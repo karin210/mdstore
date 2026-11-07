@@ -14,7 +14,11 @@ export interface PromptListing {
   slug: string;
   fileName: string;
   title: string;
+  /** Short, catchy one-liner shown as the h2 under the title on the listing page. */
+  tagline: string;
   summary: string;
+  /** The file's key rules, one short sentence each, listed on the listing page. */
+  highlights: string[];
   category: PromptCategory;
   author: string;
   priceUsd: number;
@@ -53,8 +57,18 @@ export const featuredPrompts: PromptListing[] = [
     slug: "global",
     fileName: "global.md",
     title: "Web project conventions",
+    tagline: "Give your agent the habits of a careful senior web developer, from the first commit.",
     summary:
       "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, design tokens, fluid CSS, SOLID structure, forms, loading states and secure server defaults.",
+    highlights: [
+      "Semantic HTML and WCAG 2.1 AA accessibility on every component",
+      "Colours, font sizes and spacing as :root tokens with fluid clamp() scaling",
+      "Two modal types, dismissible or not, with shared global styling",
+      "Forms with inline, as-you-type guidance and password rules that accept browser-suggested passwords",
+      "Skeletons, empty and error states for every async operation",
+      "Server-side validation, authorization and correct HTTP status codes, with no leaked internals",
+      "Branded 404, safe redirects and unique page titles",
+    ],
     category: "Conventions",
     author: "@mdstore",
     priceUsd: 0,
@@ -77,8 +91,18 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
     slug: "nextjs-structure",
     fileName: "nextjs-structure.md",
     title: "Next.js project structure",
+    tagline: "Stop asking where the file goes. Your agent already knows.",
     summary:
       "Where every file goes in a Next.js App Router project: src/ layout, routes-only app/, component folders, server-only code, public/ assets, aliases, titles and route protection.",
+    highlights: [
+      "A complete src/ tree showing where every kind of file belongs",
+      "app/ holds routes only, with the home page in a (homepage) route group",
+      "Component folders per route, per feature and global/, with no loose files",
+      "Server-only code in src/server/, guarded with server-only imports",
+      "Static files in public/; paid or private files served through an access-checked route",
+      "@/* imports with no barrel files, and one title template for every page",
+      "proxy.ts for redirects, with real permission checks in every handler",
+    ],
     category: "Conventions",
     author: "@mdstore",
     priceUsd: 5,

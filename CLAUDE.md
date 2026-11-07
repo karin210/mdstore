@@ -41,7 +41,10 @@ src/
 │  ├─ layout.tsx             root layout: fonts, metadata title template, header + footer
 │  ├─ page.tsx               landing page (composes the homepage sections)
 │  ├─ prompts/[slug]/page.tsx
-│  │                         listing detail: summary, purchase card, output examples,
+│  │                         thin shell: reads `params` only inside <Suspense> (in
+│  │                         PromptDetail) so the shared App Shell stays instant;
+│  │                         listing detail: header (h1 title + h2 tagline), summary,
+│  │                         highlights, purchase card, output examples,
 │  │                         free preview (+ "Show the full file" for free listings only;
 │  │                         paid files must never be read into a page)
 │  │                         (prerendered for every slug via generateStaticParams)
@@ -50,15 +53,18 @@ src/
 │  └─ not-found.tsx          branded 404 for every unmatched URL (real 404 status)
 ├─ components/
 │  ├─ global/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
-│  │                         MobileMenu, PrimaryButton, SecondaryButton, navLinks
+│  │                         MobileMenu, PrimaryButton, SecondaryButton, SkeletonBlock,
+│  │                         navLinks
 │  ├─ homepage/              landing-only sections: Hero, FeaturedPrompts, PromptCard,
 │  │                         HowItWorks, WhyMarkdown, SellerCta, Faq
-│  ├─ prompt-detail/         used only by /prompts/[slug]: OutputExamples (screenshots
-│  │                         from `outputExamples`, placeholder slots while empty)
+│  ├─ prompt-detail/         used only by /prompts/[slug]: PromptDetail (the page body),
+│  │                         PromptDetailSkeleton (its Suspense fallback), OutputExamples
+│  │                         (screenshots from `outputExamples`, placeholders while empty)
 │  └─ modals/                PromptPreviewDialog (dismissible)
 ├─ data/                     static catalogues: prompts.ts (listings), faq.ts
 ├─ lib/                      site.ts (app name, title format, contact), formatPrice.ts,
-│                            promptFiles.ts (reads a content/prompts/ file; cached)
+│                            promptFiles.ts (reads a content/prompts/ file; cached),
+│                            getPromptOrNotFound.ts (slug params → listing or 404)
 ├─ styles/globals.css        :root tokens, reset, typography, shared + modal classes
 └─ proxy.ts                  rewrites unknown /prompts/[slug] to the 404 page, so they get a
                              real 404 status (with Cache Components the page streams before

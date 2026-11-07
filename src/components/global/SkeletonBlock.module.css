@@ -1,0 +1,34 @@
+.block {
+  display: block;
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-surface) 50%,
+      transparent 100%
+    )
+    0 0 / 200% 100% no-repeat,
+    var(--color-secondary);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.block[data-rounded="true"] {
+  border-radius: var(--radius-pill);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 150% 0, 0 0;
+  }
+  to {
+    background-position: -50% 0, 0 0;
+  }
+}
+
+/* The global reduced-motion rule shortens animations; stop this one outright instead. */
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+  }
+}
