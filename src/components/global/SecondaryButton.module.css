@@ -1,0 +1,23 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0.75em 1.4em;
+  border: 0.125rem solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--text-base);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.button[data-size="large"] {
+  font-size: var(--text-lg);
+}
+
+.button:hover {
+  background: var(--color-secondary);
+}

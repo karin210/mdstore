@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design tokens
+   Every colour is referenced by token; components never use raw hex values.
+   ========================================================================== */
+
+:root {
+  /* Semantic roles */
+  --color-background: #f5f4fa; /* tinted off-white body background */
+  --color-primary: #3b2f8f; /* brand indigo: header, footer, key CTAs */
+  --color-primary-hover: #2e2475;
+  --color-on-primary: #f8f7fc;
+  --color-secondary: #e7e4f6; /* lavender surfaces: cards, sections, helper buttons */
+  --color-secondary-hover: #d9d4f0;
+  --color-on-secondary: #241c63;
+  --color-tertiary: #e8533a; /* coral accent: warnings, helper tools, toasts */
+  --color-on-tertiary: #fff8f6;
+
+  /* Neutrals (brand-tinted) */
+  --color-ink: #14122b;
+  --color-ink-muted: #4f4c6b;
+  --color-surface: #ffffff; /* elevated cards on the off-white background */
+  --color-border: #d6d3e6;
+  --color-code-bg: #1b1934;
+  --color-code-ink: #e6e3f5;
+  --color-code-muted: #a29fc2;
+  --color-code-accent: #f5b97a;
+  --color-focus: #3b2f8f;
+  --color-scrim: rgb(20 18 43 / 0.6);
+
+  /* Typography (font families are injected by next/font in the root layout) */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-code: var(--font-geist-mono), ui-monospace, "Cascadia Code", monospace;
+
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.84rem + 0.18vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --text-2xl: clamp(1.625rem, 1.3rem + 1.5vw, 2.5rem);
+  --text-3xl: clamp(2.25rem, 1.6rem + 3vw, 4.25rem);
+
+  /* Spacing & layout */
+  --space-2xs: clamp(0.25rem, 0.2rem + 0.2vw, 0.375rem);
+  --space-xs: clamp(0.5rem, 0.45rem + 0.25vw, 0.625rem);
+  --space-sm: clamp(0.75rem, 0.65rem + 0.4vw, 1rem);
+  --space-md: clamp(1rem, 0.85rem + 0.75vw, 1.5rem);
+  --space-lg: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+  --space-xl: clamp(2.5rem, 1.8rem + 3.5vw, 5rem);
+  --space-2xl: clamp(3.5rem, 2.5rem + 5vw, 7.5rem);
+
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --content-width: min(72rem, 100% - 2 * var(--gutter));
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.375rem;
+  --radius-pill: 999rem;
+  --shadow-card: 0 0.0625rem 0.125rem rgb(20 18 43 / 0.06), 0 0.5rem 1.5rem rgb(20 18 43 / 0.06);
+  --transition-fast: 160ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #121124;
+    --color-primary: #a99cff;
+    --color-primary-hover: #c0b6ff;
+    --color-on-primary: #14122b;
+    --color-secondary: #25224a;
+    --color-secondary-hover: #302c5c;
+    --color-on-secondary: #e4e0fb;
+    --color-tertiary: #ff8a73;
+    --color-on-tertiary: #1f0d09;
+
+    --color-ink: #eceaf7;
+    --color-ink-muted: #b3b0cc;
+    --color-surface: #1c1a36;
+    --color-border: #34315a;
+    --color-code-bg: #0d0c1c;
+    --color-focus: #c0b6ff;
+    --color-scrim: rgb(5 4 14 / 0.72);
+    --shadow-card: 0 0.0625rem 0.125rem rgb(0 0 0 / 0.3), 0 0.5rem 1.5rem rgb(0 0 0 / 0.25);
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* keeps anchored sections clear of the sticky header */
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+code,
+pre {
+  font-family: var(--font-code);
+}
+
+button,
+a,
+summary,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 0.1875rem solid var(--color-focus);
+  outline-offset: 0.1875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   Shared utilities
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.page-section {
+  width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 44rem;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: var(--text-2xl);
+}
+
+.section-heading p {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-lg);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   Modals (shared styling; see CLAUDE.md "Modals")
+   ========================================================================== */
+
+.modal-title {
+  margin: 0;
+  font-family: var(--font-body); /* modal headings use the sober font */
+  font-weight: 700;
+  font-size: var(--text-xl);
+  letter-spacing: -0.01em;
+}
+
+.modal-close-floating {
+  position: absolute;
+  top: -0.875rem;
+  right: -0.875rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-fast);
+}
+
+.modal-close-floating:hover {
+  background: var(--color-secondary);
+}

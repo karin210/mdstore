@@ -1,0 +1,73 @@
+/* The dialog is the positioned ancestor for the floating close button,
+   so it must not clip its overflow; the inner article scrolls instead. */
+.dialog {
+  width: min(40rem, 100% - 2 * var(--gutter));
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-card);
+}
+
+.dialog::backdrop {
+  background: var(--color-scrim);
+  backdrop-filter: blur(0.25rem);
+}
+
+.dialog[open] {
+  animation: pop-in 180ms ease-out;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-height: min(80dvh, 44rem);
+  padding: var(--space-lg);
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.fileName {
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+}
+
+.meta {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.excerpt {
+  margin: 0;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--color-code-bg);
+  color: var(--color-code-ink);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
