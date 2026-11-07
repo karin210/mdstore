@@ -57,4 +57,23 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
 
 - **Simplest readable implementation first.** Only trade readability for performance when the difference is significant and measurable.`,
   },
+  {
+    slug: "nextjs-structure",
+    fileName: "nextjs-structure.md",
+    title: "Next.js project structure",
+    summary:
+      "Where every file goes in a Next.js App Router project: src/ layout, routes-only app/, component folders, server-only code, public/ assets, aliases, titles and route protection.",
+    category: "Conventions",
+    author: "@mdstore",
+    priceUsd: 5,
+    lineCount: 135,
+    worksWith: ["Claude Code"],
+    excerpt: `# Next.js project structure
+
+Where every file goes in a Next.js App Router project (TypeScript). Follow it when you scaffold the project, add a feature, or decide where a new file belongs.
+
+- **The codebase wins.** If the project already has an established structure, follow it, don't mix the two, and mention the difference.
+- **Create folders when they are needed.** Don't scaffold empty folders "for later".
+- **Check the installed version.** Next.js changes conventions between major versions. Read the docs that ship in \`node_modules/next/dist/docs/\` before relying on an API you remember, and heed deprecation notices.`,
+  },
 ];
