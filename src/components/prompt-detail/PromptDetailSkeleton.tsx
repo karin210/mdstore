@@ -25,6 +25,11 @@ export function PromptDetailSkeleton(): ReactElement {
           <SkeletonBlock width="80%" height="var(--text-lg)" />
         </div>
 
+        <div className={styles.meantForSection}>
+          <SkeletonBlock width="6rem" height="var(--text-xl)" />
+          <SkeletonBlock width="min(24rem, 100%)" height="1.75rem" rounded />
+        </div>
+
         <div className={styles.highlightsSection}>
           <SkeletonBlock width="8rem" height="var(--text-xl)" />
           <SkeletonBlock width="90%" />
@@ -45,6 +50,12 @@ export function PromptDetailSkeleton(): ReactElement {
         <div className={styles.preview}>
           <SkeletonBlock width="9rem" height="var(--text-xl)" />
           <SkeletonBlock height="16rem" />
+        </div>
+
+        <div className={styles.usageSection}>
+          <SkeletonBlock width="9rem" height="var(--text-xl)" />
+          <SkeletonBlock width="85%" />
+          <SkeletonBlock width="70%" />
         </div>
       </div>
     </div>

@@ -40,10 +40,12 @@
   grid-template-areas:
     "header"
     "summary"
+    "meant-for"
     "highlights"
     "purchase"
     "examples"
-    "preview";
+    "preview"
+    "usage";
   gap: var(--space-lg);
 }
 
@@ -53,10 +55,13 @@
     grid-template-areas:
       "header purchase"
       "summary purchase"
+      "meant-for purchase"
       "highlights purchase"
       "examples purchase"
-      "preview purchase";
-    grid-template-rows: auto auto auto auto 1fr;
+      "preview purchase"
+      "usage purchase";
+    /* The last row absorbs any extra height, so the sections above stay compact. */
+    grid-template-rows: repeat(6, auto) 1fr;
     align-items: start;
   }
 
@@ -124,6 +129,33 @@
   margin: 0;
   color: var(--color-ink-muted);
   font-size: var(--text-lg);
+}
+
+/* Meant for */
+
+.meantForSection {
+  grid-area: meant-for;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tags li {
+  padding: 0.3em 0.9em;
+  border-radius: var(--radius-pill);
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
 }
 
 /* Highlights */
@@ -268,6 +300,56 @@
 
 .excerpt [data-token="comment"] {
   color: var(--color-code-muted);
+}
+
+/* Suggested use */
+
+.usageSection {
+  grid-area: usage;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 44rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  display: flex;
+  gap: var(--space-sm);
+  counter-increment: step;
+}
+
+/* Numbered badge; the <ol> already tells screen readers the order, so the badge is hidden from them. */
+.steps li::before {
+  content: counter(step) / "";
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 1.75em;
+  height: 1.75em;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.steps code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-size: 0.9em;
 }
 
 /* Full file (free listings): a native <details> that replaces the excerpt while open */

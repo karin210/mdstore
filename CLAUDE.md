@@ -44,9 +44,9 @@ src/
 │  │                         thin shell: reads `params` only inside <Suspense> (in
 │  │                         PromptDetail) so the shared App Shell stays instant;
 │  │                         listing detail: header (h1 title + h2 tagline), summary,
-│  │                         highlights, purchase card, output examples,
+│  │                         meant for, highlights, purchase card, output examples,
 │  │                         free preview (+ "Show the full file" for free listings only;
-│  │                         paid files must never be read into a page)
+│  │                         paid files must never be read into a page), suggested use
 │  │                         (prerendered for every slug via generateStaticParams)
 │  ├─ prompts/[slug]/download/route.ts
 │  │                         serves a free listing's .md as an attachment
@@ -58,6 +58,7 @@ src/
 │  ├─ homepage/              landing-only sections: Hero, FeaturedPrompts, PromptCard,
 │  │                         HowItWorks, WhyMarkdown, SellerCta, Faq
 │  ├─ prompt-detail/         used only by /prompts/[slug]: PromptDetail (the page body),
+│  │                         InlineCode (renders `backticks` in listing copy as <code>),
 │  │                         PromptDetailSkeleton (its Suspense fallback), OutputExamples
 │  │                         (screenshots from `outputExamples`, placeholders while empty)
 │  └─ modals/                PromptPreviewDialog (dismissible)

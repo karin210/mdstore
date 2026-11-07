@@ -19,6 +19,10 @@ export interface PromptListing {
   summary: string;
   /** The file's key rules, one short sentence each, listed on the listing page. */
   highlights: string[];
+  /** Kinds of projects the file is written for, as short tags ("Meant for" on the listing page). */
+  meantFor: string[];
+  /** Suggested steps from getting the file to using it. Text in `backticks` renders as inline code. */
+  usageSteps: string[];
   category: PromptCategory;
   author: string;
   priceUsd: number;
@@ -69,6 +73,13 @@ export const featuredPrompts: PromptListing[] = [
       "Server-side validation, authorization and correct HTTP status codes, with no leaked internals",
       "Branded 404, safe redirects and unique page titles",
     ],
+    meantFor: ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+    usageSteps: [
+      "Download `global.md`. It's free.",
+      "Save it in your project's root, then add the line `@global.md` to your `CLAUDE.md` so Claude Code loads it in every session. With no `CLAUDE.md` yet, rename the file to `CLAUDE.md` instead.",
+      "Work as usual. The agent applies the conventions to every file it creates or changes, and follows your codebase where it already does things differently.",
+      "Add a framework-specific file, such as `nextjs-structure.md`, on top of it for project structure.",
+    ],
     category: "Conventions",
     author: "@mdstore",
     priceUsd: 0,
@@ -102,6 +113,13 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
       "Static files in public/; paid or private files served through an access-checked route",
       "@/* imports with no barrel files, and one title template for every page",
       "proxy.ts for redirects, with real permission checks in every handler",
+    ],
+    meantFor: ["Next.js App Router", "TypeScript projects", "New projects", "Existing codebases"],
+    usageSteps: [
+      "Buy and download `nextjs-structure.md`.",
+      "Save it in your project's root, then add the line `@nextjs-structure.md` to your `CLAUDE.md` so Claude Code loads it in every session.",
+      "On a new project, ask the agent to scaffold it following the file. On an existing one, it keeps your current structure where it differs and tells you about the difference.",
+      "Let the agent keep the structure section of your `CLAUDE.md` current as it adds routes and folders.",
     ],
     category: "Conventions",
     author: "@mdstore",

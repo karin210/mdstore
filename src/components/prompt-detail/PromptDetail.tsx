@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
+import { InlineCode } from "@/components/prompt-detail/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples";
 import { downloadHref, isFree } from "@/data/prompts";
 import { formatPrice } from "@/lib/formatPrice";
@@ -51,6 +52,17 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
             Summary
           </h2>
           <p className={styles.summary}>{prompt.summary}</p>
+        </section>
+
+        <section className={styles.meantForSection} aria-labelledby="meant-for-title">
+          <h2 id="meant-for-title" className={styles.sectionTitle}>
+            Meant for
+          </h2>
+          <ul className={styles.tags}>
+            {prompt.meantFor.map((projectType) => (
+              <li key={projectType}>{projectType}</li>
+            ))}
+          </ul>
         </section>
 
         <section className={styles.highlightsSection} aria-labelledby="highlights-title">
@@ -149,6 +161,22 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
               </details>
             )}
           </div>
+        </section>
+
+        <section className={styles.usageSection} aria-labelledby="usage-title">
+          <h2 id="usage-title" className={styles.sectionTitle}>
+            Suggested use
+          </h2>
+          <ol className={styles.steps}>
+            {prompt.usageSteps.map((step) => (
+              <li key={step}>
+                {/* One flex item, so the text and its inline code keep flowing together */}
+                <span>
+                  <InlineCode text={step} />
+                </span>
+              </li>
+            ))}
+          </ol>
         </section>
       </article>
     </>
