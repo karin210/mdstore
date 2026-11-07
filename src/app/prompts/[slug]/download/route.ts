@@ -1,6 +1,5 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { findPromptBySlug, isFree } from "@/data/prompts";
+import { readPromptMarkdown } from "@/lib/promptFiles";
 
 /** Serves a free listing's full .md file as a download. Paid files are never served here. */
 export async function GET(_request: Request, ctx: RouteContext<"/prompts/[slug]/download">): Promise<Response> {
@@ -15,8 +14,7 @@ export async function GET(_request: Request, ctx: RouteContext<"/prompts/[slug]/
   }
 
   try {
-    // The file name comes from the catalogue, never from the request, so it can't escape the folder.
-    const markdown = await readFile(path.join(process.cwd(), "content", "prompts", prompt.fileName), "utf8");
+    const markdown = await readPromptMarkdown(prompt.fileName);
 
     return new Response(markdown, {
       headers: {

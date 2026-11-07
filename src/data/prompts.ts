@@ -2,6 +2,14 @@ export const promptCategories = ["Conventions", "Agents", "Frontend", "Testing",
 
 export type PromptCategory = (typeof promptCategories)[number];
 
+/** A screenshot of what the prompt produced, served from public/ (e.g. "/examples/global/form.webp"). */
+export interface OutputExample {
+  src: string;
+  /** Describes what the screenshot shows, for screen readers. */
+  alt: string;
+  caption: string;
+}
+
 export interface PromptListing {
   slug: string;
   fileName: string;
@@ -14,6 +22,8 @@ export interface PromptListing {
   worksWith: string[];
   /** First lines of the file, shown in the free preview. */
   excerpt: string;
+  /** Screenshots of the prompt's output; the detail page shows placeholders until there are some. */
+  outputExamples: OutputExample[];
 }
 
 export function isFree(prompt: PromptListing): boolean {
@@ -22,6 +32,11 @@ export function isFree(prompt: PromptListing): boolean {
 
 export function findPromptBySlug(slug: string): PromptListing | undefined {
   return featuredPrompts.find((prompt) => prompt.slug === slug);
+}
+
+/** URL of a listing's detail page (src/app/prompts/[slug]). */
+export function promptHref(prompt: PromptListing): string {
+  return `/prompts/${prompt.slug}`;
 }
 
 /** Download URL of a free listing's full .md file (served by src/app/prompts/[slug]/download). */
@@ -56,6 +71,7 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
 ## 1. Principles
 
 - **Simplest readable implementation first.** Only trade readability for performance when the difference is significant and measurable.`,
+    outputExamples: [],
   },
   {
     slug: "nextjs-structure",
@@ -75,5 +91,6 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
 - **The codebase wins.** If the project already has an established structure, follow it, don't mix the two, and mention the difference.
 - **Create folders when they are needed.** Don't scaffold empty folders "for later".
 - **Check the installed version.** Next.js changes conventions between major versions. Read the docs that ship in \`node_modules/next/dist/docs/\` before relying on an API you remember, and heed deprecation notices.`,
+    outputExamples: [],
   },
 ];

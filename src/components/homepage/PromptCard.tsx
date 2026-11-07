@@ -1,6 +1,7 @@
+import Link from "next/link";
 import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
-import { downloadHref, isFree, type PromptListing } from "@/data/prompts";
+import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
 import { formatPrice } from "@/lib/formatPrice";
 import styles from "./PromptCard.module.css";
 
@@ -19,7 +20,9 @@ export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement
         <span className={styles.category}>{prompt.category}</span>
       </header>
       <h3 id={titleId} className={styles.title}>
-        {prompt.title}
+        <Link href={promptHref(prompt)} className={styles.titleLink}>
+          {prompt.title}
+        </Link>
       </h3>
       <p className={styles.summary}>{prompt.summary}</p>
       <ul className={styles.tools} aria-label="Tested with">

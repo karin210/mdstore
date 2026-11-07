@@ -48,6 +48,12 @@
   font-size: var(--text-sm);
 }
 
+.detailsLink {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-underline-offset: 0.25em;
+}
+
 .excerpt {
   margin: 0;
   padding: var(--space-md);

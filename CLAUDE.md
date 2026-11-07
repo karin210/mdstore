@@ -9,11 +9,11 @@
 - **Buyers** browse listings by category, read a free preview of each file (its first lines), buy it once, and drop the `.md` into their repo. Purchases include future versions of the file.
 - **Sellers** publish the prompts they have refined, set their own price, choose the preview length, list the tools they tested with and get paid on every sale.
 
-Current state: only the **landing page** exists (`/`), plus the branded 404. Listings come from static data (`src/data/prompts.ts`); the full `.md` products live in `content/prompts/` (`global.md`, framework-agnostic web conventions, offered free; `nextjs-structure.md`, Next.js App Router project structure, paid). Free listings (`priceUsd: 0`) can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. There is no auth, checkout, seller onboarding or API yet. "Request seller access" opens a `mailto:` to the placeholder inbox in `src/lib/site.ts`.
+Current state: the **landing page** (`/`), a **detail page per listing** (`/prompts/[slug]`, linked from each card's title and from the preview dialog), plus the branded 404. Listings come from static data (`src/data/prompts.ts`); the full `.md` products live in `content/prompts/` (`global.md`, framework-agnostic web conventions, offered free; `nextjs-structure.md`, Next.js App Router project structure, paid). Free listings (`priceUsd: 0`) can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. There is no auth, checkout, seller onboarding or API yet. "Request seller access" opens a `mailto:` to the placeholder inbox in `src/lib/site.ts`.
 
 ## Differentiators
 
-What sets mdstore apart from other prompt and skill marketplaces. None of these exist in the UI yet; design listings, data models and pages so they can carry them.
+What sets mdstore apart from other prompt and skill marketplaces. Only output previews have a place in the UI so far (the "Output examples" section on each listing page, with placeholders until `outputExamples` has screenshots); design listings, data models and pages so they can carry the rest.
 
 - **Output previews.** Besides the free excerpt of the file, each listing shows what the prompt actually produces: a preview of its output, ideally several examples. Buyers judge a prompt by its results, not only by reading its instructions.
 - **Very specific files.** Listings target one narrow job (e.g. only improving the UI/UX of a form) rather than broad, catch-all instructions, so buyers know exactly what they get. Broader foundation files such as `global.md` are the exception, meant as the starting instructions for a project.
@@ -40,6 +40,11 @@ src/
 ├─ app/                      routes only
 │  ├─ layout.tsx             root layout: fonts, metadata title template, header + footer
 │  ├─ page.tsx               landing page (composes the homepage sections)
+│  ├─ prompts/[slug]/page.tsx
+│  │                         listing detail: summary, purchase card, output examples,
+│  │                         free preview (+ "Show the full file" for free listings only;
+│  │                         paid files must never be read into a page)
+│  │                         (prerendered for every slug via generateStaticParams)
 │  ├─ prompts/[slug]/download/route.ts
 │  │                         serves a free listing's .md as an attachment
 │  └─ not-found.tsx          branded 404 for every unmatched URL (real 404 status)
@@ -48,10 +53,16 @@ src/
 │  │                         MobileMenu, PrimaryButton, SecondaryButton, navLinks
 │  ├─ homepage/              landing-only sections: Hero, FeaturedPrompts, PromptCard,
 │  │                         HowItWorks, WhyMarkdown, SellerCta, Faq
+│  ├─ prompt-detail/         used only by /prompts/[slug]: OutputExamples (screenshots
+│  │                         from `outputExamples`, placeholder slots while empty)
 │  └─ modals/                PromptPreviewDialog (dismissible)
 ├─ data/                     static catalogues: prompts.ts (listings), faq.ts
-├─ lib/                      site.ts (app name, title format, contact), formatPrice.ts
-└─ styles/globals.css        :root tokens, reset, typography, shared + modal classes
+├─ lib/                      site.ts (app name, title format, contact), formatPrice.ts,
+│                            promptFiles.ts (reads a content/prompts/ file; cached)
+├─ styles/globals.css        :root tokens, reset, typography, shared + modal classes
+└─ proxy.ts                  rewrites unknown /prompts/[slug] to the 404 page, so they get a
+                             real 404 status (with Cache Components the page streams before
+                             notFound() runs, and dynamicParams is unavailable)
 content/prompts/             the full .md files sold on the store (keep excerpt/lineCount
                              in src/data/prompts.ts in sync)
 public/                      static files served as-is (favicon.ico, images, robots.txt);

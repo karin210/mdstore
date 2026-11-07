@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, type MouseEvent, type ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
-import { downloadHref, isFree, type PromptListing } from "@/data/prompts";
+import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
 import { formatPrice } from "@/lib/formatPrice";
 import styles from "./PromptPreviewDialog.module.css";
 
@@ -48,7 +49,10 @@ export function PromptPreviewDialog({ prompt, onClose }: PromptPreviewDialogProp
               {prompt.title}
             </h2>
             <p className={styles.meta}>
-              {prompt.author} · {prompt.lineCount} lines · {formatPrice(prompt.priceUsd)}
+              {prompt.author} · {prompt.lineCount} lines · {formatPrice(prompt.priceUsd)} ·{" "}
+              <Link href={promptHref(prompt)} className={styles.detailsLink}>
+                View details
+              </Link>
             </p>
           </header>
           <pre className={styles.excerpt}>

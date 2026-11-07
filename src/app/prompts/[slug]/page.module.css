@@ -1,0 +1,288 @@
+.main {
+  flex: 1;
+  width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-block: var(--space-lg) var(--space-2xl);
+}
+
+/* Breadcrumb */
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.breadcrumb li + li::before {
+  content: "/";
+  margin-inline-end: var(--space-2xs);
+}
+
+.breadcrumb a {
+  color: var(--color-primary);
+  text-underline-offset: 0.25em;
+}
+
+.breadcrumb [aria-current="page"] {
+  font-family: var(--font-code);
+}
+
+/* Layout: stacked on narrow screens, preview + sticky purchase card side by side on wide ones */
+
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "purchase"
+    "examples"
+    "preview";
+  gap: var(--space-lg);
+}
+
+@media (min-width: 60rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+    grid-template-areas:
+      "header purchase"
+      "examples purchase"
+      "preview purchase";
+    grid-template-rows: auto auto 1fr;
+    align-items: start;
+  }
+
+  .purchase {
+    position: sticky;
+    top: 6rem; /* clears the sticky site header */
+  }
+}
+
+/* Header */
+
+.header {
+  grid-area: header;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+.fileName {
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+}
+
+.category {
+  padding: 0.2em 0.7em;
+  border-radius: var(--radius-pill);
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-3xl);
+}
+
+.summary {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-lg);
+}
+
+/* Purchase card */
+
+.purchase {
+  grid-area: purchase;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.price {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: 0;
+  padding-block: var(--space-sm);
+  border-block: 0.0625rem solid var(--color-border);
+  font-size: var(--text-sm);
+}
+
+.facts div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2xs) var(--space-sm);
+}
+
+.facts dt {
+  color: var(--color-ink-muted);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tools li {
+  padding: 0.1em 0.6em;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 400;
+}
+
+.note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+}
+
+/* Output examples */
+
+.examples {
+  grid-area: examples;
+  min-width: 0;
+}
+
+/* Preview */
+
+.preview {
+  grid-area: preview;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+.previewHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.excerpt {
+  margin: 0;
+  padding: var(--space-md);
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  background: var(--color-code-bg);
+  color: var(--color-code-ink);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.excerpt [data-token="comment"] {
+  color: var(--color-code-muted);
+}
+
+/* Full file (free listings): a native <details> that replaces the excerpt while open */
+
+.fileView {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.fileView:has(.fullFile[open]) > .excerpt {
+  display: none;
+}
+
+.fullFile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.toggle {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.5em 1em;
+  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  list-style: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.toggle::-webkit-details-marker {
+  display: none;
+}
+
+.toggle::after {
+  content: "▾";
+  text-decoration: none;
+  transition: rotate var(--transition-fast);
+}
+
+.toggle:hover {
+  background: var(--color-secondary);
+}
+
+.fullFile[open] .toggle::after {
+  rotate: 180deg;
+}
+
+.fullFile:not([open]) [data-label="hide"],
+.fullFile[open] [data-label="show"] {
+  display: none;
+}
+
+/* The full file scrolls inside its block so "Hide" stays close at hand. */
+.excerpt[data-full="true"] {
+  max-height: min(75dvh, 50rem);
+  overflow-y: auto;
+}
