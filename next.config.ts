@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  // The download route reads the .md files at request time; ship them with its server bundle.
+  outputFileTracingIncludes: {
+    "/prompts/[slug]/download": ["./content/prompts/**/*"],
+  },
   turbopack: {
     rules: {
       "*.css": {

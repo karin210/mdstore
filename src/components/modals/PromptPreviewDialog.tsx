@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type MouseEvent, type ReactElement } from "react";
-import type { PromptListing } from "@/data/prompts";
+import { PrimaryButton } from "@/components/global/PrimaryButton";
+import { downloadHref, isFree, type PromptListing } from "@/data/prompts";
 import { formatPrice } from "@/lib/formatPrice";
 import styles from "./PromptPreviewDialog.module.css";
 
@@ -53,9 +54,21 @@ export function PromptPreviewDialog({ prompt, onClose }: PromptPreviewDialogProp
           <pre className={styles.excerpt}>
             <code>{prompt.excerpt}</code>
           </pre>
-          <p className={styles.note}>
-            Free preview: the first lines of the file. The full version is delivered as a .md download after purchase.
-          </p>
+          {isFree(prompt) ? (
+            <footer className={styles.footer}>
+              <p className={styles.note}>
+                The first lines of the file. This one is free: download the full .md and drop it into your repo.
+              </p>
+              <PrimaryButton href={downloadHref(prompt)} download aria-label={`Download ${prompt.fileName}`}>
+                Download {prompt.fileName}
+              </PrimaryButton>
+            </footer>
+          ) : (
+            <p className={styles.note}>
+              Free preview: the first lines of the file. The full version is delivered as a .md download after
+              purchase.
+            </p>
+          )}
         </article>
       )}
       <button

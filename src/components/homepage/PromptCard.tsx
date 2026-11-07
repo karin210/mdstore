@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
-import type { PromptListing } from "@/data/prompts";
+import { PrimaryButton } from "@/components/global/PrimaryButton";
+import { downloadHref, isFree, type PromptListing } from "@/data/prompts";
 import { formatPrice } from "@/lib/formatPrice";
 import styles from "./PromptCard.module.css";
 
@@ -39,15 +40,27 @@ export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement
             </dd>
           </div>
         </dl>
-        {/* Tertiary kind: informational trigger with no purchase intent */}
-        <button
-          type="button"
-          className={styles.preview}
-          onClick={() => onPreview(prompt)}
-          aria-label={`Preview ${prompt.fileName}`}
-        >
-          Preview
-        </button>
+        <div className={styles.actions}>
+          {/* Tertiary kind: informational trigger with no purchase intent */}
+          <button
+            type="button"
+            className={styles.preview}
+            onClick={() => onPreview(prompt)}
+            aria-label={`Preview ${prompt.fileName}`}
+          >
+            Preview
+          </button>
+          {isFree(prompt) && (
+            <PrimaryButton
+              href={downloadHref(prompt)}
+              download
+              size="small"
+              aria-label={`Download ${prompt.fileName}`}
+            >
+              Download
+            </PrimaryButton>
+          )}
+        </div>
       </footer>
     </article>
   );

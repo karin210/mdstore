@@ -16,6 +16,19 @@ export interface PromptListing {
   excerpt: string;
 }
 
+export function isFree(prompt: PromptListing): boolean {
+  return prompt.priceUsd === 0;
+}
+
+export function findPromptBySlug(slug: string): PromptListing | undefined {
+  return featuredPrompts.find((prompt) => prompt.slug === slug);
+}
+
+/** Download URL of a free listing's full .md file (served by src/app/prompts/[slug]/download). */
+export function downloadHref(prompt: PromptListing): string {
+  return `/prompts/${prompt.slug}/download`;
+}
+
 /**
  * Catalogue shown on the landing page until listings come from the API.
  * The full files live in `content/prompts/`; keep `excerpt` and `lineCount` in sync with them.
@@ -29,7 +42,7 @@ export const featuredPrompts: PromptListing[] = [
       "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, design tokens, fluid CSS, SOLID structure, forms, loading states and secure server defaults.",
     category: "Conventions",
     author: "@mdstore",
-    priceUsd: 9,
+    priceUsd: 0,
     lineCount: 201,
     worksWith: ["Claude Code"],
     excerpt: `# Web project conventions

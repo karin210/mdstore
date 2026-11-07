@@ -5,5 +5,5 @@ const usd = new Intl.NumberFormat("en-US", {
 });
 
 export function formatPrice(amountUsd: number): string {
-  return usd.format(amountUsd);
+  return amountUsd === 0 ? "Free" : usd.format(amountUsd);
 }
