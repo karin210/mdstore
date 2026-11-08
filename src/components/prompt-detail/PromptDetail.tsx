@@ -1,9 +1,12 @@
-import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
 import { InlineCode } from "@/components/prompt-detail/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples";
 import { downloadHref, isFree } from "@/data/prompts";
+import { Link } from "@/i18n/navigation";
+import { messageList } from "@/i18n/messages";
+import type { Locale } from "@/i18n/routing";
 import { formatPrice } from "@/lib/formatPrice";
 import { getPromptOrNotFound } from "@/lib/getPromptOrNotFound";
 import { readPromptMarkdown } from "@/lib/promptFiles";
@@ -17,17 +20,24 @@ interface PromptDetailProps {
 /** Everything on /prompts/[slug] that depends on the listing in the URL. */
 export async function PromptDetail({ params }: PromptDetailProps): Promise<ReactElement> {
   const prompt = await getPromptOrNotFound(params);
+  const locale = (await getLocale()) as Locale;
+  const t = await getTranslations("promptDetail");
+  const tPrompts = await getTranslations("prompts");
+  const tPrice = await getTranslations("price");
   const free = isFree(prompt);
   const remainingLines = prompt.lineCount - prompt.excerpt.split("\n").length;
   // Only free files are read: a paid file's content must never reach the page's HTML.
   const fullMarkdown = free ? await readPromptMarkdown(prompt.fileName) : null;
+  const category = tPrompts(`categories.${prompt.category}`);
+  const lines = tPrompts("lineCount", { count: prompt.lineCount });
+  const listing = `listings.${prompt.slug}` as const;
 
   return (
     <>
-      <nav className={styles.breadcrumb} aria-label="Breadcrumb">
+      <nav className={styles.breadcrumb} aria-label={t("breadcrumb.label")}>
         <ol>
           <li>
-            <Link href="/#featured">Prompts</Link>
+            <Link href={{ pathname: "/", hash: "featured" }}>{t("breadcrumb.prompts")}</Link>
           </li>
           <li>
             <span aria-current="page">{prompt.fileName}</span>
@@ -39,27 +49,27 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
         <header className={styles.header}>
           <p className={styles.top}>
             <code className={styles.fileName}>{prompt.fileName}</code>
-            <span className={styles.category}>{prompt.category}</span>
+            <span className={styles.category}>{category}</span>
           </p>
           <h1 id="prompt-title" className={styles.title}>
-            {prompt.title}
+            {tPrompts(`${listing}.title`)}
           </h1>
-          <h2 className={styles.tagline}>{prompt.tagline}</h2>
+          <h2 className={styles.tagline}>{tPrompts(`${listing}.tagline`)}</h2>
         </header>
 
         <section className={styles.summarySection} aria-labelledby="summary-title">
           <h2 id="summary-title" className={styles.sectionTitle}>
-            Summary
+            {t("summary")}
           </h2>
-          <p className={styles.summary}>{prompt.summary}</p>
+          <p className={styles.summary}>{tPrompts(`${listing}.summary`)}</p>
         </section>
 
         <section className={styles.meantForSection} aria-labelledby="meant-for-title">
           <h2 id="meant-for-title" className={styles.sectionTitle}>
-            Meant for
+            {t("meantFor")}
           </h2>
           <ul className={styles.tags}>
-            {prompt.meantFor.map((projectType) => (
+            {messageList(tPrompts.raw(`${listing}.meantFor`)).map((projectType) => (
               <li key={projectType}>{projectType}</li>
             ))}
           </ul>
@@ -67,10 +77,10 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
 
         <section className={styles.highlightsSection} aria-labelledby="highlights-title">
           <h2 id="highlights-title" className={styles.sectionTitle}>
-            Highlights
+            {t("highlights")}
           </h2>
           <ul className={styles.highlights}>
-            {prompt.highlights.map((highlight) => (
+            {messageList(tPrompts.raw(`${listing}.highlights`)).map((highlight) => (
               <li key={highlight}>{highlight}</li>
             ))}
           </ul>
@@ -78,24 +88,24 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
 
         <aside className={styles.purchase} aria-labelledby="purchase-title">
           <h2 id="purchase-title" className="visually-hidden">
-            Get this file
+            {t("purchase.title")}
           </h2>
-          <p className={styles.price}>{formatPrice(prompt.priceUsd)}</p>
+          <p className={styles.price}>{formatPrice(prompt.priceUsd, locale, tPrice("free"))}</p>
           <dl className={styles.facts}>
             <div>
-              <dt>Author</dt>
+              <dt>{t("purchase.author")}</dt>
               <dd>{prompt.author}</dd>
             </div>
             <div>
-              <dt>Length</dt>
-              <dd>{prompt.lineCount} lines</dd>
+              <dt>{t("purchase.length")}</dt>
+              <dd>{lines}</dd>
             </div>
             <div>
-              <dt>Category</dt>
-              <dd>{prompt.category}</dd>
+              <dt>{t("purchase.category")}</dt>
+              <dd>{category}</dd>
             </div>
             <div>
-              <dt>Tested with</dt>
+              <dt>{t("purchase.testedWith")}</dt>
               <dd>
                 <ul className={styles.tools}>
                   {prompt.worksWith.map((tool) => (
@@ -107,16 +117,17 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
           </dl>
           {free ? (
             <>
-              <PrimaryButton href={downloadHref(prompt)} download aria-label={`Download ${prompt.fileName}`}>
-                Download {prompt.fileName}
+              <PrimaryButton
+                href={downloadHref(prompt)}
+                download
+                aria-label={tPrompts("downloadFile", { fileName: prompt.fileName })}
+              >
+                {tPrompts("downloadFile", { fileName: prompt.fileName })}
               </PrimaryButton>
-              <p className={styles.note}>Free: download the full .md and drop it into your repo.</p>
+              <p className={styles.note}>{t("purchase.freeNote")}</p>
             </>
           ) : (
-            <p className={styles.note}>
-              Checkout opens soon. Once bought, the full file is delivered as a .md download, future versions
-              included.
-            </p>
+            <p className={styles.note}>{t("purchase.paidNote")}</p>
           )}
         </aside>
 
@@ -127,11 +138,11 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
         <section className={styles.preview} aria-labelledby="preview-title">
           <header className={styles.previewHeader}>
             <h2 id="preview-title" className={styles.sectionTitle}>
-              Free preview
+              {t("preview.title")}
             </h2>
             <p className={styles.note}>
-              The first lines of {prompt.fileName}, exactly as your agent will read them.
-              {fullMarkdown && " It's free, so you can read the whole file here too."}
+              {t("preview.note", { fileName: prompt.fileName })}
+              {fullMarkdown && t("preview.fullFileNote")}
             </p>
           </header>
           <div className={styles.fileView}>
@@ -141,7 +152,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
                 {remainingLines > 0 && (
                   <>
                     {"\n\n"}
-                    <span data-token="comment">{`<!-- ${remainingLines} more lines -->`}</span>
+                    <span data-token="comment">{`<!-- ${t("preview.moreLines", { count: remainingLines })} -->`}</span>
                   </>
                 )}
               </code>
@@ -151,11 +162,16 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
               <details className={styles.fullFile}>
                 {/* Tertiary kind: informational trigger with no purchase intent */}
                 <summary className={styles.toggle}>
-                  <span data-label="show">Show the full file ({prompt.lineCount} lines)</span>
-                  <span data-label="hide">Hide the full file</span>
+                  <span data-label="show">{t("preview.showFull", { lines })}</span>
+                  <span data-label="hide">{t("preview.hideFull")}</span>
                 </summary>
                 {/* Focusable so keyboard users can scroll the long file */}
-                <pre className={styles.excerpt} data-full="true" tabIndex={0} aria-label={`Full ${prompt.fileName}`}>
+                <pre
+                  className={styles.excerpt}
+                  data-full="true"
+                  tabIndex={0}
+                  aria-label={t("preview.fullLabel", { fileName: prompt.fileName })}
+                >
                   <code>{fullMarkdown}</code>
                 </pre>
               </details>
@@ -165,10 +181,10 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
 
         <section className={styles.usageSection} aria-labelledby="usage-title">
           <h2 id="usage-title" className={styles.sectionTitle}>
-            Suggested use
+            {t("usage")}
           </h2>
           <ol className={styles.steps}>
-            {prompt.usageSteps.map((step) => (
+            {messageList(tPrompts.raw(`${listing}.usageSteps`)).map((step) => (
               <li key={step}>
                 {/* One flex item, so the text and its inline code keep flowing together */}
                 <span>

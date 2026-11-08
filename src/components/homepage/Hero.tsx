@@ -1,37 +1,33 @@
+import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
 import { SecondaryButton } from "@/components/global/SecondaryButton";
 import styles from "./Hero.module.css";
 
-const highlights = [
-  "Plain Markdown, no lock-in",
-  "Free preview before you buy",
-  "Works with any AI coding tool",
-];
+const highlightKeys = ["noLockIn", "freePreview", "anyTool"] as const;
 
 export function Hero(): ReactElement {
+  const t = useTranslations("home.hero");
+
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.copy}>
-        <p className="eyebrow">{"// the marketplace for coding prompts"}</p>
+        <p className="eyebrow">{t("eyebrow")}</p>
         <h1 id="hero-title" className={styles.title}>
-          Prompts that ship code, sold as <span className={styles.highlight}>.md</span> files.
+          {t("titleStart")} <span className={styles.highlight}>.md</span> {t("titleEnd")}
         </h1>
-        <p className={styles.lead}>
-          Buy battle-tested instructions for Claude Code, Cursor and Copilot from the developers who wrote them. Drop
-          the file into your repo and your agent works the way theirs does.
-        </p>
+        <p className={styles.lead}>{t("lead")}</p>
         <div className={styles.actions}>
-          <PrimaryButton href="#featured" size="large">
-            Browse prompts
+          <PrimaryButton href={{ pathname: "/", hash: "featured" }} size="large">
+            {t("browse")}
           </PrimaryButton>
           <SecondaryButton href="#sell" size="large">
-            Start selling
+            {t("sell")}
           </SecondaryButton>
         </div>
         <ul className={styles.highlights}>
-          {highlights.map((item) => (
-            <li key={item}>{item}</li>
+          {highlightKeys.map((key) => (
+            <li key={key}>{t(`highlights.${key}`)}</li>
           ))}
         </ul>
       </div>

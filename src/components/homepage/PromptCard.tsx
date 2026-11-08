@@ -1,7 +1,8 @@
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
 import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
+import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/formatPrice";
 import styles from "./PromptCard.module.css";
 
@@ -11,21 +12,24 @@ interface PromptCardProps {
 }
 
 export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement {
+  const t = useTranslations("prompts");
+  const tCommon = useTranslations("price");
+  const locale = useLocale();
   const titleId = `prompt-${prompt.slug}-title`;
 
   return (
     <article className={styles.card} aria-labelledby={titleId}>
       <header className={styles.top}>
         <code className={styles.fileName}>{prompt.fileName}</code>
-        <span className={styles.category}>{prompt.category}</span>
+        <span className={styles.category}>{t(`categories.${prompt.category}`)}</span>
       </header>
       <h3 id={titleId} className={styles.title}>
         <Link href={promptHref(prompt)} className={styles.titleLink}>
-          {prompt.title}
+          {t(`listings.${prompt.slug}.title`)}
         </Link>
       </h3>
-      <p className={styles.summary}>{prompt.summary}</p>
-      <ul className={styles.tools} aria-label="Tested with">
+      <p className={styles.summary}>{t(`listings.${prompt.slug}.summary`)}</p>
+      <ul className={styles.tools} aria-label={t("card.testedWith")}>
         {prompt.worksWith.map((tool) => (
           <li key={tool}>{tool}</li>
         ))}
@@ -33,13 +37,13 @@ export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement
       <footer className={styles.bottom}>
         <dl className={styles.meta}>
           <div>
-            <dt className="visually-hidden">Price</dt>
-            <dd className={styles.price}>{formatPrice(prompt.priceUsd)}</dd>
+            <dt className="visually-hidden">{t("card.price")}</dt>
+            <dd className={styles.price}>{formatPrice(prompt.priceUsd, locale, tCommon("free"))}</dd>
           </div>
           <div>
-            <dt className="visually-hidden">Author and length</dt>
+            <dt className="visually-hidden">{t("card.authorAndLength")}</dt>
             <dd className={styles.byline}>
-              {prompt.author} · {prompt.lineCount} lines
+              {prompt.author} · {t("lineCount", { count: prompt.lineCount })}
             </dd>
           </div>
         </dl>
@@ -49,18 +53,18 @@ export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement
             type="button"
             className={styles.preview}
             onClick={() => onPreview(prompt)}
-            aria-label={`Preview ${prompt.fileName}`}
+            aria-label={t("card.previewLabel", { fileName: prompt.fileName })}
           >
-            Preview
+            {t("card.preview")}
           </button>
           {isFree(prompt) && (
             <PrimaryButton
               href={downloadHref(prompt)}
               download
               size="small"
-              aria-label={`Download ${prompt.fileName}`}
+              aria-label={t("downloadFile", { fileName: prompt.fileName })}
             >
-              Download
+              {t("card.download")}
             </PrimaryButton>
           )}
         </div>

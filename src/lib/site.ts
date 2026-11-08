@@ -1,10 +1,10 @@
-/** Single source of truth for the app name, title format and contact details. */
+/**
+ * Single source of truth for the app name, title format and contact details.
+ * Translated copy (tagline, description) lives in src/i18n/locales; the brand name does not translate.
+ */
 export const siteConfig = {
   name: "mdstore",
   titleSeparator: " | ",
-  tagline: "The marketplace for coding prompts",
-  description:
-    "Buy and sell battle-tested coding prompts as plain Markdown files. Preview every .md before you buy, then drop it straight into your repo.",
   /** Placeholder inbox for seller applications until the seller onboarding flow exists. */
   sellerContactEmail: "sellers@mdstore.dev",
   /** Static so the footer stays prerenderable (no `new Date()` during render). */

@@ -1,12 +1,18 @@
+import type { Messages } from "@/i18n/messages";
+
+/** Keys of `nav` in common.json that appear in the header and the footer. */
+export type NavLinkKey = keyof Pick<Messages["nav"], "browse" | "howItWorks" | "sell" | "faq">;
+
 export interface NavLink {
-  href: string;
-  label: string;
+  key: NavLinkKey;
+  /** Locale-aware target: a landing-page section (`hash`) or a page of its own. */
+  href: { pathname: string; hash?: string };
 }
 
-/** In-page sections of the landing page, shared by the header and the footer. */
+/** Header and footer links: landing-page sections, plus the page for people who want to sell. */
 export const navLinks: NavLink[] = [
-  { href: "/#featured", label: "Browse prompts" },
-  { href: "/#how-it-works", label: "How it works" },
-  { href: "/#sell", label: "Sell your prompts" },
-  { href: "/#faq", label: "FAQ" },
+  { key: "browse", href: { pathname: "/", hash: "featured" } },
+  { key: "howItWorks", href: { pathname: "/", hash: "how-it-works" } },
+  { key: "sell", href: { pathname: "/sell" } },
+  { key: "faq", href: { pathname: "/", hash: "faq" } },
 ];

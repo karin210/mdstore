@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "description": "Buy and sell battle-tested coding prompts as plain Markdown files. Preview every .md before you buy, then drop it straight into your repo."
+  },
+  "brand": {
+    "tagline": "The marketplace for coding prompts",
+    "homeLink": "{name}, home"
+  },
+  "language": {
+    "label": "Language",
+    "en": {
+      "short": "EN",
+      "name": "English",
+      "switchTo": "Switch to English"
+    },
+    "es": {
+      "short": "ES",
+      "name": "Español",
+      "switchTo": "Cambiar a español"
+    }
+  },
+  "languageBanner": {
+    "prompt": "Would you like to change the language?",
+    "close": "Dismiss language notice"
+  },
+  "nav": {
+    "main": "Main",
+    "footer": "Footer",
+    "menu": "Menu",
+    "browse": "Browse prompts",
+    "howItWorks": "How it works",
+    "sell": "Sell your prompts",
+    "faq": "FAQ",
+    "contact": "Contact"
+  },
+  "footer": {
+    "about": "About {name}",
+    "blurb": "{tagline}. Plain Markdown, written by developers, for developers.",
+    "legal": "© {year} {name}. Prompts remain the property of their authors."
+  },
+  "price": {
+    "free": "Free"
+  },
+  "notFound": {
+    "meta": {
+      "title": "Page not found"
+    },
+    "title": "This page doesn’t exist",
+    "text": "The link may be broken or the page may have moved. The prompts are still where you left them.",
+    "back": "Back to the home page"
+  }
+}

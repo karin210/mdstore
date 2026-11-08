@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "description": "Compra y vende prompts de programación probados como archivos Markdown. Lee la vista previa de cada .md antes de comprarlo y agrégalo directo a tu repositorio."
+  },
+  "brand": {
+    "tagline": "El marketplace de prompts de programación",
+    "homeLink": "{name}, inicio"
+  },
+  "language": {
+    "label": "Idioma",
+    "en": {
+      "short": "EN",
+      "name": "English",
+      "switchTo": "Switch to English"
+    },
+    "es": {
+      "short": "ES",
+      "name": "Español",
+      "switchTo": "Cambiar a español"
+    }
+  },
+  "languageBanner": {
+    "prompt": "¿Quieres cambiar el idioma?",
+    "close": "Cerrar el aviso de idioma"
+  },
+  "nav": {
+    "main": "Principal",
+    "footer": "Pie de página",
+    "menu": "Menú",
+    "browse": "Explorar prompts",
+    "howItWorks": "Cómo funciona",
+    "sell": "Vende tus prompts",
+    "faq": "Preguntas frecuentes",
+    "contact": "Contacto"
+  },
+  "footer": {
+    "about": "Acerca de {name}",
+    "blurb": "{tagline}. Markdown simple, escrito por desarrolladores, para desarrolladores.",
+    "legal": "© {year} {name}. Los prompts son propiedad de sus autores."
+  },
+  "price": {
+    "free": "Gratis"
+  },
+  "notFound": {
+    "meta": {
+      "title": "Página no encontrada"
+    },
+    "title": "Esta página no existe",
+    "text": "Puede que el enlace esté roto o que la página se haya movido. Los prompts siguen donde los dejaste.",
+    "back": "Volver al inicio"
+  }
+}

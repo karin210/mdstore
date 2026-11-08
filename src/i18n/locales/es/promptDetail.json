@@ -1,0 +1,46 @@
+{
+  "promptDetail": {
+    "meta": {
+      "title": "{title} ({fileName})"
+    },
+    "breadcrumb": {
+      "label": "Ruta de navegación",
+      "prompts": "Prompts"
+    },
+    "summary": "Resumen",
+    "meantFor": "Pensado para",
+    "highlights": "Puntos clave",
+    "purchase": {
+      "title": "Consigue este archivo",
+      "author": "Autor",
+      "length": "Longitud",
+      "category": "Categoría",
+      "testedWith": "Probado con",
+      "freeNote": "Gratis: descarga el .md completo y agrégalo a tu repositorio.",
+      "paidNote": "El pago estará disponible pronto. Al comprarlo, recibes el archivo completo como descarga .md, con las versiones futuras incluidas."
+    },
+    "examples": {
+      "title": "Ejemplos de resultados",
+      "withExamples": "Lo que construyó un agente siguiendo {fileName}.",
+      "comingSoon": "Pronto habrá capturas de lo que construye un agente con {fileName}.",
+      "placeholder": "Ejemplo {number}",
+      "placeholderHidden": ": captura disponible pronto"
+    },
+    "preview": {
+      "title": "Vista previa gratis",
+      "note": "Las primeras líneas de {fileName}, tal como las leerá tu agente.",
+      "fullFileNote": " Es gratis, así que también puedes leer aquí el archivo completo.",
+      "moreLines": "{count, plural, one {# línea más} other {# líneas más}}",
+      "showFull": "Mostrar el archivo completo ({lines})",
+      "hideFull": "Ocultar el archivo completo",
+      "fullLabel": "{fileName} completo"
+    },
+    "usage": "Uso sugerido",
+    "loading": "Cargando el prompt…",
+    "download": {
+      "notFound": "Este prompt no existe.",
+      "purchaseRequired": "Hay que comprar este prompt antes de poder descargarlo.",
+      "serverError": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento."
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "promptDetail": {
+    "meta": {
+      "title": "{title} ({fileName})"
+    },
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "prompts": "Prompts"
+    },
+    "summary": "Summary",
+    "meantFor": "Meant for",
+    "highlights": "Highlights",
+    "purchase": {
+      "title": "Get this file",
+      "author": "Author",
+      "length": "Length",
+      "category": "Category",
+      "testedWith": "Tested with",
+      "freeNote": "Free: download the full .md and drop it into your repo.",
+      "paidNote": "Checkout opens soon. Once bought, the full file is delivered as a .md download, future versions included."
+    },
+    "examples": {
+      "title": "Output examples",
+      "withExamples": "What an agent built while following {fileName}.",
+      "comingSoon": "Screenshots of what an agent builds with {fileName} are on their way.",
+      "placeholder": "Example {number}",
+      "placeholderHidden": ": screenshot coming soon"
+    },
+    "preview": {
+      "title": "Free preview",
+      "note": "The first lines of {fileName}, exactly as your agent will read them.",
+      "fullFileNote": " It's free, so you can read the whole file here too.",
+      "moreLines": "{count, plural, one {# more line} other {# more lines}}",
+      "showFull": "Show the full file ({lines})",
+      "hideFull": "Hide the full file",
+      "fullLabel": "Full {fileName}"
+    },
+    "usage": "Suggested use",
+    "loading": "Loading prompt…",
+    "download": {
+      "notFound": "This prompt doesn't exist.",
+      "purchaseRequired": "This prompt has to be purchased before it can be downloaded.",
+      "serverError": "Something went wrong on our side. Please try again in a moment."
+    }
+  }
+}

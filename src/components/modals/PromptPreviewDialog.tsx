@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, type MouseEvent, type ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
 import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
+import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/formatPrice";
 import styles from "./PromptPreviewDialog.module.css";
 
@@ -17,6 +18,9 @@ interface PromptPreviewDialogProps {
  * or the floating X button.
  */
 export function PromptPreviewDialog({ prompt, onClose }: PromptPreviewDialogProps): ReactElement {
+  const t = useTranslations("prompts");
+  const tPrice = useTranslations("price");
+  const locale = useLocale();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -46,12 +50,13 @@ export function PromptPreviewDialog({ prompt, onClose }: PromptPreviewDialogProp
           <header className={styles.header}>
             <code className={styles.fileName}>{prompt.fileName}</code>
             <h2 id="prompt-preview-title" className="modal-title">
-              {prompt.title}
+              {t(`listings.${prompt.slug}.title`)}
             </h2>
             <p className={styles.meta}>
-              {prompt.author} · {prompt.lineCount} lines · {formatPrice(prompt.priceUsd)} ·{" "}
+              {prompt.author} · {t("lineCount", { count: prompt.lineCount })} ·{" "}
+              {formatPrice(prompt.priceUsd, locale, tPrice("free"))} ·{" "}
               <Link href={promptHref(prompt)} className={styles.detailsLink}>
-                View details
+                {t("previewDialog.viewDetails")}
               </Link>
             </p>
           </header>
@@ -60,18 +65,17 @@ export function PromptPreviewDialog({ prompt, onClose }: PromptPreviewDialogProp
           </pre>
           {isFree(prompt) ? (
             <footer className={styles.footer}>
-              <p className={styles.note}>
-                The first lines of the file. This one is free: download the full .md and drop it into your repo.
-              </p>
-              <PrimaryButton href={downloadHref(prompt)} download aria-label={`Download ${prompt.fileName}`}>
-                Download {prompt.fileName}
+              <p className={styles.note}>{t("previewDialog.freeNote")}</p>
+              <PrimaryButton
+                href={downloadHref(prompt)}
+                download
+                aria-label={t("downloadFile", { fileName: prompt.fileName })}
+              >
+                {t("downloadFile", { fileName: prompt.fileName })}
               </PrimaryButton>
             </footer>
           ) : (
-            <p className={styles.note}>
-              Free preview: the first lines of the file. The full version is delivered as a .md download after
-              purchase.
-            </p>
+            <p className={styles.note}>{t("previewDialog.paidNote")}</p>
           )}
         </article>
       )}
@@ -79,8 +83,8 @@ export function PromptPreviewDialog({ prompt, onClose }: PromptPreviewDialogProp
         type="button"
         className="modal-close-floating"
         onClick={close}
-        aria-label="Close preview"
-        title="Close preview"
+        aria-label={t("previewDialog.close")}
+        title={t("previewDialog.close")}
       >
         <span aria-hidden="true">×</span>
       </button>

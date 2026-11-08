@@ -1,9 +1,11 @@
-import Link from "next/link";
-import type { ReactElement, ReactNode } from "react";
+import { useLocale } from "next-intl";
+import type { ComponentProps, ReactElement, ReactNode } from "react";
+import { getPathname, Link } from "@/i18n/navigation";
 import styles from "./PrimaryButton.module.css";
 
 interface PrimaryButtonProps {
-  href: string;
+  /** Locale-aware target; a download target is a plain path like "/prompts/global/download". */
+  href: ComponentProps<typeof Link>["href"];
   children: ReactNode;
   /** Visual size; the shape adapts to the context it is used in. */
   size?: "small" | "default" | "large";
@@ -20,10 +22,18 @@ export function PrimaryButton({
   download = false,
   "aria-label": ariaLabel,
 }: PrimaryButtonProps): ReactElement {
+  const locale = useLocale();
+
   // A download is a plain anchor: client-side routing would try to render the file as a page.
   if (download) {
     return (
-      <a href={href} download className={styles.button} data-size={size} aria-label={ariaLabel}>
+      <a
+        href={getPathname({ href: href as string, locale })}
+        download
+        className={styles.button}
+        data-size={size}
+        aria-label={ariaLabel}
+      >
         {children}
       </a>
     );

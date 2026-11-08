@@ -1,6 +1,15 @@
-export const promptCategories = ["Conventions", "Agents", "Frontend", "Testing", "Refactoring", "DevOps"] as const;
+import type { Messages } from "@/i18n/messages";
+
+/** Stable category ids; their labels live in the catalogue under `prompts.categories.<id>`. */
+export const promptCategories = ["conventions", "agents", "frontend", "testing", "refactoring", "devops"] as const;
 
 export type PromptCategory = (typeof promptCategories)[number];
+
+/**
+ * A listing's slug doubles as its catalogue key: its title, tagline, summary, highlights, "meant for"
+ * tags and usage steps live under `prompts.listings.<slug>` in src/i18n/locales/{en,es}/prompts.json.
+ */
+export type PromptSlug = keyof Messages["prompts"]["listings"];
 
 /** A screenshot of what the prompt produced, served from public/ (e.g. "/examples/global/form.webp"). */
 export interface OutputExample {
@@ -10,25 +19,16 @@ export interface OutputExample {
   caption: string;
 }
 
+/** The locale-independent part of a listing; its copy comes from the message catalogue. */
 export interface PromptListing {
-  slug: string;
+  slug: PromptSlug;
   fileName: string;
-  title: string;
-  /** Short, catchy one-liner shown as the h2 under the title on the listing page. */
-  tagline: string;
-  summary: string;
-  /** The file's key rules, one short sentence each, listed on the listing page. */
-  highlights: string[];
-  /** Kinds of projects the file is written for, as short tags ("Meant for" on the listing page). */
-  meantFor: string[];
-  /** Suggested steps from getting the file to using it. Text in `backticks` renders as inline code. */
-  usageSteps: string[];
   category: PromptCategory;
   author: string;
   priceUsd: number;
   lineCount: number;
   worksWith: string[];
-  /** First lines of the file, shown in the free preview. */
+  /** First lines of the file, shown in the free preview. The files are written in English. */
   excerpt: string;
   /** Screenshots of the prompt's output; the detail page shows placeholders until there are some. */
   outputExamples: OutputExample[];
@@ -42,12 +42,12 @@ export function findPromptBySlug(slug: string): PromptListing | undefined {
   return featuredPrompts.find((prompt) => prompt.slug === slug);
 }
 
-/** URL of a listing's detail page (src/app/prompts/[slug]). */
+/** Path of a listing's detail page (src/app/[locale]/prompts/[slug]); locale-aware links prefix it. */
 export function promptHref(prompt: PromptListing): string {
   return `/prompts/${prompt.slug}`;
 }
 
-/** Download URL of a free listing's full .md file (served by src/app/prompts/[slug]/download). */
+/** Path of a free listing's full .md file (served by src/app/[locale]/prompts/[slug]/download). */
 export function downloadHref(prompt: PromptListing): string {
   return `/prompts/${prompt.slug}/download`;
 }
@@ -60,27 +60,7 @@ export const featuredPrompts: PromptListing[] = [
   {
     slug: "global",
     fileName: "global.md",
-    title: "Web project conventions",
-    tagline: "Give your agent the habits of a careful senior web developer, from the first commit.",
-    summary:
-      "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, design tokens, fluid CSS, SOLID structure, forms, loading states and secure server defaults.",
-    highlights: [
-      "Semantic HTML and WCAG 2.1 AA accessibility on every component",
-      "Colours, font sizes and spacing as :root tokens with fluid clamp() scaling",
-      "Two modal types, dismissible or not, with shared global styling",
-      "Forms with inline, as-you-type guidance and password rules that accept browser-suggested passwords",
-      "Skeletons, empty and error states for every async operation",
-      "Server-side validation, authorization and correct HTTP status codes, with no leaked internals",
-      "Branded 404, safe redirects and unique page titles",
-    ],
-    meantFor: ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
-    usageSteps: [
-      "Download `global.md`. It's free.",
-      "Save it in your project's root, then add the line `@global.md` to your `CLAUDE.md` so Claude Code loads it in every session. With no `CLAUDE.md` yet, rename the file to `CLAUDE.md` instead.",
-      "Work as usual. The agent applies the conventions to every file it creates or changes, and follows your codebase where it already does things differently.",
-      "Add a framework-specific file, such as `nextjs-structure.md`, on top of it for project structure.",
-    ],
-    category: "Conventions",
+    category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
     lineCount: 201,
@@ -101,27 +81,7 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
   {
     slug: "nextjs-structure",
     fileName: "nextjs-structure.md",
-    title: "Next.js project structure",
-    tagline: "Stop asking where the file goes. Your agent already knows.",
-    summary:
-      "Where every file goes in a Next.js App Router project: src/ layout, routes-only app/, component folders, server-only code, public/ assets, aliases, titles and route protection.",
-    highlights: [
-      "A complete src/ tree showing where every kind of file belongs",
-      "app/ holds routes only, with the home page in a (homepage) route group",
-      "Component folders per route, per feature and global/, with no loose files",
-      "Server-only code in src/server/, guarded with server-only imports",
-      "Static files in public/; paid or private files served through an access-checked route",
-      "@/* imports with no barrel files, and one title template for every page",
-      "proxy.ts for redirects, with real permission checks in every handler",
-    ],
-    meantFor: ["Next.js App Router", "TypeScript projects", "New projects", "Existing codebases"],
-    usageSteps: [
-      "Buy and download `nextjs-structure.md`.",
-      "Save it in your project's root, then add the line `@nextjs-structure.md` to your `CLAUDE.md` so Claude Code loads it in every session.",
-      "On a new project, ask the agent to scaffold it following the file. On an existing one, it keeps your current structure where it differs and tells you about the difference.",
-      "Let the agent keep the structure section of your `CLAUDE.md` current as it adds routes and folders.",
-    ],
-    category: "Conventions",
+    category: "conventions",
     author: "@mdstore",
     priceUsd: 5,
     lineCount: 135,

@@ -1,0 +1,72 @@
+{
+  "prompts": {
+    "categories": {
+      "conventions": "Conventions",
+      "agents": "Agents",
+      "frontend": "Frontend",
+      "testing": "Testing",
+      "refactoring": "Refactoring",
+      "devops": "DevOps"
+    },
+    "card": {
+      "testedWith": "Tested with",
+      "price": "Price",
+      "authorAndLength": "Author and length",
+      "preview": "Preview",
+      "previewLabel": "Preview {fileName}",
+      "download": "Download"
+    },
+    "lineCount": "{count, plural, one {# line} other {# lines}}",
+    "downloadFile": "Download {fileName}",
+    "previewDialog": {
+      "viewDetails": "View details",
+      "freeNote": "The first lines of the file. This one is free: download the full .md and drop it into your repo.",
+      "paidNote": "Free preview: the first lines of the file. The full version is delivered as a .md download after purchase.",
+      "close": "Close preview"
+    },
+    "listings": {
+      "global": {
+        "title": "Web project conventions",
+        "tagline": "Give your agent the habits of a careful senior web developer, from the first commit.",
+        "summary": "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, design tokens, fluid CSS, SOLID structure, forms, loading states and secure server defaults.",
+        "highlights": [
+          "Semantic HTML and WCAG 2.1 AA accessibility on every component",
+          "Colours, font sizes and spacing as :root tokens with fluid clamp() scaling",
+          "Two modal types, dismissible or not, with shared global styling",
+          "Forms with inline, as-you-type guidance and password rules that accept browser-suggested passwords",
+          "Skeletons, empty and error states for every async operation",
+          "Server-side validation, authorization and correct HTTP status codes, with no leaked internals",
+          "Branded 404, safe redirects and unique page titles"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `global.md`. It's free.",
+          "Save it in your project's root, then add the line `@global.md` to your `CLAUDE.md` so Claude Code loads it in every session. With no `CLAUDE.md` yet, rename the file to `CLAUDE.md` instead.",
+          "Work as usual. The agent applies the conventions to every file it creates or changes, and follows your codebase where it already does things differently.",
+          "Add a framework-specific file, such as `nextjs-structure.md`, on top of it for project structure."
+        ]
+      },
+      "nextjs-structure": {
+        "title": "Next.js project structure",
+        "tagline": "Stop asking where the file goes. Your agent already knows.",
+        "summary": "Where every file goes in a Next.js App Router project: src/ layout, routes-only app/, component folders, server-only code, public/ assets, aliases, titles and route protection.",
+        "highlights": [
+          "A complete src/ tree showing where every kind of file belongs",
+          "app/ holds routes only, with the home page in a (homepage) route group",
+          "Component folders per route, per feature and global/, with no loose files",
+          "Server-only code in src/server/, guarded with server-only imports",
+          "Static files in public/; paid or private files served through an access-checked route",
+          "@/* imports with no barrel files, and one title template for every page",
+          "proxy.ts for redirects, with real permission checks in every handler"
+        ],
+        "meantFor": ["Next.js App Router", "TypeScript projects", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Buy and download `nextjs-structure.md`.",
+          "Save it in your project's root, then add the line `@nextjs-structure.md` to your `CLAUDE.md` so Claude Code loads it in every session.",
+          "On a new project, ask the agent to scaffold it following the file. On an existing one, it keeps your current structure where it differs and tells you about the difference.",
+          "Let the agent keep the structure section of your `CLAUDE.md` current as it adds routes and folders."
+        ]
+      }
+    }
+  }
+}

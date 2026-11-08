@@ -1,0 +1,112 @@
+{
+  "home": {
+    "meta": {
+      "title": "Buy and sell coding prompts as .md files"
+    },
+    "hero": {
+      "eyebrow": "// the marketplace for coding prompts",
+      "titleStart": "Prompts that ship code, sold as",
+      "titleEnd": "files.",
+      "lead": "Buy battle-tested instructions for Claude Code, Cursor and Copilot from the developers who wrote them. Drop the file into your repo and your agent works the way theirs does.",
+      "browse": "Browse prompts",
+      "sell": "Start selling",
+      "highlights": {
+        "noLockIn": "Plain Markdown, no lock-in",
+        "freePreview": "Free preview before you buy",
+        "anyTool": "Works with any AI coding tool"
+      }
+    },
+    "featured": {
+      "eyebrow": "// featured",
+      "title": "Prompts developers are buying this week",
+      "lead": "Every file opens with a free preview, so you know exactly what your agent will be told.",
+      "filterLabel": "Filter by category",
+      "all": "All",
+      "showing": "Showing {count, plural, one {# prompt} other {# prompts}}"
+    },
+    "howItWorks": {
+      "eyebrow": "// how it works",
+      "title": "From someone’s repo to yours in three steps",
+      "buyers": {
+        "audience": "For buyers",
+        "find": { "title": "Find", "text": "Filter by stack, task and the AI tool you use." },
+        "preview": { "title": "Preview", "text": "Read the opening of every file for free before paying." },
+        "dropIn": {
+          "title": "Drop it in",
+          "text": "Download the .md and commit it. Your agent picks it up on the next run."
+        }
+      },
+      "sellers": {
+        "audience": "For sellers",
+        "write": { "title": "Write", "text": "Package the instructions that already make your agent great." },
+        "publish": {
+          "title": "Publish",
+          "text": "Set a price, choose the preview length and list the tools you tested."
+        },
+        "earn": { "title": "Earn", "text": "Get paid on every sale and ship updates buyers receive automatically." }
+      }
+    },
+    "whyMarkdown": {
+      "eyebrow": "// why .md",
+      "title": "Just a file. That’s the point.",
+      "lead": "Markdown is what AI coding tools already read, so a prompt you buy here works on day one.",
+      "reasons": {
+        "readable": {
+          "title": "Readable before you buy",
+          "text": "No black boxes. Plain text you can review like any other file in a pull request."
+        },
+        "adaptable": {
+          "title": "Yours to adapt",
+          "text": "Edit the file to match your codebase. It lives in your repo, not on our servers."
+        },
+        "toolAgnostic": {
+          "title": "Tool-agnostic",
+          "text": "CLAUDE.md, AGENTS.md, Cursor rules or custom commands: the same file works across tools."
+        },
+        "versioned": {
+          "title": "Versioned updates",
+          "text": "Authors ship improvements; you diff the new version before you replace yours."
+        }
+      }
+    },
+    "sellerCta": {
+      "eyebrow": "// for sellers",
+      "title": "Your best prompt is already written. Start selling it.",
+      "lead": "The instructions you refined over hundreds of agent runs are worth something to developers who haven’t. Seller onboarding is in early access.",
+      "action": "Request seller access",
+      "mailSubject": "Seller access request",
+      "perks": {
+        "ownPrice": "You set the price",
+        "paidPerSale": "Paid on every sale",
+        "freePreviews": "Free previews that sell for you",
+        "updates": "Push updates to every buyer"
+      }
+    },
+    "faq": {
+      "eyebrow": "// faq",
+      "title": "Questions, answered",
+      "entries": {
+        "whatYouGet": {
+          "question": "What exactly do I get when I buy a prompt?",
+          "answer": "A plain Markdown (.md) file. Drop it into your repo as CLAUDE.md, AGENTS.md, a Cursor rule or a custom command. There is no app to install and no account needed to use it."
+        },
+        "previewFirst": {
+          "question": "Can I read a prompt before buying it?",
+          "answer": "Yes. Every listing has a free preview of the first lines of the file, so you can judge its structure and tone before paying."
+        },
+        "supportedTools": {
+          "question": "Which AI coding tools do the prompts work with?",
+          "answer": "Any tool that reads Markdown instructions: Claude Code, Cursor, GitHub Copilot, Aider and others. Each listing shows the tools its author tested it with."
+        },
+        "updates": {
+          "question": "Do I get updates when the author improves the file?",
+          "answer": "Yes. Purchases include every future version of the file, and you can compare versions before replacing the copy in your repo."
+        },
+        "sellerPayouts": {
+          "question": "How do sellers get paid?",
+          "answer": "Sellers set their own price and are paid for every sale. Write to the seller team to request access while seller onboarding is in early access."
+        }
+      }
+    }
+  }
+}

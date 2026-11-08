@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { ReactElement } from "react";
 import type { OutputExample } from "@/data/prompts";
@@ -13,19 +14,16 @@ const PLACEHOLDER_COUNT = 3;
 
 /** Screenshots of what the prompt produces; empty slots until the seller uploads them. */
 export function OutputExamples({ examples, fileName }: OutputExamplesProps): ReactElement {
+  const t = useTranslations("promptDetail.examples");
   const hasExamples = examples.length > 0;
 
   return (
     <section className={styles.section} aria-labelledby="examples-title">
       <header className={styles.header}>
         <h2 id="examples-title" className={styles.title}>
-          Output examples
+          {t("title")}
         </h2>
-        <p className={styles.note}>
-          {hasExamples
-            ? `What an agent built while following ${fileName}.`
-            : `Screenshots of what an agent builds with ${fileName} are on their way.`}
-        </p>
+        <p className={styles.note}>{hasExamples ? t("withExamples", { fileName }) : t("comingSoon", { fileName })}</p>
       </header>
 
       <ul className={styles.grid}>
@@ -55,8 +53,8 @@ export function OutputExamples({ examples, fileName }: OutputExamplesProps): Rea
                     </span>
                   </div>
                   <figcaption className={styles.caption}>
-                    Example {index + 1}
-                    <span className="visually-hidden">: screenshot coming soon</span>
+                    {t("placeholder", { number: index + 1 })}
+                    <span className="visually-hidden">{t("placeholderHidden")}</span>
                   </figcaption>
                 </figure>
               </li>

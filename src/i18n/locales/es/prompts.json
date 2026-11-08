@@ -1,0 +1,72 @@
+{
+  "prompts": {
+    "categories": {
+      "conventions": "Convenciones",
+      "agents": "Agentes",
+      "frontend": "Frontend",
+      "testing": "Pruebas",
+      "refactoring": "Refactorización",
+      "devops": "DevOps"
+    },
+    "card": {
+      "testedWith": "Probado con",
+      "price": "Precio",
+      "authorAndLength": "Autor y longitud",
+      "preview": "Vista previa",
+      "previewLabel": "Vista previa de {fileName}",
+      "download": "Descargar"
+    },
+    "lineCount": "{count, plural, one {# línea} other {# líneas}}",
+    "downloadFile": "Descargar {fileName}",
+    "previewDialog": {
+      "viewDetails": "Ver detalles",
+      "freeNote": "Las primeras líneas del archivo. Este es gratis: descarga el .md completo y agrégalo a tu repositorio.",
+      "paidNote": "Vista previa gratis: las primeras líneas del archivo. La versión completa se entrega como descarga .md después de la compra.",
+      "close": "Cerrar la vista previa"
+    },
+    "listings": {
+      "global": {
+        "title": "Convenciones para proyectos web",
+        "tagline": "Dale a tu agente los hábitos de un desarrollador web senior cuidadoso, desde el primer commit.",
+        "summary": "Instrucciones iniciales para cualquier sitio o aplicación web: HTML semántico, WCAG 2.1 AA, design tokens, CSS fluido, estructura SOLID, formularios, estados de carga y valores seguros por defecto en el servidor.",
+        "highlights": [
+          "HTML semántico y accesibilidad WCAG 2.1 AA en cada componente",
+          "Colores, tamaños de fuente y espaciados como tokens en :root con escalado fluido mediante clamp()",
+          "Dos tipos de modal, descartable o no, con estilos globales compartidos",
+          "Formularios con indicaciones en línea mientras escribes y reglas de contraseña que aceptan las contraseñas sugeridas por el navegador",
+          "Skeletons, estados vacíos y de error para cada operación asíncrona",
+          "Validación y autorización en el servidor y códigos de estado HTTP correctos, sin filtrar detalles internos",
+          "Página 404 con la marca del sitio, redirecciones seguras y títulos de página únicos"
+        ],
+        "meantFor": ["Sitios y aplicaciones web", "Cualquier framework o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "usageSteps": [
+          "Descarga `global.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y agrega la línea `@global.md` a tu `CLAUDE.md` para que Claude Code lo cargue en cada sesión. Si aún no tienes un `CLAUDE.md`, cambia el nombre del archivo a `CLAUDE.md`.",
+          "Trabaja como siempre. El agente aplica las convenciones a cada archivo que crea o modifica, y respeta tu código donde ya hace las cosas de otra forma.",
+          "Agrega encima un archivo específico de tu framework, como `nextjs-structure.md`, para la estructura del proyecto."
+        ]
+      },
+      "nextjs-structure": {
+        "title": "Estructura de proyectos Next.js",
+        "tagline": "Deja de preguntar dónde va cada archivo. Tu agente ya lo sabe.",
+        "summary": "Dónde va cada archivo en un proyecto Next.js con App Router: carpeta src/, app/ solo para rutas, carpetas de componentes, código exclusivo del servidor, recursos en public/, alias, títulos y protección de rutas.",
+        "highlights": [
+          "Un árbol src/ completo que muestra dónde va cada tipo de archivo",
+          "app/ solo contiene rutas, con la página de inicio en un grupo de rutas (homepage)",
+          "Carpetas de componentes por ruta, por funcionalidad y global/, sin archivos sueltos",
+          "Código exclusivo del servidor en src/server/, protegido con imports de server-only",
+          "Archivos estáticos en public/; los archivos de pago o privados se sirven desde una ruta que verifica el acceso",
+          "Imports con @/* sin archivos barrel, y una sola plantilla de título para todas las páginas",
+          "proxy.ts para redirecciones, con verificaciones de permisos reales en cada handler"
+        ],
+        "meantFor": ["Next.js App Router", "Proyectos con TypeScript", "Proyectos nuevos", "Proyectos existentes"],
+        "usageSteps": [
+          "Compra y descarga `nextjs-structure.md`.",
+          "Guárdalo en la raíz de tu proyecto y agrega la línea `@nextjs-structure.md` a tu `CLAUDE.md` para que Claude Code lo cargue en cada sesión.",
+          "En un proyecto nuevo, pide al agente que lo genere siguiendo el archivo. En uno existente, conserva tu estructura actual donde sea distinta y te avisa de la diferencia.",
+          "Deja que el agente mantenga al día la sección de estructura de tu `CLAUDE.md` a medida que agrega rutas y carpetas."
+        ]
+      }
+    }
+  }
+}

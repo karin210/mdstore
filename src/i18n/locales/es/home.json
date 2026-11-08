@@ -1,0 +1,124 @@
+{
+  "home": {
+    "meta": {
+      "title": "Compra y vende prompts de programación como archivos .md"
+    },
+    "hero": {
+      "eyebrow": "// el marketplace de prompts de programación",
+      "titleStart": "Prompts que entregan código, vendidos como archivos",
+      "titleEnd": ".",
+      "lead": "Compra instrucciones probadas para Claude Code, Cursor y Copilot a los desarrolladores que las escribieron. Agrega el archivo a tu repositorio y tu agente trabajará como el suyo.",
+      "browse": "Explorar prompts",
+      "sell": "Empezar a vender",
+      "highlights": {
+        "noLockIn": "Markdown simple, sin ataduras",
+        "freePreview": "Vista previa gratis antes de comprar",
+        "anyTool": "Funciona con cualquier herramienta de IA para programar"
+      }
+    },
+    "featured": {
+      "eyebrow": "// destacados",
+      "title": "Los prompts que más compran los desarrolladores esta semana",
+      "lead": "Cada archivo empieza con una vista previa gratis, así sabes exactamente qué instrucciones recibirá tu agente.",
+      "filterLabel": "Filtrar por categoría",
+      "all": "Todos",
+      "showing": "{count, plural, one {Se muestra # prompt} other {Se muestran # prompts}}"
+    },
+    "howItWorks": {
+      "eyebrow": "// cómo funciona",
+      "title": "Del repositorio de otra persona al tuyo en tres pasos",
+      "buyers": {
+        "audience": "Para compradores",
+        "find": {
+          "title": "Busca",
+          "text": "Filtra por stack, tarea y la herramienta de IA que usas."
+        },
+        "preview": {
+          "title": "Revisa",
+          "text": "Lee gratis el inicio de cada archivo antes de pagar."
+        },
+        "dropIn": {
+          "title": "Agrégalo",
+          "text": "Descarga el .md y haz commit. Tu agente lo usará en la siguiente ejecución."
+        }
+      },
+      "sellers": {
+        "audience": "Para vendedores",
+        "write": {
+          "title": "Escribe",
+          "text": "Empaqueta las instrucciones que ya hacen que tu agente sea excelente."
+        },
+        "publish": {
+          "title": "Publica",
+          "text": "Fija un precio, elige la longitud de la vista previa y lista las herramientas con las que lo probaste."
+        },
+        "earn": {
+          "title": "Gana",
+          "text": "Cobra por cada venta y publica actualizaciones que los compradores reciben automáticamente."
+        }
+      }
+    },
+    "whyMarkdown": {
+      "eyebrow": "// por qué .md",
+      "title": "Solo un archivo. De eso se trata.",
+      "lead": "Markdown es lo que ya leen las herramientas de IA para programar, así que un prompt que compras aquí funciona desde el primer día.",
+      "reasons": {
+        "readable": {
+          "title": "Legible antes de comprar",
+          "text": "Sin cajas negras. Texto simple que puedes revisar como cualquier otro archivo en un pull request."
+        },
+        "adaptable": {
+          "title": "Tuyo para adaptarlo",
+          "text": "Edita el archivo para que encaje con tu código. Vive en tu repositorio, no en nuestros servidores."
+        },
+        "toolAgnostic": {
+          "title": "Independiente de la herramienta",
+          "text": "CLAUDE.md, AGENTS.md, reglas de Cursor o comandos personalizados: el mismo archivo funciona en todas."
+        },
+        "versioned": {
+          "title": "Actualizaciones con versiones",
+          "text": "Los autores publican mejoras; tú comparas la nueva versión antes de reemplazar la tuya."
+        }
+      }
+    },
+    "sellerCta": {
+      "eyebrow": "// para vendedores",
+      "title": "Tu mejor prompt ya está escrito. Empieza a venderlo.",
+      "lead": "Las instrucciones que puliste en cientos de ejecuciones de tu agente valen algo para los desarrolladores que aún no lo han hecho. El registro de vendedores está en acceso anticipado.",
+      "action": "Solicitar acceso de vendedor",
+      "mailSubject": "Solicitud de acceso de vendedor",
+      "perks": {
+        "ownPrice": "Tú fijas el precio",
+        "paidPerSale": "Cobras por cada venta",
+        "freePreviews": "Vistas previas gratis que venden por ti",
+        "updates": "Envía actualizaciones a cada comprador"
+      }
+    },
+    "faq": {
+      "eyebrow": "// preguntas frecuentes",
+      "title": "Preguntas, respondidas",
+      "entries": {
+        "whatYouGet": {
+          "question": "¿Qué recibo exactamente al comprar un prompt?",
+          "answer": "Un archivo Markdown (.md) simple. Agrégalo a tu repositorio como CLAUDE.md, AGENTS.md, una regla de Cursor o un comando personalizado. No hay ninguna app que instalar ni hace falta una cuenta para usarlo."
+        },
+        "previewFirst": {
+          "question": "¿Puedo leer un prompt antes de comprarlo?",
+          "answer": "Sí. Cada publicación tiene una vista previa gratis de las primeras líneas del archivo, para que juzgues su estructura y su tono antes de pagar."
+        },
+        "supportedTools": {
+          "question": "¿Con qué herramientas de IA para programar funcionan los prompts?",
+          "answer": "Con cualquier herramienta que lea instrucciones en Markdown: Claude Code, Cursor, GitHub Copilot, Aider y otras. Cada publicación muestra las herramientas con las que su autor lo probó."
+        },
+        "updates": {
+          "question": "¿Recibo actualizaciones cuando el autor mejora el archivo?",
+          "answer": "Sí. Las compras incluyen todas las versiones futuras del archivo, y puedes comparar versiones antes de reemplazar la copia de tu repositorio."
+        },
+        "sellerPayouts": {
+          "question": "¿Cómo cobran los vendedores?",
+          "answer": "Los vendedores fijan su propio precio y cobran por cada venta. Escribe al equipo de vendedores para solicitar acceso mientras el registro está en acceso anticipado."
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -6,7 +7,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   // The download route reads the .md files at request time; ship them with its server bundle.
   outputFileTracingIncludes: {
-    "/prompts/[slug]/download": ["./content/prompts/**/*"],
+    "/[locale]/prompts/[slug]/download": ["./content/prompts/**/*"],
   },
   turbopack: {
     rules: {
@@ -20,4 +21,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
+export default withNextIntl(nextConfig);

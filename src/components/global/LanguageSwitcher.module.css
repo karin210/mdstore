@@ -1,0 +1,30 @@
+.list {
+  display: flex;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: block;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-pill);
+  color: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+a.item:hover {
+  background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+}
+
+.item[aria-current="true"] {
+  background: color-mix(in srgb, var(--color-on-primary) 22%, transparent);
+}
+
+.item:focus-visible {
+  outline-color: var(--color-on-primary);
+}

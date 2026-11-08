@@ -1,13 +1,16 @@
+import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { SkeletonBlock } from "@/components/global/SkeletonBlock";
 import styles from "./PromptDetail.module.css";
 
 /** Loading placeholder for PromptDetail; reuses its grid so the page doesn't jump when the listing arrives. */
 export function PromptDetailSkeleton(): ReactElement {
+  const t = useTranslations("promptDetail");
+
   return (
     <div className={styles.skeleton} aria-busy="true">
       <p role="status" className="visually-hidden">
-        Loading prompt…
+        {t("loading")}
       </p>
 
       <SkeletonBlock width="12rem" height="var(--text-sm)" />

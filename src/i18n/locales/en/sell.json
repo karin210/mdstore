@@ -1,0 +1,91 @@
+{
+  "sell": {
+    "meta": {
+      "title": "Sell your prompts",
+      "description": "Turn the prompt you refined into a listing other developers can buy. You set the price, and every sale pays you."
+    },
+    "hero": {
+      "eyebrow": "// welcome, seller",
+      "title": "You already wrote something other developers would love.",
+      "lead": "That CLAUDE.md you tuned over dozens of sessions, the Cursor rule your whole team relies on, the agent playbook that finally just works: it saves hours for people who haven’t written it yet. We’d be glad to help you share it.",
+      "action": "Tell us about your prompt",
+      "learnMore": "See what you get",
+      "mailSubject": "I’d like to sell a prompt on mdstore",
+      "note": "No audience or store needed. Just the file."
+    },
+    "benefits": {
+      "eyebrow": "// what you get",
+      "title": "Everything is set up so your work gets noticed",
+      "lead": "You focus on the prompt. mdstore gives it a proper home.",
+      "items": {
+        "ownPrice": {
+          "title": "You set the price",
+          "text": "Free or paid, it’s your call. A free file is also a great way to introduce yourself."
+        },
+        "paidPerSale": {
+          "title": "Paid on every sale",
+          "text": "Each time someone buys your file, you earn from it. Write it once, keep earning."
+        },
+        "freePreview": {
+          "title": "A preview that sells for you",
+          "text": "You choose how many opening lines buyers can read for free, so the quality of your writing does the convincing."
+        },
+        "outputExamples": {
+          "title": "Show what it produces",
+          "text": "Add screenshots of the results your prompt gets. Buyers trust what they can see."
+        },
+        "updates": {
+          "title": "Updates reach every buyer",
+          "text": "Improve your file whenever you like. People who bought it receive the new versions."
+        }
+      }
+    },
+    "listing": {
+      "eyebrow": "// a great first listing",
+      "title": "Small and specific beats big and vague",
+      "lead": "You don’t need a masterpiece. A prompt that does one job well is exactly what buyers are looking for.",
+      "tips": {
+        "oneJob": {
+          "title": "Pick one narrow job",
+          "text": "“Improve the UX of a form” is easier to trust, and to buy, than “make my whole app better”."
+        },
+        "testedTools": {
+          "title": "Say what you tested it with",
+          "text": "List the AI tools you used it with, such as Claude Code, Cursor or Copilot, so buyers know it works."
+        },
+        "technologies": {
+          "title": "Name the technologies",
+          "text": "Frameworks, languages and styling approaches it supports help the right developers find it."
+        },
+        "results": {
+          "title": "Keep a few results handy",
+          "text": "A screenshot or two of what the prompt built is the strongest way to show it’s worth it."
+        }
+      }
+    },
+    "steps": {
+      "eyebrow": "// how to start",
+      "title": "Three friendly steps",
+      "items": {
+        "write": {
+          "title": "Say hello",
+          "text": "Email us the prompt, or just a description of it, and the tools you tested it with."
+        },
+        "talk": {
+          "title": "We’ll get back to you",
+          "text": "Seller onboarding is in early access, so we’ll reply personally with the next steps."
+        },
+        "publish": {
+          "title": "Go live",
+          "text": "Set your price and your preview, and your prompt is ready for developers to find."
+        }
+      }
+    },
+    "closing": {
+      "title": "Not sure it’s good enough? Send it anyway.",
+      "text": "If it made your own work easier, it will make someone else’s easier too. Every prompt in the store started as a file like yours.",
+      "action": "Request seller access",
+      "back": "Browse the store first"
+    }
+  }
+}

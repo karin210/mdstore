@@ -1,16 +1,24 @@
+import { hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { findPromptBySlug, isFree } from "@/data/prompts";
+import { routing } from "@/i18n/routing";
 import { readPromptMarkdown } from "@/lib/promptFiles";
 
 /** Serves a free listing's full .md file as a download. Paid files are never served here. */
-export async function GET(_request: Request, ctx: RouteContext<"/prompts/[slug]/download">): Promise<Response> {
-  const { slug } = await ctx.params;
+export async function GET(
+  _request: Request,
+  ctx: RouteContext<"/[locale]/prompts/[slug]/download">,
+): Promise<Response> {
+  const { locale: requestedLocale, slug } = await ctx.params;
+  const locale = hasLocale(routing.locales, requestedLocale) ? requestedLocale : routing.defaultLocale;
+  const t = await getTranslations({ locale, namespace: "promptDetail.download" });
   const prompt = findPromptBySlug(slug);
 
   if (!prompt) {
-    return Response.json({ message: "This prompt doesn't exist." }, { status: 404 });
+    return Response.json({ message: t("notFound") }, { status: 404 });
   }
   if (!isFree(prompt)) {
-    return Response.json({ message: "This prompt has to be purchased before it can be downloaded." }, { status: 403 });
+    return Response.json({ message: t("purchaseRequired") }, { status: 403 });
   }
 
   try {
@@ -26,9 +34,6 @@ export async function GET(_request: Request, ctx: RouteContext<"/prompts/[slug]/
     const requestId = crypto.randomUUID();
     console.error(`[download] GET /prompts/${slug}/download failed (requestId ${requestId})`, error);
 
-    return Response.json(
-      { message: "Something went wrong on our side. Please try again in a moment.", requestId },
-      { status: 500 },
-    );
+    return Response.json({ message: t("serverError"), requestId }, { status: 500 });
   }
 }
