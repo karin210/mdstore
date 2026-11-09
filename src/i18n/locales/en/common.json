@@ -1,9 +1,9 @@
 {
   "meta": {
-    "description": "Buy and sell battle-tested coding prompts as plain Markdown files. Preview every .md before you buy, then drop it straight into your repo."
+    "description": "A hub for developing coding prompts. Developers share their own prompts as plain Markdown files, and the community gets high-quality, tested ones, free or paid, to drop straight into a repo."
   },
   "brand": {
-    "tagline": "The marketplace for coding prompts",
+    "tagline": "The hub for developing coding prompts",
     "homeLink": "{name}, home"
   },
   "language": {

@@ -1,13 +1,13 @@
 {
   "home": {
     "meta": {
-      "title": "Compra y vende prompts de programación como archivos .md"
+      "title": "Desarrolla, comparte y vende prompts de programación como archivos .md"
     },
     "hero": {
-      "eyebrow": "// el marketplace de prompts de programación",
-      "titleStart": "Prompts que entregan código, vendidos como archivos",
+      "eyebrow": "// el hub para desarrollar prompts de programación",
+      "titleStart": "Desarrolla y comparte prompts de programación como archivos",
       "titleEnd": ".",
-      "lead": "Compra instrucciones probadas para Claude Code, Cursor y Copilot a los desarrolladores que las escribieron. Agrega el archivo a tu repositorio y tu agente trabajará como el suyo.",
+      "lead": "Los desarrolladores publican los prompts que han perfeccionado y la comunidad accede a instrucciones probadas y de alta calidad para Claude Code, Cursor y Copilot. Compártelos gratis o véndelos, y agrega cualquier archivo a tu repositorio para que tu agente trabaje como el suyo.",
       "browse": "Explorar prompts",
       "sell": "Empezar a vender",
       "highlights": {

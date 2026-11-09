@@ -1,9 +1,9 @@
 {
   "meta": {
-    "description": "Compra y vende prompts de programación probados como archivos Markdown. Lee la vista previa de cada .md antes de comprarlo y agrégalo directo a tu repositorio."
+    "description": "Un hub para desarrollar prompts de programación. Los desarrolladores comparten sus propios prompts como archivos Markdown y la comunidad accede a prompts probados y de alta calidad, gratis o de pago, para agregarlos directo a un repositorio."
   },
   "brand": {
-    "tagline": "El marketplace de prompts de programación",
+    "tagline": "El hub para desarrollar prompts de programación",
     "homeLink": "{name}, inicio"
   },
   "language": {

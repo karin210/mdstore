@@ -1,13 +1,13 @@
 {
   "home": {
     "meta": {
-      "title": "Buy and sell coding prompts as .md files"
+      "title": "Develop, share and sell coding prompts as .md files"
     },
     "hero": {
-      "eyebrow": "// the marketplace for coding prompts",
-      "titleStart": "Prompts that ship code, sold as",
+      "eyebrow": "// the hub for developing coding prompts",
+      "titleStart": "Develop and share coding prompts as",
       "titleEnd": "files.",
-      "lead": "Buy battle-tested instructions for Claude Code, Cursor and Copilot from the developers who wrote them. Drop the file into your repo and your agent works the way theirs does.",
+      "lead": "Developers publish the prompts they have refined, and the community gets high-quality, tested instructions for Claude Code, Cursor and Copilot. Share them for free or sell them, then drop any file into your repo so your agent works the way theirs does.",
       "browse": "Browse prompts",
       "sell": "Start selling",
       "highlights": {
