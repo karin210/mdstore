@@ -9,16 +9,6 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/[locale]/prompts/[slug]/download": ["./content/prompts/**/*"],
   },
-  turbopack: {
-    rules: {
-      "*.css": {
-        // CSS Modules must keep their default handling, or their class names resolve to undefined.
-        condition: { not: { path: /\.module\.css$/ } },
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
-  },
 };
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");

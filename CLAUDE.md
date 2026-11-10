@@ -22,7 +22,7 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 ## Stack
 
 - Next.js 16 (App Router, Turbopack, `cacheComponents` and `partialPrefetching` enabled), React 19, TypeScript (strict).
-- Styling: CSS Modules per component + global design tokens in `src/styles/globals.css`. Tailwind v4 is installed and imported in `globals.css` (it also provides the preflight reset), but components are styled with CSS Modules.
+- Styling: CSS Modules per component + global design tokens in `src/styles/globals.css`. No CSS framework: the reset at the top of `globals.css` (`@layer reset`, adapted from Tailwind's preflight) removes default margins, heading sizes, list bullets and control styling, and every unlayered rule overrides it. Tailwind was removed because only its reset was used.
 - Fonts via `next/font/google`: **Bricolage Grotesque** (`--font-display`, page/section headings), **Geist** (`--font-body`, body copy, controls and modal headings), **Geist Mono** (`--font-code`, file names and Markdown excerpts).
 - Supabase (`@supabase/ssr` + `@supabase/supabase-js`): email/password auth and the `posted_prompts` table. Settings in `.env.local` (see `.env.example`); the schema and row-level security policies are in `supabase/migrations/`. Without the env vars the site still builds and runs, signed out, with posting unavailable.
 - Zod for the validation schemas shared by forms (client) and server actions.
@@ -108,7 +108,6 @@ public/                      static files served as-is (favicon.ico, images, rob
 ```
 
 - Imports use the `@/*` alias (→ `src/*`), never `../`. Each component's `*.module.css` sits next to it.
-- `next.config.ts` runs the Tailwind Turbopack loader on global CSS only; the rule excludes `*.module.css`, otherwise CSS Module class names resolve to `undefined`.
 
 ## Conventions specific to this project
 
