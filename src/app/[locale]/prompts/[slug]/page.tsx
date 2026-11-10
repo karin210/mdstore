@@ -8,19 +8,21 @@ import { routing } from "@/i18n/routing";
 import { getPromptOrNotFound } from "@/lib/getPromptOrNotFound";
 import styles from "./page.module.css";
 
-/** Every listing is known at build time, so each detail page is prerendered in every locale. */
+/**
+ * Catalogue listings are known at build time, so their pages are prerendered in every locale.
+ * Prompts posted by users render on their first request (their data is cached, see postedPrompts.ts).
+ */
 export function generateStaticParams(): { locale: string; slug: string }[] {
   return routing.locales.flatMap((locale) => featuredPrompts.map((prompt) => ({ locale, slug: prompt.slug })));
 }
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/prompts/[slug]">): Promise<Metadata> {
   const prompt = await getPromptOrNotFound(params);
-  const t = await getTranslations("prompts.listings");
   const tDetail = await getTranslations("promptDetail.meta");
 
   return {
-    title: tDetail("title", { title: t(`${prompt.slug}.title`), fileName: prompt.fileName }),
-    description: t(`${prompt.slug}.summary`),
+    title: tDetail("title", { title: prompt.title, fileName: prompt.fileName }),
+    description: prompt.summary,
   };
 }
 

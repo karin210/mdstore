@@ -5,8 +5,8 @@
 export const siteConfig = {
   name: "mdstore",
   titleSeparator: " | ",
-  /** Placeholder inbox for seller applications until the seller onboarding flow exists. */
-  sellerContactEmail: "sellers@mdstore.dev",
+  /** Placeholder contact inbox shown in the footer. */
+  contactEmail: "hello@mdstore.dev",
   /** Static so the footer stays prerenderable (no `new Date()` during render). */
   copyrightYear: 2026,
 } as const;

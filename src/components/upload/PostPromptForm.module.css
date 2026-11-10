@@ -1,0 +1,88 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.account {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.legend {
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+/* The legend is not a flex item, so the group's gap doesn't reach it. */
+.group > .legend + * {
+  margin-top: var(--space-xs);
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.tools > legend {
+  padding: 0;
+}
+
+.toolList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-input-bg);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.tool:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+}
+
+.tool:has(input:focus-visible) {
+  outline: 0.1875rem solid var(--color-focus);
+  outline-offset: 0.1875rem;
+}
+
+.tool input {
+  accent-color: var(--color-primary);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}

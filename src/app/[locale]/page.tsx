@@ -5,7 +5,7 @@ import { Faq } from "@/components/homepage/Faq";
 import { FeaturedPrompts } from "@/components/homepage/FeaturedPrompts";
 import { Hero } from "@/components/homepage/Hero";
 import { HowItWorks } from "@/components/homepage/HowItWorks";
-import { SellerCta } from "@/components/homepage/SellerCta";
+import { UploadCta } from "@/components/homepage/UploadCta";
 import { WhyMarkdown } from "@/components/homepage/WhyMarkdown";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
@@ -24,7 +24,7 @@ export default function HomePage(): ReactElement {
       <FeaturedPrompts />
       <HowItWorks />
       <WhyMarkdown />
-      <SellerCta />
+      <UploadCta />
       <Faq />
     </main>
   );

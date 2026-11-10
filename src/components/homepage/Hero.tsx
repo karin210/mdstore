@@ -21,8 +21,8 @@ export function Hero(): ReactElement {
           <PrimaryButton href={{ pathname: "/", hash: "featured" }} size="large">
             {t("browse")}
           </PrimaryButton>
-          <SecondaryButton href="#sell" size="large">
-            {t("sell")}
+          <SecondaryButton href="/upload" size="large">
+            {t("upload")}
           </SecondaryButton>
         </div>
         <ul className={styles.highlights}>

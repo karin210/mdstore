@@ -1,0 +1,31 @@
+/* Sits on the primary-coloured header: outlined in the header's text colour. */
+.signIn,
+.signOut {
+  display: block;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 0.0625rem solid color-mix(in srgb, var(--color-on-primary) 55%, transparent);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-on-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.signIn:hover,
+.signOut:hover {
+  background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+}
+
+.signIn:focus-visible,
+.signOut:focus-visible {
+  outline-color: var(--color-on-primary);
+}
+
+.signIn[data-ready="false"] {
+  visibility: hidden;
+}

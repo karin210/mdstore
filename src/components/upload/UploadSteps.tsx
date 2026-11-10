@@ -1,17 +1,17 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import styles from "./SellSteps.module.css";
+import styles from "./UploadSteps.module.css";
 
-const stepIds = ["write", "talk", "publish"] as const;
+const stepIds = ["signIn", "describe", "publish"] as const;
 
-export function SellSteps(): ReactElement {
-  const t = useTranslations("sell.steps");
+export function UploadSteps(): ReactElement {
+  const t = useTranslations("upload.steps");
 
   return (
-    <section className="page-section" aria-labelledby="sell-steps-title">
+    <section className="page-section" aria-labelledby="upload-steps-title">
       <header className="section-heading">
         <p className="eyebrow">{t("eyebrow")}</p>
-        <h2 id="sell-steps-title">{t("title")}</h2>
+        <h2 id="upload-steps-title">{t("title")}</h2>
       </header>
       <ol className={styles.steps}>
         {stepIds.map((id) => (

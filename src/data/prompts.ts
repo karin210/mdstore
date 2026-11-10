@@ -34,7 +34,7 @@ export interface PromptListing {
   outputExamples: OutputExample[];
 }
 
-export function isFree(prompt: PromptListing): boolean {
+export function isFree(prompt: Pick<PromptListing, "priceUsd">): boolean {
   return prompt.priceUsd === 0;
 }
 
@@ -43,12 +43,12 @@ export function findPromptBySlug(slug: string): PromptListing | undefined {
 }
 
 /** Path of a listing's detail page (src/app/[locale]/prompts/[slug]); locale-aware links prefix it. */
-export function promptHref(prompt: PromptListing): string {
+export function promptHref(prompt: { slug: string }): string {
   return `/prompts/${prompt.slug}`;
 }
 
 /** Path of a free listing's full .md file (served by src/app/[locale]/prompts/[slug]/download). */
-export function downloadHref(prompt: PromptListing): string {
+export function downloadHref(prompt: { slug: string }): string {
   return `/prompts/${prompt.slug}/download`;
 }
 

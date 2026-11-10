@@ -9,7 +9,7 @@
       "titleEnd": "files.",
       "lead": "Developers publish the prompts they have refined, and the community gets high-quality, tested instructions for Claude Code, Cursor and Copilot. Share them for free or sell them, then drop any file into your repo so your agent works the way theirs does.",
       "browse": "Browse prompts",
-      "sell": "Start selling",
+      "upload": "Upload your prompt",
       "highlights": {
         "noLockIn": "Plain Markdown, no lock-in",
         "freePreview": "Free preview before you buy",
@@ -69,17 +69,16 @@
         }
       }
     },
-    "sellerCta": {
-      "eyebrow": "// for sellers",
-      "title": "Your best prompt is already written. Start selling it.",
-      "lead": "The instructions you refined over hundreds of agent runs are worth something to developers who haven’t. Seller onboarding is in early access.",
-      "action": "Request seller access",
-      "mailSubject": "Seller access request",
+    "uploadCta": {
+      "eyebrow": "// for authors",
+      "title": "Your best prompt is already written. Share it.",
+      "lead": "The instructions you refined over hundreds of agent runs are worth something to developers who haven’t. Sign in, upload the .md and it gets a page of its own.",
+      "action": "Upload your prompt",
       "perks": {
-        "ownPrice": "You set the price",
-        "paidPerSale": "Paid on every sale",
-        "freePreviews": "Free previews that sell for you",
-        "updates": "Push updates to every buyer"
+        "ownPage": "A page of its own",
+        "freePreviews": "You choose the free preview",
+        "credit": "Your name as the author",
+        "plainMarkdown": "The same .md you already use"
       }
     },
     "faq": {

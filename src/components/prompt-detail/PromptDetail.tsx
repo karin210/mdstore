@@ -5,11 +5,9 @@ import { InlineCode } from "@/components/prompt-detail/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples";
 import { downloadHref, isFree } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
-import { messageList } from "@/i18n/messages";
 import type { Locale } from "@/i18n/routing";
 import { formatPrice } from "@/lib/formatPrice";
 import { getPromptOrNotFound } from "@/lib/getPromptOrNotFound";
-import { readPromptMarkdown } from "@/lib/promptFiles";
 import styles from "./PromptDetail.module.css";
 
 interface PromptDetailProps {
@@ -26,11 +24,10 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
   const tPrice = await getTranslations("price");
   const free = isFree(prompt);
   const remainingLines = prompt.lineCount - prompt.excerpt.split("\n").length;
-  // Only free files are read: a paid file's content must never reach the page's HTML.
-  const fullMarkdown = free ? await readPromptMarkdown(prompt.fileName) : null;
+  // Null for paid prompts: their content never reaches the page's HTML.
+  const fullMarkdown = free ? prompt.fullMarkdown : null;
   const category = tPrompts(`categories.${prompt.category}`);
   const lines = tPrompts("lineCount", { count: prompt.lineCount });
-  const listing = `listings.${prompt.slug}` as const;
 
   return (
     <>
@@ -52,16 +49,16 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
             <span className={styles.category}>{category}</span>
           </p>
           <h1 id="prompt-title" className={styles.title}>
-            {tPrompts(`${listing}.title`)}
+            {prompt.title}
           </h1>
-          <h2 className={styles.tagline}>{tPrompts(`${listing}.tagline`)}</h2>
+          <h2 className={styles.tagline}>{prompt.tagline}</h2>
         </header>
 
         <section className={styles.summarySection} aria-labelledby="summary-title">
           <h2 id="summary-title" className={styles.sectionTitle}>
             {t("summary")}
           </h2>
-          <p className={styles.summary}>{tPrompts(`${listing}.summary`)}</p>
+          <p className={styles.summary}>{prompt.summary}</p>
         </section>
 
         <section className={styles.meantForSection} aria-labelledby="meant-for-title">
@@ -69,7 +66,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
             {t("meantFor")}
           </h2>
           <ul className={styles.tags}>
-            {messageList(tPrompts.raw(`${listing}.meantFor`)).map((projectType) => (
+            {prompt.meantFor.map((projectType) => (
               <li key={projectType}>{projectType}</li>
             ))}
           </ul>
@@ -80,7 +77,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
             {t("highlights")}
           </h2>
           <ul className={styles.highlights}>
-            {messageList(tPrompts.raw(`${listing}.highlights`)).map((highlight) => (
+            {prompt.highlights.map((highlight) => (
               <li key={highlight}>{highlight}</li>
             ))}
           </ul>
@@ -184,7 +181,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
             {t("usage")}
           </h2>
           <ol className={styles.steps}>
-            {messageList(tPrompts.raw(`${listing}.usageSteps`)).map((step) => (
+            {prompt.usageSteps.map((step) => (
               <li key={step}>
                 {/* One flex item, so the text and its inline code keep flowing together */}
                 <span>

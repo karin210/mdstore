@@ -1,25 +1,24 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { SecondaryButton } from "@/components/global/SecondaryButton";
-import { siteConfig } from "@/lib/site";
-import styles from "./SellerCta.module.css";
+import styles from "./UploadCta.module.css";
 
-const perkKeys = ["ownPrice", "paidPerSale", "freePreviews", "updates"] as const;
+const perkKeys = ["ownPage", "freePreviews", "credit", "plainMarkdown"] as const;
 
-export function SellerCta(): ReactElement {
-  const t = useTranslations("home.sellerCta");
-  const mailto = `mailto:${siteConfig.sellerContactEmail}?subject=${encodeURIComponent(t("mailSubject"))}`;
+/** Landing-page invitation for authors to post their prompts on /upload. */
+export function UploadCta(): ReactElement {
+  const t = useTranslations("home.uploadCta");
 
   return (
-    <section id="sell" className={styles.wrapper} aria-labelledby="sell-title">
+    <section id="upload" className={styles.wrapper} aria-labelledby="upload-cta-title">
       <div className={styles.panel}>
         <div className={styles.copy}>
           <p className="eyebrow">{t("eyebrow")}</p>
-          <h2 id="sell-title" className={styles.title}>
+          <h2 id="upload-cta-title" className={styles.title}>
             {t("title")}
           </h2>
           <p className={styles.lead}>{t("lead")}</p>
-          <SecondaryButton href={mailto} size="large">
+          <SecondaryButton href="/upload" size="large">
             {t("action")}
           </SecondaryButton>
         </div>

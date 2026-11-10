@@ -1,0 +1,170 @@
+{
+  "upload": {
+    "meta": {
+      "title": "Sube tus prompts",
+      "description": "Publica el prompt que perfeccionaste para que otros desarrolladores lo encuentren, lo previsualicen y lo agreguen a su repositorio. Inicia sesión, completa el formulario y tendrá su propia página."
+    },
+    "hero": {
+      "eyebrow": "// te damos la bienvenida",
+      "title": "Ya escribiste algo que a otros desarrolladores les encantaría.",
+      "lead": "Ese CLAUDE.md que afinaste durante decenas de sesiones, la regla de Cursor en la que confía todo tu equipo, el manual para agentes que por fin funciona: les ahorra horas a quienes aún no lo han escrito. Publícalo aquí y dale una página propia.",
+      "action": "Publica tu prompt",
+      "learnMore": "Mira qué obtienes",
+      "note": "No necesitas audiencia. Solo el archivo y una cuenta gratis."
+    },
+    "benefits": {
+      "eyebrow": "// qué obtienes",
+      "title": "Todo está listo para que tu trabajo se note",
+      "lead": "Tú te ocupas del prompt. mdstore le da un buen lugar donde vivir.",
+      "items": {
+        "ownPage": {
+          "title": "Una página propia",
+          "text": "Tu prompt tiene su propia dirección con su resumen, puntos destacados, uso sugerido y las herramientas con las que lo probaste."
+        },
+        "freePreview": {
+          "title": "Tú eliges la vista previa",
+          "text": "Decide cuántas líneas iniciales leen primero los visitantes, así la calidad de tu escritura hace el convencimiento."
+        },
+        "credit": {
+          "title": "Tu nombre en él",
+          "text": "Cada publicación muestra a su autor, para que quienes usan tu archivo sepan a quién agradecer."
+        },
+        "outputExamples": {
+          "title": "Muestra lo que produce",
+          "text": "Las capturas de los resultados que consigue tu prompt llegarán a cada página. Ten algunas a mano."
+        },
+        "plainMarkdown": {
+          "title": "Markdown simple, sin ataduras",
+          "text": "Subes el mismo .md que ya usas. Los desarrolladores lo descargan y lo agregan a su repositorio."
+        }
+      }
+    },
+    "listing": {
+      "eyebrow": "// una gran primera publicación",
+      "title": "Algo pequeño y concreto vence a algo grande y vago",
+      "lead": "No necesitas una obra maestra. Un prompt que hace bien una sola tarea es justo lo que buscan los desarrolladores.",
+      "tips": {
+        "oneJob": {
+          "title": "Elige una tarea concreta",
+          "text": "“Mejorar la experiencia de un formulario” inspira más confianza, y se usa mejor, que “mejorar toda mi app”."
+        },
+        "testedTools": {
+          "title": "Di con qué lo probaste",
+          "text": "Marca las herramientas de IA con las que lo usaste, como Claude Code, Cursor o Copilot, para que los desarrolladores sepan que funciona."
+        },
+        "technologies": {
+          "title": "Nombra las tecnologías",
+          "text": "Los frameworks, lenguajes y estilos que admite ayudan a que los desarrolladores adecuados lo encuentren."
+        },
+        "results": {
+          "title": "Ten a mano algunos resultados",
+          "text": "Una o dos capturas de lo que construyó el prompt son la mejor forma de demostrar que vale la pena."
+        }
+      }
+    },
+    "steps": {
+      "eyebrow": "// cómo empezar",
+      "title": "Tres pasos sencillos",
+      "items": {
+        "signIn": {
+          "title": "Inicia sesión",
+          "text": "Crea una cuenta gratis, o inicia sesión si ya tienes una."
+        },
+        "describe": {
+          "title": "Describe tu prompt",
+          "text": "Completa el formulario de abajo: qué hace, para quién es, cómo se usa y el archivo .md."
+        },
+        "publish": {
+          "title": "Sal al aire",
+          "text": "Tu prompt se publica de inmediato en su propia página, listo para que los desarrolladores lo encuentren."
+        }
+      }
+    },
+    "form": {
+      "eyebrow": "// publica un prompt",
+      "title": "Publica tu prompt",
+      "lead": "¿No estás seguro de que sea suficiente? Publícalo igual. Si te facilitó el trabajo a ti, también se lo facilitará a alguien más.",
+      "signedOut": {
+        "text": "Inicia sesión para publicar un prompt. Toma un minuto y es gratis.",
+        "action": "Inicia sesión para publicar"
+      },
+      "signedInAs": "Sesión iniciada como {email}",
+      "sections": {
+        "basics": "Lo básico",
+        "details": "Qué hace",
+        "file": "El archivo"
+      },
+      "fields": {
+        "title": {
+          "label": "Título",
+          "hint": "Qué es el prompt, en pocas palabras (se muestra como encabezado de la página)."
+        },
+        "tagline": {
+          "label": "Frase destacada",
+          "hint": "Una oración que les diga a los desarrolladores por qué lo quieren."
+        },
+        "summary": {
+          "label": "Resumen",
+          "hint": "Qué cubre el prompt, en dos o tres oraciones."
+        },
+        "category": {
+          "label": "Categoría",
+          "placeholder": "Elige una categoría"
+        },
+        "authorHandle": {
+          "label": "Nombre o usuario del autor",
+          "hint": "Se muestra en la página como autor, p. ej. @tunombre."
+        },
+        "meantFor": {
+          "label": "Pensado para",
+          "hint": "Los tipos de proyecto a los que se adapta, uno por línea (p. ej. Next.js App Router)."
+        },
+        "highlights": {
+          "label": "Puntos destacados",
+          "hint": "Lo que el prompt hace que haga el agente, uno por línea."
+        },
+        "usageSteps": {
+          "label": "Uso sugerido",
+          "hint": "Los pasos para empezar a usarlo, uno por línea. Escribe los nombres de archivo entre `comillas invertidas`."
+        },
+        "worksWith": {
+          "label": "Probado con",
+          "hint": "Las herramientas de IA con las que lo usaste."
+        },
+        "file": {
+          "label": "Archivo Markdown",
+          "hint": "Tu archivo .md, de hasta 200 KB."
+        },
+        "previewLineCount": {
+          "label": "Largo de la vista previa gratis (líneas)",
+          "hint": "Cuántas líneas iniciales leen los visitantes antes de descargar."
+        }
+      },
+      "submit": "Publicar prompt",
+      "submitting": "Publicando…",
+      "submitted": "¡Publicado! Abriendo la página de tu prompt…",
+      "fixFields": "Algunos campos necesitan un cambio antes de publicar. Están marcados abajo.",
+      "errors": {
+        "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para publicar tu prompt.",
+        "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}.",
+        "notConfigured": "Publicar aún no está disponible. Inténtalo más tarde."
+      }
+    },
+    "validation": {
+      "required": "Completa este campo.",
+      "tooShort": "Usa al menos {min} caracteres.",
+      "tooLong": "Usa como máximo {max} caracteres.",
+      "tooFewItems": "Agrega al menos {min, plural, one {# línea} other {# líneas}}.",
+      "tooManyItems": "Usa como máximo {max} líneas.",
+      "itemTooLong": "Mantén cada línea por debajo de {max} caracteres.",
+      "chooseCategory": "Elige una categoría.",
+      "chooseTool": "Marca al menos una herramienta.",
+      "handleFormat": "Usa letras, números, puntos, guiones o guiones bajos, opcionalmente empezando con @.",
+      "fileRequired": "Elige tu archivo .md.",
+      "fileType": "Elige un archivo Markdown que termine en .md.",
+      "fileTooLarge": "Elige un archivo de hasta 200 KB.",
+      "fileEmpty": "El archivo está vacío. Elige el archivo con tu prompt.",
+      "previewRange": "Usa un número del {min} al {max}."
+    }
+  }
+}

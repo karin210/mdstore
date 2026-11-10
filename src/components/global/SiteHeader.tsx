@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
+import { AccountControl } from "@/components/global/AccountControl";
 import { LanguageSwitcher } from "@/components/global/LanguageSwitcher";
 import { MobileMenu } from "@/components/global/MobileMenu";
 import { navLinks } from "@/components/global/navLinks";
@@ -29,6 +30,7 @@ export function SiteHeader(): ReactElement {
             </div>
           </nav>
           <LanguageSwitcher />
+          <AccountControl />
         </div>
       </div>
     </header>

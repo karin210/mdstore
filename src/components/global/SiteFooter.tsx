@@ -25,7 +25,7 @@ export function SiteFooter(): ReactElement {
               </li>
             ))}
             <li>
-              <a href={`mailto:${siteConfig.sellerContactEmail}`}>{t("nav.contact")}</a>
+              <a href={`mailto:${siteConfig.contactEmail}`}>{t("nav.contact")}</a>
             </li>
           </ul>
         </nav>

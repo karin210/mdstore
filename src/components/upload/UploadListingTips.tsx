@@ -1,11 +1,11 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { FeatureGrid } from "@/components/sell/FeatureGrid";
+import { FeatureGrid } from "@/components/upload/FeatureGrid";
 
 const tipIds = ["oneJob", "testedTools", "technologies", "results"] as const;
 
-export function SellListingTips(): ReactElement {
-  const t = useTranslations("sell.listing");
+export function UploadListingTips(): ReactElement {
+  const t = useTranslations("upload.listing");
 
   return (
     <FeatureGrid

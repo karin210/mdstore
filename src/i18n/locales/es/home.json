@@ -9,7 +9,7 @@
       "titleEnd": ".",
       "lead": "Los desarrolladores publican los prompts que han perfeccionado y la comunidad accede a instrucciones probadas y de alta calidad para Claude Code, Cursor y Copilot. Compártelos gratis o véndelos, y agrega cualquier archivo a tu repositorio para que tu agente trabaje como el suyo.",
       "browse": "Explorar prompts",
-      "sell": "Empezar a vender",
+      "upload": "Sube tu prompt",
       "highlights": {
         "noLockIn": "Markdown simple, sin ataduras",
         "freePreview": "Vista previa gratis antes de comprar",
@@ -81,17 +81,16 @@
         }
       }
     },
-    "sellerCta": {
-      "eyebrow": "// para vendedores",
-      "title": "Tu mejor prompt ya está escrito. Empieza a venderlo.",
-      "lead": "Las instrucciones que puliste en cientos de ejecuciones de tu agente valen algo para los desarrolladores que aún no lo han hecho. El registro de vendedores está en acceso anticipado.",
-      "action": "Solicitar acceso de vendedor",
-      "mailSubject": "Solicitud de acceso de vendedor",
+    "uploadCta": {
+      "eyebrow": "// para autores",
+      "title": "Tu mejor prompt ya está escrito. Compártelo.",
+      "lead": "Las instrucciones que puliste en cientos de ejecuciones de tu agente valen algo para los desarrolladores que aún no lo han hecho. Inicia sesión, sube el .md y tendrá su propia página.",
+      "action": "Sube tu prompt",
       "perks": {
-        "ownPrice": "Tú fijas el precio",
-        "paidPerSale": "Cobras por cada venta",
-        "freePreviews": "Vistas previas gratis que venden por ti",
-        "updates": "Envía actualizaciones a cada comprador"
+        "ownPage": "Una página propia",
+        "freePreviews": "Tú eliges la vista previa gratis",
+        "credit": "Tu nombre como autor",
+        "plainMarkdown": "El mismo .md que ya usas"
       }
     },
     "faq": {

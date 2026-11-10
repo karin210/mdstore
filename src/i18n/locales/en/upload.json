@@ -1,0 +1,170 @@
+{
+  "upload": {
+    "meta": {
+      "title": "Upload your prompts",
+      "description": "Post the prompt you refined so other developers can find it, preview it and drop it into their repo. Sign in, fill in the form and it gets its own page."
+    },
+    "hero": {
+      "eyebrow": "// welcome, author",
+      "title": "You already wrote something other developers would love.",
+      "lead": "That CLAUDE.md you tuned over dozens of sessions, the Cursor rule your whole team relies on, the agent playbook that finally just works: it saves hours for people who haven’t written it yet. Post it here and give it a page of its own.",
+      "action": "Post your prompt",
+      "learnMore": "See what you get",
+      "note": "No audience needed. Just the file and a free account."
+    },
+    "benefits": {
+      "eyebrow": "// what you get",
+      "title": "Everything is set up so your work gets noticed",
+      "lead": "You focus on the prompt. mdstore gives it a proper home.",
+      "items": {
+        "ownPage": {
+          "title": "A page of its own",
+          "text": "Your prompt gets its own address with its summary, highlights, suggested use and the tools you tested it with."
+        },
+        "freePreview": {
+          "title": "You choose the preview",
+          "text": "Pick how many opening lines visitors read first, so the quality of your writing does the convincing."
+        },
+        "credit": {
+          "title": "Your name on it",
+          "text": "Every post shows its author, so the developers who use your file know who to thank."
+        },
+        "outputExamples": {
+          "title": "Show what it produces",
+          "text": "Screenshots of the results your prompt gets are coming to every page. Keep a few handy."
+        },
+        "plainMarkdown": {
+          "title": "Plain Markdown, no lock-in",
+          "text": "You upload the same .md you already use. Developers download it and drop it into their repo."
+        }
+      }
+    },
+    "listing": {
+      "eyebrow": "// a great first post",
+      "title": "Small and specific beats big and vague",
+      "lead": "You don’t need a masterpiece. A prompt that does one job well is exactly what developers are looking for.",
+      "tips": {
+        "oneJob": {
+          "title": "Pick one narrow job",
+          "text": "“Improve the UX of a form” is easier to trust, and to use, than “make my whole app better”."
+        },
+        "testedTools": {
+          "title": "Say what you tested it with",
+          "text": "Mark the AI tools you used it with, such as Claude Code, Cursor or Copilot, so developers know it works."
+        },
+        "technologies": {
+          "title": "Name the technologies",
+          "text": "Frameworks, languages and styling approaches it supports help the right developers find it."
+        },
+        "results": {
+          "title": "Keep a few results handy",
+          "text": "A screenshot or two of what the prompt built is the strongest way to show it’s worth it."
+        }
+      }
+    },
+    "steps": {
+      "eyebrow": "// how to start",
+      "title": "Three friendly steps",
+      "items": {
+        "signIn": {
+          "title": "Sign in",
+          "text": "Create a free account, or sign in if you already have one."
+        },
+        "describe": {
+          "title": "Describe your prompt",
+          "text": "Fill in the form below: what it does, who it’s for, how to use it, and the .md file itself."
+        },
+        "publish": {
+          "title": "Go live",
+          "text": "Your prompt is posted straight away on its own page, ready for developers to find."
+        }
+      }
+    },
+    "form": {
+      "eyebrow": "// post a prompt",
+      "title": "Post your prompt",
+      "lead": "Not sure it’s good enough? Post it anyway. If it made your own work easier, it will make someone else’s easier too.",
+      "signedOut": {
+        "text": "Sign in to post a prompt. It takes a minute and it’s free.",
+        "action": "Sign in to post"
+      },
+      "signedInAs": "Signed in as {email}",
+      "sections": {
+        "basics": "The basics",
+        "details": "What it does",
+        "file": "The file"
+      },
+      "fields": {
+        "title": {
+          "label": "Title",
+          "hint": "What the prompt is, in a few words (shown as the page heading)."
+        },
+        "tagline": {
+          "label": "Tagline",
+          "hint": "One sentence that tells developers why they want it."
+        },
+        "summary": {
+          "label": "Summary",
+          "hint": "What the prompt covers, in two or three sentences."
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Choose a category"
+        },
+        "authorHandle": {
+          "label": "Author name or handle",
+          "hint": "Shown on the page as the author, e.g. @yourname."
+        },
+        "meantFor": {
+          "label": "Meant for",
+          "hint": "The kinds of projects it suits, one per line (e.g. Next.js App Router)."
+        },
+        "highlights": {
+          "label": "Highlights",
+          "hint": "What the prompt makes the agent do, one per line."
+        },
+        "usageSteps": {
+          "label": "Suggested use",
+          "hint": "The steps to start using it, one per line. Wrap file names in `backticks`."
+        },
+        "worksWith": {
+          "label": "Tested with",
+          "hint": "The AI tools you used it with."
+        },
+        "file": {
+          "label": "Markdown file",
+          "hint": "Your .md file, up to 200 KB."
+        },
+        "previewLineCount": {
+          "label": "Free preview length (lines)",
+          "hint": "How many opening lines visitors read before downloading."
+        }
+      },
+      "submit": "Post prompt",
+      "submitting": "Posting…",
+      "submitted": "Posted! Opening your prompt’s page…",
+      "fixFields": "Some fields need a change before posting. They’re marked below.",
+      "errors": {
+        "unauthenticated": "Your session ended. Sign in again to post your prompt.",
+        "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}.",
+        "notConfigured": "Posting isn’t available yet. Please try again later."
+      }
+    },
+    "validation": {
+      "required": "Fill in this field.",
+      "tooShort": "Use at least {min} characters.",
+      "tooLong": "Use at most {max} characters.",
+      "tooFewItems": "Add at least {min, plural, one {# line} other {# lines}}.",
+      "tooManyItems": "Use at most {max} lines.",
+      "itemTooLong": "Keep each line under {max} characters.",
+      "chooseCategory": "Choose a category.",
+      "chooseTool": "Mark at least one tool.",
+      "handleFormat": "Use letters, numbers, dots, dashes or underscores, optionally starting with @.",
+      "fileRequired": "Choose your .md file.",
+      "fileType": "Choose a Markdown file ending in .md.",
+      "fileTooLarge": "Choose a file up to 200 KB.",
+      "fileEmpty": "The file is empty. Choose the file with your prompt.",
+      "previewRange": "Use a number from {min} to {max}."
+    }
+  }
+}
