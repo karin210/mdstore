@@ -66,6 +66,28 @@
           "On a new project, ask the agent to scaffold it following the file. On an existing one, it keeps your current structure where it differs and tells you about the difference.",
           "Let the agent keep the structure section of your `CLAUDE.md` current as it adds routes and folders."
         ]
+      },
+      "dev-tools-advisor": {
+        "title": "Dev tools and stack advisor",
+        "tagline": "Let your agent research the tools that fit your project, not the ones in fashion.",
+        "summary": "Recommends a linter, formatter, test runner, package manager, framework or library from your project and your setup: it detects your environment, researches current docs and respects the tools you already chose.",
+        "highlights": [
+          "Detects your OS, editor, version manager and stack before recommending anything",
+          "Asks only what it can't read from the repo, and offers to save your setup so other projects don't ask again",
+          "Researches each tool's current docs and maintenance instead of recommending from memory",
+          "Compares by compatibility, simplicity, editor integration and migration cost",
+          "One recommendation and one alternative, with exact commands for your shell and package manager",
+          "Respects your decisions: if you already chose a tool, it sets it up well instead of arguing",
+          "Records every decision in the project's instructions so it isn't reopened"
+        ],
+        "meantFor": ["Any AI coding agent", "Any language or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `dev-tools-advisor.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@dev-tools-advisor.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Run it right away by sending your agent a prompt. In a project in progress: `Follow dev-tools-advisor.md and review the tools in this project.` In an empty folder: `Follow dev-tools-advisor.md and recommend a stack for a booking web app.` The agent detects your setup and asks only for what's missing.",
+          "From then on, ask about a single tool whenever you need it (for example \"ESLint and Prettier, or Biome?\"), or start a new project, and the agent applies the advisor on its own.",
+          "Approve the recommendation. The agent installs it, runs it once to confirm it works, and records the decision."
+        ]
       }
     }
   }

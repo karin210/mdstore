@@ -95,4 +95,22 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
 - **Check the installed version.** Next.js changes conventions between major versions. Read the docs that ship in \`node_modules/next/dist/docs/\` before relying on an API you remember, and heed deprecation notices.`,
     outputExamples: [],
   },
+  {
+    slug: "dev-tools-advisor",
+    fileName: "dev-tools-advisor.md",
+    category: "agents",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 68,
+    worksWith: ["Claude Code"],
+    excerpt: `# Dev tools and stack advisor
+
+Recommends the tools and stack that fit the project and the developer's setup: linter, formatter, test runner, package manager, framework or library. Follow it when a project starts, when the user asks which tool to use or asks you to run this advisor, or when the current tooling keeps causing friction. It works with any AI agent, editor, operating system and language: detect the setup, never assume it.
+
+- **The user's choice wins.** When the user has already chosen a tool, or names the one they want, use it and set it up well instead of arguing for another. If it has a serious problem (abandoned, incompatible with their versions, insecure), say so once, then follow their decision. Decisions recorded in the project's instruction files count as the user's choice.
+- **Recommend, don't install.** Return a recommendation; install only after the user approves it.
+- **The codebase wins.** In a project in progress, a working setup stays unless the gain is clear.
+- **Research, don't remember.** Tools change fast: check their current docs before recommending them.`,
+    outputExamples: [],
+  },
 ];

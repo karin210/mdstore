@@ -66,6 +66,28 @@
           "En un proyecto nuevo, pide al agente que lo genere siguiendo el archivo. En uno existente, conserva tu estructura actual donde sea distinta y te avisa de la diferencia.",
           "Deja que el agente mantenga al día la sección de estructura de tu `CLAUDE.md` a medida que agrega rutas y carpetas."
         ]
+      },
+      "dev-tools-advisor": {
+        "title": "Asesor de herramientas y stack",
+        "tagline": "Deja que tu agente investigue las herramientas que encajan con tu proyecto, no las de moda.",
+        "summary": "Recomienda linter, formateador, test runner, gestor de paquetes, framework o librería según tu proyecto y tu entorno: detecta tu configuración, investiga la documentación actual y respeta las herramientas que ya elegiste.",
+        "highlights": [
+          "Detecta tu sistema operativo, editor, gestor de versiones y stack antes de recomendar nada",
+          "Pregunta solo lo que no puede leer del repositorio, y ofrece guardar tu entorno para que otros proyectos no vuelvan a preguntar",
+          "Investiga la documentación actual y el mantenimiento de cada herramienta en lugar de recomendar de memoria",
+          "Compara por compatibilidad, simplicidad, integración con tu editor y costo de migración",
+          "Una recomendación y una alternativa, con los comandos exactos para tu shell y tus gestores",
+          "Respeta tus decisiones: si ya elegiste una herramienta, la configura bien en lugar de discutirla",
+          "Registra cada decisión en las instrucciones del proyecto para que no se vuelva a abrir"
+        ],
+        "meantFor": ["Cualquier agente de IA", "Cualquier lenguaje o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "usageSteps": [
+          "Descarga `dev-tools-advisor.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo, la línea `@dev-tools-advisor.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en las reglas de Cursor).",
+          "Ejecútalo de inmediato enviando un prompt a tu agente. En un proyecto en curso: `Sigue dev-tools-advisor.md y revisa las herramientas de este proyecto.` En una carpeta vacía: `Sigue dev-tools-advisor.md y recomienda un stack para una app web de reservas.` El agente detecta tu entorno y pregunta solo lo que falta.",
+          "A partir de ahí, pregunta por una herramienta concreta cuando la necesites (por ejemplo, «¿ESLint y Prettier o Biome?») o empieza un proyecto nuevo, y el agente aplica el asesor por su cuenta.",
+          "Aprueba la recomendación. El agente la instala, la ejecuta una vez para confirmar que funciona y registra la decisión."
+        ]
       }
     }
   }
