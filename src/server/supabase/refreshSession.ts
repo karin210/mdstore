@@ -1,24 +1,24 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import type { NextRequest, NextResponse } from "next/server";
-import { get_supabase_env } from "@/lib/supabase/env";
+import { getSupabaseEnv } from "@/lib/supabase/env";
 
 /**
  * Refreshes the visitor's Supabase session on every request (called from src/proxy.ts), writing
  * renewed auth cookies to both the request (for this render) and the response (for the browser).
  * Server Components can't set cookies, so without this the session would expire mid-visit.
  */
-export async function refresh_supabase_session(request: NextRequest, response: NextResponse): Promise<NextResponse> {
-  const env = get_supabase_env();
+export async function refreshSupabaseSession(request: NextRequest, response: NextResponse): Promise<NextResponse> {
+  const env = getSupabaseEnv();
   if (!env) return response;
 
-  const supabase = createServerClient(env.url, env.publishable_key, {
+  const supabase = createServerClient(env.url, env.publishableKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
       },
-      setAll(cookies_to_set, headers) {
-        cookies_to_set.forEach(({ name, value, options }) => {
+      setAll(cookiesToSet, headers) {
+        cookiesToSet.forEach(({ name, value, options }) => {
           request.cookies.set(name, value);
           response.cookies.set(name, value, options);
         });

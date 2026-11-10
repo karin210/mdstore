@@ -11,9 +11,7 @@
   padding: var(--space-xl) var(--space-lg);
   border: 0.0625rem solid var(--color-border);
   border-radius: var(--radius-lg);
-  background:
-    radial-gradient(circle at 100% 0%, var(--color-secondary), transparent 55%),
-    var(--color-surface);
+  background: radial-gradient(circle at 100% 0%, var(--color-secondary), transparent 55%), var(--color-surface);
 }
 
 .copy {

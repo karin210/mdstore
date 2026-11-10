@@ -7,8 +7,8 @@ import { FormAlert } from "@/components/global/FormAlert";
 import { SignInForm } from "@/components/login/SignInForm";
 import { SignUpForm } from "@/components/login/SignUpForm";
 import type { CredentialValues } from "@/lib/forms/credentialForms";
-import { get_safe_redirect_path } from "@/lib/safeRedirect";
-import { sign_in, sign_up, type AuthActionResult } from "@/server/auth/actions";
+import { getSafeRedirectPath } from "@/lib/safeRedirect";
+import { signIn, signUp, type AuthActionResult } from "@/server/auth/actions";
 import styles from "./LoginPanel.module.css";
 
 type LoginMode = "signUp" | "signIn";
@@ -24,77 +24,77 @@ const MODES: LoginMode[] = ["signUp", "signIn"];
 export function LoginPanel(): ReactElement {
   const t = useTranslations("auth");
   const locale = useLocale();
-  const search_params = useSearchParams();
-  const next_path = get_safe_redirect_path(search_params.get("next"));
-  const [mode, set_mode] = useState<LoginMode>(search_params.get("mode") === "signIn" ? "signIn" : "signUp");
-  const [error_message, set_error_message] = useState(
-    search_params.get("error") === "confirm" ? t("errors.confirmFailed") : "",
+  const searchParams = useSearchParams();
+  const nextPath = getSafeRedirectPath(searchParams.get("next"));
+  const [mode, setMode] = useState<LoginMode>(searchParams.get("mode") === "signIn" ? "signIn" : "signUp");
+  const [errorMessage, setErrorMessage] = useState(
+    searchParams.get("error") === "confirm" ? t("errors.confirmFailed") : "",
   );
-  const [confirmation_email, set_confirmation_email] = useState("");
-  const [is_submitting, start_submit] = useTransition();
-  const tab_refs = useRef<Record<LoginMode, HTMLButtonElement | null>>({ signUp: null, signIn: null });
+  const [confirmationEmail, setConfirmationEmail] = useState("");
+  const [isSubmitting, startSubmit] = useTransition();
+  const tabRefs = useRef<Record<LoginMode, HTMLButtonElement | null>>({ signUp: null, signIn: null });
 
-  function select_mode(next_mode: LoginMode, should_focus = false): void {
-    set_mode(next_mode);
-    set_error_message("");
-    set_confirmation_email("");
-    if (should_focus) tab_refs.current[next_mode]?.focus();
+  function selectMode(nextMode: LoginMode, shouldFocus = false): void {
+    setMode(nextMode);
+    setErrorMessage("");
+    setConfirmationEmail("");
+    if (shouldFocus) tabRefs.current[nextMode]?.focus();
   }
 
-  function move_between_tabs(event: KeyboardEvent<HTMLDivElement>): void {
-    const current_index = MODES.indexOf(mode);
-    const target_index: Record<string, number> = {
-      ArrowRight: (current_index + 1) % MODES.length,
-      ArrowLeft: (current_index - 1 + MODES.length) % MODES.length,
+  function moveBetweenTabs(event: KeyboardEvent<HTMLDivElement>): void {
+    const currentIndex = MODES.indexOf(mode);
+    const targetIndex: Record<string, number> = {
+      ArrowRight: (currentIndex + 1) % MODES.length,
+      ArrowLeft: (currentIndex - 1 + MODES.length) % MODES.length,
       Home: 0,
       End: MODES.length - 1,
     };
-    if (!(event.key in target_index)) return;
+    if (!(event.key in targetIndex)) return;
     event.preventDefault();
-    select_mode(MODES[target_index[event.key]], true);
+    selectMode(MODES[targetIndex[event.key]], true);
   }
 
-  function show_result(result: AuthActionResult): void {
-    if (result.status === "check_email") set_confirmation_email(result.email);
-    else if (result.status === "invalid") set_error_message(t("errors.fixFields"));
-    else set_error_message(t(`errors.${result.error_key}`, { requestId: result.request_id ?? "" }));
+  function showResult(result: AuthActionResult): void {
+    if (result.status === "checkEmail") setConfirmationEmail(result.email);
+    else if (result.status === "invalid") setErrorMessage(t("errors.fixFields"));
+    else setErrorMessage(t(`errors.${result.errorKey}`, { requestId: result.requestId ?? "" }));
   }
 
-  function submit_credentials(values: CredentialValues): void {
-    set_error_message("");
-    start_submit(async () => {
-      const submit_action = mode === "signUp" ? sign_up : sign_in;
+  function submitCredentials(values: CredentialValues): void {
+    setErrorMessage("");
+    startSubmit(async () => {
+      const submitAction = mode === "signUp" ? signUp : signIn;
       // On success the action redirects, so a result only comes back when something needs showing.
-      show_result(await submit_action({ ...values, locale, next: next_path }));
+      showResult(await submitAction({ ...values, locale, next: nextPath }));
     });
   }
 
-  const tab_id = (tab_mode: LoginMode): string => `login-tab-${tab_mode}`;
+  const tabId = (tabMode: LoginMode): string => `login-tab-${tabMode}`;
 
   return (
     <section className={styles.card} aria-labelledby="login-title">
-      <div className={styles.tabs} role="tablist" aria-label={t("tabs.label")} onKeyDown={move_between_tabs}>
-        {MODES.map((tab_mode) => (
+      <div className={styles.tabs} role="tablist" aria-label={t("tabs.label")} onKeyDown={moveBetweenTabs}>
+        {MODES.map((tabMode) => (
           <button
-            key={tab_mode}
+            key={tabMode}
             ref={(element) => {
-              tab_refs.current[tab_mode] = element;
+              tabRefs.current[tabMode] = element;
             }}
-            id={tab_id(tab_mode)}
+            id={tabId(tabMode)}
             type="button"
             role="tab"
             className={styles.tab}
-            aria-selected={mode === tab_mode}
+            aria-selected={mode === tabMode}
             aria-controls="login-tabpanel"
-            tabIndex={mode === tab_mode ? 0 : -1}
-            onClick={() => select_mode(tab_mode)}
+            tabIndex={mode === tabMode ? 0 : -1}
+            onClick={() => selectMode(tabMode)}
           >
-            {t(`tabs.${tab_mode}`)}
+            {t(`tabs.${tabMode}`)}
           </button>
         ))}
       </div>
 
-      <div id="login-tabpanel" className={styles.panel} role="tabpanel" aria-labelledby={tab_id(mode)}>
+      <div id="login-tabpanel" className={styles.panel} role="tabpanel" aria-labelledby={tabId(mode)}>
         <header className={styles.heading}>
           <h1 id="login-title" className={styles.title}>
             {t(`headings.${mode}`)}
@@ -102,12 +102,12 @@ export function LoginPanel(): ReactElement {
           <p className={styles.lead}>{t(`leads.${mode}`)}</p>
         </header>
 
-        {confirmation_email ? (
-          <FormAlert tone="success">{t("results.checkEmail", { email: confirmation_email })}</FormAlert>
+        {confirmationEmail ? (
+          <FormAlert tone="success">{t("results.checkEmail", { email: confirmationEmail })}</FormAlert>
         ) : mode === "signUp" ? (
-          <SignUpForm is_submitting={is_submitting} error_message={error_message} on_submit={submit_credentials} />
+          <SignUpForm isSubmitting={isSubmitting} errorMessage={errorMessage} onSubmit={submitCredentials} />
         ) : (
-          <SignInForm is_submitting={is_submitting} error_message={error_message} on_submit={submit_credentials} />
+          <SignInForm isSubmitting={isSubmitting} errorMessage={errorMessage} onSubmit={submitCredentials} />
         )}
       </div>
     </section>

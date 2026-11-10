@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactElement } from "react";
 import { CopyIcon, EyeIcon, EyeOffIcon } from "@/components/global/icons";
 import { HelperChunks } from "@/components/login/HelperChunks";
 import {
-  get_sign_up_password_rules,
+  getSignUpPasswordRules,
   SIGN_UP_PASSWORD_RULES_ATTRIBUTE,
   type SignInPasswordGuidanceKey,
 } from "@/lib/validation/credentials";
@@ -16,65 +16,68 @@ interface PasswordFieldProps {
   /** Sign-up shows the rules helper, the copy control and the suggested-password button. */
   mode: "signIn" | "signUp";
   value: string;
-  was_edited: boolean;
-  is_valid: boolean;
-  border_mark: "error" | "valid" | undefined;
+  wasEdited: boolean;
+  isValid: boolean;
+  borderMark: "error" | "valid" | undefined;
   /** Sign-in only: what is wrong with the value (sign-up uses the rules helper instead). */
-  guidance_key: SignInPasswordGuidanceKey | null;
-  on_change: (value: string) => void;
-  on_blur: () => void;
-  on_suggest?: () => void;
+  guidanceKey: SignInPasswordGuidanceKey | null;
+  onChange: (value: string) => void;
+  onBlur: () => void;
+  onSuggest?: () => void;
 }
 
 export function PasswordField({
   id,
   mode,
   value,
-  was_edited,
-  is_valid,
-  border_mark,
-  guidance_key,
-  on_change,
-  on_blur,
-  on_suggest,
+  wasEdited,
+  isValid,
+  borderMark,
+  guidanceKey,
+  onChange,
+  onBlur,
+  onSuggest,
 }: PasswordFieldProps): ReactElement {
   const t = useTranslations("auth");
-  const [is_visible, set_is_visible] = useState(false);
-  const [copy_message, set_copy_message] = useState("");
-  const copy_timer_ref = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const helper_id = `${id}-helper`;
-  const guidance_id = `${id}-guidance`;
-  const is_sign_up = mode === "signUp";
-  const shows_toggle = value !== "";
-  const shows_copy = is_sign_up && is_valid;
-  const guidance_text = guidance_key ? t(`guidance.${guidance_key}`) : "";
-  const described_by = is_sign_up ? `${helper_id} ${guidance_id}` : guidance_id;
+  const [isVisible, setIsVisible] = useState(false);
+  const [copyMessage, setCopyMessage] = useState("");
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const helperId = `${id}-helper`;
+  const guidanceId = `${id}-guidance`;
+  const isSignUp = mode === "signUp";
+  const showsToggle = value !== "";
+  const showsCopy = isSignUp && isValid;
+  const guidanceText = guidanceKey ? t(`guidance.${guidanceKey}`) : "";
+  const describedBy = isSignUp ? `${helperId} ${guidanceId}` : guidanceId;
 
-  useEffect(() => () => {
-    if (copy_timer_ref.current) clearTimeout(copy_timer_ref.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    },
+    [],
+  );
 
-  async function copy_password(): Promise<void> {
+  async function copyPassword(): Promise<void> {
     try {
       await navigator.clipboard.writeText(value);
-      set_copy_message(t("password.copied"));
+      setCopyMessage(t("password.copied"));
     } catch {
-      set_copy_message(t("password.copyFailed"));
+      setCopyMessage(t("password.copyFailed"));
     }
-    if (copy_timer_ref.current) clearTimeout(copy_timer_ref.current);
-    copy_timer_ref.current = setTimeout(() => set_copy_message(""), 3000);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopyMessage(""), 3000);
   }
 
-  const rule_texts = {
+  const ruleTexts = {
     length: t("passwordRules.length"),
     lower: t("passwordRules.lower"),
     upper: t("passwordRules.upper"),
     digit: t("passwordRules.digit"),
   };
-  const rule_chunks = get_sign_up_password_rules(value).map((rule) => ({
+  const ruleChunks = getSignUpPasswordRules(value).map((rule) => ({
     id: rule.id,
-    text: rule_texts[rule.id],
-    is_met: rule.is_met,
+    text: ruleTexts[rule.id],
+    isMet: rule.isMet,
   }));
 
   return (
@@ -86,30 +89,30 @@ export function PasswordField({
         <input
           id={id}
           name="password"
-          type={is_visible ? "text" : "password"}
-          autoComplete={is_sign_up ? "new-password" : "current-password"}
+          type={isVisible ? "text" : "password"}
+          autoComplete={isSignUp ? "new-password" : "current-password"}
           // Safari's generator reads this to suggest a password the sign-up rule accepts.
-          {...(is_sign_up ? { passwordrules: SIGN_UP_PASSWORD_RULES_ATTRIBUTE } : {})}
+          {...(isSignUp ? { passwordrules: SIGN_UP_PASSWORD_RULES_ATTRIBUTE } : {})}
           spellCheck={false}
           className={`form-input ${styles.input}`}
           value={value}
-          aria-invalid={was_edited && !is_valid}
-          aria-describedby={described_by}
-          data-mark={border_mark}
-          data-valid={is_valid}
-          onChange={(event) => on_change(event.target.value)}
-          onBlur={on_blur}
+          aria-invalid={wasEdited && !isValid}
+          aria-describedby={describedBy}
+          data-mark={borderMark}
+          data-valid={isValid}
+          onChange={(event) => onChange(event.target.value)}
+          onBlur={onBlur}
         />
         <div className={styles.controls}>
-          {is_sign_up && (
+          {isSignUp && (
             <button
               type="button"
               className={styles.iconButton}
-              data-visible={shows_copy}
-              inert={!shows_copy}
+              data-visible={showsCopy}
+              inert={!showsCopy}
               aria-label={t("password.copy")}
               title={t("password.copy")}
-              onClick={copy_password}
+              onClick={copyPassword}
             >
               <CopyIcon />
             </button>
@@ -117,36 +120,36 @@ export function PasswordField({
           <button
             type="button"
             className={styles.iconButton}
-            data-visible={shows_toggle}
-            inert={!shows_toggle}
-            aria-pressed={is_visible}
-            aria-label={is_visible ? t("password.hide") : t("password.show")}
-            title={is_visible ? t("password.hide") : t("password.show")}
-            onClick={() => set_is_visible((visible) => !visible)}
+            data-visible={showsToggle}
+            inert={!showsToggle}
+            aria-pressed={isVisible}
+            aria-label={isVisible ? t("password.hide") : t("password.show")}
+            title={isVisible ? t("password.hide") : t("password.show")}
+            onClick={() => setIsVisible((visible) => !visible)}
           >
-            {is_visible ? <EyeOffIcon /> : <EyeIcon />}
+            {isVisible ? <EyeOffIcon /> : <EyeIcon />}
           </button>
         </div>
       </div>
       <div className={styles.below}>
-        {is_sign_up && (
+        {isSignUp && (
           <HelperChunks
-            id={helper_id}
+            id={helperId}
             label={t("passwordRules.label")}
-            chunks={rule_chunks}
+            chunks={ruleChunks}
             separator=", "
-            was_edited={was_edited}
+            wasEdited={wasEdited}
           />
         )}
-        <p id={guidance_id} className="form-guidance" aria-live="polite" hidden={guidance_text === ""}>
-          {guidance_text}
+        <p id={guidanceId} className="form-guidance" aria-live="polite" hidden={guidanceText === ""}>
+          {guidanceText}
         </p>
-        <p className="form-hint" role="status" hidden={copy_message === ""}>
-          {copy_message}
+        <p className="form-hint" role="status" hidden={copyMessage === ""}>
+          {copyMessage}
         </p>
-        {is_sign_up && on_suggest && (
+        {isSignUp && onSuggest && (
           <div className={styles.suggestRow}>
-            <button type="button" className={styles.suggest} onClick={on_suggest}>
+            <button type="button" className={styles.suggest} onClick={onSuggest}>
               {t("password.suggest")}
             </button>
           </div>

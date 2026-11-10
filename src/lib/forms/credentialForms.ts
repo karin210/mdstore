@@ -1,8 +1,8 @@
 import { BaseForm } from "@/lib/forms/BaseForm";
 import {
-  get_email_guidance,
-  get_sign_in_password_guidance,
-  get_sign_up_password_guidance,
+  getEmailGuidance,
+  getSignInPasswordGuidance,
+  getSignUpPasswordGuidance,
   type CredentialField,
   type GuidanceKey,
 } from "@/lib/validation/credentials";
@@ -18,9 +18,9 @@ export class SignInForm extends BaseForm<CredentialField, CredentialValues, Guid
     super(EMPTY_CREDENTIALS, CREDENTIAL_FIELDS);
   }
 
-  protected get_field_issue(field: CredentialField): GuidanceKey | null {
+  protected getFieldIssue(field: CredentialField): GuidanceKey | null {
     const value = this.values[field];
-    return field === "email" ? get_email_guidance(value) : get_sign_in_password_guidance(value);
+    return field === "email" ? getEmailGuidance(value) : getSignInPasswordGuidance(value);
   }
 }
 
@@ -30,8 +30,8 @@ export class SignUpForm extends BaseForm<CredentialField, CredentialValues, Guid
     super(EMPTY_CREDENTIALS, CREDENTIAL_FIELDS);
   }
 
-  protected get_field_issue(field: CredentialField): GuidanceKey | null {
+  protected getFieldIssue(field: CredentialField): GuidanceKey | null {
     const value = this.values[field];
-    return field === "email" ? get_email_guidance(value) : get_sign_up_password_guidance(value);
+    return field === "email" ? getEmailGuidance(value) : getSignUpPasswordGuidance(value);
   }
 }

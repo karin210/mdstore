@@ -4,7 +4,7 @@ import { Suspense, type ReactElement } from "react";
 import { SecondaryButton } from "@/components/global/SecondaryButton";
 import { SkeletonBlock } from "@/components/global/SkeletonBlock";
 import { PostPromptForm } from "@/components/upload/PostPromptForm";
-import { get_signed_in_user } from "@/server/auth/getSignedInUser";
+import { getSignedInUser } from "@/server/auth/getSignedInUser";
 import styles from "./PostPromptSection.module.css";
 
 /**
@@ -13,7 +13,7 @@ import styles from "./PostPromptSection.module.css";
  */
 async function PostPromptSlot(): Promise<ReactElement> {
   const t = await getTranslations("upload.form");
-  const user = await get_signed_in_user();
+  const user = await getSignedInUser();
 
   if (!user) {
     return (

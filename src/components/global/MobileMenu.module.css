@@ -29,7 +29,9 @@
   height: 0.125rem;
   border-radius: 0.125rem;
   background: currentColor;
-  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .bars {

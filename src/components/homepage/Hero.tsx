@@ -46,8 +46,7 @@ export function Hero(): ReactElement {
             {"\n"}- Ask when a requirement is ambiguous.
             {"\n\n"}
             <span data-token="heading">## Conventions</span>
-            {"\n"}- Explicit return types, <span data-token="inline">no any</span>.
-            {"\n"}- Semantic HTML, WCAG 2.1 AA.
+            {"\n"}- Explicit return types, <span data-token="inline">no any</span>.{"\n"}- Semantic HTML, WCAG 2.1 AA.
             {"\n"}- Colours only through <span data-token="inline">:root</span> tokens.
             {"\n\n"}
             <span data-token="comment">{"<!-- 128 more lines -->"}</span>

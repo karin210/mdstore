@@ -4,7 +4,7 @@ import { Fragment, type ReactElement } from "react";
 export interface HelperChunk {
   id: string;
   text: string;
-  is_met: boolean;
+  isMet: boolean;
 }
 
 interface HelperChunksProps {
@@ -14,7 +14,7 @@ interface HelperChunksProps {
   /** Text between chunks ("" for the email example, ", " for the password rules). */
   separator: string;
   /** Before the first keystroke the whole line stays in the default text colour. */
-  was_edited: boolean;
+  wasEdited: boolean;
 }
 
 /**
@@ -22,14 +22,14 @@ interface HelperChunksProps {
  * each chunk turns green when met and red when missing (once the field was edited), with hidden
  * "(done)" / "(missing)" text so colour is never the only cue. Polite live region.
  */
-export function HelperChunks({ id, label, chunks, separator, was_edited }: HelperChunksProps): ReactElement {
+export function HelperChunks({ id, label, chunks, separator, wasEdited }: HelperChunksProps): ReactElement {
   const t = useTranslations("auth");
 
   return (
     <p id={id} className="form-hint" aria-live="polite">
       {label}{" "}
       {chunks.map((chunk, index) => {
-        const state = was_edited ? (chunk.is_met ? "met" : "missing") : undefined;
+        const state = wasEdited ? (chunk.isMet ? "met" : "missing") : undefined;
         return (
           <Fragment key={chunk.id}>
             {index > 0 && separator}

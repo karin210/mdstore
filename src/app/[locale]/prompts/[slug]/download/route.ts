@@ -2,8 +2,8 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { isFree } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
-import { log_server_error } from "@/server/logServerError";
-import { get_prompt_view } from "@/server/prompts/getPromptView";
+import { logServerError } from "@/server/logServerError";
+import { getPromptView } from "@/server/prompts/getPromptView";
 
 /** Serves a free prompt's full .md file (catalogue or posted) as a download. Paid files are never served here. */
 export async function GET(
@@ -15,7 +15,7 @@ export async function GET(
   const t = await getTranslations({ locale, namespace: "promptDetail.download" });
 
   try {
-    const prompt = await get_prompt_view(slug, locale);
+    const prompt = await getPromptView(slug, locale);
 
     if (!prompt) {
       return Response.json({ message: t("notFound") }, { status: 404 });
@@ -31,7 +31,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    const requestId = log_server_error(`download GET /prompts/${slug}/download`, error);
+    const requestId = logServerError(`download GET /prompts/${slug}/download`, error);
 
     return Response.json({ message: t("serverError"), requestId }, { status: 500 });
   }

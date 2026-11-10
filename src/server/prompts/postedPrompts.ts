@@ -3,11 +3,11 @@ import { cacheLife, cacheTag } from "next/cache";
 import type { PromptCategory } from "@/data/prompts";
 import type { PromptView } from "@/lib/promptView";
 import { POSTED_PROMPTS_TABLE, SLUG_PATTERN } from "@/server/prompts/postedPromptsTable";
-import { create_public_supabase } from "@/server/supabase/publicClient";
+import { createPublicSupabase } from "@/server/supabase/publicClient";
 
 /** Cache tags: every posted prompt, and one prompt by slug. Updated by the create action. */
 export const POSTED_PROMPTS_TAG = "posted-prompts";
-export function get_posted_prompt_tag(slug: string): string {
+export function getPostedPromptTag(slug: string): string {
   return `posted-prompt-${slug}`;
 }
 
@@ -32,12 +32,12 @@ const DETAIL_COLUMNS =
   "slug, file_name, author_handle, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, content, preview_line_count";
 
 /** Lines of a file the way an editor counts them (a final newline doesn't add one). */
-export function split_file_lines(content: string): string[] {
+export function splitFileLines(content: string): string[] {
   return content.replace(/\r\n/g, "\n").replace(/\n$/, "").split("\n");
 }
 
-function to_prompt_view(row: PostedPromptRow): PromptView {
-  const lines = split_file_lines(row.content);
+function toPromptView(row: PostedPromptRow): PromptView {
+  const lines = splitFileLines(row.content);
 
   return {
     slug: row.slug,
@@ -64,12 +64,12 @@ function to_prompt_view(row: PostedPromptRow): PromptView {
  * A posted prompt by slug, or null. Cached until a new post updates its tag; a failed query
  * throws instead of returning null, so an outage is never cached as "not found".
  */
-export async function get_posted_prompt(slug: string): Promise<PromptView | null> {
+export async function getPostedPrompt(slug: string): Promise<PromptView | null> {
   "use cache";
-  cacheTag(POSTED_PROMPTS_TAG, get_posted_prompt_tag(slug));
+  cacheTag(POSTED_PROMPTS_TAG, getPostedPromptTag(slug));
   cacheLife("hours");
 
-  const supabase = create_public_supabase();
+  const supabase = createPublicSupabase();
   if (!supabase || !SLUG_PATTERN.test(slug)) return null;
 
   const { data, error } = await supabase
@@ -78,5 +78,5 @@ export async function get_posted_prompt(slug: string): Promise<PromptView | null
     .eq("slug", slug)
     .maybeSingle<PostedPromptRow>();
   if (error) throw new Error(`Couldn't load posted prompt "${slug}": ${error.message}`);
-  return data ? to_prompt_view(data) : null;
+  return data ? toPromptView(data) : null;
 }

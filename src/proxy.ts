@@ -3,14 +3,14 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { findPromptBySlug } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
-import { posted_prompt_exists } from "@/server/prompts/postedPromptExists";
-import { refresh_supabase_session } from "@/server/supabase/refreshSession";
+import { postedPromptExists } from "@/server/prompts/postedPromptExists";
+import { refreshSupabaseSession } from "@/server/supabase/refreshSession";
 
 const handleLocale = createMiddleware(routing);
 
 /** Whether /prompts/[slug] has something to show: a catalogue listing or a posted prompt. */
-async function prompt_exists(slug: string): Promise<boolean> {
-  return Boolean(findPromptBySlug(slug)) || (await posted_prompt_exists(slug));
+async function promptExists(slug: string): Promise<boolean> {
+  return Boolean(findPromptBySlug(slug)) || (await postedPromptExists(slug));
 }
 
 /**
@@ -28,11 +28,16 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const locale = hasPrefix ? first : routing.defaultLocale;
   const [section, slug, ...more] = hasPrefix ? rest : [first, ...rest];
 
-  if (section === "prompts" && slug !== undefined && more.length === 0 && !(await prompt_exists(decodeURIComponent(slug)))) {
+  if (
+    section === "prompts" &&
+    slug !== undefined &&
+    more.length === 0 &&
+    !(await promptExists(decodeURIComponent(slug)))
+  ) {
     // Only the [...rest] catch-all matches this internal path, so the not-found page renders with a 404.
     return NextResponse.rewrite(new URL(`/${locale}/_unknown-prompt`, request.url));
   }
-  return refresh_supabase_session(request, handleLocale(request));
+  return refreshSupabaseSession(request, handleLocale(request));
 }
 
 export const config = {

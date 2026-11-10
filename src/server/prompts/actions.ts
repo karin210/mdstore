@@ -8,49 +8,49 @@ import { redirect } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { slugify } from "@/lib/slugify";
 import {
-  check_file_content,
-  prompt_post_schema,
+  checkFileContent,
+  promptPostSchema,
   type PromptPostField,
   type PromptPostInput,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
-import { get_signed_in_user } from "@/server/auth/getSignedInUser";
-import { log_server_error } from "@/server/logServerError";
-import { get_posted_prompt_tag, POSTED_PROMPTS_TAG } from "@/server/prompts/postedPrompts";
+import { getSignedInUser } from "@/server/auth/getSignedInUser";
+import { logServerError } from "@/server/logServerError";
+import { getPostedPromptTag, POSTED_PROMPTS_TAG } from "@/server/prompts/postedPrompts";
 import { POSTED_PROMPTS_TABLE } from "@/server/prompts/postedPromptsTable";
-import { create_server_supabase } from "@/server/supabase/serverClient";
+import { createServerSupabase } from "@/server/supabase/serverClient";
 
 export type PostPromptResult =
-  | { status: "invalid"; field_errors: Partial<Record<PromptPostField, ValidationIssue>> }
-  | { status: "error"; error_key: "unauthenticated" | "notConfigured" | "server"; request_id?: string };
+  | { status: "invalid"; fieldErrors: Partial<Record<PromptPostField, ValidationIssue>> }
+  | { status: "error"; errorKey: "unauthenticated" | "notConfigured" | "server"; requestId?: string };
 
 const UNIQUE_VIOLATION = "23505";
 const RLS_VIOLATION = "42501";
 
-function read_text(form_data: FormData, field: string): string {
-  const value = form_data.get(field);
+function readText(formData: FormData, field: string): string {
+  const value = formData.get(field);
   return typeof value === "string" ? value : "";
 }
 
 /** Only the known fields are read from the request; anything else in it is ignored. */
-function read_submission(form_data: FormData): Record<PromptPostField, unknown> {
+function readSubmission(formData: FormData): Record<PromptPostField, unknown> {
   return {
-    title: read_text(form_data, "title"),
-    tagline: read_text(form_data, "tagline"),
-    summary: read_text(form_data, "summary"),
-    category: read_text(form_data, "category"),
-    author_handle: read_text(form_data, "author_handle"),
-    meant_for: read_text(form_data, "meant_for"),
-    highlights: read_text(form_data, "highlights"),
-    usage_steps: read_text(form_data, "usage_steps"),
-    works_with: form_data.getAll("works_with").filter((value) => typeof value === "string"),
-    file: form_data.get("file"),
-    preview_line_count: read_text(form_data, "preview_line_count"),
+    title: readText(formData, "title"),
+    tagline: readText(formData, "tagline"),
+    summary: readText(formData, "summary"),
+    category: readText(formData, "category"),
+    authorHandle: readText(formData, "authorHandle"),
+    meantFor: readText(formData, "meantFor"),
+    highlights: readText(formData, "highlights"),
+    usageSteps: readText(formData, "usageSteps"),
+    worksWith: formData.getAll("worksWith").filter((value) => typeof value === "string"),
+    file: formData.get("file"),
+    previewLineCount: readText(formData, "previewLineCount"),
   };
 }
 
 /** The file as UTF-8 text, or null when it isn't valid UTF-8 (a binary renamed to .md). */
-async function read_markdown(file: File): Promise<string | null> {
+async function readMarkdown(file: File): Promise<string | null> {
   try {
     return new TextDecoder("utf-8", { fatal: true }).decode(await file.arrayBuffer());
   } catch {
@@ -59,40 +59,41 @@ async function read_markdown(file: File): Promise<string | null> {
 }
 
 /** A URL slug from the title that no catalogue listing uses (posted slugs are unique in the database). */
-function get_base_slug(title: string): string {
+function getBaseSlug(title: string): string {
   const slug = slugify(title) || "prompt";
   return findPromptBySlug(slug) ? `${slug}-post` : slug;
 }
 
-function get_file_name(file: File, slug: string): string {
+function getFileName(file: File, slug: string): string {
   return `${slugify(file.name.replace(/\.md$/i, "")) || slug}.md`;
 }
 
-async function insert_posted_prompt(
+async function insertPostedPrompt(
   input: PromptPostInput,
   content: string,
-  author_id: string,
+  authorId: string,
   slug: string,
 ): Promise<PostgrestError | null> {
-  const supabase = await create_server_supabase();
+  const supabase = await createServerSupabase();
   if (!supabase) throw new Error("Supabase is not configured");
 
   // Runs as the signed-in user: row-level security only accepts rows whose author_id is theirs.
+  // The keys are the table's snake_case column names.
   const { error } = await supabase.from(POSTED_PROMPTS_TABLE).insert({
     slug,
-    author_id,
-    author_handle: input.author_handle,
-    file_name: get_file_name(input.file, slug),
+    author_id: authorId,
+    author_handle: input.authorHandle,
+    file_name: getFileName(input.file, slug),
     title: input.title,
     tagline: input.tagline,
     summary: input.summary,
     category: input.category,
-    meant_for: input.meant_for,
+    meant_for: input.meantFor,
     highlights: input.highlights,
-    usage_steps: input.usage_steps,
-    works_with: input.works_with,
+    usage_steps: input.usageSteps,
+    works_with: input.worksWith,
     content,
-    preview_line_count: input.preview_line_count,
+    preview_line_count: input.previewLineCount,
   });
   return error;
 }
@@ -101,51 +102,51 @@ async function insert_posted_prompt(
  * Posts a prompt for the signed-in user and opens its page. Every field is validated again here
  * with the same rules as the form; the author comes from the verified session, never the request.
  */
-export async function post_prompt(form_data: FormData): Promise<PostPromptResult> {
-  const requested_locale = read_text(form_data, "locale");
-  const locale = hasLocale(routing.locales, requested_locale) ? requested_locale : routing.defaultLocale;
+export async function postPrompt(formData: FormData): Promise<PostPromptResult> {
+  const requestedLocale = readText(formData, "locale");
+  const locale = hasLocale(routing.locales, requestedLocale) ? requestedLocale : routing.defaultLocale;
 
-  const user = await get_signed_in_user();
-  if (!user) return { status: "error", error_key: "unauthenticated" };
+  const user = await getSignedInUser();
+  if (!user) return { status: "error", errorKey: "unauthenticated" };
 
-  const parsed = prompt_post_schema.safeParse(read_submission(form_data));
+  const parsed = promptPostSchema.safeParse(readSubmission(formData));
   if (!parsed.success) {
-    const field_errors: Partial<Record<PromptPostField, ValidationIssue>> = {};
+    const fieldErrors: Partial<Record<PromptPostField, ValidationIssue>> = {};
     parsed.error.issues.forEach((issue) => {
       const field = issue.path[0] as PromptPostField;
-      if (field_errors[field]) return;
+      if (fieldErrors[field]) return;
       const params = "params" in issue ? (issue.params as ValidationIssue["values"]) : undefined;
-      field_errors[field] = { key: issue.message as ValidationIssue["key"], values: params };
+      fieldErrors[field] = { key: issue.message as ValidationIssue["key"], values: params };
     });
-    return { status: "invalid", field_errors };
+    return { status: "invalid", fieldErrors };
   }
 
-  const content = await read_markdown(parsed.data.file);
-  const content_issue = content === null ? { key: "fileType" as const } : check_file_content(content);
-  if (content === null || content_issue) {
-    return { status: "invalid", field_errors: { file: content_issue ?? { key: "fileType" } } };
+  const content = await readMarkdown(parsed.data.file);
+  const contentIssue = content === null ? { key: "fileType" as const } : checkFileContent(content);
+  if (content === null || contentIssue) {
+    return { status: "invalid", fieldErrors: { file: contentIssue ?? { key: "fileType" } } };
   }
 
-  const base_slug = get_base_slug(parsed.data.title);
-  let slug = base_slug;
+  const baseSlug = getBaseSlug(parsed.data.title);
+  let slug = baseSlug;
   try {
-    let error = await insert_posted_prompt(parsed.data, content, user.id, slug);
+    let error = await insertPostedPrompt(parsed.data, content, user.id, slug);
     if (error?.code === UNIQUE_VIOLATION) {
       // Another post already has this title's slug: add a short random suffix and try once more.
-      slug = `${base_slug}-${crypto.randomUUID().slice(0, 6)}`;
-      error = await insert_posted_prompt(parsed.data, content, user.id, slug);
+      slug = `${baseSlug}-${crypto.randomUUID().slice(0, 6)}`;
+      error = await insertPostedPrompt(parsed.data, content, user.id, slug);
     }
-    if (error?.code === RLS_VIOLATION) return { status: "error", error_key: "unauthenticated" };
-    if (error) return { status: "error", error_key: "server", request_id: log_server_error("prompts.post", error) };
+    if (error?.code === RLS_VIOLATION) return { status: "error", errorKey: "unauthenticated" };
+    if (error) return { status: "error", errorKey: "server", requestId: logServerError("prompts.post", error) };
   } catch (error) {
     if (error instanceof Error && error.message === "Supabase is not configured") {
-      return { status: "error", error_key: "notConfigured" };
+      return { status: "error", errorKey: "notConfigured" };
     }
-    return { status: "error", error_key: "server", request_id: log_server_error("prompts.post", error) };
+    return { status: "error", errorKey: "server", requestId: logServerError("prompts.post", error) };
   }
 
   updateTag(POSTED_PROMPTS_TAG);
-  updateTag(get_posted_prompt_tag(slug));
+  updateTag(getPostedPromptTag(slug));
   redirect({ href: `/prompts/${slug}`, locale });
-  return { status: "error", error_key: "server" }; // unreachable: redirect() throws
+  return { status: "error", errorKey: "server" }; // unreachable: redirect() throws
 }

@@ -8,78 +8,78 @@
  */
 export abstract class BaseForm<Field extends string, Values extends Record<Field, unknown>, Issue> {
   protected values: Values;
-  private readonly initial_values: Values;
-  private readonly field_order: readonly Field[];
-  private readonly edited_fields = new Set<Field>();
-  private readonly left_fields = new Set<Field>();
+  private readonly initialValues: Values;
+  private readonly fieldOrder: readonly Field[];
+  private readonly editedFields = new Set<Field>();
+  private readonly leftFields = new Set<Field>();
 
-  protected constructor(initial_values: Values, field_order: readonly Field[]) {
-    this.values = { ...initial_values };
-    this.initial_values = initial_values;
-    this.field_order = field_order;
+  protected constructor(initialValues: Values, fieldOrder: readonly Field[]) {
+    this.values = { ...initialValues };
+    this.initialValues = initialValues;
+    this.fieldOrder = fieldOrder;
   }
 
   /** The field's problem with its current value, or null when it is valid. */
-  protected abstract get_field_issue(field: Field): Issue | null;
+  protected abstract getFieldIssue(field: Field): Issue | null;
 
-  get_value<Key extends Field>(field: Key): Values[Key] {
+  getValue<Key extends Field>(field: Key): Values[Key] {
     return this.values[field];
   }
 
-  set_value<Key extends Field>(field: Key, value: Values[Key]): void {
+  setValue<Key extends Field>(field: Key, value: Values[Key]): void {
     this.values = { ...this.values, [field]: value };
-    this.edited_fields.add(field);
+    this.editedFields.add(field);
   }
 
   /** Records that the user left the field (blur), which turns its border mark on. */
-  mark_left(field: Field): void {
-    this.left_fields.add(field);
+  markLeft(field: Field): void {
+    this.leftFields.add(field);
   }
 
   /** On submit: every field counts as edited and left, so each wrong one shows its guidance. */
-  mark_all_edited(): void {
-    this.field_order.forEach((field) => {
-      this.edited_fields.add(field);
-      this.left_fields.add(field);
+  markAllEdited(): void {
+    this.fieldOrder.forEach((field) => {
+      this.editedFields.add(field);
+      this.leftFields.add(field);
     });
   }
 
-  is_field_valid(field: Field): boolean {
-    return this.get_field_issue(field) === null;
+  isFieldValid(field: Field): boolean {
+    return this.getFieldIssue(field) === null;
   }
 
-  was_edited(field: Field): boolean {
-    return this.edited_fields.has(field);
+  wasEdited(field: Field): boolean {
+    return this.editedFields.has(field);
   }
 
-  get_guidance(field: Field): Issue | null {
-    return this.edited_fields.has(field) ? this.get_field_issue(field) : null;
+  getGuidance(field: Field): Issue | null {
+    return this.editedFields.has(field) ? this.getFieldIssue(field) : null;
   }
 
-  get_border_mark(field: Field): "error" | "valid" | undefined {
-    if (!this.left_fields.has(field) || !this.has_content(field)) return undefined;
-    return this.is_field_valid(field) ? "valid" : "error";
+  getBorderMark(field: Field): "error" | "valid" | undefined {
+    if (!this.leftFields.has(field) || !this.hasContent(field)) return undefined;
+    return this.isFieldValid(field) ? "valid" : "error";
   }
 
-  get first_invalid_field(): Field | null {
-    return this.field_order.find((field) => !this.is_field_valid(field)) ?? null;
+  get firstInvalidField(): Field | null {
+    return this.fieldOrder.find((field) => !this.isFieldValid(field)) ?? null;
   }
 
-  get is_valid(): boolean {
-    return this.first_invalid_field === null;
+  get isValid(): boolean {
+    return this.firstInvalidField === null;
   }
 
-  get_values(): Values {
+  getValues(): Values {
     return { ...this.values };
   }
 
   reset(): void {
-    this.values = { ...this.initial_values };
-    this.edited_fields.clear();
-    this.left_fields.clear();
+    this.values = { ...this.initialValues };
+    this.editedFields.clear();
+    this.leftFields.clear();
   }
 
-  private has_content(field: Field): boolean {
+  private hasContent(field: Field): boolean {
     const value = this.values[field];
     if (typeof value === "string") return value !== "";
     if (Array.isArray(value)) return value.length > 0;

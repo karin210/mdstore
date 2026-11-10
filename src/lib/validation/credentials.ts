@@ -19,12 +19,7 @@ export const SIGN_UP_PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,}$/
 export const SIGN_UP_PASSWORD_RULES_ATTRIBUTE = "minlength: 8; required: lower; required: upper; required: digit;";
 
 export type GuidanceKey =
-  | "emailRequired"
-  | "emailFormat"
-  | "passwordRequired"
-  | "passwordRules"
-  | "passwordSpaces"
-  | "passwordTooLong";
+  "emailRequired" | "emailFormat" | "passwordRequired" | "passwordRules" | "passwordSpaces" | "passwordTooLong";
 
 // ---------------------------------------------------------------------------
 // Email
@@ -34,42 +29,42 @@ export type EmailPartId = "name" | "at" | "domain" | "dot" | "tld";
 
 export interface ChunkState<Id extends string> {
   id: Id;
-  is_met: boolean;
+  isMet: boolean;
 }
 
 /**
  * The example `name@domain.com`, chunk by chunk, with whether the typed value already has each part.
- * Every chunk is met exactly when the whole email is valid (see is_email_valid).
+ * Every chunk is met exactly when the whole email is valid (see isEmailValid).
  */
-export function get_email_parts(value_raw: string): ChunkState<EmailPartId>[] {
-  const value_trimmed = value_raw.trim();
-  const at_index = value_trimmed.indexOf("@");
-  const has_single_at = at_index > 0 && value_trimmed.indexOf("@", at_index + 1) === -1;
-  const local_part = at_index === -1 ? value_trimmed : value_trimmed.slice(0, at_index);
-  const host = has_single_at ? value_trimmed.slice(at_index + 1) : "";
-  const last_dot_index = host.lastIndexOf(".");
-  const domain_part = last_dot_index > 0 ? host.slice(0, last_dot_index) : "";
-  const tld_part = last_dot_index > 0 ? host.slice(last_dot_index + 1) : "";
+export function getEmailParts(valueRaw: string): ChunkState<EmailPartId>[] {
+  const valueTrimmed = valueRaw.trim();
+  const atIndex = valueTrimmed.indexOf("@");
+  const hasSingleAt = atIndex > 0 && valueTrimmed.indexOf("@", atIndex + 1) === -1;
+  const localPart = atIndex === -1 ? valueTrimmed : valueTrimmed.slice(0, atIndex);
+  const host = hasSingleAt ? valueTrimmed.slice(atIndex + 1) : "";
+  const lastDotIndex = host.lastIndexOf(".");
+  const domainPart = lastDotIndex > 0 ? host.slice(0, lastDotIndex) : "";
+  const tldPart = lastDotIndex > 0 ? host.slice(lastDotIndex + 1) : "";
 
   return [
     {
       id: "name",
-      is_met: local_part.length > 0 && !/\s/.test(local_part) && value_trimmed.length <= EMAIL_MAX_LENGTH,
+      isMet: localPart.length > 0 && !/\s/.test(localPart) && valueTrimmed.length <= EMAIL_MAX_LENGTH,
     },
-    { id: "at", is_met: has_single_at },
-    { id: "domain", is_met: /^[^\s@.]+(\.[^\s@.]+)*$/.test(domain_part) },
-    { id: "dot", is_met: last_dot_index > 0 },
-    { id: "tld", is_met: /^[A-Za-z]{2,}$/.test(tld_part) },
+    { id: "at", isMet: hasSingleAt },
+    { id: "domain", isMet: /^[^\s@.]+(\.[^\s@.]+)*$/.test(domainPart) },
+    { id: "dot", isMet: lastDotIndex > 0 },
+    { id: "tld", isMet: /^[A-Za-z]{2,}$/.test(tldPart) },
   ];
 }
 
-export function is_email_valid(value_raw: string): boolean {
-  return get_email_parts(value_raw).every((part) => part.is_met);
+export function isEmailValid(valueRaw: string): boolean {
+  return getEmailParts(valueRaw).every((part) => part.isMet);
 }
 
-export function get_email_guidance(value_raw: string): GuidanceKey | null {
-  if (value_raw.trim() === "") return "emailRequired";
-  return is_email_valid(value_raw) ? null : "emailFormat";
+export function getEmailGuidance(valueRaw: string): GuidanceKey | null {
+  if (valueRaw.trim() === "") return "emailRequired";
+  return isEmailValid(valueRaw) ? null : "emailFormat";
 }
 
 // ---------------------------------------------------------------------------
@@ -83,44 +78,44 @@ export type PasswordRuleId = "length" | "lower" | "upper" | "digit";
  * Every rule is met exactly when the password is valid: the length rule also fails on spaces or
  * on more than PASSWORD_MAX_LENGTH characters, which the helper line has no separate chunk for.
  */
-export function get_sign_up_password_rules(value: string): ChunkState<PasswordRuleId>[] {
+export function getSignUpPasswordRules(value: string): ChunkState<PasswordRuleId>[] {
   return [
-    { id: "length", is_met: /^\S{8,}$/.test(value) && value.length <= PASSWORD_MAX_LENGTH },
-    { id: "lower", is_met: /[a-z]/.test(value) },
-    { id: "upper", is_met: /[A-Z]/.test(value) },
-    { id: "digit", is_met: /\d/.test(value) },
+    { id: "length", isMet: /^\S{8,}$/.test(value) && value.length <= PASSWORD_MAX_LENGTH },
+    { id: "lower", isMet: /[a-z]/.test(value) },
+    { id: "upper", isMet: /[A-Z]/.test(value) },
+    { id: "digit", isMet: /\d/.test(value) },
   ];
 }
 
-export function is_sign_up_password_valid(value: string): boolean {
+export function isSignUpPasswordValid(value: string): boolean {
   return SIGN_UP_PASSWORD_PATTERN.test(value) && value.length <= PASSWORD_MAX_LENGTH;
 }
 
-export function get_sign_up_password_guidance(value: string): GuidanceKey | null {
+export function getSignUpPasswordGuidance(value: string): GuidanceKey | null {
   if (value === "") return "passwordRequired";
   if (/\s/.test(value)) return "passwordSpaces";
   if (value.length > PASSWORD_MAX_LENGTH) return "passwordTooLong";
-  return is_sign_up_password_valid(value) ? null : "passwordRules";
+  return isSignUpPasswordValid(value) ? null : "passwordRules";
 }
 
 /** The guidance the sign-in password field can show (the other fields use their helper line). */
 export type SignInPasswordGuidanceKey = Extract<GuidanceKey, "passwordRequired" | "passwordTooLong">;
 
 /** Sign-in only checks that a password was typed: older accounts may predate the sign-up rules. */
-export function get_sign_in_password_guidance(value: string): SignInPasswordGuidanceKey | null {
+export function getSignInPasswordGuidance(value: string): SignInPasswordGuidanceKey | null {
   if (value === "") return "passwordRequired";
   if (value.length > PASSWORD_MAX_LENGTH) return "passwordTooLong";
   return null;
 }
 
 /** A random password that satisfies the sign-up rule, with at least one of each required class. */
-export function generate_suggested_password(length = 20): string {
+export function generateSuggestedPassword(length = 20): string {
   const lower = "abcdefghijkmnopqrstuvwxyz";
   const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
   const digits = "23456789";
   const all = lower + upper + digits + "-_";
-  const random_values = crypto.getRandomValues(new Uint32Array(length));
-  const pick = (alphabet: string, index: number): string => alphabet[random_values[index] % alphabet.length];
+  const randomValues = crypto.getRandomValues(new Uint32Array(length));
+  const pick = (alphabet: string, index: number): string => alphabet[randomValues[index] % alphabet.length];
 
   const characters = Array.from({ length }, (_, index) => {
     if (index === 0) return pick(lower, index);
@@ -129,10 +124,10 @@ export function generate_suggested_password(length = 20): string {
     return pick(all, index);
   });
   // Shuffle so the required classes aren't always at the start.
-  const shuffle_values = crypto.getRandomValues(new Uint32Array(length));
+  const shuffleValues = crypto.getRandomValues(new Uint32Array(length));
   for (let index = characters.length - 1; index > 0; index--) {
-    const swap_index = shuffle_values[index] % (index + 1);
-    [characters[index], characters[swap_index]] = [characters[swap_index], characters[index]];
+    const swapIndex = shuffleValues[index] % (index + 1);
+    [characters[index], characters[swapIndex]] = [characters[swapIndex], characters[index]];
   }
   return characters.join("");
 }
@@ -141,26 +136,26 @@ export function generate_suggested_password(length = 20): string {
 // Server schemas (the same rules, as Zod schemas the auth actions parse with)
 // ---------------------------------------------------------------------------
 
-function guidance_check(get_guidance: (value: string) => GuidanceKey | null) {
+function guidanceCheck(getGuidance: (value: string) => GuidanceKey | null) {
   return (value: string, ctx: z.RefinementCtx): void => {
-    const guidance_key = get_guidance(value);
-    if (guidance_key) ctx.addIssue({ code: "custom", message: guidance_key });
+    const guidanceKey = getGuidance(value);
+    if (guidanceKey) ctx.addIssue({ code: "custom", message: guidanceKey });
   };
 }
 
-const email_schema = z
+const emailSchema = z
   .string()
-  .superRefine(guidance_check(get_email_guidance))
+  .superRefine(guidanceCheck(getEmailGuidance))
   .transform((value) => value.trim().toLowerCase());
 
-export const sign_in_schema = z.strictObject({
-  email: email_schema,
-  password: z.string().superRefine(guidance_check(get_sign_in_password_guidance)),
+export const signInSchema = z.strictObject({
+  email: emailSchema,
+  password: z.string().superRefine(guidanceCheck(getSignInPasswordGuidance)),
 });
 
-export const sign_up_schema = z.strictObject({
-  email: email_schema,
-  password: z.string().superRefine(guidance_check(get_sign_up_password_guidance)),
+export const signUpSchema = z.strictObject({
+  email: emailSchema,
+  password: z.string().superRefine(guidanceCheck(getSignUpPasswordGuidance)),
 });
 
 export type CredentialField = "email" | "password";

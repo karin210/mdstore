@@ -5,14 +5,14 @@
  */
 export interface SupabaseEnv {
   url: string;
-  publishable_key: string;
+  publishableKey: string;
 }
 
 /** The Supabase settings, or null while the project isn't configured (e.g. a build without `.env.local`). */
-export function get_supabase_env(): SupabaseEnv | null {
+export function getSupabaseEnv(): SupabaseEnv | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const publishable_key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  if (!url || !publishable_key) return null;
-  return { url, publishable_key };
+  if (!url || !publishableKey) return null;
+  return { url, publishableKey };
 }

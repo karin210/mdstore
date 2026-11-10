@@ -5,13 +5,13 @@ interface PostFormFieldProps {
   label: string;
   hint?: string;
   /** What is wrong with the value, once the field was edited; empty when there is nothing to say. */
-  guidance_text: string;
+  guidanceText: string;
   /** The control; it must reference `${id}-hint` and `${id}-guidance` in aria-describedby. */
   children: ReactNode;
 }
 
 /** Label, control, a short description and the inline guidance below, for one upload-form field. */
-export function PostFormField({ id, label, hint, guidance_text, children }: PostFormFieldProps): ReactElement {
+export function PostFormField({ id, label, hint, guidanceText, children }: PostFormFieldProps): ReactElement {
   return (
     <div className="form-field">
       <label htmlFor={id} className="form-label">
@@ -23,14 +23,14 @@ export function PostFormField({ id, label, hint, guidance_text, children }: Post
           {hint}
         </p>
       )}
-      <p id={`${id}-guidance`} className="form-guidance" aria-live="polite" hidden={guidance_text === ""}>
-        {guidance_text}
+      <p id={`${id}-guidance`} className="form-guidance" aria-live="polite" hidden={guidanceText === ""}>
+        {guidanceText}
       </p>
     </div>
   );
 }
 
 /** The aria-describedby value for a field rendered with PostFormField. */
-export function get_described_by(id: string, has_hint: boolean): string {
-  return has_hint ? `${id}-hint ${id}-guidance` : `${id}-guidance`;
+export function getDescribedBy(id: string, hasHint: boolean): string {
+  return hasHint ? `${id}-hint ${id}-guidance` : `${id}-guidance`;
 }

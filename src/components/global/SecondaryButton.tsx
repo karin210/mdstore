@@ -10,7 +10,7 @@ interface SecondaryButtonProps {
 }
 
 /** Plain targets that must not get a locale prefix or client-side routing. */
-function is_plain_target(href: SecondaryButtonProps["href"]): href is string {
+function isPlainTarget(href: SecondaryButtonProps["href"]): href is string {
   return typeof href === "string" && (href.startsWith("mailto:") || href.startsWith("#"));
 }
 
@@ -19,7 +19,7 @@ function is_plain_target(href: SecondaryButtonProps["href"]): href is string {
  * upload a prompt) and contact buttons.
  */
 export function SecondaryButton({ href, children, size = "default" }: SecondaryButtonProps): ReactElement {
-  if (is_plain_target(href)) {
+  if (isPlainTarget(href)) {
     return (
       <a href={href} className={styles.button} data-size={size}>
         {children}
