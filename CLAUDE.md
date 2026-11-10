@@ -26,7 +26,15 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - Fonts via `next/font/google`: **Bricolage Grotesque** (`--font-display`, page/section headings), **Geist** (`--font-body`, body copy, controls and modal headings), **Geist Mono** (`--font-code`, file names and Markdown excerpts).
 - Supabase (`@supabase/ssr` + `@supabase/supabase-js`): email/password auth and the `posted_prompts` table. Settings in `.env.local` (see `.env.example`); the schema and row-level security policies are in `supabase/migrations/`. Without the env vars the site still builds and runs, signed out, with posting unavailable.
 - Zod for the validation schemas shared by forms (client) and server actions.
-- Node is pinned with mise; run commands through the mise-activated shell.
+- Node 24, pinned in `mise.toml` so every machine and CI use the same version; run commands through the mise-activated shell. `@types/node` follows the same major.
+- npm (lockfile in the repo): working setup, no gain in switching.
+- ESLint 9 with `eslint-config-next` (flat config): keeps the Next-specific rules (core web vitals, React hooks). Stay on 9 until the bundled plugins list ESLint 10 as a peer.
+- Prettier, pinned in the project (`.prettierrc.json`: `printWidth: 120`, LF), with `eslint-config-prettier` last in the ESLint config: same output in Zed, the CLI and CI. Chosen over Biome to keep the Next lint rules. `content/prompts/` is ignored because those files are the product, byte for byte. `.gitattributes` keeps LF on Windows.
+- Vitest 5 for unit tests of plain TypeScript (validation rules, form classes, helpers), as `src/**/*.test.ts` next to the code, Node environment; `@/` resolves through Vite's built-in `resolve.tsconfigPaths`. Async Server Components need E2E tests (Playwright) instead, per the Next docs.
+- TypeScript 5: stay off TypeScript 7 until it ships a JavaScript API (the `next` editor plugin needs it).
+- Supabase CLI (dev dependency, config in `supabase/config.toml`): applies migrations and generates the table types.
+- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`.
+- CI: `.github/workflows/ci.yml` runs lint, format check, tests and build on pushes to `main`/`dev` and on pull requests (Node from `mise.toml`, no secrets needed).
 
 ## Commands
 
@@ -34,6 +42,10 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - `npm run build`: production build (also type-checks)
 - `npm run start`: serve the production build
 - `npm run lint`: ESLint
+- `npm run format` / `npm run format:check`: write / check Prettier formatting
+- `npm test` / `npm run test:watch`: Vitest once / in watch mode
+- `npm run db:push`: apply `supabase/migrations/` to the linked project (after `npx supabase login` and `npx supabase link --project-ref <ref>`)
+- `npm run db:types`: regenerate `src/lib/supabase/database.types.ts` from the linked project
 
 ## Structure
 
@@ -105,7 +117,7 @@ public/                      static files served as-is (favicon.ico, images, rob
 - **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons (card "Preview", "Sign out"), interface controls (mobile menu toggle).
 - **Auth**: only signed-in users can post; the server action re-checks the session (`get_signed_in_user`, verified with `getClaims()`) and RLS only accepts rows whose `author_id` is the caller. The header's `AccountControl` refreshes the page on sign-in/sign-out, so the upload form disappears when the session ends.
 - **Forms** follow the global auth-form rules: validation rules live once in `src/lib/validation/` (client checks + Zod schemas for the server), form state lives in `src/lib/forms/` classes, guidance is inline under each field, and submit focuses the first wrong field. Shared field styles (`.form-input`, `.form-hint`, `.form-guidance`, `data-mark`, `data-state`) are in `globals.css`.
-- **Naming**: new code uses snake_case for variables and functions (global rule); older code still uses camelCase, so don't rename it piecemeal.
+- **Naming**: camelCase for variables, functions, props and object keys; PascalCase for components and types; UPPER_SNAKE_CASE for module constants. snake_case appears only where an outside system owns the name: Supabase column names (`PostedPromptRow`, the insert in `src/server/prompts/actions.ts`, `DETAIL_COLUMNS`), Supabase error codes and parameters (`token_hash`, `email_change`) and cookie names (`mdstore_locale`). Until `npm run db:types` is wired into the clients, the insert's column names are not type-checked, so keep them in sync with the migration by hand.
 - **Modals**: `PromptPreviewDialog` is a dismissible native `<dialog>` (Escape, backdrop click, `.modal-close-floating` X). Shared modal classes are in `globals.css`.
 - **Titles**: format `Page | mdstore`, defined once in `src/lib/site.ts` (`titleTemplate`) and applied in the root layout; the home page uses `title.absolute` to lead with the brand.
 - **Behavioural state** uses attributes, not classes (`aria-pressed` on category filters, `data-size` on buttons, `data-token` in code previews).

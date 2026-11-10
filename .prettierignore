@@ -1,0 +1,16 @@
+# Build output and generated files
+.next
+next-env.d.ts
+src/lib/supabase/database.types.ts
+
+# Product files sold or shared as-is: their exact bytes and line counts are the product
+content/prompts
+
+# Supabase CLI config and SQL keep the CLI's own formatting
+supabase
+
+# Written and re-added by `next dev` in its own format
+AGENTS.md
+
+# Personal notes
+xd.md
