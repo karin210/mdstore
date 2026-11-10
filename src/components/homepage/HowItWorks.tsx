@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
+import { NextSection } from "@/components/homepage/NextSection";
 import styles from "./HowItWorks.module.css";
 
 const tracks = [
@@ -34,6 +35,7 @@ export function HowItWorks(): ReactElement {
           </article>
         ))}
       </div>
+      <NextSection from="how-it-works" />
     </section>
   );
 }

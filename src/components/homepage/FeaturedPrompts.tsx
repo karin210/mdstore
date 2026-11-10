@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState, type ReactElement } from "react";
 import { PromptCard } from "@/components/homepage/PromptCard";
+import { NextSection } from "@/components/homepage/NextSection";
 import { PromptPreviewDialog } from "@/components/modals/PromptPreviewDialog";
 import { featuredPrompts, promptCategories, type PromptCategory, type PromptListing } from "@/data/prompts";
 import styles from "./FeaturedPrompts.module.css";
@@ -57,6 +58,8 @@ export function FeaturedPrompts(): ReactElement {
           </li>
         ))}
       </ul>
+
+      <NextSection from="featured" />
 
       <PromptPreviewDialog prompt={previewed} onClose={() => setPreviewed(null)} />
     </section>

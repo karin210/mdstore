@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { faqEntryIds } from "@/data/faq";
+import { NextSection } from "@/components/homepage/NextSection";
 import styles from "./Faq.module.css";
 
 export function Faq(): ReactElement {
@@ -20,6 +21,7 @@ export function Faq(): ReactElement {
           </details>
         ))}
       </div>
+      <NextSection from="faq" />
     </section>
   );
 }

@@ -29,8 +29,14 @@
       "title": "From someone’s repo to yours in three steps",
       "buyers": {
         "audience": "For buyers",
-        "find": { "title": "Find", "text": "Filter by stack, task and the AI tool you use." },
-        "preview": { "title": "Preview", "text": "Read the opening of every file for free before paying." },
+        "find": {
+          "title": "Find",
+          "text": "Filter by stack, task and the AI tool you use."
+        },
+        "preview": {
+          "title": "Preview",
+          "text": "Read the opening of every file for free before paying."
+        },
         "dropIn": {
           "title": "Drop it in",
           "text": "Download the .md and commit it. Your agent picks it up on the next run."
@@ -38,12 +44,18 @@
       },
       "sellers": {
         "audience": "For sellers",
-        "write": { "title": "Write", "text": "Package the instructions that already make your agent great." },
+        "write": {
+          "title": "Write",
+          "text": "Package the instructions that already make your agent great."
+        },
         "publish": {
           "title": "Publish",
           "text": "Set a price, choose the preview length and list the tools you tested."
         },
-        "earn": { "title": "Earn", "text": "Get paid on every sale and ship updates buyers receive automatically." }
+        "earn": {
+          "title": "Earn",
+          "text": "Get paid on every sale and ship updates buyers receive automatically."
+        }
       }
     },
     "whyMarkdown": {
@@ -105,6 +117,23 @@
           "question": "How do sellers get paid?",
           "answer": "Sellers set their own price and are paid for every sale. Write to the seller team to request access while seller onboarding is in early access."
         }
+      }
+    },
+    "outline": {
+      "label": "On this page",
+      "file": "home.md",
+      "reading": "Reading:",
+      "open": "Outline",
+      "close": "Close the outline",
+      "next": "Next",
+      "finalNext": "Upload your prompts",
+      "sections": {
+        "intro": "Intro",
+        "featured": "Featured prompts",
+        "howItWorks": "How it works",
+        "whyMarkdown": "Why .md",
+        "upload": "For authors",
+        "faq": "FAQ"
       }
     }
   }

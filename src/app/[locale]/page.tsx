@@ -4,6 +4,7 @@ import type { ReactElement } from "react";
 import { Faq } from "@/components/homepage/Faq";
 import { FeaturedPrompts } from "@/components/homepage/FeaturedPrompts";
 import { Hero } from "@/components/homepage/Hero";
+import { HomeOutlineRail, HomeStatusBar } from "@/components/homepage/HomeOutline";
 import { HowItWorks } from "@/components/homepage/HowItWorks";
 import { UploadCta } from "@/components/homepage/UploadCta";
 import { WhyMarkdown } from "@/components/homepage/WhyMarkdown";
@@ -17,15 +18,20 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: { absolute: `${siteConfig.name}${siteConfig.titleSeparator}${t("title")}` } };
 }
 
+/** Sections follow `homeSections` (the outline's order); each ends with a "Next" link to the following one. */
 export default function HomePage(): ReactElement {
   return (
     <main className={styles.main}>
-      <Hero />
-      <FeaturedPrompts />
-      <HowItWorks />
-      <WhyMarkdown />
-      <UploadCta />
-      <Faq />
+      <HomeOutlineRail />
+      <div className={styles.content}>
+        <Hero />
+        <FeaturedPrompts />
+        <HowItWorks />
+        <WhyMarkdown />
+        <UploadCta />
+        <Faq />
+        <HomeStatusBar />
+      </div>
     </main>
   );
 }

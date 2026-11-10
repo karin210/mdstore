@@ -1,7 +1,54 @@
+/*
+  The landing page reads as one Markdown file. The outline rail and the content share a single grid row:
+  the content spans the full width (so the hero is full-bleed), and the rail sits in its own column on
+  the left, as tall as the page, so its sticky outline follows the reader all the way down.
+*/
 .main {
   flex: 1;
+  display: grid;
+  grid-template-columns: var(--gutter) var(--rail-width) 1fr;
+  padding-bottom: var(--space-lg);
+}
+
+.content {
+  grid-column: 1 / -1;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-2xl);
-  padding-bottom: var(--space-2xl);
+}
+
+/* Wide screens: narrow the content so the rail has its own space on the left (and balance on the right). */
+@media (min-width: 80rem) {
+  .main {
+    --content-width: min(62rem, 100% - 2 * (var(--gutter) + var(--rail-width) + var(--space-lg)));
+  }
+}
+
+/* Each section heading carries its Markdown level, matching the outline. */
+.content :global(.section-heading) h2::before {
+  content: "## " / "";
+  color: var(--color-primary);
+  font-family: var(--font-code);
+  font-weight: 500;
+}
+
+/* Sections rise in as they enter the viewport; native scrolling is untouched and nothing is hidden without support. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .content > :global(section):not(:first-child) {
+      animation: section-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+      /* Scaling from the top edge keeps that edge still, so "#section" links land where scroll-padding says. */
+      transform-origin: 50% 0;
+    }
+  }
+}
+
+@keyframes section-reveal {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
 }

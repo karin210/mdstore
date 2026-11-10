@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
+import { NextSection } from "@/components/homepage/NextSection";
 import styles from "./WhyMarkdown.module.css";
 
 const reasonKeys = ["readable", "adaptable", "toolAgnostic", "versioned"] as const;
@@ -8,7 +9,7 @@ export function WhyMarkdown(): ReactElement {
   const t = useTranslations("home.whyMarkdown");
 
   return (
-    <section className="page-section" aria-labelledby="why-title">
+    <section id="why-markdown" className="page-section" aria-labelledby="why-title">
       <header className="section-heading">
         <p className="eyebrow">{t("eyebrow")}</p>
         <h2 id="why-title">{t("title")}</h2>
@@ -22,6 +23,7 @@ export function WhyMarkdown(): ReactElement {
           </li>
         ))}
       </ul>
+      <NextSection from="why-markdown" />
     </section>
   );
 }

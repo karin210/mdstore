@@ -75,7 +75,11 @@ src/
 │  │                         SecondaryButton, SubmitButton, FormAlert, SkeletonBlock, icons,
 │  │                         navLinks
 │  ├─ homepage/              landing-only sections: Hero, FeaturedPrompts, PromptCard,
-│  │                         HowItWorks, WhyMarkdown, UploadCta, Faq
+│  │                         HowItWorks, WhyMarkdown, UploadCta, Faq; the page reads as one
+│  │                         Markdown file: homeSections (outline order), HomeOutline (desktop
+│  │                         rail + mobile status bar with an Outline popover), NextSection
+│  │                         ("Next ## …" link ending each section), MarkdownField (hero's
+│  │                         WebGL backdrop, lazy, see src/lib/markdownFieldRenderer.ts)
 │  ├─ upload/                used only by /upload: its sections, PostPromptSection (session
 │  │                         check in <Suspense>), PostPromptForm, PostFormField
 │  ├─ login/                 LoginPanel (tabs, owns mode + submission), SignUpForm, SignInForm,

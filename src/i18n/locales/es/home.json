@@ -118,6 +118,23 @@
           "answer": "Los vendedores fijan su propio precio y cobran por cada venta. Escribe al equipo de vendedores para solicitar acceso mientras el registro está en acceso anticipado."
         }
       }
+    },
+    "outline": {
+      "label": "En esta página",
+      "file": "home.md",
+      "reading": "Leyendo:",
+      "open": "Índice",
+      "close": "Cerrar el índice",
+      "next": "Siguiente",
+      "finalNext": "Sube tus prompts",
+      "sections": {
+        "intro": "Inicio",
+        "featured": "Prompts destacados",
+        "howItWorks": "Cómo funciona",
+        "whyMarkdown": "Por qué .md",
+        "upload": "Para autores",
+        "faq": "Preguntas frecuentes"
+      }
     }
   }
 }

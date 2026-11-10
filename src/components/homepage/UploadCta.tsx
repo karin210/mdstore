@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { SecondaryButton } from "@/components/global/SecondaryButton";
+import { NextSection } from "@/components/homepage/NextSection";
 import styles from "./UploadCta.module.css";
 
 const perkKeys = ["ownPage", "freePreviews", "credit", "plainMarkdown"] as const;
@@ -28,6 +29,7 @@ export function UploadCta(): ReactElement {
           ))}
         </ul>
       </div>
+      <NextSection from="upload" />
     </section>
   );
 }

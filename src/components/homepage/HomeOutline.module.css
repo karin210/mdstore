@@ -1,0 +1,211 @@
+/* How much of the page has been read: driven by the page's scroll timeline where supported, 0% elsewhere. */
+@property --read {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+@keyframes read-progress {
+  to {
+    --read: 100%;
+  }
+}
+
+/* ---------- Shared outline list ---------- */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.link:hover {
+  background: color-mix(in srgb, var(--color-secondary) 60%, transparent);
+  color: var(--color-ink);
+}
+
+.link[aria-current="location"] {
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-weight: 600;
+}
+
+.marker {
+  min-width: 2ch;
+  color: var(--color-primary);
+  font-family: var(--font-code);
+  font-weight: 500;
+}
+
+.fileName {
+  color: var(--color-ink-muted);
+  font-family: var(--font-code);
+  font-size: var(--text-xs);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* ---------- Wide screens: sticky rail beside the page ---------- */
+
+.rail {
+  display: none;
+}
+
+@media (min-width: 80rem) {
+  .rail {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    z-index: 1;
+  }
+}
+
+.railInner {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-lg));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-block-start: var(--space-xl);
+}
+
+.railBody {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-sm);
+}
+
+/* The "read" line: fills top to bottom as the page scrolls. */
+.railTrack {
+  width: 0.125rem;
+  border-radius: var(--radius-pill);
+  background:
+    linear-gradient(var(--color-primary), var(--color-primary)) top / 100% var(--read) no-repeat,
+    var(--color-border);
+}
+
+/* ---------- Narrow screens: editor status bar pinned to the bottom ---------- */
+
+.statusBar {
+  position: sticky;
+  bottom: var(--space-sm);
+  z-index: 10;
+  width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) var(--space-2xs) var(--space-2xs) var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  /* Its bottom edge doubles as the "read" line. */
+  background:
+    linear-gradient(var(--color-primary), var(--color-primary)) left bottom / var(--read) 0.1875rem no-repeat,
+    color-mix(in srgb, var(--color-surface) 82%, transparent);
+  backdrop-filter: blur(0.75rem);
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 80rem) {
+  .statusBar {
+    display: none;
+  }
+}
+
+.location {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  min-width: 0;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.current {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+/* Interface kind: it changes what the screen shows, not a task. */
+.outlineButton {
+  flex-shrink: 0;
+  padding: var(--space-2xs) var(--space-sm);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.outlineButton:hover {
+  background: var(--color-secondary);
+}
+
+/* Dismissible outline sheet (native popover: Escape, an outside click or the X close it). */
+.sheet {
+  inset: auto 0 var(--space-md);
+  width: min(26rem, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+  padding: var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-card);
+  overflow: visible;
+}
+
+.sheet::backdrop {
+  background: var(--color-scrim);
+}
+
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+@supports (animation-timeline: scroll()) {
+  .railTrack,
+  .statusBar {
+    animation: read-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet {
+    transition:
+      opacity 0.2s ease,
+      translate 0.2s ease,
+      overlay 0.2s allow-discrete,
+      display 0.2s allow-discrete;
+  }
+
+  .sheet:not(:popover-open) {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+
+  @starting-style {
+    .sheet:popover-open {
+      opacity: 0;
+      translate: 0 1rem;
+    }
+  }
+}
