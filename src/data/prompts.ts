@@ -63,7 +63,7 @@ export const featuredPrompts: PromptListing[] = [
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 201,
+    lineCount: 280,
     worksWith: ["Claude Code"],
     excerpt: `# Web project conventions
 

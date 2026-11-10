@@ -28,17 +28,25 @@
       "global": {
         "title": "Convenciones para proyectos web",
         "tagline": "Dale a tu agente los hábitos de un desarrollador web senior cuidadoso, desde el primer commit.",
-        "summary": "Instrucciones iniciales para cualquier sitio o aplicación web: HTML semántico, WCAG 2.1 AA, design tokens, CSS fluido, estructura SOLID, formularios, estados de carga y valores seguros por defecto en el servidor.",
+        "summary": "Instrucciones iniciales para cualquier sitio o aplicación web: HTML semántico, WCAG 2.1 AA, un sistema de color con jerarquía visual clara, CSS fluido con tokens, nombres legibles, navegación, formularios, estados de carga, visibilidad ante la IA y valores seguros por defecto en el servidor.",
         "highlights": [
           "HTML semántico y accesibilidad WCAG 2.1 AA en cada componente",
-          "Colores, tamaños de fuente y espaciados como tokens en :root con escalado fluido mediante clamp()",
-          "Dos tipos de modal, descartable o no, con estilos globales compartidos",
-          "Formularios con indicaciones en línea mientras escribes y reglas de contraseña que aceptan las contraseñas sugeridas por el navegador",
+          "Un sistema de color que marca la jerarquía visual: marca, acento, elevación y colores de estado tipo semáforo",
+          "Colores, tamaños de fuente y cada espaciado como tokens en :root, con el layout definido por el contenedor",
+          "Nombres que se entienden a primera vista, según su valor, su estado y su objetivo",
+          "Navegación en la que el usuario siempre sabe dónde está y qué viene después",
+          "Formularios con indicaciones en línea mientras escribes y pestañas de registro e inicio de sesión que aceptan las contraseñas sugeridas por el navegador",
+          "Visibilidad ante la IA: contenido renderizado en el servidor, llms.txt generado, reglas para crawlers y JSON-LD",
           "Skeletons, estados vacíos y de error para cada operación asíncrona",
           "Validación y autorización en el servidor y códigos de estado HTTP correctos, sin filtrar detalles internos",
           "Página 404 con la marca del sitio, redirecciones seguras y títulos de página únicos"
         ],
-        "meantFor": ["Sitios y aplicaciones web", "Cualquier framework o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
         "usageSteps": [
           "Descarga `global.md`. Es gratis.",
           "Guárdalo en la raíz de tu proyecto y agrega la línea `@global.md` a tu `CLAUDE.md` para que Claude Code lo cargue en cada sesión. Si aún no tienes un `CLAUDE.md`, cambia el nombre del archivo a `CLAUDE.md`.",
@@ -80,7 +88,12 @@
           "Respeta tus decisiones: si ya elegiste una herramienta, la configura bien en lugar de discutirla",
           "Registra cada decisión en las instrucciones del proyecto para que no se vuelva a abrir"
         ],
-        "meantFor": ["Cualquier agente de IA", "Cualquier lenguaje o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "meantFor": [
+          "Cualquier agente de IA",
+          "Cualquier lenguaje o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
         "usageSteps": [
           "Descarga `dev-tools-advisor.md`. Es gratis.",
           "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo, la línea `@dev-tools-advisor.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en las reglas de Cursor).",

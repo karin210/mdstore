@@ -28,12 +28,15 @@
       "global": {
         "title": "Web project conventions",
         "tagline": "Give your agent the habits of a careful senior web developer, from the first commit.",
-        "summary": "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, design tokens, fluid CSS, SOLID structure, forms, loading states and secure server defaults.",
+        "summary": "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, a colour system with a clear visual hierarchy, tokenized fluid CSS, readable naming, navigation, forms, loading states, AI discoverability and secure server defaults.",
         "highlights": [
           "Semantic HTML and WCAG 2.1 AA accessibility on every component",
-          "Colours, font sizes and spacing as :root tokens with fluid clamp() scaling",
-          "Two modal types, dismissible or not, with shared global styling",
-          "Forms with inline, as-you-type guidance and password rules that accept browser-suggested passwords",
+          "A colour system that sets visual hierarchy: brand, accent, elevation and traffic-light status colours",
+          "Colours, font sizes and every spacing value as :root tokens, with layouts arranged by the parent",
+          "Names a developer understands at first sight, by value, state and goal",
+          "Navigation where users always know where they are and what comes next",
+          "Forms with inline, as-you-type guidance, and sign-in/sign-up tabs that accept browser-suggested passwords",
+          "AI discoverability: server-rendered content, a generated llms.txt, crawler rules and JSON-LD",
           "Skeletons, empty and error states for every async operation",
           "Server-side validation, authorization and correct HTTP status codes, with no leaked internals",
           "Branded 404, safe redirects and unique page titles"
