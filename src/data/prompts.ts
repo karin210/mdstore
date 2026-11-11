@@ -113,4 +113,106 @@ Recommends the tools and stack that fit the project and the developer's setup: l
 - **Research, don't remember.** Tools change fast: check their current docs before recommending them.`,
     outputExamples: [],
   },
+  {
+    slug: "commit-attribution",
+    fileName: "commit-attribution.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 81,
+    worksWith: ["Claude Code"],
+    excerpt: `# Commit messages without AI attribution
+
+Keeps commit messages, pull request texts and release notes free of credits to an AI assistant, so the history only describes the change. Follow it whenever you create, amend or squash a commit, write a pull request title or description, or find that a tool, template or hook has added a line of its own to a message.
+
+- **The project's policy wins.** If the project or the user asks for AI assistance to be disclosed, follow that policy instead and say so. Without such a policy, this file applies.
+- **The message describes the change, nothing else.** What changed and why, written for the next developer who reads the history.
+- **Strip, don't argue.** When an attribution line appears, remove it silently and carry on. Don't add a note about it.`,
+    outputExamples: [],
+  },
+  {
+    slug: "authentication-forms",
+    fileName: "authentication-forms.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 83,
+    worksWith: ["Claude Code"],
+    excerpt: `# Authentication forms
+
+How to build sign-in, sign-up and password forms that are easy to get right: one page with tabs, validation as the user types, guidance under each field, and password rules that accept whatever the browser suggests. Follow it whenever you create or change a sign-in, sign-up, password reset or similar account form.
+
+- **The codebase wins.** If the project already has form components or a validation module, extend them, don't mix two approaches, and mention the difference.
+- **Write in the project's language.** Labels, guidance and error messages use the site's language. The strings below are examples.
+- **The server decides.** Everything the form checks is checked again on the server with the same rules; client validation is only guidance.`,
+    outputExamples: [],
+  },
+  {
+    slug: "modals",
+    fileName: "modals.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 54,
+    worksWith: ["Claude Code"],
+    excerpt: `# Modals
+
+How to build modal dialogs: which kind to use, how each one closes, and how to style them so every modal in the project looks and behaves the same. Follow it whenever you create or change a modal, a dialog, a confirmation or an overlay panel.
+
+- **The codebase wins.** If the project already has a modal component or a dialog convention, extend it, don't mix two, and mention the difference.
+- **Reuse, don't redefine.** Modal typography, inputs, close button and action row live in one shared place (the global stylesheet or one modal component), never per modal.
+- **Readability first.** A modal usually carries important information, so its text stays plain and easy to read.`,
+    outputExamples: [],
+  },
+  {
+    slug: "loading-states",
+    fileName: "loading-states.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 59,
+    worksWith: ["Claude Code"],
+    excerpt: `# Loading states
+
+What the interface shows while something asynchronous happens, and when it fails or comes back empty. Follow it for every data fetch, form submission, mutation, upload, authentication call, route transition that waits on data and lazy-loaded piece of content.
+
+- **The codebase wins.** If the project already has a spinner, skeleton or status component, reuse it and mention any gap.
+- **Never leave the user staring at a frozen or blank screen.** Every async operation has a visible state.
+- **Every async view handles four outcomes:** loading, success, empty and error.`,
+    outputExamples: [],
+  },
+  {
+    slug: "error-handling-and-http-status",
+    fileName: "error-handling-and-http-status.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 80,
+    worksWith: ["Claude Code"],
+    excerpt: `# Error handling and HTTP status codes
+
+How a server answers when something goes wrong, and how a client reads the answer: safe messages, the right status code, no leaked internals. Follow it whenever you write or change an API route, a form action, a server function or the client code that calls them.
+
+- **The codebase wins.** If the project already has an error handler or a response shape, extend it, don't mix two, and mention the difference.
+- **The status code is the signal; the body only adds detail.** Never respond \`200 OK\` with a failure inside the body (\`{ "success": false }\`).
+- **One central place.** Errors are translated by a central handler or helper, so no route can forget to.`,
+    outputExamples: [],
+  },
+  {
+    slug: "ai-discoverability-geo",
+    fileName: "ai-discoverability-geo.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 90,
+    worksWith: ["Claude Code"],
+    excerpt: `# AI discoverability
+
+How to make a public website easy for AI assistants to find, read and quote. Follow it when you build or change a public site: its rendering, \`llms.txt\`, \`robots.txt\`, sitemap, structured data and the way its pages are written.
+
+- **The codebase wins.** If the site already generates a sitemap or \`robots.txt\`, extend that, don't add a second one, and mention the difference.
+- **Build for three things only:** being in the models' training data, being found by their live search, and being easy to read and quote. Skip speculative formats.
+- **Generate, don't hand-write.** Files that list the site's pages come from the same data that renders the pages, so they never go stale.`,
+    outputExamples: [],
+  },
 ];

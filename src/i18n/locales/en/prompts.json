@@ -91,6 +91,133 @@
           "From then on, ask about a single tool whenever you need it (for example \"ESLint and Prettier, or Biome?\"), or start a new project, and the agent applies the advisor on its own.",
           "Approve the recommendation. The agent installs it, runs it once to confirm it works, and records the decision."
         ]
+      },
+      "commit-attribution": {
+        "title": "Commit messages without AI attribution",
+        "tagline": "Your history describes the change, not the tool that helped write it.",
+        "summary": "Keeps commit messages, pull request texts and release notes free of AI credits: no Co-Authored-By trailers, no generated-with lines, no session links. Includes how to write a clear message and an optional commit-msg hook that enforces it.",
+        "highlights": [
+          "Removes assistant trailers, generated-with lines and session links from commits and pull requests",
+          "Strips lines that an agent's template, a generator or a hook injects before the commit is created",
+          "Keeps what belongs: real co-authors, sign-offs and issue references",
+          "Subject and body rules: imperative mood, about 50 characters, the why in the body",
+          "Fixes an unpushed commit with amend or reword, and leaves pushed history to you",
+          "An optional commit-msg hook that rejects attribution lines for the whole team",
+          "Defers to your project's policy if it asks for AI assistance to be disclosed"
+        ],
+        "meantFor": ["Any AI coding agent", "Any language or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `commit-attribution.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@commit-attribution.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Commit as usual. The agent writes the message from the change and removes any attribution line before creating the commit.",
+          "To enforce it for everyone, copy the optional `commit-msg` hook from section 5 into your repository."
+        ]
+      },
+      "authentication-forms": {
+        "title": "Authentication forms",
+        "tagline": "Sign-in and sign-up forms that guide users as they type, and accept the password their browser suggests.",
+        "summary": "How to build sign-in, sign-up and password forms: one tabbed card instead of a link at the bottom, validation as the user types, guidance under each field, a live example that turns green as it is met, and password rules that accept browser-generated passwords.",
+        "highlights": [
+          "Sign-in and sign-up as tabs in one card, labelled by who the user is, with full keyboard support",
+          "Each field validated as the user types, showing only what is still missing",
+          "A live example line, such as name@domain.com, whose chunks turn green as they are met",
+          "Border and focus ring mark valid and invalid fields, without recolouring the text",
+          "Password rules that accept what Chrome, Safari and password managers generate",
+          "Show, copy and generate controls that appear when the user needs them",
+          "A submit button that stays enabled and focuses the first wrong field",
+          "The same rules defined once for the client and the server"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `authentication-forms.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@authentication-forms.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to build or review your sign-in and sign-up forms. It applies the file and follows your existing form components where they differ.",
+          "Before shipping, test the sign-up password rule with the password your browser suggests."
+        ]
+      },
+      "modals": {
+        "title": "Modals",
+        "tagline": "Know when a modal can be dismissed, and make every one behave the same.",
+        "summary": "Two kinds of modal, chosen by whether closing it is a meaningful decision: non-dismissible ones close only through an action-named button, dismissible ones close three ways. Plus shared styling, native dialog behaviour and accessibility.",
+        "highlights": [
+          "One question picks the kind: is closing this modal a meaningful decision?",
+          "Non-dismissible modals close only through action-named buttons, with Cancel always present",
+          "Dismissible modals close with an outside click, Escape and a floating X",
+          "Shared title, input, close and action classes, defined once instead of per modal",
+          "Built on the native dialog element, with focus moved in and returned to the trigger",
+          "A busy state on the action button while the request is in flight",
+          "Calm motion for users who prefer reduced motion"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `modals.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@modals.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent for a modal, or to review your existing ones. It picks the kind for each and reuses your shared modal styles.",
+          "Check each modal against the checklist at the end of the file."
+        ]
+      },
+      "loading-states": {
+        "title": "Loading states",
+        "tagline": "No frozen screens: every async operation shows what is happening and what went wrong.",
+        "summary": "What the interface shows while something asynchronous happens, and when it fails or comes back empty: an explicit status, skeletons that match the content, busy buttons, no flicker on fast responses and accessible announcements.",
+        "highlights": [
+          "An explicit idle, loading, success or error status, always cleared in a finally",
+          "Skeletons that mirror the final layout, so the page doesn't jump when data arrives",
+          "Buttons that show their busy state, stay disabled in flight and keep their width",
+          "Loaders delayed and held a minimum time, so fast responses don't flicker",
+          "Empty and error states for every view, with a retry action",
+          "Announced to assistive technology and calm under reduced motion",
+          "Spinners and skeletons built once as reusable components"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `loading-states.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@loading-states.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to add a fetch, a form submission or an upload, or to review the screens that wait on data. It adds the loading, empty and error states for each.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "error-handling-and-http-status": {
+        "title": "Error handling and HTTP status codes",
+        "tagline": "Safe messages for users, the right status for clients, and the details only in your logs.",
+        "summary": "How a server answers when something goes wrong and how a client reads it: no leaked internals, errors translated into messages in the user's terms, the correct HTTP status code, a stable error body and a request ID for support.",
+        "highlights": [
+          "No database, framework or stack-trace detail ever reaches the client",
+          "Known failures mapped to the right status and a message in the user's terms",
+          "A generic 500 with a request ID for everything unexpected",
+          "Full technical errors logged on the server, without secrets",
+          "No failure inside a 200 body, and a status code chosen deliberately",
+          "One stable error body with field-level messages and a request ID",
+          "Client handling of 401, 403, 404, 409, 422, 429 and 5xx"
+        ],
+        "meantFor": ["APIs and server code", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `error-handling-and-http-status.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@error-handling-and-http-status.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to write an endpoint, or to review the error handling of the ones you have. It sets the status codes and replaces raw error messages with safe ones.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "ai-discoverability-geo": {
+        "title": "AI discoverability",
+        "tagline": "Make your site easy for AI assistants to find, read and quote.",
+        "summary": "How to make a public website discoverable by AI assistants: server-rendered content, a generated llms.txt, deliberate crawler rules in robots.txt, sitemap and canonical basics, JSON-LD and writing that can be quoted.",
+        "highlights": [
+          "Public text, prices and links in the initial HTML, not behind client-side rendering",
+          "A generated /llms.txt in the llmstxt.org format that never goes stale",
+          "Search, user-fetch and training crawlers configured on purpose in robots.txt",
+          "Sitemap, canonical URLs, unique titles and descriptions, and Open Graph tags",
+          "JSON-LD for the home page and for each page type, matching the visible text",
+          "Answer-first headings and specific facts that models can quote",
+          "Says what not to add: unestablished manifests and unrequested Markdown endpoints"
+        ],
+        "meantFor": ["Public websites", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `ai-discoverability-geo.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@ai-discoverability-geo.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to set up discoverability for your site, or to audit it. It adds or fixes `llms.txt`, `robots.txt`, the sitemap and the structured data.",
+          "Register the site in Google Search Console and Bing Webmaster Tools."
+        ]
       }
     }
   }

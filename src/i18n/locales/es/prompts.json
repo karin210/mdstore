@@ -101,6 +101,158 @@
           "A partir de ahí, pregunta por una herramienta concreta cuando la necesites (por ejemplo, «¿ESLint y Prettier o Biome?») o empieza un proyecto nuevo, y el agente aplica el asesor por su cuenta.",
           "Aprueba la recomendación. El agente la instala, la ejecuta una vez para confirmar que funciona y registra la decisión."
         ]
+      },
+      "commit-attribution": {
+        "title": "Mensajes de commit sin atribución a la IA",
+        "tagline": "Tu historial describe el cambio, no la herramienta que ayudó a escribirlo.",
+        "summary": "Mantiene los mensajes de commit, los textos de pull request y las notas de versión libres de créditos a la IA: sin trailers Co-Authored-By, sin líneas «generado con» y sin enlaces de sesión. Incluye cómo escribir un mensaje claro y un hook commit-msg opcional que lo hace cumplir.",
+        "highlights": [
+          "Quita trailers de asistentes, líneas «generado con» y enlaces de sesión de commits y pull requests",
+          "Elimina las líneas que inyecta la plantilla de un agente, un generador o un hook antes de crear el commit",
+          "Conserva lo que corresponde: coautores reales, sign-offs y referencias a issues",
+          "Reglas de asunto y cuerpo: modo imperativo, unos 50 caracteres y el porqué en el cuerpo",
+          "Corrige un commit sin publicar con amend o reword, y deja a tu criterio el historial ya publicado",
+          "Un hook commit-msg opcional que rechaza las líneas de atribución para todo el equipo",
+          "Respeta la política de tu proyecto si pide que se declare el uso de IA"
+        ],
+        "meantFor": [
+          "Cualquier agente de programación con IA",
+          "Cualquier lenguaje o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `commit-attribution.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@commit-attribution.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Haz commits como siempre. El agente escribe el mensaje a partir del cambio y quita cualquier línea de atribución antes de crear el commit.",
+          "Para hacerlo cumplir a todo el equipo, copia a tu repositorio el hook `commit-msg` opcional de la sección 5."
+        ]
+      },
+      "authentication-forms": {
+        "title": "Formularios de autenticación",
+        "tagline": "Formularios de registro e inicio de sesión que guían mientras escribes y aceptan la contraseña que sugiere el navegador.",
+        "summary": "Cómo construir formularios de inicio de sesión, registro y contraseña: una sola tarjeta con pestañas en lugar de un enlace al final, validación mientras se escribe, indicaciones bajo cada campo, un ejemplo en vivo que se pone verde al cumplirse y reglas de contraseña que aceptan las generadas por el navegador.",
+        "highlights": [
+          "Inicio de sesión y registro como pestañas en una tarjeta, nombradas según quién es el usuario y con soporte completo de teclado",
+          "Cada campo se valida mientras se escribe y muestra solo lo que aún falta",
+          "Una línea de ejemplo en vivo, como nombre@dominio.com, cuyos fragmentos se ponen verdes al cumplirse",
+          "El borde y el anillo de foco marcan los campos válidos e inválidos, sin cambiar el color del texto",
+          "Reglas de contraseña que aceptan lo que generan Chrome, Safari y los gestores de contraseñas",
+          "Controles de mostrar, copiar y generar que aparecen cuando el usuario los necesita",
+          "Un botón de envío que siempre está activo y lleva el foco al primer campo incorrecto",
+          "Las mismas reglas definidas una sola vez para el cliente y el servidor"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `authentication-forms.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@authentication-forms.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que construya o revise tus formularios de inicio de sesión y registro. Aplica el archivo y respeta tus componentes de formulario existentes donde difieran.",
+          "Antes de publicar, prueba la regla de contraseña del registro con la contraseña que sugiere tu navegador."
+        ]
+      },
+      "modals": {
+        "title": "Modales",
+        "tagline": "Sabe cuándo un modal se puede cerrar sin decidir, y haz que todos se comporten igual.",
+        "summary": "Dos tipos de modal, según si cerrarlo es una decisión importante: los no descartables se cierran solo con un botón que nombra su acción, y los descartables se cierran de tres maneras. Además, estilos compartidos, comportamiento del dialog nativo y accesibilidad.",
+        "highlights": [
+          "Una pregunta decide el tipo: ¿cerrar este modal es una decisión importante?",
+          "Los modales no descartables se cierran solo con botones que nombran su acción, y siempre incluyen Cancelar",
+          "Los modales descartables se cierran con un clic fuera, con Escape y con una X flotante",
+          "Clases compartidas de título, campo, cierre y acciones, definidas una vez en lugar de en cada modal",
+          "Basados en el elemento dialog nativo, con el foco que entra y vuelve al elemento que lo abrió",
+          "Estado de ocupado en el botón de acción mientras la petición está en curso",
+          "Movimiento reducido para quienes lo prefieren"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `modals.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@modals.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente un modal, o que revise los que ya tienes. Elige el tipo de cada uno y reutiliza tus estilos de modal compartidos.",
+          "Comprueba cada modal con la lista de verificación del final del archivo."
+        ]
+      },
+      "loading-states": {
+        "title": "Estados de carga",
+        "tagline": "Sin pantallas congeladas: cada operación asíncrona muestra qué está pasando y qué salió mal.",
+        "summary": "Qué muestra la interfaz mientras ocurre algo asíncrono, y cuando falla o vuelve vacío: un estado explícito, skeletons que se parecen al contenido, botones ocupados, sin parpadeos en respuestas rápidas y avisos accesibles.",
+        "highlights": [
+          "Un estado explícito (inactivo, cargando, éxito o error) que siempre se limpia en un finally",
+          "Skeletons que replican el diseño final, para que la página no salte cuando llegan los datos",
+          "Botones que muestran su estado de ocupado, se desactivan mientras la petición está en curso y mantienen su ancho",
+          "Cargadores con retraso y tiempo mínimo visible, para que las respuestas rápidas no parpadeen",
+          "Estados vacíos y de error en cada vista, con una acción para reintentar",
+          "Anunciados a la tecnología de asistencia y con movimiento reducido cuando se prefiere",
+          "Spinners y skeletons construidos una vez como componentes reutilizables"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `loading-states.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@loading-states.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que añada una consulta de datos, un envío de formulario o una subida, o que revise las pantallas que esperan datos. Añade los estados de carga, vacío y error de cada una.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "error-handling-and-http-status": {
+        "title": "Manejo de errores y códigos de estado HTTP",
+        "tagline": "Mensajes seguros para los usuarios, el estado correcto para los clientes y los detalles solo en tus logs.",
+        "summary": "Cómo responde un servidor cuando algo sale mal y cómo lo lee un cliente: sin filtrar detalles internos, errores traducidos a mensajes en los términos del usuario, el código de estado HTTP correcto, un cuerpo de error estable y un ID de petición para soporte.",
+        "highlights": [
+          "Ningún detalle de la base de datos, del framework ni de la traza llega al cliente",
+          "Los fallos conocidos se convierten en el estado correcto y en un mensaje en los términos del usuario",
+          "Un 500 genérico con un ID de petición para todo lo inesperado",
+          "Los errores técnicos completos se registran en el servidor, sin secretos",
+          "Ningún fallo dentro de un cuerpo 200, y un código de estado elegido con criterio",
+          "Un cuerpo de error estable con mensajes por campo y un ID de petición",
+          "El cliente maneja 401, 403, 404, 409, 422, 429 y 5xx"
+        ],
+        "meantFor": [
+          "APIs y código de servidor",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `error-handling-and-http-status.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@error-handling-and-http-status.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que escriba un endpoint, o que revise el manejo de errores de los que tienes. Fija los códigos de estado y reemplaza los mensajes de error crudos por mensajes seguros.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "ai-discoverability-geo": {
+        "title": "Visibilidad ante la IA",
+        "tagline": "Haz que los asistentes de IA encuentren, lean y citen tu sitio con facilidad.",
+        "summary": "Cómo hacer que un sitio web público sea descubrible por los asistentes de IA: contenido renderizado en el servidor, un llms.txt generado, reglas de crawlers elegidas a propósito en robots.txt, lo básico de sitemap y canónicas, JSON-LD y una redacción que se pueda citar.",
+        "highlights": [
+          "Texto, precios y enlaces públicos en el HTML inicial, no detrás de renderizado en el cliente",
+          "Un /llms.txt generado en el formato de llmstxt.org que nunca se desactualiza",
+          "Crawlers de búsqueda, de consulta del usuario y de entrenamiento configurados a propósito en robots.txt",
+          "Sitemap, URLs canónicas, títulos y descripciones únicos y etiquetas Open Graph",
+          "JSON-LD para la página de inicio y para cada tipo de página, coherente con el texto visible",
+          "Encabezados que empiezan por la respuesta y datos concretos que los modelos pueden citar",
+          "Indica qué no añadir: manifiestos sin consolidar y endpoints Markdown que nadie pidió"
+        ],
+        "meantFor": ["Sitios web públicos", "Cualquier framework o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "usageSteps": [
+          "Descarga `ai-discoverability-geo.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@ai-discoverability-geo.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que configure la visibilidad de tu sitio, o que la audite. Añade o corrige `llms.txt`, `robots.txt`, el sitemap y los datos estructurados.",
+          "Registra el sitio en Google Search Console y en Bing Webmaster Tools."
+        ]
       }
     }
   }
