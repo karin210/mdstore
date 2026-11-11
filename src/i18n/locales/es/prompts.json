@@ -253,6 +253,271 @@
           "Pide al agente que configure la visibilidad de tu sitio, o que la audite. Añade o corrige `llms.txt`, `robots.txt`, el sitemap y los datos estructurados.",
           "Registra el sitio en Google Search Console y en Bing Webmaster Tools."
         ]
+      },
+      "security-validation-authorization": {
+        "title": "Seguridad en el servidor: validación y autorización",
+        "tagline": "No confíes en el cliente: comprueba cada dato y cada permiso en el servidor.",
+        "summary": "Cómo proteger el código de servidor que maneja datos de entrada, cuentas e información: una revisión OWASP, validación con esquema de todo lo que cruza la frontera, autoridad tomada solo de la sesión verificada y autorización del recurso concreto en cada ruta.",
+        "highlights": [
+          "Una revisión del OWASP Top 10 antes de tocar entradas, autenticación, sesiones, subidas o acceso a datos",
+          "Validación en el servidor con un esquema compartido entre cliente y servidor, que rechaza campos desconocidos",
+          "Roles, precios y propiedad calculados en el servidor, nunca tomados de la petición",
+          "Un guard reutilizable al inicio de cada handler, con denegación por defecto",
+          "Propiedad y rol comprobados en cada recurso, lo que evita el IDOR",
+          "Todas las rutas cubiertas: todos los métodos, operaciones en lote, descargas y suscripciones",
+          "Los secretos fuera del repositorio y del bundle del cliente"
+        ],
+        "meantFor": [
+          "APIs y código de servidor",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `security-validation-authorization.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@security-validation-authorization.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que escriba un endpoint, o que revise los que tienes. Valida la entrada, añade el guard y comprueba la propiedad del recurso.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "page-titles": {
+        "title": "Títulos de página",
+        "tagline": "Cada página dice dónde estás: únicos, coherentes y definidos en un solo lugar.",
+        "summary": "Cómo dar a cada página un título significativo y único con el formato Página | App: páginas de detalle con el nombre del elemento, páginas de error y de pasos, una sola plantilla de título y títulos que se actualizan al navegar en el cliente.",
+        "highlights": [
+          "Un título único en cada ruta, nunca el del framework ni el mismo en todas las páginas",
+          "Un solo formato, Página | App, con la página primero para que sobreviva a una pestaña recortada",
+          "Las páginas de detalle incluyen el nombre del elemento y nunca muestran undefined mientras cargan",
+          "Las páginas de error, sin acceso y de pasos tienen su propio título",
+          "El nombre de la app y el separador definidos una sola vez en una plantilla de título",
+          "Títulos que cambian al navegar en el cliente y son correctos en el render del servidor"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `page-titles.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@page-titles.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que añada una página, o que audite los títulos de tus rutas. Fija uno por página a través de una única plantilla.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "routing-and-404": {
+        "title": "Rutas, 404 y redirecciones seguras",
+        "tagline": "URLs desconocidas, usuarios que cierran sesión y redirecciones sin sorpresas.",
+        "summary": "Cómo nombrar rutas, publicar una página 404 con la marca y un estado 404 real, redirigir solo a rutas internas seguras, sacar a los usuarios de las páginas privilegiadas cuando cierran sesión y aplicar las mismas reglas en el servidor.",
+        "highlights": [
+          "Una página 404 con la marca que devuelve un estado 404 real y ofrece una salida",
+          "Parámetros de redirección validados como rutas relativas del mismo origen, lo que cierra las redirecciones abiertas",
+          "Guards de ruta que reaccionan al cierre de sesión y usan replace, para que Atrás no vuelva a una página protegida",
+          "Datos privilegiados borrados del estado del cliente cuando termina la sesión",
+          "El servidor vuelve a comprobar autenticación y rol, y responde 401 o 403",
+          "Nombres de ruta que describen su contenido y siguen las convenciones habituales"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `routing-and-404.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@routing-and-404.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que añada rutas, una página 404 o protección de rutas. Nombra las rutas, valida las redirecciones y protege las páginas privilegiadas.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "button-kinds": {
+        "title": "Tipos de botón",
+        "tagline": "Elige el botón por el trabajo que hace, y el aspecto viene solo.",
+        "summary": "Cuatro tipos de botón (primario, secundario, terciario y de interfaz) elegidos por el trabajo de cada uno, con reglas de contraste para el primario, comportamiento compartido, foco y estados en curso.",
+        "highlights": [
+          "Cuatro tipos elegidos por su función: captación, seguimiento, informativo y de interfaz",
+          "Un componente por tipo, para que un cambio se aplique en todas partes",
+          "El botón primario debe destacar: 3:1 frente a lo que lo rodea y 4.5:1 para su texto",
+          "Un orden para corregir el bajo contraste: controlar primero la superficie y luego una variante de la marca",
+          "Foco visible, sin destello al tocar y un estado ocupado que mantiene el ancho del botón",
+          "Un botón de envío que siempre está activo y solo se desactiva mientras la petición está en curso"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `button-kinds.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@button-kinds.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que añada botones o que restilice los tuyos. Elige el tipo según su función y reutiliza tus componentes de botón.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "color-and-ui-system": {
+        "title": "Sistema de color",
+        "tagline": "Una paleta que muestra al ojo qué mirar primero.",
+        "summary": "Cómo construir una paleta que exprese la jerarquía visual: cuatro roles semánticos, fondos justificados, sin negro ni blanco puros, elevación mediante luminosidad, superficies de lectura neutras y colores de estado tipo semáforo.",
+        "highlights": [
+          "Cuatro roles como tokens: fondo, primario, secundario y terciario",
+          "Un fondo distinto del habitual necesita un significado declarado y mantener el contraste AA",
+          "Neutros casi negros y casi blancos, teñidos hacia la marca, para los modos claro y oscuro",
+          "Elevación mostrada con la luminosidad, con las excepciones de las superficies hundidas y de énfasis",
+          "Superficies de lectura neutras para textos formales, y un tinte sutil de la marca donde encaja",
+          "Colores de estado rojo, ámbar y verde en tamaño pequeño, con un icono o texto como segunda señal"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `color-and-ui-system.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@color-and-ui-system.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que defina tu paleta o que revise tus colores. Crea los tokens para ambos modos y comprueba el contraste.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "landing-and-hero-sections": {
+        "title": "Páginas de aterrizaje y secciones hero",
+        "tagline": "Una primera pantalla que se explica sola de un vistazo.",
+        "summary": "Cómo construir un hero que responda qué es esto, para quién es, por qué importa y qué hacer a continuación, con señales de confianza reales, imágenes tratadas y un diseño que aguanta pantallas altas y bajas.",
+        "highlights": [
+          "Las cuatro preguntas que todo hero responde sin hacer scroll",
+          "Señales de confianza reales y verificables, nunca inventadas",
+          "Imágenes que siempre reciben un tratamiento, y un degradado bajo el texto colocado encima",
+          "min-height en svh, para que nada se corte en móviles de poca altura",
+          "El texto y los llamados a la acción se mantienen completos; la imagen es lo primero que se reduce",
+          "Una comprobación a 320×568 y en un móvil apaisado antes de publicar"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `landing-and-hero-sections.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@landing-and-hero-sections.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que construya o revise tu página de aterrizaje. Revisa el hero con las cuatro preguntas y prueba pantallas de poca altura.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "api-route-handlers": {
+        "title": "Handlers de API: un propósito por handler",
+        "tagline": "Divide un handler cuando cambia su propósito, en vez de añadir un flag de modo.",
+        "summary": "Cómo organizar los endpoints de una API para que cada uno haga un solo trabajo con su propia validación, guard y efectos secundarios, separados por propósito y no por método HTTP, con la lógica compartida en utilidades del servidor.",
+        "highlights": [
+          "Un handler por propósito, con varios handlers para el mismo método cuando difieren",
+          "Una división en lugar de un flag de modo cada vez que cambian quién llama, qué escribe, la validación o los efectos",
+          "Cada handler tiene su propio esquema, su propio guard y un comentario de cabecera",
+          "Nombres de ruta que expresan el propósito, en kebab-case",
+          "Lógica compartida en utilidades del servidor, no handlers copiados y pegados",
+          "División por segmento de ruta para frameworks con un archivo por ruta"
+        ],
+        "meantFor": [
+          "APIs y código de servidor",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `api-route-handlers.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@api-route-handlers.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que añada un endpoint o una variante de uno. Crea un handler nuevo en lugar de ramificar el existente.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "classes-for-complex-objects": {
+        "title": "Clases para objetos complejos",
+        "tagline": "Pon las reglas de un objeto en un solo lugar y cada uso se comporta igual.",
+        "summary": "Cuándo modelar reservas, usuarios, formularios y estado de carga como clases: qué va dentro, cómo mantenerlas independientes del framework y fáciles de probar, cómo conectarlas con la reactividad y cuándo basta un tipo simple.",
+        "highlights": [
+          "Datos, validación, transiciones y valores derivados juntos en una clase",
+          "Un contenedor de estado asíncrono reutilizable que nunca deja la interfaz atascada en «cargando»",
+          "Formularios como objetos que son dueños de sus campos, ediciones y primer campo inválido",
+          "Clases independientes del framework, con dependencias inyectadas y fáciles de probar",
+          "Registros guardados en el estado compartido y reconstruidos con fromRecord, enviados por la red con toPayload",
+          "Una línea clara: los datos sin comportamiento siguen siendo un tipo simple"
+        ],
+        "meantFor": [
+          "Cualquier lenguaje o stack",
+          "Cualquier agente de programación con IA",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `classes-for-complex-objects.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@classes-for-complex-objects.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que modele un objeto con reglas, como una reserva o un formulario. Pone la validación y los valores derivados en una clase.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "naming-conventions": {
+        "title": "Nombres de variables y funciones",
+        "tagline": "Nombres que un desarrollador entiende a primera vista.",
+        "summary": "Cómo nombrar variables, funciones y handlers por el valor que guardan o el objetivo que cumplen: sufijos para los roles de un campo, nombres que dicen cómo se transformó un valor y los prefijos de getters, booleanos y manejadores de eventos.",
+        "highlights": [
+          "Variables nombradas por el valor que guardan, con contexto cuando hace falta",
+          "Sufijos de rol para las variables relacionadas de un campo: emailValue, emailRef",
+          "Valores transformados nombrados por su estado: phoneValueRaw, phoneValueTrimmed",
+          "Prefijos para getters, setters, booleanos y manejadores de eventos",
+          "Nombres de función que expresan el objetivo y no el último clic: setRole, nextStep",
+          "Ejemplos resueltos de nombres demasiado amplios y su corrección"
+        ],
+        "meantFor": [
+          "Cualquier lenguaje o stack",
+          "Cualquier agente de programación con IA",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `naming-conventions.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@naming-conventions.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que escriba o renombre código. Nombra variables y funciones según el valor, el estado y el objetivo.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "css-layout-and-spacing": {
+        "title": "Layout y espaciado en CSS",
+        "tagline": "El layout definido en un solo lugar y el espaciado desde tokens.",
+        "summary": "Cómo organizar los elementos para que el contenedor controle el layout: envoltorios en lugar de hermanos con posición absoluta, gap en lugar de márgenes, tokens de espaciado creados con clamp() y un reset global pequeño.",
+        "highlights": [
+          "position: absolute en un envoltorio, nunca en los hermanos uno por uno",
+          "Los contenedores organizan a sus hijos con flex o grid y gap",
+          "Márgenes y padding reservados para los pocos casos que los necesitan, con una excepción para la prosa",
+          "Cada valor de espaciado es un token de :root creado con clamp()",
+          "Un reset que gestiona el resaltado al tocar y el box-sizing una sola vez"
+        ],
+        "meantFor": ["CSS y estilos", "Cualquier framework o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "usageSteps": [
+          "Descarga `css-layout-and-spacing.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@css-layout-and-spacing.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que construya un layout o que limpie tu CSS. Mueve el espaciado a los contenedores y reemplaza los valores sueltos por tokens.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
+      "fluid-design-and-container-queries": {
+        "title": "Diseño fluido y container queries",
+        "tagline": "Layouts que se adaptan a la pantalla y al espacio donde están.",
+        "summary": "Cómo hacer que un layout escale de forma continua en ancho y alto con clamp() y las unidades de viewport adecuadas, decidir quién cede en pantallas bajas y dimensionar componentes según su contenedor con container queries y cqi.",
+        "highlights": [
+          "Valores fluidos primero, con media queries solo para cambios estructurales",
+          "min-height en svh en lugar de alturas fijas, para que nada se corte en móviles",
+          "Una regla de quién cede cuando falta espacio: el medio se reduce, el texto y los llamados a la acción se mantienen completos",
+          "Container queries para los componentes, declaradas por el contenedor y con enfoque mobile-first",
+          "cqi para un escalado continuo, con límites de clamp() tomados de los tokens",
+          "Pasos de prueba para el contenedor más estrecho, 320×568 y móviles apaisados"
+        ],
+        "meantFor": ["CSS y estilos", "Cualquier framework o stack", "Proyectos nuevos", "Proyectos existentes"],
+        "usageSteps": [
+          "Descarga `fluid-design-and-container-queries.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@fluid-design-and-container-queries.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que haga responsive un layout o que construya un componente que vive en espacios distintos. Usa valores fluidos y container queries.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
       }
     }
   }

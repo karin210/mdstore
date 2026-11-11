@@ -218,6 +218,226 @@
           "Ask the agent to set up discoverability for your site, or to audit it. It adds or fixes `llms.txt`, `robots.txt`, the sitemap and the structured data.",
           "Register the site in Google Search Console and Bing Webmaster Tools."
         ]
+      },
+      "security-validation-authorization": {
+        "title": "Server security: validation and authorization",
+        "tagline": "Never trust the client: check every input and every permission on the server.",
+        "summary": "How to protect server code that handles input, accounts and data: an OWASP check, schema validation of everything that crosses the boundary, authority taken only from the verified session, and authorization of the specific resource on every path.",
+        "highlights": [
+          "An OWASP Top 10 check before touching input, auth, sessions, uploads or data access",
+          "Server-side validation with a schema shared by client and server, rejecting unknown fields",
+          "Roles, prices and ownership derived on the server, never taken from the request",
+          "A reusable guard at the top of every handler, deny by default",
+          "Ownership and role checked on each resource, which prevents IDOR",
+          "Every path covered: all methods, bulk operations, downloads and subscriptions",
+          "Secrets kept out of the repository and the client bundle"
+        ],
+        "meantFor": ["APIs and server code", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `security-validation-authorization.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@security-validation-authorization.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to write an endpoint, or to review the ones you have. It validates the input, adds the guard and checks ownership.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "page-titles": {
+        "title": "Page titles",
+        "tagline": "Every page says where you are: unique, consistent and set in one place.",
+        "summary": "How to give every page a meaningful, unique title in the format Page | App: detail pages with the item's name, error and flow pages, one title template and titles that update on client-side navigation.",
+        "highlights": [
+          "A unique title on every route, never the framework default or the same one on all pages",
+          "One format, Page | App, with the page first so it survives a truncated tab",
+          "Detail pages include the item's name and never show undefined while loading",
+          "Error, no-access and flow-step pages get their own titles",
+          "The app name and the separator defined once in a title template",
+          "Titles that change on client-side navigation and are correct on server render"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `page-titles.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@page-titles.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to add a page, or to audit the titles of your routes. It sets one per page through a single template.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "routing-and-404": {
+        "title": "Routing, 404 and safe redirects",
+        "tagline": "Unknown URLs, logged-out users and redirects handled without surprises.",
+        "summary": "How to name routes, ship a branded 404 with a real 404 status, redirect only to safe internal paths, kick users out of privileged pages when they log out and enforce the same rules on the server.",
+        "highlights": [
+          "A branded 404 page that returns a real 404 status and offers a way back",
+          "Redirect parameters validated as same-origin relative paths, which closes open redirects",
+          "Route guards that react to logout and use replace, so Back can't return to a protected page",
+          "Privileged data cleared from client state when the session ends",
+          "The server re-checks authentication and role, answering 401 or 403",
+          "Route names that describe their content and follow the standard conventions"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `routing-and-404.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@routing-and-404.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to add routes, a 404 page or route protection. It names the routes, validates redirects and guards privileged pages.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "button-kinds": {
+        "title": "Button kinds",
+        "tagline": "Pick a button by the job it does, and the look follows.",
+        "summary": "Four kinds of button (primary, secondary, tertiary and interface) chosen by the job each does, with rules for contrast on the primary, shared behaviour, focus and in-flight states.",
+        "highlights": [
+          "Four kinds chosen by the job: acquisition, follow-up, informational and interface",
+          "One component per kind, so a change applies everywhere",
+          "The primary button must stand out: 3:1 against its surroundings and 4.5:1 for its label",
+          "A fix order for low contrast: control the surface first, then a brand-aligned variant",
+          "Visible focus, no tap-highlight flash and a busy state that keeps the button's width",
+          "A submit button that stays enabled and is disabled only while the request is in flight"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `button-kinds.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@button-kinds.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to add buttons or restyle yours. It picks the kind by job and reuses your button components.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "color-and-ui-system": {
+        "title": "Colour system",
+        "tagline": "A palette that shows the eye what to look at first.",
+        "summary": "How to build a colour palette that expresses visual hierarchy: four semantic roles, justified backgrounds, no pure black or white, elevation through lightness, neutral reading surfaces and traffic-light status colours.",
+        "highlights": [
+          "Four roles as tokens: background, primary, secondary and tertiary",
+          "A non-default background needs a stated meaning and must keep AA contrast",
+          "Off-black and off-white neutrals, tinted toward the brand, for light and dark modes",
+          "Elevation shown by lightness, with the exceptions for recessed and emphasis surfaces",
+          "Neutral reading surfaces for formal text, and a subtle brand tint where it fits",
+          "Red, amber and green status colours used small, with an icon or text as the second cue"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `color-and-ui-system.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@color-and-ui-system.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to define your palette or review your colours. It creates the tokens for both modes and checks the contrast.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "landing-and-hero-sections": {
+        "title": "Landing pages and hero sections",
+        "tagline": "A first screen that explains itself in one look.",
+        "summary": "How to build a hero that answers what this is, who it is for, why it matters and what to do next, with real trust cues, treated images and a layout that holds on tall and short screens.",
+        "highlights": [
+          "The four questions every hero answers without scrolling",
+          "Trust cues that are real and verifiable, never invented",
+          "Images that always get a treatment, and a scrim under text placed over them",
+          "min-height in svh, so nothing is cut off on short phones",
+          "Text and calls to action stay whole; the image is the first thing to shrink",
+          "A check at 320×568 and on a landscape phone before shipping"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `landing-and-hero-sections.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@landing-and-hero-sections.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to build or review your landing page. It checks the hero against the four questions and tests short screens.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "api-route-handlers": {
+        "title": "API route handlers: one purpose per handler",
+        "tagline": "Split a handler when its purpose changes, instead of adding a mode flag.",
+        "summary": "How to organise API endpoints so each does one job with its own validation, guard and side effects, split by purpose rather than by HTTP method, with shared logic in server utilities.",
+        "highlights": [
+          "One handler per purpose, with several handlers for the same method when they differ",
+          "A split instead of a mode flag whenever who, what, validation or side effects change",
+          "Each handler has its own schema, its own guard and a header comment",
+          "Path names that state the purpose, in kebab-case",
+          "Shared logic in server utilities, not copy-pasted handlers",
+          "A path-segment split for frameworks with one file per route"
+        ],
+        "meantFor": ["APIs and server code", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `api-route-handlers.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@api-route-handlers.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to add an endpoint or a variant of one. It creates a new handler rather than branching the existing one.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "classes-for-complex-objects": {
+        "title": "Classes for complex objects",
+        "tagline": "Put an object's rules in one place and every use behaves the same.",
+        "summary": "When to model bookings, users, forms and loading state as classes: what belongs inside them, how to keep them framework-agnostic and testable, how to wire them into reactivity and when a plain type is enough.",
+        "highlights": [
+          "Data, validation, transitions and derived values together in one class",
+          "A reusable async state holder that never leaves the UI stuck on loading",
+          "Forms as objects that own their fields, edits and first invalid field",
+          "Framework-agnostic classes with injected dependencies, easy to unit test",
+          "Records kept in shared state and rebuilt with fromRecord, sent over the wire with toPayload",
+          "A clear line: behaviour-free data stays a plain type"
+        ],
+        "meantFor": ["Any language or stack", "Any AI coding agent", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `classes-for-complex-objects.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@classes-for-complex-objects.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to model an object with rules, such as a booking or a form. It puts the validation and derived values in a class.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "naming-conventions": {
+        "title": "Naming variables and functions",
+        "tagline": "Names a developer understands at first sight.",
+        "summary": "How to name variables, functions and handlers by the value they store or the goal they serve: suffixes for the roles of a field, names that say how a value was transformed, and the prefixes for getters, booleans and event handlers.",
+        "highlights": [
+          "Variables named by the value they store, with context when needed",
+          "Role suffixes for the related variables of one field: emailValue, emailRef",
+          "Transformed values named by their state: phoneValueRaw, phoneValueTrimmed",
+          "Prefixes for getters, setters, booleans and event handlers",
+          "Function names that carry the goal, not the last click: setRole, nextStep",
+          "Worked examples of broad names and their fixes"
+        ],
+        "meantFor": ["Any language or stack", "Any AI coding agent", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `naming-conventions.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@naming-conventions.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to write or rename code. It names variables and functions by value, state and goal.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "css-layout-and-spacing": {
+        "title": "CSS layout and spacing",
+        "tagline": "Layout set in one place, spacing from tokens.",
+        "summary": "How to arrange elements so the parent controls the layout: wrappers instead of absolutely positioned siblings, gap instead of margins, spacing tokens built with clamp(), and a small global reset.",
+        "highlights": [
+          "position: absolute on a wrapper, never on siblings one by one",
+          "Parents arrange their children with flex or grid and gap",
+          "Margins and padding kept for the few cases that need them, with a prose exception",
+          "Every spacing value a :root token built with clamp()",
+          "A reset that handles the tap highlight and box-sizing once"
+        ],
+        "meantFor": ["CSS and styling", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `css-layout-and-spacing.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@css-layout-and-spacing.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to build a layout or to clean up your CSS. It moves spacing to the parents and replaces raw values with tokens.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
+      "fluid-design-and-container-queries": {
+        "title": "Fluid design and container queries",
+        "tagline": "Layouts that scale with the screen and with the space they sit in.",
+        "summary": "How to make a layout scale continuously in width and height with clamp() and the right viewport units, decide who yields on short screens, and size components by their container with container queries and cqi.",
+        "highlights": [
+          "Fluid values first, with media queries only for structural changes",
+          "min-height in svh instead of fixed heights, so nothing is cut off on phones",
+          "A rule for who yields when space runs out: media shrinks, text and calls to action stay whole",
+          "Container queries for components, declared by the parent and mobile-first",
+          "cqi for continuous scaling, with clamp() bounds from the tokens",
+          "Test steps for the narrowest container, 320×568 and landscape phones"
+        ],
+        "meantFor": ["CSS and styling", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `fluid-design-and-container-queries.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@fluid-design-and-container-queries.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to make a layout responsive or to build a component that lives in different spaces. It uses fluid values and container queries.",
+          "Check the result against the checklist at the end of the file."
+        ]
       }
     }
   }

@@ -215,4 +215,191 @@ How to make a public website easy for AI assistants to find, read and quote. Fol
 - **Generate, don't hand-write.** Files that list the site's pages come from the same data that renders the pages, so they never go stale.`,
     outputExamples: [],
   },
+  {
+    slug: "security-validation-authorization",
+    fileName: "security-validation-authorization.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 53,
+    worksWith: ["Claude Code"],
+    excerpt: `# Server security: validation and authorization
+
+How to protect server code that handles input, accounts and data: check every input on the server, check that the caller may do exactly what they ask, and keep secrets out of the repository and the client. Follow it whenever you write or review an API route, a form action, a server function, a file upload or anything that reads or changes protected data.
+
+- **The codebase wins.** If the project already has a validation layer or an authorization guard, extend it, don't mix two, and mention the difference.
+- **Client checks are only UX.** Anyone can bypass a form attribute, a disabled button or a hidden menu item with devtools, \`curl\` or a modified client. The server decides.
+- **Deny by default.** An endpoint is closed unless a rule explicitly allows the caller in.`,
+    outputExamples: [],
+  },
+  {
+    slug: "page-titles",
+    fileName: "page-titles.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 59,
+    worksWith: ["Claude Code"],
+    excerpt: `# Page titles
+
+How to give every page a meaningful, unique title. Follow it whenever you create a page or a route, change what a page shows, or set up the title mechanism of a project.
+
+- **The codebase wins.** If the project already has a title template or helper, extend it, don't mix two, and mention the difference.
+- **Never ship a default title.** Not the framework default, not an empty title, not a filename, and not the same title on every route.
+- **Write in the user's language,** in plain sentence or title case, with no keyword stuffing.`,
+    outputExamples: [],
+  },
+  {
+    slug: "routing-and-404",
+    fileName: "routing-and-404.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 59,
+    worksWith: ["Claude Code"],
+    excerpt: `# Routing, 404 pages and safe redirects
+
+How to name routes, handle unknown URLs, redirect safely and protect privileged pages. Follow it whenever you add or rename a route, build a not-found or no-access page, write a redirect, or guard a page by role.
+
+- **The codebase wins.** If the project already has route guards or an error page, extend them, don't mix two, and mention the difference.
+- **Client guards are only UX.** Every privileged page and endpoint also checks authentication and role on the server.
+- **Never leave the user on a blank screen,** a spinner or a raw error.`,
+    outputExamples: [],
+  },
+  {
+    slug: "button-kinds",
+    fileName: "button-kinds.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 56,
+    worksWith: ["Claude Code"],
+    excerpt: `# Button kinds
+
+How to decide what a button looks like by the job it does. Follow it whenever you create or restyle a button, or add an action to a page.
+
+- **The codebase wins.** If the project already has button components, use them, don't mix two sets, and mention the difference.
+- **Pick the kind first; the look follows.** A button's kind comes from the job it does, not from where it sits.
+- **One component per kind.** Each kind lives in its own component, so changing a kind changes it everywhere.`,
+    outputExamples: [],
+  },
+  {
+    slug: "color-and-ui-system",
+    fileName: "color-and-ui-system.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 63,
+    worksWith: ["Claude Code"],
+    excerpt: `# Colour system
+
+How to build a colour palette that expresses visual hierarchy: what the eye should see first. Follow it whenever you define colours, a theme or dark mode, choose surfaces and elevation, or colour a status message.
+
+- **The codebase wins.** If the project already has a palette or tokens, extend them, don't mix two, and mention the difference.
+- **Colours are tokens.** Every colour is a custom property defined once on \`:root\`, and referenced by token. No raw hex values inside components.
+- **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.`,
+    outputExamples: [],
+  },
+  {
+    slug: "landing-and-hero-sections",
+    fileName: "landing-and-hero-sections.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 51,
+    worksWith: ["Claude Code"],
+    excerpt: `# Landing pages and hero sections
+
+How to build a hero that explains the site at first sight, and the images and trust cues around it. Follow it whenever you create or change a landing page, a home page or the first screen of any page that has to convince a visitor.
+
+- **The codebase wins.** If the project already has a hero or landing structure, extend it, don't mix two, and mention the difference.
+- **Say it plainly.** The first screen tells a stranger what this is, in words they understand, before it tries to impress.
+- **Nothing in the first view is cut off.** Text and calls to action always stay whole and readable, on tall and short screens alike.`,
+    outputExamples: [],
+  },
+  {
+    slug: "api-route-handlers",
+    fileName: "api-route-handlers.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 61,
+    worksWith: ["Claude Code"],
+    excerpt: `# API route handlers: one purpose per handler
+
+How to organise API endpoints so that each one does one job, with its own rules and its own guard. Follow it whenever you add an endpoint, change what an existing one does, or are tempted to add a flag, a mode or a branch to a handler.
+
+- **The codebase wins.** If the project already organises its handlers a different way, follow it, don't mix two, and mention the difference.
+- **One handler per purpose,** not one per HTTP method. A resource may have several handlers for the same method when they serve different purposes.
+- **Thin handlers.** Shared logic lives in server utilities, not in copies of a handler.`,
+    outputExamples: [],
+  },
+  {
+    slug: "classes-for-complex-objects",
+    fileName: "classes-for-complex-objects.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 76,
+    worksWith: ["Claude Code"],
+    excerpt: `# Classes for complex objects
+
+When to model an object as a class, and what goes inside it, so its rules live in one place. Follow it whenever you build something that carries its own rules and behaviour, such as a booking, a user, a form or a loading state, and not only data.
+
+- **The codebase wins.** If the project already models these objects another way, follow it, don't mix two, and mention the difference.
+- **Behaviour decides.** Reach for a class when the object has rules that would otherwise be duplicated. Plain data stays a plain type.
+- **Readability beats ceremony.** When a class and the simplest readable solution conflict, choose the simplest.`,
+    outputExamples: [],
+  },
+  {
+    slug: "naming-conventions",
+    fileName: "naming-conventions.md",
+    category: "conventions",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 63,
+    worksWith: ["Claude Code"],
+    excerpt: `# Naming variables and functions
+
+How to name things so a developer understands what a variable holds or what a function does at first sight. Follow it whenever you create or rename a variable, a function, a handler, a prop or a field.
+
+- **The codebase wins.** If the project already follows a different naming convention, keep it, don't mix the two, and mention the difference.
+- **Name for a stranger.** Someone opening the file for the first time should know what a variable stores, or what a function is for, without reading its body or tracing where it is used.
+- **Be as brief as clarity allows.** A long name is better than an unclear one, but the shortest clear name is best.`,
+    outputExamples: [],
+  },
+  {
+    slug: "css-layout-and-spacing",
+    fileName: "css-layout-and-spacing.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 62,
+    worksWith: ["Claude Code"],
+    excerpt: `# CSS layout and spacing
+
+How to arrange elements so the layout is set in one place, spacing comes from tokens, and a reset removes the browser's defaults. Follow it whenever you write or review CSS for a page, a component or a layout.
+
+- **The codebase wins.** If the project already has a layout or spacing convention, follow it, don't mix the two, and mention the difference.
+- **The parent arranges its children;** the children never position themselves.
+- **No raw spacing values** inside components. Every spacing value is a token.`,
+    outputExamples: [],
+  },
+  {
+    slug: "fluid-design-and-container-queries",
+    fileName: "fluid-design-and-container-queries.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 57,
+    worksWith: ["Claude Code"],
+    excerpt: `# Fluid design and container queries
+
+How to make a layout scale continuously with the screen and with the space a component sits in, instead of jumping between breakpoints. Follow it whenever you size a layout, write responsive CSS, or build a component that can be placed in spaces of different widths.
+
+- **The codebase wins.** If the project already has a responsive approach, follow it, don't mix the two, and mention the difference.
+- **Fluid over breakpoints.** Let sizes, spacing and tracks scale, and add a media query only for a structural change that fluid values can't express.
+- **Fluid in both dimensions.** The viewport has a width and a height, and the layout must hold for every combination.`,
+    outputExamples: [],
+  },
 ];
