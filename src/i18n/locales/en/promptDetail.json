@@ -15,7 +15,6 @@
       "author": "Author",
       "length": "Length",
       "category": "Category",
-      "testedWith": "Tested with",
       "freeNote": "Free: download the full .md and drop it into your repo.",
       "paidNote": "Checkout opens soon. Once bought, the full file is delivered as a .md download, future versions included."
     },
@@ -25,6 +24,18 @@
       "comingSoon": "Screenshots of what an agent builds with {fileName} are on their way.",
       "placeholder": "Example {number}",
       "placeholderHidden": ": screenshot coming soon"
+    },
+    "models": {
+      "title": "Tested models",
+      "note": "The specific models {fileName} was tested against, by family. The recommended ones gave the best results.",
+      "empty": "The author hasn't listed the models this prompt was tested against yet.",
+      "recommended": "Recommended",
+      "table": {
+        "caption": "Cost by model, in US dollars per one million tokens",
+        "model": "Model",
+        "input": "Input",
+        "output": "Output"
+      }
     },
     "preview": {
       "title": "Free preview",

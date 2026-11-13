@@ -48,6 +48,8 @@ function toPromptView(row: PostedPromptRow): PromptView {
     priceUsd: 0,
     lineCount: lines.length,
     worksWith: row.works_with,
+    // Posts don't record tested models yet.
+    tested_models: [],
     excerpt: lines.slice(0, row.preview_line_count).join("\n"),
     outputExamples: [],
     title: row.title,

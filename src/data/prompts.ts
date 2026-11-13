@@ -1,3 +1,4 @@
+import { build_tested_models, type TestedModel } from "@/data/aiModels";
 import type { Messages } from "@/i18n/messages";
 
 /** Stable category ids; their labels live in the catalogue under `prompts.categories.<id>`. */
@@ -28,6 +29,8 @@ export interface PromptListing {
   priceUsd: number;
   lineCount: number;
   worksWith: string[];
+  /** The specific models (by family) the prompt was tested against, with the recommended ones flagged. */
+  tested_models: TestedModel[];
   /** First lines of the file, shown in the free preview. The files are written in English. */
   excerpt: string;
   /** Screenshots of the prompt's output; the detail page shows placeholders until there are some. */
@@ -65,6 +68,10 @@ export const featuredPrompts: PromptListing[] = [
     priceUsd: 0,
     lineCount: 280,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-opus-5-5", "gpt-5-1"],
+      ["claude-sonnet-5-5", "claude-haiku-5-5", "gemini-3-pro"],
+    ),
     excerpt: `# Web project conventions
 
 Baseline conventions for any website or web app, whatever the framework. Apply them to every file you create or change.
@@ -86,6 +93,7 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
     priceUsd: 5,
     lineCount: 135,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-fable-5-2", "claude-opus-5-5"], ["claude-sonnet-5-5", "gpt-5-1"]),
     excerpt: `# Next.js project structure
 
 Where every file goes in a Next.js App Router project (TypeScript). Follow it when you scaffold the project, add a feature, or decide where a new file belongs.
@@ -103,6 +111,10 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
     priceUsd: 0,
     lineCount: 68,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-sonnet-5-5"],
+      ["claude-opus-5-5", "gpt-5-1", "gemini-3-pro", "gemini-3-flash"],
+    ),
     excerpt: `# Dev tools and stack advisor
 
 Recommends the tools and stack that fit the project and the developer's setup: linter, formatter, test runner, package manager, framework or library. Follow it when a project starts, when the user asks which tool to use or asks you to run this advisor, or when the current tooling keeps causing friction. It works with any AI agent, editor, operating system and language: detect the setup, never assume it.
@@ -121,6 +133,7 @@ Recommends the tools and stack that fit the project and the developer's setup: l
     priceUsd: 0,
     lineCount: 81,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-sonnet-5-5", "gpt-5-mini"], ["claude-haiku-5-5", "gemini-3-flash"]),
     excerpt: `# Commit messages without AI attribution
 
 Keeps commit messages, pull request texts and release notes free of credits to an AI assistant, so the history only describes the change. Follow it whenever you create, amend or squash a commit, write a pull request title or description, or find that a tool, template or hook has added a line of its own to a message.
@@ -138,6 +151,7 @@ Keeps commit messages, pull request texts and release notes free of credits to a
     priceUsd: 0,
     lineCount: 83,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-opus-5-5"], ["claude-fable-5-2", "claude-sonnet-5-5", "gpt-5-1"]),
     excerpt: `# Authentication forms
 
 How to build sign-in, sign-up and password forms that are easy to get right: one page with tabs, validation as the user types, guidance under each field, and password rules that accept whatever the browser suggests. Follow it whenever you create or change a sign-in, sign-up, password reset or similar account form.
@@ -155,6 +169,10 @@ How to build sign-in, sign-up and password forms that are easy to get right: one
     priceUsd: 0,
     lineCount: 54,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-sonnet-5-5"],
+      ["claude-opus-5-5", "claude-haiku-5-5", "gpt-5-1", "gemini-3-pro"],
+    ),
     excerpt: `# Modals
 
 How to build modal dialogs: which kind to use, how each one closes, and how to style them so every modal in the project looks and behaves the same. Follow it whenever you create or change a modal, a dialog, a confirmation or an overlay panel.
@@ -172,6 +190,7 @@ How to build modal dialogs: which kind to use, how each one closes, and how to s
     priceUsd: 0,
     lineCount: 59,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-haiku-5-5", "gemini-3-flash"], ["claude-sonnet-5-5", "gpt-5-mini"]),
     excerpt: `# Loading states
 
 What the interface shows while something asynchronous happens, and when it fails or comes back empty. Follow it for every data fetch, form submission, mutation, upload, authentication call, route transition that waits on data and lazy-loaded piece of content.
@@ -189,6 +208,7 @@ What the interface shows while something asynchronous happens, and when it fails
     priceUsd: 0,
     lineCount: 80,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-opus-5-5", "gpt-5-1"], ["claude-sonnet-5-5", "gemini-3-pro"]),
     excerpt: `# Error handling and HTTP status codes
 
 How a server answers when something goes wrong, and how a client reads the answer: safe messages, the right status code, no leaked internals. Follow it whenever you write or change an API route, a form action, a server function or the client code that calls them.
@@ -206,6 +226,10 @@ How a server answers when something goes wrong, and how a client reads the answe
     priceUsd: 0,
     lineCount: 90,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["gemini-3-pro", "claude-opus-5-5"],
+      ["claude-sonnet-5-5", "gpt-5-1", "gemini-3-flash"],
+    ),
     excerpt: `# AI discoverability
 
 How to make a public website easy for AI assistants to find, read and quote. Follow it when you build or change a public site: its rendering, \`llms.txt\`, \`robots.txt\`, sitemap, structured data and the way its pages are written.
@@ -223,6 +247,10 @@ How to make a public website easy for AI assistants to find, read and quote. Fol
     priceUsd: 0,
     lineCount: 53,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-fable-5-2"],
+      ["claude-opus-5-5", "claude-sonnet-5-5", "gpt-5-1", "gemini-3-pro"],
+    ),
     excerpt: `# Server security: validation and authorization
 
 How to protect server code that handles input, accounts and data: check every input on the server, check that the caller may do exactly what they ask, and keep secrets out of the repository and the client. Follow it whenever you write or review an API route, a form action, a server function, a file upload or anything that reads or changes protected data.
@@ -240,6 +268,7 @@ How to protect server code that handles input, accounts and data: check every in
     priceUsd: 0,
     lineCount: 59,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-haiku-5-5", "gpt-5-mini"], ["claude-sonnet-5-5", "gemini-3-flash"]),
     excerpt: `# Page titles
 
 How to give every page a meaningful, unique title. Follow it whenever you create a page or a route, change what a page shows, or set up the title mechanism of a project.
@@ -257,6 +286,7 @@ How to give every page a meaningful, unique title. Follow it whenever you create
     priceUsd: 0,
     lineCount: 59,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-sonnet-5-5"], ["claude-opus-5-5", "claude-haiku-5-5", "gpt-5-1"]),
     excerpt: `# Routing, 404 pages and safe redirects
 
 How to name routes, handle unknown URLs, redirect safely and protect privileged pages. Follow it whenever you add or rename a route, build a not-found or no-access page, write a redirect, or guard a page by role.
@@ -274,6 +304,10 @@ How to name routes, handle unknown URLs, redirect safely and protect privileged 
     priceUsd: 0,
     lineCount: 56,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-sonnet-5-5", "gpt-5-1"],
+      ["claude-opus-5-5", "claude-haiku-5-5", "gemini-3-pro"],
+    ),
     excerpt: `# Button kinds
 
 How to decide what a button looks like by the job it does. Follow it whenever you create or restyle a button, or add an action to a page.
@@ -291,12 +325,37 @@ How to decide what a button looks like by the job it does. Follow it whenever yo
     priceUsd: 0,
     lineCount: 63,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-opus-5-5", "gemini-3-pro"],
+      ["claude-sonnet-5-5", "gpt-5-1", "gemini-3-flash"],
+    ),
     excerpt: `# Colour system
 
 How to build a colour palette that expresses visual hierarchy: what the eye should see first. Follow it whenever you define colours, a theme or dark mode, choose surfaces and elevation, or colour a status message.
 
 - **The codebase wins.** If the project already has a palette or tokens, extend them, don't mix two, and mention the difference.
 - **Colours are tokens.** Every colour is a custom property defined once on \`:root\`, and referenced by token. No raw hex values inside components.
+- **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.`,
+    outputExamples: [],
+  },
+  {
+    slug: "web-visual-design-and-images",
+    fileName: "web-visual-design-and-images.md",
+    category: "frontend",
+    author: "@mdstore",
+    priceUsd: 0,
+    lineCount: 61,
+    worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-fable-5-2", "claude-opus-5-5"],
+      ["claude-sonnet-5-5", "gpt-5-1", "gemini-3-pro"],
+    ),
+    excerpt: `# Web visual design and images
+
+How to decide what a web page looks like and how it communicates, from its audience and goal down to its images. Follow it whenever you design or restyle a page, a section or a component, or add images to one.
+
+- **The codebase wins.** If the project already has a design system, tokens or a visual style, extend them, don't mix two, and mention the difference.
+- **Start from the audience and the goal,** not from a style. Every decision serves the action the page should drive or the emotion it should evoke.
 - **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.`,
     outputExamples: [],
   },
@@ -308,6 +367,10 @@ How to build a colour palette that expresses visual hierarchy: what the eye shou
     priceUsd: 0,
     lineCount: 51,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-opus-5-5"],
+      ["claude-sonnet-5-5", "gpt-5-1", "gemini-3-pro", "gemini-3-flash"],
+    ),
     excerpt: `# Landing pages and hero sections
 
 How to build a hero that explains the site at first sight, and the images and trust cues around it. Follow it whenever you create or change a landing page, a home page or the first screen of any page that has to convince a visitor.
@@ -325,6 +388,10 @@ How to build a hero that explains the site at first sight, and the images and tr
     priceUsd: 0,
     lineCount: 61,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-sonnet-5-5", "gpt-5-1"],
+      ["claude-opus-5-5", "claude-haiku-5-5", "gemini-3-pro"],
+    ),
     excerpt: `# API route handlers: one purpose per handler
 
 How to organise API endpoints so that each one does one job, with its own rules and its own guard. Follow it whenever you add an endpoint, change what an existing one does, or are tempted to add a flag, a mode or a branch to a handler.
@@ -342,6 +409,7 @@ How to organise API endpoints so that each one does one job, with its own rules 
     priceUsd: 0,
     lineCount: 76,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-opus-5-5"], ["claude-fable-5-2", "claude-sonnet-5-5", "gpt-5-1"]),
     excerpt: `# Classes for complex objects
 
 When to model an object as a class, and what goes inside it, so its rules live in one place. Follow it whenever you build something that carries its own rules and behaviour, such as a booking, a user, a form or a loading state, and not only data.
@@ -359,6 +427,10 @@ When to model an object as a class, and what goes inside it, so its rules live i
     priceUsd: 0,
     lineCount: 63,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-haiku-5-5", "gpt-5-mini", "gemini-3-flash"],
+      ["claude-sonnet-5-5", "claude-opus-5-5"],
+    ),
     excerpt: `# Naming variables and functions
 
 How to name things so a developer understands what a variable holds or what a function does at first sight. Follow it whenever you create or rename a variable, a function, a handler, a prop or a field.
@@ -376,6 +448,10 @@ How to name things so a developer understands what a variable holds or what a fu
     priceUsd: 0,
     lineCount: 62,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(
+      ["claude-sonnet-5-5", "gemini-3-pro"],
+      ["claude-opus-5-5", "gpt-5-1", "claude-haiku-5-5"],
+    ),
     excerpt: `# CSS layout and spacing
 
 How to arrange elements so the layout is set in one place, spacing comes from tokens, and a reset removes the browser's defaults. Follow it whenever you write or review CSS for a page, a component or a layout.
@@ -393,6 +469,7 @@ How to arrange elements so the layout is set in one place, spacing comes from to
     priceUsd: 0,
     lineCount: 57,
     worksWith: ["Claude Code"],
+    tested_models: build_tested_models(["claude-opus-5-5", "claude-sonnet-5-5"], ["gpt-5-1", "gemini-3-pro"]),
     excerpt: `# Fluid design and container queries
 
 How to make a layout scale continuously with the screen and with the space a component sits in, instead of jumping between breakpoints. Follow it whenever you size a layout, write responsive CSS, or build a component that can be placed in spaces of different widths.

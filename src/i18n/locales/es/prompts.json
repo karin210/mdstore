@@ -380,6 +380,31 @@
           "Comprueba el resultado con la lista de verificación del final del archivo."
         ]
       },
+      "web-visual-design-and-images": {
+        "title": "Diseño visual web e imágenes",
+        "tagline": "Una página diseñada desde su público y su objetivo, no desde un estilo.",
+        "summary": "Cómo decidir qué aspecto tiene una página web y cómo comunica: un orden de prioridad para las reglas en conflicto, el público y el objetivo como punto de partida, un estilo artístico elegido de una vez, una idea exclusiva de la web por página, colores de estado tipo semáforo y un tratamiento para cada imagen.",
+        "highlights": [
+          "Un orden de prioridad para los conflictos: usabilidad, accesibilidad, las reglas del proyecto, estilo, ambición",
+          "El público, el objetivo y la descripción llevan a una acción y hasta tres emociones",
+          "Un estilo artístico elegido de una vez, con una razón de una frase en el mensaje final",
+          "Una idea exclusiva de la web por página, elegida por significado y encaje antes que por coste",
+          "Colores de estado rojo, ámbar y verde en tamaño pequeño, con un icono o texto como segunda señal",
+          "Imágenes editadas solo lo necesario, con un degradado bajo el texto colocado encima"
+        ],
+        "meantFor": [
+          "Sitios y aplicaciones web",
+          "Cualquier framework o stack",
+          "Proyectos nuevos",
+          "Proyectos existentes"
+        ],
+        "usageSteps": [
+          "Descarga `web-visual-design-and-images.md`. Es gratis.",
+          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@web-visual-design-and-images.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
+          "Pide al agente que diseñe o restilice una página. Deduce la acción y las emociones de tu proyecto, elige un estilo y una idea, y trata las imágenes.",
+          "Comprueba el resultado con la lista de verificación del final del archivo."
+        ]
+      },
       "landing-and-hero-sections": {
         "title": "Páginas de aterrizaje y secciones hero",
         "tagline": "Una primera pantalla que se explica sola de un vistazo.",

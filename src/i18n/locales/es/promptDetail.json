@@ -15,7 +15,6 @@
       "author": "Autor",
       "length": "Longitud",
       "category": "Categoría",
-      "testedWith": "Probado con",
       "freeNote": "Gratis: descarga el .md completo y agrégalo a tu repositorio.",
       "paidNote": "El pago estará disponible pronto. Al comprarlo, recibes el archivo completo como descarga .md, con las versiones futuras incluidas."
     },
@@ -25,6 +24,18 @@
       "comingSoon": "Pronto habrá capturas de lo que construye un agente con {fileName}.",
       "placeholder": "Ejemplo {number}",
       "placeholderHidden": ": captura disponible pronto"
+    },
+    "models": {
+      "title": "Modelos probados",
+      "note": "Los modelos concretos con los que se probó {fileName}, por familia. Los recomendados dieron los mejores resultados.",
+      "empty": "El autor aún no ha indicado con qué modelos se probó este prompt.",
+      "recommended": "Recomendado",
+      "table": {
+        "caption": "Coste por modelo, en dólares estadounidenses por millón de tokens",
+        "model": "Modelo",
+        "input": "Entrada",
+        "output": "Salida"
+      }
     },
     "preview": {
       "title": "Vista previa gratis",

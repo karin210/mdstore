@@ -320,6 +320,26 @@
           "Check the result against the checklist at the end of the file."
         ]
       },
+      "web-visual-design-and-images": {
+        "title": "Web visual design and images",
+        "tagline": "A page designed from its audience and goal, not from a style.",
+        "summary": "How to decide what a web page looks like and how it communicates: a priority order for conflicting rules, the audience and goal as inputs, one art style chosen in one pass, one web-only idea per page, traffic-light status colours and a treatment for every image.",
+        "highlights": [
+          "A priority order for conflicts: usability, accessibility, the project's rules, style, ambition",
+          "The audience, the goal and the description lead to one action and up to three emotions",
+          "One art style chosen in one pass, with a one-sentence reason in the final message",
+          "One web-only idea per page, picked by meaning and fit before cost",
+          "Red, amber and green status colours used small, with an icon or text as the second cue",
+          "Images that are edited only as much as needed, with a scrim under text placed over them"
+        ],
+        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
+        "usageSteps": [
+          "Download `web-visual-design-and-images.md`. It's free.",
+          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@web-visual-design-and-images.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
+          "Ask the agent to design or restyle a page. It derives the action and emotions from your project, picks one style and one idea, and treats the images.",
+          "Check the result against the checklist at the end of the file."
+        ]
+      },
       "landing-and-hero-sections": {
         "title": "Landing pages and hero sections",
         "tagline": "A first screen that explains itself in one look.",

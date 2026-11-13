@@ -13,3 +13,13 @@ export function formatPrice(amountUsd: number, locale: Locale, freeLabel: string
     maximumFractionDigits: 0,
   }).format(amountUsd);
 }
+
+/** An AI model's price per million tokens in US dollars, always with cents ("$0.25", "$15.00"). */
+export function format_token_price(amount_usd: number, locale: Locale): string {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount_usd);
+}

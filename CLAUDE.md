@@ -9,7 +9,7 @@
 - **Buyers** browse listings by category, read a free preview of each file (its first lines), buy it once, and drop the `.md` into their repo. Purchases include future versions of the file.
 - **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use, tools tested with), the `.md` file and the free-preview length. The post is published at once on its own `/prompts/[slug]` page. Posting is free for now; paid posts come with checkout.
 
-Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs) and the branded 404. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; the full `.md` products live in `content/prompts/`: `global.md`, framework-agnostic web conventions, free; `nextjs-structure.md`, Next.js App Router project structure, paid; `dev-tools-advisor.md`, agent playbook that recommends dev tools and stack, free; and seventeen narrow deep-dives, all free: `commit-attribution.md`, `authentication-forms.md`, `modals.md`, `loading-states.md`, `error-handling-and-http-status.md`, `ai-discoverability-geo.md`, `security-validation-authorization.md`, `page-titles.md`, `routing-and-404.md`, `button-kinds.md`, `color-and-ui-system.md`, `landing-and-hero-sections.md`, `api-route-handlers.md`, `classes-for-complex-objects.md`, `naming-conventions.md`, `css-layout-and-spacing.md` and `fluid-design-and-container-queries.md`. Most of them expand a topic that `global.md` covers in a short section, on purpose: each listing is one narrow job, and `global.md` stays the starting file) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. Posted prompts don't appear on the landing page grid yet (only on their own page). There is no checkout yet.
+Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs) and the branded 404. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; the full `.md` products live in `content/prompts/`: `global.md`, framework-agnostic web conventions, free; `nextjs-structure.md`, Next.js App Router project structure, paid; `dev-tools-advisor.md`, agent playbook that recommends dev tools and stack, free; and eighteen narrow deep-dives, all free: `commit-attribution.md`, `authentication-forms.md`, `modals.md`, `loading-states.md`, `error-handling-and-http-status.md`, `ai-discoverability-geo.md`, `security-validation-authorization.md`, `page-titles.md`, `routing-and-404.md`, `button-kinds.md`, `color-and-ui-system.md`, `web-visual-design-and-images.md`, `landing-and-hero-sections.md`, `api-route-handlers.md`, `classes-for-complex-objects.md`, `naming-conventions.md`, `css-layout-and-spacing.md` and `fluid-design-and-container-queries.md`. Most of them expand a topic that `global.md` covers in a short section, on purpose: each listing is one narrow job, and `global.md` stays the starting file) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. Posted prompts don't appear on the landing page grid yet (only on their own page). There is no checkout yet.
 
 ## Differentiators
 
@@ -62,7 +62,8 @@ src/
 │  │                         PromptDetail) so the shared App Shell stays instant;
 │  │                         listing detail: header (h1 title + h2 tagline), summary,
 │  │                         meant for, highlights, purchase card, output examples,
-│  │                         free preview (+ "Show the full file" for free listings only;
+│  │                         tested models (by family, recommended ones highlighted, plus a
+│  │                         cost table), free preview (+ "Show the full file" for free listings only;
 │  │                         paid files must never be read into a page), suggested use
 │  │                         (catalogue slugs prerendered via generateStaticParams; posted
 │  │                         prompts render on first request from cached Supabase reads)
@@ -87,9 +88,13 @@ src/
 │  ├─ prompt-detail/         used only by /prompts/[slug]: PromptDetail (the page body),
 │  │                         InlineCode (renders `backticks` in listing copy as <code>),
 │  │                         PromptDetailSkeleton (its Suspense fallback), OutputExamples
-│  │                         (screenshots from `outputExamples`, placeholders while empty)
+│  │                         (screenshots from `outputExamples`, placeholders while empty),
+│  │                         TestedModels (the `tested_models` of a listing, from the
+│  │                         `ai_models` registry in src/data/aiModels.ts)
 │  └─ modals/                PromptPreviewDialog (dismissible)
-├─ data/                     static catalogues: prompts.ts (listings), faq.ts
+├─ data/                     static catalogues: prompts.ts (listings), aiModels.ts (model
+│                            families, names and prices; the models and every listing's
+│                            tested models are invented placeholders), faq.ts
 ├─ lib/                      site.ts (app name, title format, contact), formatPrice.ts,
 │                            promptFiles.ts (reads a content/prompts/ file; cached),
 │                            promptView.ts (what a prompt page shows, from either source),

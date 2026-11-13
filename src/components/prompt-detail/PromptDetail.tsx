@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
 import { InlineCode } from "@/components/prompt-detail/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples";
+import { TestedModels } from "@/components/prompt-detail/TestedModels";
 import { downloadHref, isFree } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -101,16 +102,6 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
               <dt>{t("purchase.category")}</dt>
               <dd>{category}</dd>
             </div>
-            <div>
-              <dt>{t("purchase.testedWith")}</dt>
-              <dd>
-                <ul className={styles.tools}>
-                  {prompt.worksWith.map((tool) => (
-                    <li key={tool}>{tool}</li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
           </dl>
           {free ? (
             <>
@@ -130,6 +121,10 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
 
         <div className={styles.examples}>
           <OutputExamples examples={prompt.outputExamples} fileName={prompt.fileName} />
+        </div>
+
+        <div className={styles.models}>
+          <TestedModels models={prompt.tested_models} fileName={prompt.fileName} />
         </div>
 
         <section className={styles.preview} aria-labelledby="preview-title">

@@ -50,6 +50,10 @@ export function PromptDetailSkeleton(): ReactElement {
           <SkeletonBlock width="11rem" height="var(--text-xl)" />
         </div>
 
+        <div className={styles.models}>
+          <SkeletonBlock width="9rem" height="var(--text-xl)" />
+        </div>
+
         <div className={styles.preview}>
           <SkeletonBlock width="9rem" height="var(--text-xl)" />
           <SkeletonBlock height="16rem" />
