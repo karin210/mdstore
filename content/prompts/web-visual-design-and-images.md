@@ -5,6 +5,7 @@ How to decide what a web page looks like and how it communicates, from its audie
 - **The codebase wins.** If the project already has a design system, tokens or a visual style, extend them, don't mix two, and mention the difference.
 - **Start from the audience and the goal,** not from a style. Every decision serves the action the page should drive or the emotion it should evoke.
 - **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Priority order
 

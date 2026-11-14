@@ -95,7 +95,9 @@ src/
 ├─ data/                     static catalogues: prompts.ts (listings), aiModels.ts (model
 │                            families, names and prices; the models and every listing's
 │                            tested models are invented placeholders), faq.ts
-├─ lib/                      site.ts (app name, title format, contact), formatPrice.ts,
+├─ lib/                      site.ts (app name, title format, contact), formatPrice.ts, estimateContextTokens.ts (the
+│                            "Context" figure on a listing; a test keeps `context_tokens` in
+│                            prompts.ts in step with the files),
 │                            promptFiles.ts (reads a content/prompts/ file; cached),
 │                            promptView.ts (what a prompt page shows, from either source),
 │                            getPromptOrNotFound.ts (slug params → prompt or 404),

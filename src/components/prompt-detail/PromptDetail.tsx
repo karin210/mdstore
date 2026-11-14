@@ -99,10 +99,15 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
               <dd>{lines}</dd>
             </div>
             <div>
+              <dt>{t("purchase.context")}</dt>
+              <dd>{t("purchase.contextValue", { count: prompt.context_tokens })}</dd>
+            </div>
+            <div>
               <dt>{t("purchase.category")}</dt>
               <dd>{category}</dd>
             </div>
           </dl>
+          <p className={styles.note}>{t("purchase.contextNote")}</p>
           {free ? (
             <>
               <PrimaryButton

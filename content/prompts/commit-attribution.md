@@ -5,6 +5,7 @@ Keeps commit messages, pull request texts and release notes free of credits to a
 - **The project's policy wins.** If the project or the user asks for AI assistance to be disclosed, follow that policy instead and say so. Without such a policy, this file applies.
 - **The message describes the change, nothing else.** What changed and why, written for the next developer who reads the history.
 - **Strip, don't argue.** When an attribution line appears, remove it silently and carry on. Don't add a note about it.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. What never goes into a message
 

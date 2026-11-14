@@ -1,6 +1,7 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import type { PromptCategory } from "@/data/prompts";
+import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptView } from "@/lib/promptView";
 import { POSTED_PROMPTS_TABLE, SLUG_PATTERN } from "@/server/prompts/postedPromptsTable";
 import { createPublicSupabase } from "@/server/supabase/publicClient";
@@ -47,6 +48,7 @@ function toPromptView(row: PostedPromptRow): PromptView {
     // Posting is free for now; paid posts arrive with checkout.
     priceUsd: 0,
     lineCount: lines.length,
+    context_tokens: estimate_context_tokens(row.content),
     worksWith: row.works_with,
     // Posts don't record tested models yet.
     tested_models: [],

@@ -5,6 +5,7 @@ When to model an object as a class, and what goes inside it, so its rules live i
 - **The codebase wins.** If the project already models these objects another way, follow it, don't mix two, and mention the difference.
 - **Behaviour decides.** Reach for a class when the object has rules that would otherwise be duplicated. Plain data stays a plain type.
 - **Readability beats ceremony.** When a class and the simplest readable solution conflict, choose the simplest.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. What belongs in the class
 

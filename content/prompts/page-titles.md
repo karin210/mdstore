@@ -5,6 +5,7 @@ How to give every page a meaningful, unique title. Follow it whenever you create
 - **The codebase wins.** If the project already has a title template or helper, extend it, don't mix two, and mention the difference.
 - **Never ship a default title.** Not the framework default, not an empty title, not a filename, and not the same title on every route.
 - **Write in the user's language,** in plain sentence or title case, with no keyword stuffing.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Why it matters
 

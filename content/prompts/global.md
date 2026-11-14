@@ -5,6 +5,7 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
 - **The codebase wins.** If the project already follows a different convention, keep it, don't mix the two, and mention the difference.
 - **Readability wins.** If a rule here makes the code more complex than the problem needs, choose the simplest readable solution.
 - **Write in the project's language.** UI copy, error messages and route names use the site's language.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Principles
 

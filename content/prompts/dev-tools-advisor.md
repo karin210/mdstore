@@ -6,6 +6,7 @@ Recommends the tools and stack that fit the project and the developer's setup: l
 - **Recommend, don't install.** Return a recommendation; install only after the user approves it.
 - **The codebase wins.** In a project in progress, a working setup stays unless the gain is clear.
 - **Research, don't remember.** Tools change fast: check their current docs before recommending them.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 0. The request
 

@@ -5,6 +5,7 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
 - **The codebase wins.** If the project already has an established structure, follow it, don't mix the two, and mention the difference.
 - **Create folders when they are needed.** Don't scaffold empty folders "for later".
 - **Check the installed version.** Next.js changes conventions between major versions. Read the docs that ship in `node_modules/next/dist/docs/` before relying on an API you remember, and heed deprecation notices.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. The tree
 

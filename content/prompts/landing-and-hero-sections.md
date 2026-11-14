@@ -5,6 +5,7 @@ How to build a hero that explains the site at first sight, and the images and tr
 - **The codebase wins.** If the project already has a hero or landing structure, extend it, don't mix two, and mention the difference.
 - **Say it plainly.** The first screen tells a stranger what this is, in words they understand, before it tries to impress.
 - **Nothing in the first view is cut off.** Text and calls to action always stay whole and readable, on tall and short screens alike.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. The hero answers four questions
 

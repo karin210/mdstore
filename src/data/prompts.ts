@@ -28,6 +28,8 @@ export interface PromptListing {
   author: string;
   priceUsd: number;
   lineCount: number;
+  /** About how many tokens the file takes in a model's context window; see estimate_context_tokens. */
+  context_tokens: number;
   worksWith: string[];
   /** The specific models (by family) the prompt was tested against, with the recommended ones flagged. */
   tested_models: TestedModel[];
@@ -66,7 +68,8 @@ export const featuredPrompts: PromptListing[] = [
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 280,
+    lineCount: 281,
+    context_tokens: 8100,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-opus-5-5", "gpt-5-1"],
@@ -79,6 +82,7 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
 - **The codebase wins.** If the project already follows a different convention, keep it, don't mix the two, and mention the difference.
 - **Readability wins.** If a rule here makes the code more complex than the problem needs, choose the simplest readable solution.
 - **Write in the project's language.** UI copy, error messages and route names use the site's language.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Principles
 
@@ -91,7 +95,8 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
     category: "conventions",
     author: "@mdstore",
     priceUsd: 5,
-    lineCount: 135,
+    lineCount: 136,
+    context_tokens: 2350,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-fable-5-2", "claude-opus-5-5"], ["claude-sonnet-5-5", "gpt-5-1"]),
     excerpt: `# Next.js project structure
@@ -100,7 +105,8 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
 
 - **The codebase wins.** If the project already has an established structure, follow it, don't mix the two, and mention the difference.
 - **Create folders when they are needed.** Don't scaffold empty folders "for later".
-- **Check the installed version.** Next.js changes conventions between major versions. Read the docs that ship in \`node_modules/next/dist/docs/\` before relying on an API you remember, and heed deprecation notices.`,
+- **Check the installed version.** Next.js changes conventions between major versions. Read the docs that ship in \`node_modules/next/dist/docs/\` before relying on an API you remember, and heed deprecation notices.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -109,7 +115,8 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
     category: "agents",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 68,
+    lineCount: 69,
+    context_tokens: 1200,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-sonnet-5-5"],
@@ -122,7 +129,8 @@ Recommends the tools and stack that fit the project and the developer's setup: l
 - **The user's choice wins.** When the user has already chosen a tool, or names the one they want, use it and set it up well instead of arguing for another. If it has a serious problem (abandoned, incompatible with their versions, insecure), say so once, then follow their decision. Decisions recorded in the project's instruction files count as the user's choice.
 - **Recommend, don't install.** Return a recommendation; install only after the user approves it.
 - **The codebase wins.** In a project in progress, a working setup stays unless the gain is clear.
-- **Research, don't remember.** Tools change fast: check their current docs before recommending them.`,
+- **Research, don't remember.** Tools change fast: check their current docs before recommending them.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -131,7 +139,8 @@ Recommends the tools and stack that fit the project and the developer's setup: l
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 81,
+    lineCount: 82,
+    context_tokens: 1000,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-sonnet-5-5", "gpt-5-mini"], ["claude-haiku-5-5", "gemini-3-flash"]),
     excerpt: `# Commit messages without AI attribution
@@ -140,7 +149,8 @@ Keeps commit messages, pull request texts and release notes free of credits to a
 
 - **The project's policy wins.** If the project or the user asks for AI assistance to be disclosed, follow that policy instead and say so. Without such a policy, this file applies.
 - **The message describes the change, nothing else.** What changed and why, written for the next developer who reads the history.
-- **Strip, don't argue.** When an attribution line appears, remove it silently and carry on. Don't add a note about it.`,
+- **Strip, don't argue.** When an attribution line appears, remove it silently and carry on. Don't add a note about it.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -149,7 +159,8 @@ Keeps commit messages, pull request texts and release notes free of credits to a
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 83,
+    lineCount: 84,
+    context_tokens: 2450,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-opus-5-5"], ["claude-fable-5-2", "claude-sonnet-5-5", "gpt-5-1"]),
     excerpt: `# Authentication forms
@@ -158,7 +169,8 @@ How to build sign-in, sign-up and password forms that are easy to get right: one
 
 - **The codebase wins.** If the project already has form components or a validation module, extend them, don't mix two approaches, and mention the difference.
 - **Write in the project's language.** Labels, guidance and error messages use the site's language. The strings below are examples.
-- **The server decides.** Everything the form checks is checked again on the server with the same rules; client validation is only guidance.`,
+- **The server decides.** Everything the form checks is checked again on the server with the same rules; client validation is only guidance.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -167,7 +179,8 @@ How to build sign-in, sign-up and password forms that are easy to get right: one
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 54,
+    lineCount: 55,
+    context_tokens: 1050,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-sonnet-5-5"],
@@ -179,7 +192,8 @@ How to build modal dialogs: which kind to use, how each one closes, and how to s
 
 - **The codebase wins.** If the project already has a modal component or a dialog convention, extend it, don't mix two, and mention the difference.
 - **Reuse, don't redefine.** Modal typography, inputs, close button and action row live in one shared place (the global stylesheet or one modal component), never per modal.
-- **Readability first.** A modal usually carries important information, so its text stays plain and easy to read.`,
+- **Readability first.** A modal usually carries important information, so its text stays plain and easy to read.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -188,7 +202,8 @@ How to build modal dialogs: which kind to use, how each one closes, and how to s
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 59,
+    lineCount: 60,
+    context_tokens: 1050,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-haiku-5-5", "gemini-3-flash"], ["claude-sonnet-5-5", "gpt-5-mini"]),
     excerpt: `# Loading states
@@ -197,7 +212,8 @@ What the interface shows while something asynchronous happens, and when it fails
 
 - **The codebase wins.** If the project already has a spinner, skeleton or status component, reuse it and mention any gap.
 - **Never leave the user staring at a frozen or blank screen.** Every async operation has a visible state.
-- **Every async view handles four outcomes:** loading, success, empty and error.`,
+- **Every async view handles four outcomes:** loading, success, empty and error.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -206,7 +222,8 @@ What the interface shows while something asynchronous happens, and when it fails
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 80,
+    lineCount: 81,
+    context_tokens: 1300,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-opus-5-5", "gpt-5-1"], ["claude-sonnet-5-5", "gemini-3-pro"]),
     excerpt: `# Error handling and HTTP status codes
@@ -215,7 +232,8 @@ How a server answers when something goes wrong, and how a client reads the answe
 
 - **The codebase wins.** If the project already has an error handler or a response shape, extend it, don't mix two, and mention the difference.
 - **The status code is the signal; the body only adds detail.** Never respond \`200 OK\` with a failure inside the body (\`{ "success": false }\`).
-- **One central place.** Errors are translated by a central handler or helper, so no route can forget to.`,
+- **One central place.** Errors are translated by a central handler or helper, so no route can forget to.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -224,7 +242,8 @@ How a server answers when something goes wrong, and how a client reads the answe
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 90,
+    lineCount: 91,
+    context_tokens: 1100,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["gemini-3-pro", "claude-opus-5-5"],
@@ -236,7 +255,8 @@ How to make a public website easy for AI assistants to find, read and quote. Fol
 
 - **The codebase wins.** If the site already generates a sitemap or \`robots.txt\`, extend that, don't add a second one, and mention the difference.
 - **Build for three things only:** being in the models' training data, being found by their live search, and being easy to read and quote. Skip speculative formats.
-- **Generate, don't hand-write.** Files that list the site's pages come from the same data that renders the pages, so they never go stale.`,
+- **Generate, don't hand-write.** Files that list the site's pages come from the same data that renders the pages, so they never go stale.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -245,7 +265,8 @@ How to make a public website easy for AI assistants to find, read and quote. Fol
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 53,
+    lineCount: 54,
+    context_tokens: 1300,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-fable-5-2"],
@@ -257,7 +278,8 @@ How to protect server code that handles input, accounts and data: check every in
 
 - **The codebase wins.** If the project already has a validation layer or an authorization guard, extend it, don't mix two, and mention the difference.
 - **Client checks are only UX.** Anyone can bypass a form attribute, a disabled button or a hidden menu item with devtools, \`curl\` or a modified client. The server decides.
-- **Deny by default.** An endpoint is closed unless a rule explicitly allows the caller in.`,
+- **Deny by default.** An endpoint is closed unless a rule explicitly allows the caller in.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -266,7 +288,8 @@ How to protect server code that handles input, accounts and data: check every in
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 59,
+    lineCount: 60,
+    context_tokens: 750,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-haiku-5-5", "gpt-5-mini"], ["claude-sonnet-5-5", "gemini-3-flash"]),
     excerpt: `# Page titles
@@ -275,7 +298,8 @@ How to give every page a meaningful, unique title. Follow it whenever you create
 
 - **The codebase wins.** If the project already has a title template or helper, extend it, don't mix two, and mention the difference.
 - **Never ship a default title.** Not the framework default, not an empty title, not a filename, and not the same title on every route.
-- **Write in the user's language,** in plain sentence or title case, with no keyword stuffing.`,
+- **Write in the user's language,** in plain sentence or title case, with no keyword stuffing.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -284,7 +308,8 @@ How to give every page a meaningful, unique title. Follow it whenever you create
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 59,
+    lineCount: 60,
+    context_tokens: 1050,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-sonnet-5-5"], ["claude-opus-5-5", "claude-haiku-5-5", "gpt-5-1"]),
     excerpt: `# Routing, 404 pages and safe redirects
@@ -293,7 +318,8 @@ How to name routes, handle unknown URLs, redirect safely and protect privileged 
 
 - **The codebase wins.** If the project already has route guards or an error page, extend them, don't mix two, and mention the difference.
 - **Client guards are only UX.** Every privileged page and endpoint also checks authentication and role on the server.
-- **Never leave the user on a blank screen,** a spinner or a raw error.`,
+- **Never leave the user on a blank screen,** a spinner or a raw error.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -302,7 +328,8 @@ How to name routes, handle unknown URLs, redirect safely and protect privileged 
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 56,
+    lineCount: 57,
+    context_tokens: 1000,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-sonnet-5-5", "gpt-5-1"],
@@ -314,7 +341,8 @@ How to decide what a button looks like by the job it does. Follow it whenever yo
 
 - **The codebase wins.** If the project already has button components, use them, don't mix two sets, and mention the difference.
 - **Pick the kind first; the look follows.** A button's kind comes from the job it does, not from where it sits.
-- **One component per kind.** Each kind lives in its own component, so changing a kind changes it everywhere.`,
+- **One component per kind.** Each kind lives in its own component, so changing a kind changes it everywhere.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -323,7 +351,8 @@ How to decide what a button looks like by the job it does. Follow it whenever yo
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 63,
+    lineCount: 64,
+    context_tokens: 1550,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-opus-5-5", "gemini-3-pro"],
@@ -335,7 +364,8 @@ How to build a colour palette that expresses visual hierarchy: what the eye shou
 
 - **The codebase wins.** If the project already has a palette or tokens, extend them, don't mix two, and mention the difference.
 - **Colours are tokens.** Every colour is a custom property defined once on \`:root\`, and referenced by token. No raw hex values inside components.
-- **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.`,
+- **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -344,7 +374,8 @@ How to build a colour palette that expresses visual hierarchy: what the eye shou
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 61,
+    lineCount: 62,
+    context_tokens: 1900,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-fable-5-2", "claude-opus-5-5"],
@@ -356,7 +387,8 @@ How to decide what a web page looks like and how it communicates, from its audie
 
 - **The codebase wins.** If the project already has a design system, tokens or a visual style, extend them, don't mix two, and mention the difference.
 - **Start from the audience and the goal,** not from a style. Every decision serves the action the page should drive or the emotion it should evoke.
-- **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.`,
+- **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -365,7 +397,8 @@ How to decide what a web page looks like and how it communicates, from its audie
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 51,
+    lineCount: 52,
+    context_tokens: 1000,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-opus-5-5"],
@@ -377,7 +410,8 @@ How to build a hero that explains the site at first sight, and the images and tr
 
 - **The codebase wins.** If the project already has a hero or landing structure, extend it, don't mix two, and mention the difference.
 - **Say it plainly.** The first screen tells a stranger what this is, in words they understand, before it tries to impress.
-- **Nothing in the first view is cut off.** Text and calls to action always stay whole and readable, on tall and short screens alike.`,
+- **Nothing in the first view is cut off.** Text and calls to action always stay whole and readable, on tall and short screens alike.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -386,7 +420,8 @@ How to build a hero that explains the site at first sight, and the images and tr
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 61,
+    lineCount: 62,
+    context_tokens: 850,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-sonnet-5-5", "gpt-5-1"],
@@ -398,7 +433,8 @@ How to organise API endpoints so that each one does one job, with its own rules 
 
 - **The codebase wins.** If the project already organises its handlers a different way, follow it, don't mix two, and mention the difference.
 - **One handler per purpose,** not one per HTTP method. A resource may have several handlers for the same method when they serve different purposes.
-- **Thin handlers.** Shared logic lives in server utilities, not in copies of a handler.`,
+- **Thin handlers.** Shared logic lives in server utilities, not in copies of a handler.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -407,7 +443,8 @@ How to organise API endpoints so that each one does one job, with its own rules 
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 76,
+    lineCount: 77,
+    context_tokens: 1000,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-opus-5-5"], ["claude-fable-5-2", "claude-sonnet-5-5", "gpt-5-1"]),
     excerpt: `# Classes for complex objects
@@ -416,7 +453,8 @@ When to model an object as a class, and what goes inside it, so its rules live i
 
 - **The codebase wins.** If the project already models these objects another way, follow it, don't mix two, and mention the difference.
 - **Behaviour decides.** Reach for a class when the object has rules that would otherwise be duplicated. Plain data stays a plain type.
-- **Readability beats ceremony.** When a class and the simplest readable solution conflict, choose the simplest.`,
+- **Readability beats ceremony.** When a class and the simplest readable solution conflict, choose the simplest.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -425,7 +463,8 @@ When to model an object as a class, and what goes inside it, so its rules live i
     category: "conventions",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 63,
+    lineCount: 64,
+    context_tokens: 1000,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-haiku-5-5", "gpt-5-mini", "gemini-3-flash"],
@@ -437,7 +476,8 @@ How to name things so a developer understands what a variable holds or what a fu
 
 - **The codebase wins.** If the project already follows a different naming convention, keep it, don't mix the two, and mention the difference.
 - **Name for a stranger.** Someone opening the file for the first time should know what a variable stores, or what a function is for, without reading its body or tracing where it is used.
-- **Be as brief as clarity allows.** A long name is better than an unclear one, but the shortest clear name is best.`,
+- **Be as brief as clarity allows.** A long name is better than an unclear one, but the shortest clear name is best.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -446,7 +486,8 @@ How to name things so a developer understands what a variable holds or what a fu
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 62,
+    lineCount: 63,
+    context_tokens: 1100,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(
       ["claude-sonnet-5-5", "gemini-3-pro"],
@@ -458,7 +499,8 @@ How to arrange elements so the layout is set in one place, spacing comes from to
 
 - **The codebase wins.** If the project already has a layout or spacing convention, follow it, don't mix the two, and mention the difference.
 - **The parent arranges its children;** the children never position themselves.
-- **No raw spacing values** inside components. Every spacing value is a token.`,
+- **No raw spacing values** inside components. Every spacing value is a token.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
   {
@@ -467,7 +509,8 @@ How to arrange elements so the layout is set in one place, spacing comes from to
     category: "frontend",
     author: "@mdstore",
     priceUsd: 0,
-    lineCount: 57,
+    lineCount: 58,
+    context_tokens: 1550,
     worksWith: ["Claude Code"],
     tested_models: build_tested_models(["claude-opus-5-5", "claude-sonnet-5-5"], ["gpt-5-1", "gemini-3-pro"]),
     excerpt: `# Fluid design and container queries
@@ -476,7 +519,8 @@ How to make a layout scale continuously with the screen and with the space a com
 
 - **The codebase wins.** If the project already has a responsive approach, follow it, don't mix the two, and mention the difference.
 - **Fluid over breakpoints.** Let sizes, spacing and tracks scale, and add a media query only for a structural change that fluid values can't express.
-- **Fluid in both dimensions.** The viewport has a width and a height, and the layout must hold for every combination.`,
+- **Fluid in both dimensions.** The viewport has a width and a height, and the layout must hold for every combination.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.`,
     outputExamples: [],
   },
 ];

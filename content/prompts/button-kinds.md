@@ -5,6 +5,7 @@ How to decide what a button looks like by the job it does. Follow it whenever yo
 - **The codebase wins.** If the project already has button components, use them, don't mix two sets, and mention the difference.
 - **Pick the kind first; the look follows.** A button's kind comes from the job it does, not from where it sits.
 - **One component per kind.** Each kind lives in its own component, so changing a kind changes it everywhere.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. The four kinds
 

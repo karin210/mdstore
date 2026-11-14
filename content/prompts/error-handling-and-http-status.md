@@ -5,6 +5,7 @@ How a server answers when something goes wrong, and how a client reads the answe
 - **The codebase wins.** If the project already has an error handler or a response shape, extend it, don't mix two, and mention the difference.
 - **The status code is the signal; the body only adds detail.** Never respond `200 OK` with a failure inside the body (`{ "success": false }`).
 - **One central place.** Errors are translated by a central handler or helper, so no route can forget to.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Never leak internal errors
 

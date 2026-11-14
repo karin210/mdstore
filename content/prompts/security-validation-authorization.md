@@ -5,6 +5,7 @@ How to protect server code that handles input, accounts and data: check every in
 - **The codebase wins.** If the project already has a validation layer or an authorization guard, extend it, don't mix two, and mention the difference.
 - **Client checks are only UX.** Anyone can bypass a form attribute, a disabled button or a hidden menu item with devtools, `curl` or a modified client. The server decides.
 - **Deny by default.** An endpoint is closed unless a rule explicitly allows the caller in.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Check against the OWASP Top 10
 

@@ -5,6 +5,7 @@ How to make a public website easy for AI assistants to find, read and quote. Fol
 - **The codebase wins.** If the site already generates a sitemap or `robots.txt`, extend that, don't add a second one, and mention the difference.
 - **Build for three things only:** being in the models' training data, being found by their live search, and being easy to read and quote. Skip speculative formats.
 - **Generate, don't hand-write.** Files that list the site's pages come from the same data that renders the pages, so they never go stale.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Server-render all public content
 

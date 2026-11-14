@@ -5,6 +5,7 @@ How to arrange elements so the layout is set in one place, spacing comes from to
 - **The codebase wins.** If the project already has a layout or spacing convention, follow it, don't mix the two, and mention the difference.
 - **The parent arranges its children;** the children never position themselves.
 - **No raw spacing values** inside components. Every spacing value is a token.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Positioning: wrap the group, don't pull out the children
 

@@ -5,6 +5,7 @@ How to build sign-in, sign-up and password forms that are easy to get right: one
 - **The codebase wins.** If the project already has form components or a validation module, extend them, don't mix two approaches, and mention the difference.
 - **Write in the project's language.** Labels, guidance and error messages use the site's language. The strings below are examples.
 - **The server decides.** Everything the form checks is checked again on the server with the same rules; client validation is only guidance.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. One page, two tabs
 

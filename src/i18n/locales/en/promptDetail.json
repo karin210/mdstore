@@ -15,6 +15,9 @@
       "author": "Author",
       "length": "Length",
       "category": "Category",
+      "context": "Context",
+      "contextValue": "About {count, number} tokens",
+      "contextNote": "What the file takes up in your agent's context window. Load only the files your task needs.",
       "freeNote": "Free: download the full .md and drop it into your repo.",
       "paidNote": "Checkout opens soon. Once bought, the full file is delivered as a .md download, future versions included."
     },

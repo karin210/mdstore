@@ -5,6 +5,7 @@ How to build modal dialogs: which kind to use, how each one closes, and how to s
 - **The codebase wins.** If the project already has a modal component or a dialog convention, extend it, don't mix two, and mention the difference.
 - **Reuse, don't redefine.** Modal typography, inputs, close button and action row live in one shared place (the global stylesheet or one modal component), never per modal.
 - **Readability first.** A modal usually carries important information, so its text stays plain and easy to read.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Two kinds, chosen by one question
 

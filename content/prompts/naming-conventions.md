@@ -5,6 +5,7 @@ How to name things so a developer understands what a variable holds or what a fu
 - **The codebase wins.** If the project already follows a different naming convention, keep it, don't mix the two, and mention the difference.
 - **Name for a stranger.** Someone opening the file for the first time should know what a variable stores, or what a function is for, without reading its body or tracing where it is used.
 - **Be as brief as clarity allows.** A long name is better than an unclear one, but the shortest clear name is best.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Variables: name by the value they store
 

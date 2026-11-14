@@ -5,6 +5,7 @@ How to make a layout scale continuously with the screen and with the space a com
 - **The codebase wins.** If the project already has a responsive approach, follow it, don't mix the two, and mention the difference.
 - **Fluid over breakpoints.** Let sizes, spacing and tracks scale, and add a media query only for a structural change that fluid values can't express.
 - **Fluid in both dimensions.** The viewport has a width and a height, and the layout must hold for every combination.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Fluid by default
 

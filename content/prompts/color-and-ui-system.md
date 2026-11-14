@@ -5,6 +5,7 @@ How to build a colour palette that expresses visual hierarchy: what the eye shou
 - **The codebase wins.** If the project already has a palette or tokens, extend them, don't mix two, and mention the difference.
 - **Colours are tokens.** Every colour is a custom property defined once on `:root`, and referenced by token. No raw hex values inside components.
 - **Contrast is not optional.** Text and controls meet WCAG 2.1 AA.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Four semantic roles
 

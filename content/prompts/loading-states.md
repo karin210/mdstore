@@ -5,6 +5,7 @@ What the interface shows while something asynchronous happens, and when it fails
 - **The codebase wins.** If the project already has a spinner, skeleton or status component, reuse it and mention any gap.
 - **Never leave the user staring at a frozen or blank screen.** Every async operation has a visible state.
 - **Every async view handles four outcomes:** loading, success, empty and error.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Track an explicit status
 

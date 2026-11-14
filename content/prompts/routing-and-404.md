@@ -5,6 +5,7 @@ How to name routes, handle unknown URLs, redirect safely and protect privileged 
 - **The codebase wins.** If the project already has route guards or an error page, extend them, don't mix two, and mention the difference.
 - **Client guards are only UX.** Every privileged page and endpoint also checks authentication and role on the server.
 - **Never leave the user on a blank screen,** a spinner or a raw error.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. Always ship a custom 404 page
 

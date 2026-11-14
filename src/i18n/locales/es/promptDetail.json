@@ -15,6 +15,9 @@
       "author": "Autor",
       "length": "Longitud",
       "category": "Categoría",
+      "context": "Contexto",
+      "contextValue": "Unos {count, number} tokens",
+      "contextNote": "Lo que ocupa el archivo en la ventana de contexto de tu agente. Carga solo los archivos que tu tarea necesita.",
       "freeNote": "Gratis: descarga el .md completo y agrégalo a tu repositorio.",
       "paidNote": "El pago estará disponible pronto. Al comprarlo, recibes el archivo completo como descarga .md, con las versiones futuras incluidas."
     },

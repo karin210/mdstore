@@ -5,6 +5,7 @@ How to organise API endpoints so that each one does one job, with its own rules 
 - **The codebase wins.** If the project already organises its handlers a different way, follow it, don't mix two, and mention the difference.
 - **One handler per purpose,** not one per HTTP method. A resource may have several handlers for the same method when they serve different purposes.
 - **Thin handlers.** Shared logic lives in server utilities, not in copies of a handler.
+- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
 
 ## 1. One purpose, one handler
 
