@@ -1,0 +1,25 @@
+{
+  "name": "mdstore",
+  "version": "0.1.0",
+  "description": "Install coding prompts from mdstore (CLAUDE.md, AGENTS.md, Cursor rules, commands, agents) into your repo.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "bin": {
+    "mdstore": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run --project cli --root ../.."
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^5"
+  }
+}
