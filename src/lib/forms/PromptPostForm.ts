@@ -2,6 +2,7 @@ import { BaseForm } from "@/lib/forms/BaseForm";
 import {
   checkAuthorHandle,
   checkCategory,
+  check_kind,
   checkFile,
   checkList,
   checkPreviewLineCount,
@@ -18,6 +19,7 @@ export interface PromptPostValues {
   tagline: string;
   summary: string;
   category: string;
+  kind: string;
   authorHandle: string;
   meantFor: string;
   highlights: string;
@@ -32,6 +34,7 @@ const EMPTY_POST: PromptPostValues = {
   tagline: "",
   summary: "",
   category: "",
+  kind: "",
   authorHandle: "",
   meantFor: "",
   highlights: "",
@@ -60,6 +63,8 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkList(field, values[field]);
       case "category":
         return checkCategory(values.category);
+      case "kind":
+        return check_kind(values.kind);
       case "authorHandle":
         return checkAuthorHandle(values.authorHandle);
       case "worksWith":
@@ -80,6 +85,7 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     formData.set("tagline", values.tagline);
     formData.set("summary", values.summary);
     formData.set("category", values.category);
+    formData.set("kind", values.kind);
     formData.set("authorHandle", values.authorHandle);
     formData.set("meantFor", values.meantFor);
     formData.set("highlights", values.highlights);

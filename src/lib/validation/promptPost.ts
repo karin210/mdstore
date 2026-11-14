@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { promptCategories, type PromptCategory } from "@/data/prompts";
+import { prompt_kinds, promptCategories, type PromptCategory, type PromptKind } from "@/data/prompts";
 
 /**
  * Rules for posting a prompt, shared by the upload form (client) and the create action (server).
@@ -16,6 +16,7 @@ export interface ValidationIssue {
     | "tooManyItems"
     | "itemTooLong"
     | "chooseCategory"
+    | "chooseKind"
     | "chooseTool"
     | "handleFormat"
     | "fileRequired"
@@ -56,7 +57,7 @@ const LIST_LIMITS = {
 export type TextField = keyof typeof TEXT_LIMITS;
 export type ListField = keyof typeof LIST_LIMITS;
 export type PromptPostField =
-  TextField | ListField | "category" | "authorHandle" | "worksWith" | "file" | "previewLineCount";
+  TextField | ListField | "category" | "kind" | "authorHandle" | "worksWith" | "file" | "previewLineCount";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
@@ -64,6 +65,7 @@ export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "tagline",
   "summary",
   "category",
+  "kind",
   "authorHandle",
   "meantFor",
   "highlights",
@@ -111,6 +113,15 @@ export function isPromptCategory(value: string): value is PromptCategory {
 
 export function checkCategory(value: string): ValidationIssue | null {
   return isPromptCategory(value) ? null : { key: "chooseCategory" };
+}
+
+export function is_prompt_kind(value: string): value is PromptKind {
+  return (prompt_kinds as readonly string[]).includes(value);
+}
+
+/** The kind decides where the CLI installs the file, so it has to be chosen (no default). */
+export function check_kind(value: string): ValidationIssue | null {
+  return is_prompt_kind(value) ? null : { key: "chooseKind" };
 }
 
 export function checkAuthorHandle(valueRaw: string): ValidationIssue | null {
@@ -178,6 +189,10 @@ export const promptPostSchema = z.strictObject({
     .string()
     .superRefine(asRefinement(checkCategory))
     .transform((value) => value as PromptCategory),
+  kind: z
+    .string()
+    .superRefine(asRefinement(check_kind))
+    .transform((value) => value as PromptKind),
   authorHandle: z
     .string()
     .superRefine(asRefinement(checkAuthorHandle))

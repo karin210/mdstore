@@ -5,7 +5,7 @@ import { useReducer, useState, useTransition, type FormEvent, type ReactElement,
 import { FormAlert } from "@/components/global/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField";
-import { promptCategories } from "@/data/prompts";
+import { prompt_kinds, promptCategories } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
 import { PromptPostForm, type PromptPostValues } from "@/lib/forms/PromptPostForm";
 import {
@@ -18,7 +18,7 @@ import {
 import { postPrompt, type PostPromptResult } from "@/server/prompts/actions";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<PromptPostField, "category" | "worksWith" | "file">;
+type TextField = Exclude<PromptPostField, "category" | "kind" | "worksWith" | "file">;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 interface PostPromptFormProps {
@@ -196,6 +196,30 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
             {promptCategories.map((category) => (
               <option key={category} value={category}>
                 {tCategories(category)}
+              </option>
+            ))}
+          </select>
+        </PostFormField>
+        <PostFormField
+          id="post-kind"
+          label={t("fields.kind.label")}
+          hint={t("fields.kind.hint")}
+          guidanceText={getGuidanceText("kind")}
+        >
+          <select
+            id="post-kind"
+            name="kind"
+            className="form-input"
+            value={form.getValue("kind")}
+            aria-describedby={getDescribedBy("post-kind", true)}
+            {...getControlState("kind")}
+            onChange={(event) => updateField("kind", event.target.value)}
+            onBlur={() => leaveField("kind")}
+          >
+            <option value="">{t("fields.kind.placeholder")}</option>
+            {prompt_kinds.map((kind) => (
+              <option key={kind} value={kind}>
+                {t(`fields.kind.options.${kind}`)}
               </option>
             ))}
           </select>

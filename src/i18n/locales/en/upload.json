@@ -111,6 +111,16 @@
           "label": "Category",
           "placeholder": "Choose a category"
         },
+        "kind": {
+          "label": "Kind of file",
+          "hint": "Tells the mdstore CLI where to install it in a developer’s repo.",
+          "placeholder": "Choose a kind",
+          "options": {
+            "instructions": "Instructions (project rules, like CLAUDE.md or AGENTS.md)",
+            "command": "Command (a slash command the developer runs)",
+            "agent": "Agent (a subagent or playbook the agent hands work to)"
+          }
+        },
         "authorHandle": {
           "label": "Author name or handle",
           "hint": "Shown on the page as the author, e.g. @yourname."
@@ -158,6 +168,7 @@
       "tooManyItems": "Use at most {max} lines.",
       "itemTooLong": "Keep each line under {max} characters.",
       "chooseCategory": "Choose a category.",
+      "chooseKind": "Choose what kind of file it is.",
       "chooseTool": "Mark at least one tool.",
       "handleFormat": "Use letters, numbers, dots, dashes or underscores, optionally starting with @.",
       "fileRequired": "Choose your .md file.",
