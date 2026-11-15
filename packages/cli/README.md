@@ -1,6 +1,6 @@
 # mdstore CLI
 
-Install coding prompts from [mdstore](https://mdstore.dev) into your project: `CLAUDE.md` and `AGENTS.md` instructions, Cursor rules, slash commands and agent playbooks, each in the place your AI tool reads it.
+Install coding prompts from [mdstore](https://mdstore-seven.vercel.app) into your project: `CLAUDE.md` and `AGENTS.md` instructions, Cursor rules, slash commands and agent playbooks, each in the place your AI tool reads it.
 
 ```sh
 npx mdstore search forms

@@ -1,16 +1,13 @@
 import { readFileSync } from "node:fs";
 import { UserError } from "./context.js";
 
-/**
- * PLACEHOLDER: the site has no production URL yet (src/lib/site.ts only has the contact address
- * hello@mdstore.dev), so this guesses the domain from it. Replace it once the site is deployed.
- */
-export const placeholder_production_url = "https://mdstore.dev";
+/** The deployed site (same value as siteConfig.url in the site's src/lib/site.ts; keep them in step). */
+export const production_url = "https://mdstore-seven.vercel.app";
 
 /** The site the CLI talks to: MDSTORE_API_URL when set (e.g. http://localhost:3000), else production. */
 export function get_base_url(env: NodeJS.ProcessEnv = process.env): string {
   const configured = env.MDSTORE_API_URL?.trim();
-  const base = configured ? configured : placeholder_production_url;
+  const base = configured ? configured : production_url;
   let url: URL;
   try {
     url = new URL(base);
