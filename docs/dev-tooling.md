@@ -55,7 +55,7 @@ TypeScript 7 is out, and `next build` can type-check with it through the `tsc` C
 
 The riskiest logic is plain TypeScript: the validation rules shared by the client and the server, the form classes and small helpers. Vitest is the runner the Next docs document, and it is fast and needs one config file.
 
-- Tests are `src/**/*.test.ts`, next to the file they test.
+- Tests sit next to the file they test, in two Vitest projects (`vitest.config.mts`): `site` (`src/**/*.test.ts`) and `cli` (`packages/cli/src/**/*.test.ts`). `npm test` runs both; `npm run cli:test` (or `npx vitest run --project site`) runs one. CI runs them as separate steps.
 - They run in the Node environment. To test a component, add `// @vitest-environment jsdom` at the top of that file and install `jsdom` and `@testing-library/react`.
 - `@/` imports resolve through Vite 8's built-in `resolve.tsconfigPaths` (in `vitest.config.mts`), so the `vite-tsconfig-paths` plugin from the Next guide is not needed.
 - **Async Server Components can't be unit tested** with Vitest (the Next docs say so). Cover them, and full flows like sign-up → post → download, with end-to-end tests (Playwright) when they are added.
