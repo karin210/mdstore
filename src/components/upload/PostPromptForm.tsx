@@ -1,6 +1,7 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useReducer, useState, useTransition, type FormEvent, type ReactElement, type ReactNode } from "react";
 import { FormAlert } from "@/components/global/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton";
@@ -10,6 +11,7 @@ import { Link } from "@/i18n/navigation";
 import { PromptPostForm, type PromptPostValues } from "@/lib/forms/PromptPostForm";
 import {
   PREVIEW_LINES,
+  PROMPT_KINDS,
   PROMPT_POST_FIELDS,
   WORKS_WITH_TOOLS,
   type PromptPostField,
@@ -18,7 +20,7 @@ import {
 import { postPrompt, type PostPromptResult } from "@/server/prompts/actions";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<PromptPostField, "category" | "worksWith" | "file">;
+type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "file">;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 interface PostPromptFormProps {
@@ -39,18 +41,21 @@ function focusField(field: PromptPostField): void {
 
 /**
  * The upload form: the fields /prompts/[slug] shows, plus the .md file. It validates as the user
- * types (rules shared with the server), focuses the first wrong field on submit, and opens the
- * new prompt's page once it is posted.
+ * types (rules shared with the server), focuses the first wrong field on submit, and clears itself
+ * once the post is submitted for review. Submitted posts stay pending until an admin approves them.
  */
 export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
   const t = useTranslations("upload.form");
   const tValidation = useTranslations("upload.validation");
   const tCategories = useTranslations("prompts.categories");
-  const locale = useLocale();
+  const router = useRouter();
   const [form] = useState(() => new PromptPostForm());
   const [, rerender] = useReducer((count: number) => count + 1, 0);
+  // Bumping the key remounts the form, which clears the uncontrolled file input after a success.
+  const [formKey, setFormKey] = useState(0);
   const [serverIssues, setServerIssues] = useState<IssueMap>({});
   const [errorMessage, setErrorMessage] = useState<ReactNode>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, startSubmit] = useTransition();
 
   function getIssue(field: PromptPostField): ValidationIssue | null {
@@ -95,6 +100,16 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
   }
 
   function showResult(result: PostPromptResult): void {
+    if (result.status === "submitted") {
+      form.reset();
+      setServerIssues({});
+      setFormKey((key) => key + 1);
+      setIsSubmitted(true);
+      rerender();
+      // The "my submissions" list is server-rendered, so ask the server to re-render it with the new post.
+      router.refresh();
+      return;
+    }
     if (result.status === "invalid") {
       setServerIssues(result.fieldErrors);
       setErrorMessage(t("fixFields"));
@@ -118,6 +133,7 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
     event.preventDefault();
     form.markAllEdited();
     setErrorMessage(null);
+    setIsSubmitted(false);
     rerender();
     const invalidField = form.firstInvalidField;
     if (invalidField) {
@@ -125,8 +141,7 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
       return;
     }
     startSubmit(async () => {
-      // On success the action redirects to the new page, so a result only comes back on failure.
-      showResult(await postPrompt(form.toFormData(locale)));
+      showResult(await postPrompt(form.toFormData()));
     });
   }
 
@@ -173,11 +188,34 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
   const toolsGuidance = getGuidanceText("worksWith");
 
   return (
-    <form className={styles.form} noValidate onSubmit={submitPost} aria-busy={isSubmitting}>
+    <form key={formKey} className={styles.form} noValidate onSubmit={submitPost} aria-busy={isSubmitting}>
       {email && <p className={styles.account}>{t("signedInAs", { email })}</p>}
 
       <fieldset className={styles.group}>
         <legend className={styles.legend}>{t("sections.basics")}</legend>
+        <PostFormField
+          id="post-kind"
+          label={t("fields.kind.label")}
+          hint={t("fields.kind.hint")}
+          guidanceText={getGuidanceText("kind")}
+        >
+          <select
+            id="post-kind"
+            name="kind"
+            className="form-input"
+            value={form.getValue("kind")}
+            aria-describedby={getDescribedBy("post-kind", true)}
+            {...getControlState("kind")}
+            onChange={(event) => updateField("kind", event.target.value as PromptPostValues["kind"])}
+            onBlur={() => leaveField("kind")}
+          >
+            {PROMPT_KINDS.map((kind) => (
+              <option key={kind} value={kind}>
+                {t(`fields.kind.options.${kind}`)}
+              </option>
+            ))}
+          </select>
+        </PostFormField>
         {renderTextField("title")}
         {renderTextField("tagline")}
         {renderTextField("summary", { multiline: true })}
@@ -266,6 +304,7 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
         {renderTextField("previewLineCount")}
       </fieldset>
 
+      {isSubmitted && <FormAlert tone="success">{t("submitted")}</FormAlert>}
       {errorMessage && <FormAlert tone="error">{errorMessage}</FormAlert>}
       <div className={styles.actions}>
         <SubmitButton label={t("submit")} busyLabel={t("submitting")} isBusy={isSubmitting} />

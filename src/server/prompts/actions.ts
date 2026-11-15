@@ -1,11 +1,8 @@
 "use server";
 
 import type { PostgrestError } from "@supabase/supabase-js";
-import { hasLocale } from "next-intl";
 import { updateTag } from "next/cache";
 import { findPromptBySlug } from "@/data/prompts";
-import { redirect } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
 import { slugify } from "@/lib/slugify";
 import {
   checkFileContent,
@@ -22,6 +19,7 @@ import { createServerSupabase } from "@/server/supabase/serverClient";
 
 export type PostPromptResult =
   | { status: "invalid"; fieldErrors: Partial<Record<PromptPostField, ValidationIssue>> }
+  | { status: "submitted" }
   | { status: "error"; errorKey: "unauthenticated" | "notConfigured" | "server"; requestId?: string };
 
 const UNIQUE_VIOLATION = "23505";
@@ -35,6 +33,7 @@ function readText(formData: FormData, field: string): string {
 /** Only the known fields are read from the request; anything else in it is ignored. */
 function readSubmission(formData: FormData): Record<PromptPostField, unknown> {
   return {
+    kind: readText(formData, "kind"),
     title: readText(formData, "title"),
     tagline: readText(formData, "tagline"),
     summary: readText(formData, "summary"),
@@ -79,8 +78,10 @@ async function insertPostedPrompt(
 
   // Runs as the signed-in user: row-level security only accepts rows whose author_id is theirs.
   // The keys are the table's snake_case column names.
+  // The status is left out on purpose: the column defaults to 'pending', so a new post waits for review.
   const { error } = await supabase.from(POSTED_PROMPTS_TABLE).insert({
     slug,
+    kind: input.kind,
     author_id: authorId,
     author_handle: input.authorHandle,
     file_name: getFileName(input.file, slug),
@@ -99,13 +100,11 @@ async function insertPostedPrompt(
 }
 
 /**
- * Posts a prompt for the signed-in user and opens its page. Every field is validated again here
+ * Submits a prompt for review on behalf of the signed-in user. Every field is validated again here
  * with the same rules as the form; the author comes from the verified session, never the request.
+ * The post stays pending until an admin approves it, so there is no page to redirect to yet.
  */
 export async function postPrompt(formData: FormData): Promise<PostPromptResult> {
-  const requestedLocale = readText(formData, "locale");
-  const locale = hasLocale(routing.locales, requestedLocale) ? requestedLocale : routing.defaultLocale;
-
   const user = await getSignedInUser();
   if (!user) return { status: "error", errorKey: "unauthenticated" };
 
@@ -147,6 +146,5 @@ export async function postPrompt(formData: FormData): Promise<PostPromptResult> 
 
   updateTag(POSTED_PROMPTS_TAG);
   updateTag(getPostedPromptTag(slug));
-  redirect({ href: `/prompts/${slug}`, locale });
-  return { status: "error", errorKey: "server" }; // unreachable: redirect() throws
+  return { status: "submitted" };
 }

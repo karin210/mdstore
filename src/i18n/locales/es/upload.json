@@ -75,8 +75,8 @@
           "text": "Completa el formulario de abajo: qué hace, para quién es, cómo se usa y el archivo .md."
         },
         "publish": {
-          "title": "Sal al aire",
-          "text": "Tu prompt se publica de inmediato en su propia página, listo para que los desarrolladores lo encuentren."
+          "title": "Revisión",
+          "text": "Revisamos tu prompt antes de publicarlo. Después aparece en su propia página para que los desarrolladores lo encuentren."
         }
       }
     },
@@ -95,6 +95,14 @@
         "file": "El archivo"
       },
       "fields": {
+        "kind": {
+          "label": "Tipo",
+          "hint": "¿Es un prompt o una skill?",
+          "options": {
+            "prompt": "Prompt",
+            "skill": "Skill"
+          }
+        },
         "title": {
           "label": "Título",
           "hint": "Qué es el prompt, en pocas palabras (se muestra como encabezado de la página)."
@@ -142,7 +150,7 @@
       },
       "submit": "Publicar prompt",
       "submitting": "Publicando…",
-      "submitted": "¡Publicado! Abriendo la página de tu prompt…",
+      "submitted": "Enviado a revisión. Se publica cuando un administrador lo apruebe.",
       "fixFields": "Algunos campos necesitan un cambio antes de publicar. Están marcados abajo.",
       "errors": {
         "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para publicar tu prompt.",
@@ -164,7 +172,20 @@
       "fileType": "Elige un archivo Markdown que termine en .md.",
       "fileTooLarge": "Elige un archivo de hasta 200 KB.",
       "fileEmpty": "El archivo está vacío. Elige el archivo con tu prompt.",
-      "previewRange": "Usa un número del {min} al {max}."
+      "previewRange": "Usa un número del {min} al {max}.",
+      "chooseKind": "Elige prompt o skill."
+    },
+    "submissions": {
+      "title": "Tus envíos",
+      "lead": "Los prompts esperan revisión. Los aprobados salen en su propia página.",
+      "empty": "Todavía no has publicado nada.",
+      "status": {
+        "pending": "Esperando revisión",
+        "approved": "Publicado",
+        "rejected": "No aprobado"
+      },
+      "rejectedNote": "Motivo: {note}",
+      "view": "Ver página"
     }
   }
 }

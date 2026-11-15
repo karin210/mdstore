@@ -75,8 +75,8 @@
           "text": "Fill in the form below: what it does, who it’s for, how to use it, and the .md file itself."
         },
         "publish": {
-          "title": "Go live",
-          "text": "Your prompt is posted straight away on its own page, ready for developers to find."
+          "title": "Get reviewed",
+          "text": "Your prompt is reviewed before it goes live, then it appears on its own page for developers to find."
         }
       }
     },
@@ -95,6 +95,14 @@
         "file": "The file"
       },
       "fields": {
+        "kind": {
+          "label": "Type",
+          "hint": "Is it a prompt or a skill?",
+          "options": {
+            "prompt": "Prompt",
+            "skill": "Skill"
+          }
+        },
         "title": {
           "label": "Title",
           "hint": "What the prompt is, in a few words (shown as the page heading)."
@@ -142,7 +150,7 @@
       },
       "submit": "Post prompt",
       "submitting": "Posting…",
-      "submitted": "Posted! Opening your prompt’s page…",
+      "submitted": "Sent for review. It goes live once an admin approves it.",
       "fixFields": "Some fields need a change before posting. They’re marked below.",
       "errors": {
         "unauthenticated": "Your session ended. Sign in again to post your prompt.",
@@ -164,7 +172,20 @@
       "fileType": "Choose a Markdown file ending in .md.",
       "fileTooLarge": "Choose a file up to 200 KB.",
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
-      "previewRange": "Use a number from {min} to {max}."
+      "previewRange": "Use a number from {min} to {max}.",
+      "chooseKind": "Choose prompt or skill."
+    },
+    "submissions": {
+      "title": "Your submissions",
+      "lead": "Posts wait for review. Approved ones go live on their own page.",
+      "empty": "You haven’t posted anything yet.",
+      "status": {
+        "pending": "Waiting for review",
+        "approved": "Live",
+        "rejected": "Not approved"
+      },
+      "rejectedNote": "Reason: {note}",
+      "view": "View page"
     }
   }
 }

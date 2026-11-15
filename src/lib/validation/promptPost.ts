@@ -15,6 +15,7 @@ export interface ValidationIssue {
     | "tooFewItems"
     | "tooManyItems"
     | "itemTooLong"
+    | "chooseKind"
     | "chooseCategory"
     | "chooseTool"
     | "handleFormat"
@@ -38,6 +39,10 @@ export const WORKS_WITH_TOOLS = [
   "Zed",
 ] as const;
 
+/** What a post is: a prompt file or a skill. Matches the `kind` check on posted_prompts. */
+export const PROMPT_KINDS = ["prompt", "skill"] as const;
+export type PromptKind = (typeof PROMPT_KINDS)[number];
+
 export const MAX_FILE_BYTES = 200 * 1024;
 export const PREVIEW_LINES = { min: 5, max: 40, default: 12 } as const;
 
@@ -56,10 +61,11 @@ const LIST_LIMITS = {
 export type TextField = keyof typeof TEXT_LIMITS;
 export type ListField = keyof typeof LIST_LIMITS;
 export type PromptPostField =
-  TextField | ListField | "category" | "authorHandle" | "worksWith" | "file" | "previewLineCount";
+  TextField | ListField | "kind" | "category" | "authorHandle" | "worksWith" | "file" | "previewLineCount";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
+  "kind",
   "title",
   "tagline",
   "summary",
@@ -107,6 +113,10 @@ export function checkList(field: ListField, valueRaw: string): ValidationIssue |
 
 export function isPromptCategory(value: string): value is PromptCategory {
   return (promptCategories as readonly string[]).includes(value);
+}
+
+export function checkKind(value: string): ValidationIssue | null {
+  return (PROMPT_KINDS as readonly string[]).includes(value) ? null : { key: "chooseKind" };
 }
 
 export function checkCategory(value: string): ValidationIssue | null {
@@ -171,6 +181,10 @@ const listSchema = (field: ListField) =>
     .transform(splitLines);
 
 export const promptPostSchema = z.strictObject({
+  kind: z
+    .string()
+    .superRefine(asRefinement(checkKind))
+    .transform((value) => value as PromptKind),
   title: textSchema("title"),
   tagline: textSchema("tagline"),
   summary: textSchema("summary"),

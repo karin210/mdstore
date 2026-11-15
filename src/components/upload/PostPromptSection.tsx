@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
 import { SecondaryButton } from "@/components/global/SecondaryButton";
 import { SkeletonBlock } from "@/components/global/SkeletonBlock";
+import { MySubmissions } from "@/components/upload/MySubmissions";
 import { PostPromptForm } from "@/components/upload/PostPromptForm";
 import { getSignedInUser } from "@/server/auth/getSignedInUser";
 import styles from "./PostPromptSection.module.css";
@@ -56,6 +57,9 @@ export function PostPromptSection(): ReactElement {
           <PostPromptSlot />
         </Suspense>
       </div>
+      <Suspense fallback={null}>
+        <MySubmissions />
+      </Suspense>
     </section>
   );
 }

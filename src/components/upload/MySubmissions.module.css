@@ -1,0 +1,83 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: min(48rem, 100%);
+  padding: var(--space-lg);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+}
+
+.lead,
+.empty {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-sm);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-input-bg);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.badge {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.item[data-status="approved"] .badge {
+  color: var(--color-brand-green-strong);
+}
+
+.item[data-status="rejected"] .badge {
+  color: var(--color-error);
+}
+
+.meta,
+.note {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.link {
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}

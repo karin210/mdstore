@@ -3,17 +3,20 @@ import {
   checkAuthorHandle,
   checkCategory,
   checkFile,
+  checkKind,
   checkList,
   checkPreviewLineCount,
   checkText,
   checkWorksWith,
   PREVIEW_LINES,
   PROMPT_POST_FIELDS,
+  type PromptKind,
   type PromptPostField,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
 
 export interface PromptPostValues {
+  kind: PromptKind;
   title: string;
   tagline: string;
   summary: string;
@@ -28,6 +31,7 @@ export interface PromptPostValues {
 }
 
 const EMPTY_POST: PromptPostValues = {
+  kind: "prompt",
   title: "",
   tagline: "",
   summary: "",
@@ -50,6 +54,8 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
   protected getFieldIssue(field: PromptPostField): ValidationIssue | null {
     const values = this.values;
     switch (field) {
+      case "kind":
+        return checkKind(values.kind);
       case "title":
       case "tagline":
       case "summary":
@@ -72,10 +78,10 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
   }
 
   /** The values as the multipart body the create action reads (the file travels as a File). */
-  toFormData(locale: string): FormData {
+  toFormData(): FormData {
     const formData = new FormData();
     const values = this.values;
-    formData.set("locale", locale);
+    formData.set("kind", values.kind);
     formData.set("title", values.title);
     formData.set("tagline", values.tagline);
     formData.set("summary", values.summary);
