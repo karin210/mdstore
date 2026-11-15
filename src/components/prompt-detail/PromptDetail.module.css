@@ -335,8 +335,10 @@
   font-weight: 700;
 }
 
-.steps code {
+.steps code,
+.note code {
   padding: 0.1em 0.35em;
+  overflow-wrap: anywhere;
   border-radius: var(--radius-sm);
   background: var(--color-secondary);
   color: var(--color-on-secondary);
