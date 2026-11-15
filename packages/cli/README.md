@@ -78,7 +78,7 @@ Cursor rules get a short frontmatter (`description`, `alwaysApply`) so Cursor pi
 
 ## Development
 
-The CLI lives in the mdstore repository as an npm workspace (`packages/cli`). It has no runtime dependencies and needs Node 24.
+The CLI lives in the mdstore repository as an npm workspace (`packages/cli`); how it fits with the site and its API is in `docs/cli.md`. It has no runtime dependencies and needs Node 24.
 
 ```sh
 npm run cli:build   # tsc → packages/cli/dist

@@ -1,6 +1,6 @@
 # CLI and prompts API: what still has to be settled
 
-Status: written 2026-11-14, after the first phase (free prompts only). The CLI (`packages/cli`), the public API (`src/app/api/v1/prompts`) and the prompt `kind` / `version` fields are in place; this lists what must happen, or be decided, before the feature works well for real users. Remove items as they are done.
+Status: written 2026-11-14, after the first phase (free prompts only). How the feature works: `docs/cli.md`. The CLI (`packages/cli`), the public API (`src/app/api/v1/prompts`) and the prompt `kind` / `version` fields are in place; this lists what must happen, or be decided, before the feature works well for real users. Remove items as they are done.
 
 ## Must do before deploying
 
