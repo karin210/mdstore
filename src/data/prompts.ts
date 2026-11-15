@@ -36,7 +36,10 @@ export interface PromptListing {
   category: PromptCategory;
   /** Where the CLI installs the file; see prompt_kinds. */
   kind: PromptKind;
-  /** Bumped by one each time the file changes; the CLI compares it to find updates. Starts at 1. */
+  /**
+   * Starts at 1. Bump it by hand, by one, in the same commit that changes the file in content/prompts/:
+   * the CLI compares it with its lockfile to find updates, so an unbumped change never reaches users.
+   */
   version: number;
   author: string;
   priceUsd: number;
