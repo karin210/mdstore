@@ -16,22 +16,35 @@ The goal of this part of the project is also to learn raw PostgreSQL, so there i
 
 One row per listing posted from `/upload` (a prompt or a skill). It holds the listing copy, the full `.md` in `content` (up to 200 KB) and the free-preview length.
 
-- **Checks mirror the app's validation** (`src/lib/validation/promptPost.ts`): slug and file-name patterns, length ranges, allowed categories, array sizes. They exist because anyone holding the publishable key can call the API directly, so the database must refuse bad rows even when the app is skipped. When a rule changes, change both places.
+- **The database checks the same rules as the app's frontend.** The form validates in `src/lib/validation/promptPost.ts` (slug and file-name patterns, length limits, allowed categories, array sizes). The table repeats those rules as `CHECK` constraints, because anyone with the publishable key can call the API directly and skip the form. When you change a rule, update both the validation file and the migration.
 - `author_id` defaults to `auth.uid()` and cascades on user deletion. `slug` is unique.
 - **Column names are snake_case** because the database owns them; the TypeScript that reads them keeps those spellings (`PostedPromptRow`, `DETAIL_COLUMNS`).
+
+## Indexes
+
+An index is a sorted lookup structure Postgres keeps next to a table, so it can find matching rows without reading every row. Both indexes below are created by migrations on `posted_prompts`; nothing is applied to a database yet (see the status line at the top).
+
+| Index                                  | Columns                | Created by                             | Queries it serves                                                                                                    |
+| -------------------------------------- | ---------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `posted_prompts_author_id_idx`         | `author_id`            | `20261110000000_create_posted_prompts` | lookups by author: the author branch of the select policy, deleting a user's rows, the planned "my submissions" view |
+| `posted_prompts_status_created_at_idx` | `status`, `created_at` | `20261114000000_add_review_workflow`   | the public listing (`status = 'approved'`) and the review queue (`status = 'pending'`, oldest first)                 |
+
+**Why `(status, created_at)` is one composite index:** both queries filter `status` by equality and then sort by `created_at`, so a single index returns the rows already in order. Two separate indexes would force Postgres to combine them or sort afterwards. `status` goes first (equality filter), `created_at` second (ordering only).
+
+**Not measured:** chosen as a cheap, sensible default, not from measurements. With few rows no index is needed yet. A partial index (e.g. `where status = 'pending'`) would be smaller. Once there is real data, check with `EXPLAIN` that Postgres uses it before changing anything.
 
 ## Review workflow
 
 Posts are not public at once. Everything starts as `pending` and an admin decides.
 
-| `status`   | Who can see it                       | How it gets there                      |
+| `status`   | Who can see it                       | How it gets set                        |
 | ---------- | ------------------------------------ | -------------------------------------- |
 | `pending`  | the author and admins                | default on insert                      |
 | `approved` | everyone (appears at `/prompts/...`) | an admin updates the row               |
 | `rejected` | the author and admins                | an admin updates it, ideally with note |
 
 - Extra columns: `kind` (`prompt` or `skill`), `review_note` (max 1000 chars, the reason for a rejection), `reviewed_at`, `reviewed_by`. A trigger (`stamp_review`) fills the last two whenever `status` changes, so nobody has to remember.
-- The index `(status, created_at)` serves both the public listing (`status = 'approved'`) and the review queue (pending, oldest first).
+- The second migration also creates the index `posted_prompts_status_created_at_idx`, which serves the public listing and the review queue. See [Indexes](#indexes).
 - The first migration's rows predate the workflow, so the second one marks them `approved`.
 - Reviewing is done by hand in the dashboard's SQL editor until there is an admin page:
 
@@ -55,7 +68,12 @@ RLS is what makes it safe for the browser to talk to the database with a public 
 Traps:
 
 - Writing `auth.uid()` as `(select auth.uid())` inside policies lets Postgres evaluate it once per query instead of once per row.
-- **Pending and rejected slugs return no row for anonymous readers**, so `/prompts/[slug]` for them 404s unless the reader is the author or an admin. The proxy's "does this slug exist" check and the cached reads in `src/server/prompts/` use the anonymous client, so they only ever see approved rows. Showing an author their own pending post needs a session-aware read that is not cached across users.
+- **Pending and rejected slugs return no row for anonymous readers**, so `/prompts/[slug]` 404s for them unless the reader is the author or an admin. Two layers apply this:
+  - The cached reads in `src/server/prompts/postedPrompts.ts` use the anonymous client, so they only ever see approved rows.
+  - For a slug nobody can see publicly, the proxy asks `postedPromptVisibleToRequest` (a client built from the request's cookies, skipped when there is no Supabase cookie), and the page body falls back to `getPostedPromptForViewer` (uncached, the visitor's session). RLS decides: authors and admins get the page with a "waiting for review" notice, everyone else gets the same 404 as an unknown slug.
+  - `generateMetadata` reads only public prompts, so it never touches the session; a post in review gets a generic `noindex` title.
+  - `/prompts/[slug]/download` still uses the public read only, so pending files are not downloadable (not even by their author or an admin).
+  - If the proxy's lookup fails (for example an expired session token, since the proxy checks before it refreshes the session), it lets the request through and the page decides, so such a visitor may see the 404 page with a 200 status instead of a real 404.
 - Anything cached with `cacheTag` must never hold a pending row, or it leaks to everyone.
 
 ## Admins
@@ -70,8 +88,6 @@ Traps:
 
 ## Pending work
 
-- Create the hosted project, `supabase login`, `supabase link`, `npm run db:push`, add the first admin.
-- Change the app for the workflow: the upload action and form say "submitted for review" instead of redirecting to a live page, the form and Zod schema gain `kind`, authors get a "my submissions" view, and the reads in `src/server/prompts/` are checked against the new policies.
 - Wire `npm run db:types` output into the Supabase clients so queries are type-checked.
 - Decide how app queries are written: Postgres functions called with `supabase.rpc()`, or a direct driver (`postgres` / `pg`) with hand-written SQL. A direct driver bypasses RLS, so authorization would move into the queries.
 - RLS tests with pgTAP (`supabase test db`, needs the local stack) before real users post.

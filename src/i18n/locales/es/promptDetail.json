@@ -55,6 +55,10 @@
       "notFound": "Este prompt no existe.",
       "purchaseRequired": "Hay que comprar este prompt antes de poder descargarlo.",
       "serverError": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento."
+    },
+    "reviewNotice": {
+      "pending": "Esta publicación está esperando revisión. Solo tú y los administradores pueden ver esta página hasta que se apruebe.",
+      "rejected": "Esta publicación no fue aprobada. Solo tú y los administradores pueden ver esta página."
     }
   }
 }

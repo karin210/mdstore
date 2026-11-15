@@ -108,9 +108,10 @@ src/
 │                            session refresh, auth/ (actions, getSignedInUser),
 │                            prompts/ (post action, cached posted-prompt reads, view resolver)
 ├─ styles/globals.css        :root tokens, reset, typography, shared form + modal classes
-└─ proxy.ts                  rewrites unknown /prompts/[slug] (neither catalogue nor posted) to
-                             the 404 page for a real 404 status, runs next-intl, and refreshes
-                             the Supabase session cookies on every request
+└─ proxy.ts                  rewrites unknown /prompts/[slug] (not in the catalogue, not an
+                             approved post, and not a pending post of the signed-in author or an
+                             admin) to the 404 page for a real 404 status, runs next-intl, and
+                             refreshes the Supabase session cookies on every request
 content/prompts/             the full .md files of the curated catalogue (keep excerpt/lineCount
                              in src/data/prompts.ts in sync)
 supabase/migrations/         SQL for the posted_prompts table, its checks and RLS policies

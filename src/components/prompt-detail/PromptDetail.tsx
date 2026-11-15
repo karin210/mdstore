@@ -43,6 +43,12 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
         </ol>
       </nav>
 
+      {prompt.reviewStatus && (
+        <p className={styles.reviewNotice} data-status={prompt.reviewStatus} role="status">
+          {t(`reviewNotice.${prompt.reviewStatus}`)}
+        </p>
+      )}
+
       <article className={styles.layout} aria-labelledby="prompt-title">
         <header className={styles.header}>
           <p className={styles.top}>

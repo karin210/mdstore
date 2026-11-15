@@ -3,14 +3,22 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { findPromptBySlug } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
-import { postedPromptExists } from "@/server/prompts/postedPromptExists";
+import { postedPromptExists, postedPromptVisibleToRequest } from "@/server/prompts/postedPromptExists";
 import { refreshSupabaseSession } from "@/server/supabase/refreshSession";
 
 const handleLocale = createMiddleware(routing);
 
-/** Whether /prompts/[slug] has something to show: a catalogue listing or a posted prompt. */
-async function promptExists(slug: string): Promise<boolean> {
-  return Boolean(findPromptBySlug(slug)) || (await postedPromptExists(slug));
+/**
+ * Whether /prompts/[slug] has something to show this visitor: a catalogue listing, a public posted
+ * prompt, or (for its author or an admin) a post still in review. Checked in that order, so the
+ * session lookup only runs for slugs nobody can see publicly.
+ */
+async function promptExists(slug: string, request: NextRequest): Promise<boolean> {
+  return (
+    Boolean(findPromptBySlug(slug)) ||
+    (await postedPromptExists(slug)) ||
+    (await postedPromptVisibleToRequest(slug, request))
+  );
 }
 
 /**
@@ -32,7 +40,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     section === "prompts" &&
     slug !== undefined &&
     more.length === 0 &&
-    !(await promptExists(decodeURIComponent(slug)))
+    !(await promptExists(decodeURIComponent(slug), request))
   ) {
     // Only the [...rest] catch-all matches this internal path, so the not-found page renders with a 404.
     return NextResponse.rewrite(new URL(`/${locale}/_unknown-prompt`, request.url));

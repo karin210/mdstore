@@ -55,6 +55,10 @@
       "notFound": "This prompt doesn't exist.",
       "purchaseRequired": "This prompt has to be purchased before it can be downloaded.",
       "serverError": "Something went wrong on our side. Please try again in a moment."
+    },
+    "reviewNotice": {
+      "pending": "This post is waiting for review. Only you and the admins can see this page until it is approved.",
+      "rejected": "This post was not approved. Only you and the admins can see this page."
     }
   }
 }

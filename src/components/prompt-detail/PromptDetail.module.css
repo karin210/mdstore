@@ -406,3 +406,22 @@
   max-height: min(75dvh, 50rem);
   overflow-y: auto;
 }
+
+/* Shown only to the author or an admin while a post is not public: pending or rejected. */
+.reviewNotice {
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-inline-start-width: 0.25rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+}
+
+.reviewNotice[data-status="pending"] {
+  border-inline-start-color: var(--color-primary);
+}
+
+.reviewNotice[data-status="rejected"] {
+  border-inline-start-color: var(--color-error);
+}

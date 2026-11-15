@@ -29,7 +29,7 @@ export interface PostedPromptRow {
   preview_line_count: number;
 }
 
-const DETAIL_COLUMNS =
+export const DETAIL_COLUMNS =
   "slug, file_name, author_handle, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, content, preview_line_count";
 
 /** Lines of a file the way an editor counts them (a final newline doesn't add one). */
@@ -37,7 +37,7 @@ export function splitFileLines(content: string): string[] {
   return content.replace(/\r\n/g, "\n").replace(/\n$/, "").split("\n");
 }
 
-function toPromptView(row: PostedPromptRow): PromptView {
+export function toPromptView(row: PostedPromptRow): PromptView {
   const lines = splitFileLines(row.content);
 
   return {

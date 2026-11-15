@@ -5,7 +5,7 @@ import { PromptDetail } from "@/components/prompt-detail/PromptDetail";
 import { PromptDetailSkeleton } from "@/components/prompt-detail/PromptDetailSkeleton";
 import { featuredPrompts } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
-import { getPromptOrNotFound } from "@/lib/getPromptOrNotFound";
+import { getPromptView } from "@/server/prompts/getPromptView";
 import styles from "./page.module.css";
 
 /**
@@ -16,8 +16,18 @@ export function generateStaticParams(): { locale: string; slug: string }[] {
   return routing.locales.flatMap((locale) => featuredPrompts.map((prompt) => ({ locale, slug: prompt.slug })));
 }
 
+/**
+ * Metadata only reads public prompts, so it never touches the visitor's session. A post still in
+ * review (visible only to its author or an admin, through the page body) gets a generic title and
+ * stays out of search results; the page itself renders or 404s on its own.
+ */
 export async function generateMetadata({ params }: PageProps<"/[locale]/prompts/[slug]">): Promise<Metadata> {
-  const prompt = await getPromptOrNotFound(params);
+  const { slug } = await params;
+  const prompt = await getPromptView(slug);
+  if (!prompt) {
+    const tBreadcrumb = await getTranslations("promptDetail.breadcrumb");
+    return { title: tBreadcrumb("prompts"), robots: { index: false, follow: false } };
+  }
   const tDetail = await getTranslations("promptDetail.meta");
 
   return {

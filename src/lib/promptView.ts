@@ -14,4 +14,9 @@ export interface PromptView extends Omit<PromptListing, "slug"> {
   usageSteps: string[];
   /** The whole file, for free prompts only; null for paid ones so it never reaches the page. */
   fullMarkdown: string | null;
+  /**
+   * Set only when a posted prompt is shown to its author or an admin before it is public
+   * ("pending" or "rejected"); the page then says so. Never set on a publicly readable prompt.
+   */
+  reviewStatus?: "pending" | "rejected";
 }
