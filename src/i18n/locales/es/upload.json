@@ -196,6 +196,16 @@
       },
       "openReview": "Abrir revisión",
       "view": "Ver página"
+    },
+    "outline": {
+      "file": "upload.md",
+      "sections": {
+        "intro": "Inicio",
+        "benefits": "Qué obtienes",
+        "listingTips": "Consejos para tu ficha",
+        "steps": "Cómo publicar",
+        "postPrompt": "Publica tu prompt"
+      }
     }
   }
 }

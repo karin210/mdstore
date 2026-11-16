@@ -61,7 +61,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
       )}
 
       <article className={styles.layout} aria-labelledby="prompt-title">
-        <header className={styles.header}>
+        <header id="overview" className={styles.header}>
           <p className={styles.top}>
             <code className={styles.fileName}>{prompt.fileName}</code>
             <span className={styles.category}>{category}</span>
@@ -72,14 +72,14 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
           <h2 className={styles.tagline}>{prompt.tagline}</h2>
         </header>
 
-        <section className={styles.summarySection} aria-labelledby="summary-title">
+        <section id="summary" className={styles.summarySection} aria-labelledby="summary-title">
           <h2 id="summary-title" className={styles.sectionTitle}>
             {t("summary")}
           </h2>
           <p className={styles.summary}>{prompt.summary}</p>
         </section>
 
-        <section className={styles.meantForSection} aria-labelledby="meant-for-title">
+        <section id="meant-for" className={styles.meantForSection} aria-labelledby="meant-for-title">
           <h2 id="meant-for-title" className={styles.sectionTitle}>
             {t("meantFor")}
           </h2>
@@ -90,7 +90,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
           </ul>
         </section>
 
-        <section className={styles.highlightsSection} aria-labelledby="highlights-title">
+        <section id="highlights" className={styles.highlightsSection} aria-labelledby="highlights-title">
           <h2 id="highlights-title" className={styles.sectionTitle}>
             {t("highlights")}
           </h2>
@@ -149,7 +149,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
           <TestedModels models={prompt.tested_models} fileName={prompt.fileName} />
         </div>
 
-        <section className={styles.preview} aria-labelledby="preview-title">
+        <section id="preview" className={styles.preview} aria-labelledby="preview-title">
           <header className={styles.previewHeader}>
             <h2 id="preview-title" className={styles.sectionTitle}>
               {t("preview.title")}
@@ -193,7 +193,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
           </div>
         </section>
 
-        <section className={styles.usageSection} aria-labelledby="usage-title">
+        <section id="usage" className={styles.usageSection} aria-labelledby="usage-title">
           <h2 id="usage-title" className={styles.sectionTitle}>
             {t("usage")}
           </h2>

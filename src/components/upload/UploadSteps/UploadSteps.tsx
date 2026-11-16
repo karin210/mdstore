@@ -8,7 +8,7 @@ export function UploadSteps(): ReactElement {
   const t = useTranslations("upload.steps");
 
   return (
-    <section className="page-section" aria-labelledby="upload-steps-title">
+    <section id="steps" className="page-section" aria-labelledby="upload-steps-title">
       <header className="section-heading">
         <p className="eyebrow">{t("eyebrow")}</p>
         <h2 id="upload-steps-title">{t("title")}</h2>

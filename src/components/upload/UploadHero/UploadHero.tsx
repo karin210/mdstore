@@ -7,7 +7,7 @@ export function UploadHero(): ReactElement {
   const t = useTranslations("upload.hero");
 
   return (
-    <section className={styles.hero} aria-labelledby="upload-hero-title">
+    <section id="intro" className={styles.hero} aria-labelledby="upload-hero-title">
       <div className={styles.copy}>
         <p className="eyebrow">{t("eyebrow")}</p>
         <h1 id="upload-hero-title" className={styles.title}>

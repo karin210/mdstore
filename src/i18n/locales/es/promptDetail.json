@@ -66,6 +66,19 @@
       "author": "Eres autor de esta publicación. Propón cambios o lee comentarios anteriores en su revisión.",
       "admin": "Eres administrador. Lee las revisiones de esta publicación o responde la que está en curso.",
       "action": "Abrir la revisión"
+    },
+    "outline": {
+      "file": "prompt.md",
+      "sections": {
+        "overview": "Visión general",
+        "summary": "Resumen",
+        "meantFor": "Pensado para",
+        "highlights": "Puntos clave",
+        "outputExamples": "Ejemplos de resultados",
+        "testedModels": "Modelos probados",
+        "preview": "Vista previa gratis",
+        "usage": "Uso sugerido"
+      }
     }
   }
 }

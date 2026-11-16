@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
+import type { RouteIndexSection } from "@/components/global/RouteIndex/RouteIndex";
+import { RouteIndexLayout } from "@/components/global/RouteIndexLayout/RouteIndexLayout";
 import { PromptDetail } from "@/components/prompt-detail/PromptDetail/PromptDetail";
 import { PromptDetailSkeleton } from "@/components/prompt-detail/PromptDetailSkeleton/PromptDetailSkeleton";
 import { featuredPrompts } from "@/data/prompts";
@@ -39,13 +42,29 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/prompts/
 /**
  * The page itself never awaits `params`: the URL-specific content reads it inside <Suspense>,
  * so the shell shared by every listing can be prefetched and shown instantly on navigation.
+ * The route index belongs to that shell: every listing has the same sections, so it needs no data.
  */
 export default function PromptDetailPage({ params }: PageProps<"/[locale]/prompts/[slug]">): ReactElement {
+  const t = useTranslations("promptDetail.outline");
+  // The ids are the ones on the blocks in PromptDetail, OutputExamples and TestedModels, in reading order.
+  const sections: RouteIndexSection[] = [
+    { id: "overview", level: 1, label: t("sections.overview") },
+    { id: "summary", level: 2, label: t("sections.summary") },
+    { id: "meant-for", level: 2, label: t("sections.meantFor") },
+    { id: "highlights", level: 2, label: t("sections.highlights") },
+    { id: "output-examples", level: 2, label: t("sections.outputExamples") },
+    { id: "tested-models", level: 2, label: t("sections.testedModels") },
+    { id: "preview", level: 2, label: t("sections.preview") },
+    { id: "usage", level: 2, label: t("sections.usage") },
+  ];
+
   return (
-    <main className={styles.main}>
-      <Suspense fallback={<PromptDetailSkeleton />}>
-        <PromptDetail params={params} />
-      </Suspense>
-    </main>
+    <RouteIndexLayout sections={sections} file_name={t("file")} content_class_name={styles.content}>
+      <div className={styles.body}>
+        <Suspense fallback={<PromptDetailSkeleton />}>
+          <PromptDetail params={params} />
+        </Suspense>
+      </div>
+    </RouteIndexLayout>
   );
 }

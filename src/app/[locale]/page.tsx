@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
+import { RouteIndexLayout } from "@/components/global/RouteIndexLayout/RouteIndexLayout";
 import { Faq } from "@/components/homepage/Faq/Faq";
 import { FeaturedPrompts } from "@/components/homepage/FeaturedPrompts/FeaturedPrompts";
 import { Hero } from "@/components/homepage/Hero/Hero";
-import { HomeOutlineRail, HomeStatusBar } from "@/components/homepage/HomeOutline/HomeOutline";
+import { homeSections } from "@/components/homepage/homeSections/homeSections";
 import { HowItWorks } from "@/components/homepage/HowItWorks/HowItWorks";
 import { UploadCta } from "@/components/homepage/UploadCta/UploadCta";
 import { WhyMarkdown } from "@/components/homepage/WhyMarkdown/WhyMarkdown";
@@ -18,20 +20,23 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: { absolute: `${siteConfig.name}${siteConfig.titleSeparator}${t("title")}` } };
 }
 
-/** Sections follow `homeSections` (the outline's order); each ends with a "Next" link to the following one. */
+/** Sections follow `homeSections`, the order of the route's index. */
 export default function HomePage(): ReactElement {
+  const t = useTranslations("home.outline");
+  const sections = homeSections.map((section) => ({
+    id: section.id,
+    level: section.level,
+    label: t(`sections.${section.key}`),
+  }));
+
   return (
-    <main className={styles.main}>
-      <HomeOutlineRail />
-      <div className={styles.content}>
-        <Hero />
-        <FeaturedPrompts />
-        <HowItWorks />
-        <WhyMarkdown />
-        <UploadCta />
-        <Faq />
-        <HomeStatusBar />
-      </div>
-    </main>
+    <RouteIndexLayout sections={sections} file_name={t("file")} content_class_name={styles.content}>
+      <Hero />
+      <FeaturedPrompts />
+      <HowItWorks />
+      <WhyMarkdown />
+      <UploadCta />
+      <Faq />
+    </RouteIndexLayout>
   );
 }

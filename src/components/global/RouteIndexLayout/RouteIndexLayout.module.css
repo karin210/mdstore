@@ -1,0 +1,21 @@
+/*
+  The index rail and the content share a single grid row: the content spans the full width, and the
+  rail sits in its own column on the left (see RouteIndex.module.css), as tall as the page.
+*/
+.main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: var(--gutter) var(--rail-width) 1fr;
+}
+
+.content {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+/* Wide screens: narrow the content so the rail has its own space on the left (and balance on the right). */
+@media (min-width: 80rem) {
+  .main {
+    --content-width: min(62rem, 100% - 2 * (var(--gutter) + var(--rail-width) + var(--space-lg)));
+  }
+}

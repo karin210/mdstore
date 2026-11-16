@@ -65,7 +65,7 @@
   }
 }
 
-.inner {
+.content {
   width: var(--content-width);
   margin-inline: auto;
   display: grid;
@@ -76,7 +76,7 @@
 
 /* Two columns from here on, weighted toward the copy, which holds the title and both calls to action. */
 @media (min-width: 64rem) {
-  .inner {
+  .content {
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   }
 }

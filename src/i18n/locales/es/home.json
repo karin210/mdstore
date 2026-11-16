@@ -120,13 +120,7 @@
       }
     },
     "outline": {
-      "label": "En esta página",
       "file": "home.md",
-      "reading": "Leyendo:",
-      "open": "Índice",
-      "close": "Cerrar el índice",
-      "next": "Siguiente",
-      "finalNext": "Sube tus prompts",
       "sections": {
         "intro": "Inicio",
         "featured": "Prompts destacados",

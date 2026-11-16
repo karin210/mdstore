@@ -1,9 +1,15 @@
-.main {
-  flex: 1;
+/* The content column spans the page (so the index's status bar is full width); `.body` holds the listing. */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-block: var(--space-lg) var(--space-2xl);
+}
+
+.body {
   width: var(--content-width);
   margin-inline: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  padding-block: var(--space-lg) var(--space-2xl);
 }

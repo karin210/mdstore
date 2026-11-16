@@ -23,6 +23,12 @@
     "prompt": "¿Quieres cambiar el idioma?",
     "close": "Cerrar el aviso de idioma"
   },
+  "routeIndex": {
+    "label": "En esta página",
+    "reading": "Leyendo:",
+    "open": "Índice",
+    "close": "Cerrar el índice"
+  },
   "nav": {
     "main": "Principal",
     "footer": "Pie de página",

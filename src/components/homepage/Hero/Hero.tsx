@@ -3,7 +3,6 @@ import type { CSSProperties, ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
 import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
 import { MarkdownField } from "@/components/homepage/MarkdownField/MarkdownField";
-import { NextSection } from "@/components/homepage/NextSection/NextSection";
 import styles from "./Hero.module.css";
 
 const highlightKeys = ["noLockIn", "freePreview", "anyTool"] as const;
@@ -47,7 +46,7 @@ export function Hero(): ReactElement {
         <div className={styles.scrim} />
       </div>
 
-      <div className={styles.inner}>
+      <div className={styles.content}>
         <div className={styles.copy}>
           <p className="eyebrow">{t("eyebrow")}</p>
           <h1 id="hero-title" className={styles.title}>
@@ -98,8 +97,6 @@ export function Hero(): ReactElement {
           </figure>
         </div>
       </div>
-
-      <NextSection from="intro" />
     </section>
   );
 }

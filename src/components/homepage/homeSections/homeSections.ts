@@ -20,9 +20,3 @@ export const homeSections: HomeSection[] = [
   { id: "upload", key: "upload", level: 2 },
   { id: "faq", key: "faq", level: 2 },
 ];
-
-/** The section after `id`, or null after the last one. */
-export function getNextSection(id: string): HomeSection | null {
-  const index = homeSections.findIndex((section) => section.id === id);
-  return homeSections[index + 1] ?? null;
-}

@@ -66,6 +66,19 @@
       "author": "You’re an author of this post. Propose changes or read past feedback in its review.",
       "admin": "You’re an admin. Read this post’s reviews or answer one in progress.",
       "action": "Open the review"
+    },
+    "outline": {
+      "file": "prompt.md",
+      "sections": {
+        "overview": "Overview",
+        "summary": "Summary",
+        "meantFor": "Meant for",
+        "highlights": "Highlights",
+        "outputExamples": "Output examples",
+        "testedModels": "Tested models",
+        "preview": "Free preview",
+        "usage": "Suggested use"
+      }
     }
   }
 }

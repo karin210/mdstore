@@ -35,7 +35,7 @@ export function TestedModels({ models, fileName }: TestedModelsProps): ReactElem
     .filter((group) => group.models.length > 0);
 
   return (
-    <section className={styles.section} aria-labelledby="models-title">
+    <section id="tested-models" className={styles.section} aria-labelledby="models-title">
       <header className={styles.header}>
         <h2 id="models-title" className={styles.title}>
           {t("title")}

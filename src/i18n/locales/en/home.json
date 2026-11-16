@@ -120,13 +120,7 @@
       }
     },
     "outline": {
-      "label": "On this page",
       "file": "home.md",
-      "reading": "Reading:",
-      "open": "Outline",
-      "close": "Close the outline",
-      "next": "Next",
-      "finalNext": "Upload your prompts",
       "sections": {
         "intro": "Intro",
         "featured": "Featured prompts",

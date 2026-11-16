@@ -196,6 +196,16 @@
       },
       "openReview": "Open review",
       "view": "View page"
+    },
+    "outline": {
+      "file": "upload.md",
+      "sections": {
+        "intro": "Intro",
+        "benefits": "What you get",
+        "listingTips": "Listing tips",
+        "steps": "How posting works",
+        "postPrompt": "Post your prompt"
+      }
     }
   }
 }

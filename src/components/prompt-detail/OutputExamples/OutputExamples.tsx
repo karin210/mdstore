@@ -18,7 +18,7 @@ export function OutputExamples({ examples, fileName }: OutputExamplesProps): Rea
   const hasExamples = examples.length > 0;
 
   return (
-    <section className={styles.section} aria-labelledby="examples-title">
+    <section id="output-examples" className={styles.section} aria-labelledby="examples-title">
       <header className={styles.header}>
         <h2 id="examples-title" className={styles.title}>
           {t("title")}

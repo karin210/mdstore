@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { NextSection } from "@/components/homepage/NextSection/NextSection";
 import styles from "./WhyMarkdown.module.css";
 
 const reasonKeys = ["readable", "adaptable", "toolAgnostic", "versioned"] as const;
@@ -23,7 +22,6 @@ export function WhyMarkdown(): ReactElement {
           </li>
         ))}
       </ul>
-      <NextSection from="why-markdown" />
     </section>
   );
 }
