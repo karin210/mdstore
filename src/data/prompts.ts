@@ -80,42 +80,13 @@ export function downloadHref(prompt: { slug: string }): string {
  */
 export const featuredPrompts: PromptListing[] = [
   {
-    slug: "global",
-    fileName: "global.md",
-    category: "conventions",
-    kind: "prompt",
-    version: 1,
-    author: "@mdstore",
-    priceUsd: 0,
-    lineCount: 281,
-    context_tokens: 8100,
-    worksWith: ["Claude Code"],
-    tested_models: build_tested_models(
-      ["claude-opus-5-5", "gpt-5-1"],
-      ["claude-sonnet-5-5", "claude-haiku-5-5", "gemini-3-pro"],
-    ),
-    excerpt: `# Web project conventions
-
-Baseline conventions for any website or web app, whatever the framework. Apply them to every file you create or change.
-
-- **The codebase wins.** If the project already follows a different convention, keep it, don't mix the two, and mention the difference.
-- **Readability wins.** If a rule here makes the code more complex than the problem needs, choose the simplest readable solution.
-- **Write in the project's language.** UI copy, error messages and route names use the site's language.
-- **Re-read this file in long sessions.** If the conversation has been compacted or summarised, or you've been working for a long stretch, re-read this file before the next change and check your work against it.
-
-## 1. Principles
-
-- **Simplest readable implementation first.** Only trade readability for performance when the difference is significant and measurable.`,
-    outputExamples: [],
-  },
-  {
     slug: "nextjs-structure",
     fileName: "nextjs-structure.md",
     category: "conventions",
     kind: "prompt",
     version: 1,
     author: "@mdstore",
-    priceUsd: 5,
+    priceUsd: 0,
     lineCount: 136,
     context_tokens: 2350,
     worksWith: ["Claude Code"],

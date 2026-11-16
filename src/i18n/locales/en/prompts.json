@@ -17,30 +17,6 @@
     "lineCount": "{count, plural, one {# line} other {# lines}}",
     "downloadFile": "Download {fileName}",
     "listings": {
-      "global": {
-        "title": "Web project conventions",
-        "tagline": "Give your agent the habits of a careful senior web developer, from the first commit.",
-        "summary": "Starting instructions for any website or web app: semantic HTML, WCAG 2.1 AA, a colour system with a clear visual hierarchy, tokenized fluid CSS, readable naming, navigation, forms, loading states, AI discoverability and secure server defaults.",
-        "highlights": [
-          "Semantic HTML and WCAG 2.1 AA accessibility on every component",
-          "A colour system that sets visual hierarchy: brand, accent, elevation and traffic-light status colours",
-          "Colours, font sizes and every spacing value as :root tokens, with layouts arranged by the parent",
-          "Names a developer understands at first sight, by value, state and goal",
-          "Navigation where users always know where they are and what comes next",
-          "Forms with inline, as-you-type guidance, and sign-in/sign-up tabs that accept browser-suggested passwords",
-          "AI discoverability: server-rendered content, a generated llms.txt, crawler rules and JSON-LD",
-          "Skeletons, empty and error states for every async operation",
-          "Server-side validation, authorization and correct HTTP status codes, with no leaked internals",
-          "Branded 404, safe redirects and unique page titles"
-        ],
-        "meantFor": ["Websites and web apps", "Any framework or stack", "New projects", "Existing codebases"],
-        "usageSteps": [
-          "Download `global.md`. It's free.",
-          "Save it in your project's root, then add the line `@global.md` to your `CLAUDE.md` so Claude Code loads it in every session. With no `CLAUDE.md` yet, rename the file to `CLAUDE.md` instead.",
-          "Work as usual. The agent applies the conventions to every file it creates or changes, and follows your codebase where it already does things differently.",
-          "Add a framework-specific file, such as `nextjs-structure.md`, on top of it for project structure."
-        ]
-      },
       "nextjs-structure": {
         "title": "Next.js project structure",
         "tagline": "Stop asking where the file goes. Your agent already knows.",
@@ -56,7 +32,7 @@
         ],
         "meantFor": ["Next.js App Router", "TypeScript projects", "New projects", "Existing codebases"],
         "usageSteps": [
-          "Buy and download `nextjs-structure.md`.",
+          "Download `nextjs-structure.md`. It's free.",
           "Save it in your project's root, then add the line `@nextjs-structure.md` to your `CLAUDE.md` so Claude Code loads it in every session.",
           "On a new project, ask the agent to scaffold it following the file. On an existing one, it keeps your current structure where it differs and tells you about the difference.",
           "Let the agent keep the structure section of your `CLAUDE.md` current as it adds routes and folders."

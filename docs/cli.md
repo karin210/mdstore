@@ -43,7 +43,7 @@ Four parts, each in its own place:
 | `version` | Integer from 1                        | Catalogue: by hand in `prompts.ts`. Posts: always 1 for now.                        | Lets `outdated` and `update` spot newer files.   |
 | `sha256`  | Hex SHA-256 of the file's UTF-8 bytes | Computed by the API on each request, never stored.                                  | Lets the CLI verify a download and detect edits. |
 
-- **prompt:** text a developer copies or downloads and uses in a session (every catalogue file today, including `global.md` and `dev-tools-advisor.md`). The CLI doesn't install it.
+- **prompt:** text a developer copies or downloads and uses in a session (every catalogue file today, including `nextjs-structure.md` and `dev-tools-advisor.md`). The CLI doesn't install it.
 - **skill:** a file the agent loads on its own when a task matches it; the CLI writes it to the agent's skills folder. A skill is one `SKILL.md` for now; one that carries more files (a folder) is not supported yet (see `docs/cli-pending.md`).
 - **agent:** a subagent definition: a separate worker with its own context, handed tasks by the main agent; the CLI writes it to the agent's agents folder.
 

@@ -17,35 +17,6 @@
     "lineCount": "{count, plural, one {# línea} other {# líneas}}",
     "downloadFile": "Descargar {fileName}",
     "listings": {
-      "global": {
-        "title": "Convenciones para proyectos web",
-        "tagline": "Dale a tu agente los hábitos de un desarrollador web senior cuidadoso, desde el primer commit.",
-        "summary": "Instrucciones iniciales para cualquier sitio o aplicación web: HTML semántico, WCAG 2.1 AA, un sistema de color con jerarquía visual clara, CSS fluido con tokens, nombres legibles, navegación, formularios, estados de carga, visibilidad ante la IA y valores seguros por defecto en el servidor.",
-        "highlights": [
-          "HTML semántico y accesibilidad WCAG 2.1 AA en cada componente",
-          "Un sistema de color que marca la jerarquía visual: marca, acento, elevación y colores de estado tipo semáforo",
-          "Colores, tamaños de fuente y cada espaciado como tokens en :root, con el layout definido por el contenedor",
-          "Nombres que se entienden a primera vista, según su valor, su estado y su objetivo",
-          "Navegación en la que el usuario siempre sabe dónde está y qué viene después",
-          "Formularios con indicaciones en línea mientras escribes y pestañas de registro e inicio de sesión que aceptan las contraseñas sugeridas por el navegador",
-          "Visibilidad ante la IA: contenido renderizado en el servidor, llms.txt generado, reglas para crawlers y JSON-LD",
-          "Skeletons, estados vacíos y de error para cada operación asíncrona",
-          "Validación y autorización en el servidor y códigos de estado HTTP correctos, sin filtrar detalles internos",
-          "Página 404 con la marca del sitio, redirecciones seguras y títulos de página únicos"
-        ],
-        "meantFor": [
-          "Sitios y aplicaciones web",
-          "Cualquier framework o stack",
-          "Proyectos nuevos",
-          "Proyectos existentes"
-        ],
-        "usageSteps": [
-          "Descarga `global.md`. Es gratis.",
-          "Guárdalo en la raíz de tu proyecto y agrega la línea `@global.md` a tu `CLAUDE.md` para que Claude Code lo cargue en cada sesión. Si aún no tienes un `CLAUDE.md`, cambia el nombre del archivo a `CLAUDE.md`.",
-          "Trabaja como siempre. El agente aplica las convenciones a cada archivo que crea o modifica, y respeta tu código donde ya hace las cosas de otra forma.",
-          "Agrega encima un archivo específico de tu framework, como `nextjs-structure.md`, para la estructura del proyecto."
-        ]
-      },
       "nextjs-structure": {
         "title": "Estructura de proyectos Next.js",
         "tagline": "Deja de preguntar dónde va cada archivo. Tu agente ya lo sabe.",
@@ -61,7 +32,7 @@
         ],
         "meantFor": ["Next.js App Router", "Proyectos con TypeScript", "Proyectos nuevos", "Proyectos existentes"],
         "usageSteps": [
-          "Compra y descarga `nextjs-structure.md`.",
+          "Descarga `nextjs-structure.md`. Es gratis.",
           "Guárdalo en la raíz de tu proyecto y agrega la línea `@nextjs-structure.md` a tu `CLAUDE.md` para que Claude Code lo cargue en cada sesión.",
           "En un proyecto nuevo, pide al agente que lo genere siguiendo el archivo. En uno existente, conserva tu estructura actual donde sea distinta y te avisa de la diferencia.",
           "Deja que el agente mantenga al día la sección de estructura de tu `CLAUDE.md` a medida que agrega rutas y carpetas."
