@@ -6,8 +6,6 @@ import { MarkdownField } from "@/components/homepage/MarkdownField/MarkdownField
 import { hero_file_lines, type HeroFileSegment } from "@/data/heroEditorLines";
 import styles from "./Hero.module.css";
 
-const highlightKeys = ["noLockIn", "freePreview", "anyTool"] as const;
-
 export function Hero(): ReactElement {
   const t = useTranslations("home.hero");
 
@@ -36,11 +34,6 @@ export function Hero(): ReactElement {
               {t("upload")}
             </SecondaryButton>
           </div>
-          <ul className={styles.highlights}>
-            {highlightKeys.map((key) => (
-              <li key={key}>{t(`highlights.${key}`)}</li>
-            ))}
-          </ul>
         </div>
 
         <div className={styles.stage}>
