@@ -143,41 +143,41 @@
    ========================================================================== */
 
 :root {
-  /* Semantic roles. The brand colour is #087EA4 (a deep cyan-blue, hue ~195°); every other token is
+  /* Semantic roles. The brand colour is #31606B (a deep, muted teal, hue ~191°); every other token is
      derived from it: tinted neutrals on the same hue, its complement (burnt orange) for the tertiary. */
-  --color-background: #f3f8fa; /* cyan-tinted off-white body background */
-  --color-primary: #087ea4; /* brand cyan-blue: fills (header, CTAs, active states), borders, glows */
-  --color-primary-hover: #066a8a;
-  --color-primary-text: #066a8a; /* the primary as text on light surfaces (#087ea4 is 4.3:1 there) */
-  --color-on-primary: #ffffff; /* 4.6:1 on the primary */
-  --color-secondary: #e1f1f7; /* pale sky surfaces: cards, sections, helper buttons */
-  --color-secondary-hover: #cde7f1;
-  --color-on-secondary: #0a4458;
+  --color-background: #f4f8f8; /* teal-tinted off-white body background */
+  --color-primary: #31606b; /* brand deep teal: fills (header, CTAs, active states), borders, glows; 6.5:1 as text */
+  --color-primary-hover: #264b54;
+  --color-primary-text: #31606b; /* the primary as text (AA on background, surface and secondary) */
+  --color-on-primary: #ffffff; /* 7:1 on the primary */
+  --color-secondary: #e2eef0; /* pale teal surfaces: cards, sections, helper buttons */
+  --color-secondary-hover: #d0e3e6;
+  --color-on-secondary: #1d3f47;
   --color-tertiary: #c2410c; /* burnt orange (the primary's complement): warnings, helper tools, toasts */
   --color-on-tertiary: #ffffff;
 
   /* Site chrome: the header and footer bands */
-  --color-chrome: #087ea4; /* the brand colour in light mode, a deep teal band in dark mode */
+  --color-chrome: #31606b; /* the brand colour in light mode, a deep teal band in dark mode */
   --color-on-chrome: #ffffff;
   --color-chrome-accent: #ffffff; /* the logo tile on the chrome */
 
   /* Neutrals (brand-tinted) */
-  --color-ink: #0b1c24;
-  --color-ink-muted: #475f6b;
+  --color-ink: #0e1f23;
+  --color-ink-muted: #4a6168;
   --color-surface: #ffffff; /* elevated cards on the off-white background */
-  --color-border: #cfdfe6; /* decorative dividers and card outlines */
-  --color-border-strong: #6f8b98; /* form control outlines: 3:1 against their fill */
-  --color-code-bg: #0a1f29;
-  --color-code-ink: #dceef4;
-  --color-code-muted: #8eabb8;
-  --color-code-accent: #5ccbe6; /* headings in code previews: the brand hue, lit for the dark editor */
-  --color-focus: #087ea4;
-  --color-scrim: rgb(11 28 36 / 0.6);
+  --color-border: #d1dfe2; /* decorative dividers and card outlines */
+  --color-border-strong: #6e888e; /* form control outlines: 3:1 against their fill */
+  --color-code-bg: #0d2025;
+  --color-code-ink: #dcebee;
+  --color-code-muted: #8ea8ae;
+  --color-code-accent: #8ccbd8; /* headings in code previews: the brand hue, lit for the dark editor */
+  --color-focus: #31606b;
+  --color-scrim: rgb(14 31 35 / 0.6);
 
   /* Status (traffic light): small elements only, always paired with text or an icon */
   --color-error: #b42318; /* AA as text on surface and background */
   --color-brand-green-strong: #15803d; /* success / valid, AA as text */
-  --color-input-bg: #f8fbfc; /* inputs sit slightly recessed on the white surface */
+  --color-input-bg: #f8fbfb; /* inputs sit slightly recessed on the white surface */
 
   /* Typography (font families are injected by next/font in the root layout) */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
@@ -215,38 +215,38 @@
   --radius-lg: 1.375rem;
   --radius-pill: 999rem;
   --icon-button-size: 2.25rem;
-  --shadow-card: 0 0.0625rem 0.125rem rgb(11 28 36 / 0.06), 0 0.5rem 1.5rem rgb(11 28 36 / 0.07);
+  --shadow-card: 0 0.0625rem 0.125rem rgb(14 31 35 / 0.06), 0 0.5rem 1.5rem rgb(14 31 35 / 0.07);
   --transition-fast: 160ms ease;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #0a161c;
-    --color-primary: #4fc3e3; /* the brand hue, lifted to stay bright on the dark background */
-    --color-primary-hover: #7ad3eb;
-    --color-primary-text: #4fc3e3;
-    --color-on-primary: #04161d;
-    --color-secondary: #11303c;
-    --color-secondary-hover: #173d4c;
-    --color-on-secondary: #d2eef7;
+    --color-background: #0b1719;
+    --color-primary: #7db9c5; /* the brand hue, lifted to stay bright on the dark background */
+    --color-primary-hover: #a3d0d9;
+    --color-primary-text: #7db9c5;
+    --color-on-primary: #0a1b1f;
+    --color-secondary: #143036;
+    --color-secondary-hover: #1b3d44;
+    --color-on-secondary: #d3e9ed;
     --color-tertiary: #ff9466;
     --color-on-tertiary: #2a0d02;
 
-    --color-chrome: #0d2a35;
-    --color-on-chrome: #e4f0f4;
-    --color-chrome-accent: #4fc3e3;
+    --color-chrome: #112a30;
+    --color-on-chrome: #e3eff1;
+    --color-chrome-accent: #7db9c5;
 
-    --color-ink: #e4f0f4;
-    --color-ink-muted: #9db5c0;
-    --color-surface: #10222b;
-    --color-border: #24414e;
-    --color-border-strong: #5f7d8a;
-    --color-code-bg: #061117;
-    --color-focus: #7ad3eb;
+    --color-ink: #e3eff1;
+    --color-ink-muted: #9fb7bc;
+    --color-surface: #102428;
+    --color-border: #25434a;
+    --color-border-strong: #5f7d84;
+    --color-code-bg: #071316;
+    --color-focus: #a3d0d9;
     --color-scrim: rgb(2 8 11 / 0.72);
     --color-error: #ff9b8f;
     --color-brand-green-strong: #5ee08f;
-    --color-input-bg: #0c1b22;
+    --color-input-bg: #0c1c20;
     --shadow-card: 0 0.0625rem 0.125rem rgb(0 0 0 / 0.3), 0 0.5rem 1.5rem rgb(0 0 0 / 0.25);
   }
 }
