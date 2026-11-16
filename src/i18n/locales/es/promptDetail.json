@@ -57,8 +57,15 @@
       "serverError": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento."
     },
     "reviewNotice": {
-      "pending": "Esta publicación está esperando revisión. Solo tú y los administradores pueden ver esta página hasta que se apruebe.",
-      "rejected": "Esta publicación no fue aprobada. Solo tú y los administradores pueden ver esta página."
+      "pending": "Esta publicación está esperando revisión. Solo sus autores y los administradores pueden ver esta página hasta que se apruebe.",
+      "rejected": "Esta publicación no fue aprobada. Solo sus autores y los administradores pueden ver esta página.",
+      "withdrawn": "Esta publicación fue retirada. Solo sus autores y los administradores pueden ver esta página.",
+      "openReview": "Abrir la revisión"
+    },
+    "authorBar": {
+      "author": "Eres autor de esta publicación. Propón cambios o lee comentarios anteriores en su revisión.",
+      "admin": "Eres administrador. Lee las revisiones de esta publicación o responde la que está en curso.",
+      "action": "Abrir la revisión"
     }
   }
 }

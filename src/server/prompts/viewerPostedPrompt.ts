@@ -4,7 +4,7 @@ import { DETAIL_COLUMNS, toPromptView, type PostedPromptRow } from "@/server/pro
 import { POSTED_PROMPTS_TABLE, SLUG_PATTERN } from "@/server/prompts/postedPromptsTable";
 import { createServerSupabase } from "@/server/supabase/serverClient";
 
-type ViewerRow = PostedPromptRow & { status: "pending" | "approved" | "rejected" };
+type ViewerRow = PostedPromptRow & { status: "pending" | "approved" | "rejected" | "withdrawn" };
 
 /**
  * A posted prompt that is not public yet, read as the signed-in visitor. Row-level security only

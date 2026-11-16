@@ -1,6 +1,5 @@
 import { BaseForm } from "@/lib/forms/BaseForm";
 import {
-  checkAuthorHandle,
   checkCategory,
   checkFile,
   checkKind,
@@ -21,7 +20,6 @@ export interface PromptPostValues {
   tagline: string;
   summary: string;
   category: string;
-  authorHandle: string;
   meantFor: string;
   highlights: string;
   usageSteps: string;
@@ -36,7 +34,6 @@ const EMPTY_POST: PromptPostValues = {
   tagline: "",
   summary: "",
   category: "",
-  authorHandle: "",
   meantFor: "",
   highlights: "",
   usageSteps: "",
@@ -45,10 +42,18 @@ const EMPTY_POST: PromptPostValues = {
   previewLineCount: String(PREVIEW_LINES.default),
 };
 
-/** The upload form's fields and rules; the create action re-checks everything on the server. */
+/**
+ * The upload form's fields and rules; the server actions re-check everything.
+ * - New post: starts empty and needs the file.
+ * - New revision of a post: starts from the latest revision's values; the file is optional
+ *   (left out, the previous file is kept).
+ */
 export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, ValidationIssue> {
-  constructor() {
-    super(EMPTY_POST, PROMPT_POST_FIELDS);
+  private readonly is_revision: boolean;
+
+  constructor(initial_values?: Omit<PromptPostValues, "file">) {
+    super(initial_values ? { ...initial_values, file: null } : EMPTY_POST, PROMPT_POST_FIELDS);
+    this.is_revision = initial_values !== undefined;
   }
 
   protected getFieldIssue(field: PromptPostField): ValidationIssue | null {
@@ -66,18 +71,16 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkList(field, values[field]);
       case "category":
         return checkCategory(values.category);
-      case "authorHandle":
-        return checkAuthorHandle(values.authorHandle);
       case "worksWith":
         return checkWorksWith(values.worksWith);
       case "file":
-        return checkFile(values.file);
+        return checkFile(values.file, this.is_revision);
       case "previewLineCount":
         return checkPreviewLineCount(values.previewLineCount);
     }
   }
 
-  /** The values as the multipart body the create action reads (the file travels as a File). */
+  /** The values as the multipart body the server actions read (the file travels as a File). */
   toFormData(): FormData {
     const formData = new FormData();
     const values = this.values;
@@ -86,7 +89,6 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     formData.set("tagline", values.tagline);
     formData.set("summary", values.summary);
     formData.set("category", values.category);
-    formData.set("authorHandle", values.authorHandle);
     formData.set("meantFor", values.meantFor);
     formData.set("highlights", values.highlights);
     formData.set("usageSteps", values.usageSteps);

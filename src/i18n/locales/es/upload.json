@@ -88,7 +88,8 @@
         "text": "Inicia sesión para publicar un prompt. Toma un minuto y es gratis.",
         "action": "Inicia sesión para publicar"
       },
-      "signedInAs": "Sesión iniciada como {email}",
+      "signedInAsWithUsername": "Sesión iniciada como {email}. Tu publicación aparece a nombre de @{username}; puedes sumar coautores desde su revisión.",
+      "postingAs": "Tu publicación aparece a nombre de @{username}; puedes sumar coautores desde su revisión.",
       "sections": {
         "basics": "Lo básico",
         "details": "Qué hace",
@@ -119,10 +120,6 @@
           "label": "Categoría",
           "placeholder": "Elige una categoría"
         },
-        "authorHandle": {
-          "label": "Nombre o usuario del autor",
-          "hint": "Se muestra en la página como autor, p. ej. @tunombre."
-        },
         "meantFor": {
           "label": "Pensado para",
           "hint": "Los tipos de proyecto a los que se adapta, uno por línea (p. ej. Next.js App Router)."
@@ -151,9 +148,11 @@
       "submit": "Publicar prompt",
       "submitting": "Publicando…",
       "submitted": "Enviado a revisión. Se publica cuando un administrador lo apruebe.",
+      "openReview": "Abrir su revisión",
       "fixFields": "Algunos campos necesitan un cambio antes de publicar. Están marcados abajo.",
       "errors": {
         "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para publicar tu prompt.",
+        "usernameRequired": "Elige un nombre de usuario antes de publicar.",
         "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}.",
         "notConfigured": "Publicar aún no está disponible. Inténtalo más tarde."
       }
@@ -167,7 +166,6 @@
       "itemTooLong": "Mantén cada línea por debajo de {max} caracteres.",
       "chooseCategory": "Elige una categoría.",
       "chooseTool": "Marca al menos una herramienta.",
-      "handleFormat": "Usa letras, números, puntos, guiones o guiones bajos, opcionalmente empezando con @.",
       "fileRequired": "Elige tu archivo .md.",
       "fileType": "Elige un archivo Markdown que termine en .md.",
       "fileTooLarge": "Elige un archivo de hasta 200 KB.",
@@ -177,14 +175,26 @@
     },
     "submissions": {
       "title": "Tus envíos",
-      "lead": "Los prompts esperan revisión. Los aprobados salen en su propia página.",
+      "lead": "Las publicaciones de las que eres dueño o coautor. Cada una tiene una revisión donde lees comentarios y subes nuevas versiones.",
       "empty": "Todavía no has publicado nada.",
       "status": {
         "pending": "Esperando revisión",
         "approved": "Publicado",
-        "rejected": "No aprobado"
+        "rejected": "No aprobado",
+        "withdrawn": "Retirado"
       },
-      "rejectedNote": "Motivo: {note}",
+      "role": {
+        "owner": "Dueño",
+        "coauthor": "Coautor"
+      },
+      "liveReview": {
+        "open": "Hay un cambio esperando revisión.",
+        "changes_requested": "Un revisor pidió cambios a tu actualización propuesta.",
+        "approved": "La versión publicada está al día.",
+        "rejected": "Tu último cambio propuesto no se aprobó; la versión publicada se mantiene.",
+        "withdrawn": "Retiraste tu último cambio propuesto; la versión publicada se mantiene."
+      },
+      "openReview": "Abrir revisión",
       "view": "Ver página"
     }
   }

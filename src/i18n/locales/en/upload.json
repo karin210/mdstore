@@ -88,7 +88,8 @@
         "text": "Sign in to post a prompt. It takes a minute and it’s free.",
         "action": "Sign in to post"
       },
-      "signedInAs": "Signed in as {email}",
+      "signedInAsWithUsername": "Signed in as {email}. Your post is credited to @{username}; you can add co-authors from its review.",
+      "postingAs": "Your post is credited to @{username}; you can add co-authors from its review.",
       "sections": {
         "basics": "The basics",
         "details": "What it does",
@@ -119,10 +120,6 @@
           "label": "Category",
           "placeholder": "Choose a category"
         },
-        "authorHandle": {
-          "label": "Author name or handle",
-          "hint": "Shown on the page as the author, e.g. @yourname."
-        },
         "meantFor": {
           "label": "Meant for",
           "hint": "The kinds of projects it suits, one per line (e.g. Next.js App Router)."
@@ -151,9 +148,11 @@
       "submit": "Post prompt",
       "submitting": "Posting…",
       "submitted": "Sent for review. It goes live once an admin approves it.",
+      "openReview": "Open its review",
       "fixFields": "Some fields need a change before posting. They’re marked below.",
       "errors": {
         "unauthenticated": "Your session ended. Sign in again to post your prompt.",
+        "usernameRequired": "Pick a username before posting.",
         "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}.",
         "notConfigured": "Posting isn’t available yet. Please try again later."
       }
@@ -167,7 +166,6 @@
       "itemTooLong": "Keep each line under {max} characters.",
       "chooseCategory": "Choose a category.",
       "chooseTool": "Mark at least one tool.",
-      "handleFormat": "Use letters, numbers, dots, dashes or underscores, optionally starting with @.",
       "fileRequired": "Choose your .md file.",
       "fileType": "Choose a Markdown file ending in .md.",
       "fileTooLarge": "Choose a file up to 200 KB.",
@@ -177,14 +175,26 @@
     },
     "submissions": {
       "title": "Your submissions",
-      "lead": "Posts wait for review. Approved ones go live on their own page.",
+      "lead": "Posts you own or co-author. Each one has a review where you read feedback and push new versions.",
       "empty": "You haven’t posted anything yet.",
       "status": {
         "pending": "Waiting for review",
         "approved": "Live",
-        "rejected": "Not approved"
+        "rejected": "Not approved",
+        "withdrawn": "Withdrawn"
       },
-      "rejectedNote": "Reason: {note}",
+      "role": {
+        "owner": "Owner",
+        "coauthor": "Co-author"
+      },
+      "liveReview": {
+        "open": "A change is waiting for review.",
+        "changes_requested": "A reviewer asked for changes to your proposed update.",
+        "approved": "The live version is up to date.",
+        "rejected": "Your last proposed change wasn’t approved; the live version stays.",
+        "withdrawn": "Your last proposed change was withdrawn; the live version stays."
+      },
+      "openReview": "Open review",
       "view": "View page"
     }
   }

@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { getSupabaseEnv } from "@/lib/supabase/env";
 
 /**
@@ -13,6 +14,8 @@ export async function createServerSupabase(): Promise<SupabaseClient | null> {
   const env = getSupabaseEnv();
   if (!env) return null;
   const cookieStore = await cookies();
+  // The session check reads the clock (token expiry), so it must run at request time, never in a prerender.
+  await connection();
 
   return createServerClient(env.url, env.publishableKey, {
     cookies: {

@@ -75,6 +75,7 @@ The CLI is a dev dependency (run as `npx supabase …` or through the npm script
 
 - **One-time setup:** `npx supabase login`, then `npx supabase link --project-ref <ref>` (the ref is in the project's dashboard URL).
 - `npm run db:push` applies the files in `supabase/migrations/` to the linked project, instead of pasting SQL into the dashboard. New schema changes go in a new migration file (`npx supabase migration new <name>`), never by editing an applied one.
+- `npm run db:test` runs the pgTAP tests in `supabase/tests/database/` against the local stack (`supabase test db`; each file runs in a rolled-back transaction). Not in CI yet, since it needs Docker.
 - `npm run db:types` writes `src/lib/supabase/database.types.ts`. **Not done yet:** passing those types to the Supabase clients (`createServerClient<Database>`) so queries on `posted_prompts` are type-checked.
 - `config.toml` only affects the **local** Supabase stack (`npx supabase start`, needs Docker). Its auth redirects allow `http://localhost:3000/auth/confirm` and `/es/auth/confirm`. The hosted project's Site URL and redirect URLs are still set in the dashboard.
 
@@ -87,5 +88,6 @@ The deploy target is not decided yet. If it builds every push itself (Vercel doe
 ## Pending
 
 - Connect the Supabase CLI to the hosted project, run `db:push`, and wire the generated types into the clients.
-- End-to-end tests (Playwright) for sign-up, posting a prompt and downloading a free one.
+- End-to-end tests (Playwright) for sign-up, posting a prompt, downloading a free one, and the review workflow.
+- Run `npm run db:test` in CI (start the local Supabase stack in the job first).
 - Upgrade ESLint to 10 and TypeScript to 7 once the blockers above are gone.

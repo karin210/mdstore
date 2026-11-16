@@ -57,8 +57,15 @@
       "serverError": "Something went wrong on our side. Please try again in a moment."
     },
     "reviewNotice": {
-      "pending": "This post is waiting for review. Only you and the admins can see this page until it is approved.",
-      "rejected": "This post was not approved. Only you and the admins can see this page."
+      "pending": "This post is waiting for review. Only its authors and the admins can see this page until it is approved.",
+      "rejected": "This post was not approved. Only its authors and the admins can see this page.",
+      "withdrawn": "This post was withdrawn. Only its authors and the admins can see this page.",
+      "openReview": "Open the review"
+    },
+    "authorBar": {
+      "author": "You’re an author of this post. Propose changes or read past feedback in its review.",
+      "admin": "You’re an admin. Read this post’s reviews or answer one in progress.",
+      "action": "Open the review"
     }
   }
 }

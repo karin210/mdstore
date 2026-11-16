@@ -31,6 +31,7 @@ export function LoginPanel(): ReactElement {
     searchParams.get("error") === "confirm" ? t("errors.confirmFailed") : "",
   );
   const [confirmationEmail, setConfirmationEmail] = useState("");
+  const [is_username_taken, set_is_username_taken] = useState(false);
   const [isSubmitting, startSubmit] = useTransition();
   const tabRefs = useRef<Record<LoginMode, HTMLButtonElement | null>>({ signUp: null, signIn: null });
 
@@ -38,6 +39,7 @@ export function LoginPanel(): ReactElement {
     setMode(nextMode);
     setErrorMessage("");
     setConfirmationEmail("");
+    set_is_username_taken(false);
     if (shouldFocus) tabRefs.current[nextMode]?.focus();
   }
 
@@ -56,12 +58,18 @@ export function LoginPanel(): ReactElement {
 
   function showResult(result: AuthActionResult): void {
     if (result.status === "checkEmail") setConfirmationEmail(result.email);
-    else if (result.status === "invalid") setErrorMessage(t("errors.fixFields"));
-    else setErrorMessage(t(`errors.${result.errorKey}`, { requestId: result.requestId ?? "" }));
+    else if (result.status === "invalid") {
+      setErrorMessage(t("errors.fixFields"));
+      if (result.fieldErrors.username === "usernameTaken") {
+        set_is_username_taken(true);
+        document.getElementById("sign-up-username")?.focus();
+      }
+    } else setErrorMessage(t(`errors.${result.errorKey}`, { requestId: result.requestId ?? "" }));
   }
 
-  function submitCredentials(values: CredentialValues): void {
+  function submitCredentials(values: CredentialValues & { username?: string }): void {
     setErrorMessage("");
+    set_is_username_taken(false);
     startSubmit(async () => {
       const submitAction = mode === "signUp" ? signUp : signIn;
       // On success the action redirects, so a result only comes back when something needs showing.
@@ -105,7 +113,13 @@ export function LoginPanel(): ReactElement {
         {confirmationEmail ? (
           <FormAlert tone="success">{t("results.checkEmail", { email: confirmationEmail })}</FormAlert>
         ) : mode === "signUp" ? (
-          <SignUpForm isSubmitting={isSubmitting} errorMessage={errorMessage} onSubmit={submitCredentials} />
+          <SignUpForm
+            isSubmitting={isSubmitting}
+            errorMessage={errorMessage}
+            isUsernameTaken={is_username_taken}
+            onUsernameEdited={() => set_is_username_taken(false)}
+            onSubmit={submitCredentials}
+          />
         ) : (
           <SignInForm isSubmitting={isSubmitting} errorMessage={errorMessage} onSubmit={submitCredentials} />
         )}

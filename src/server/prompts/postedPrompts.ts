@@ -3,6 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import type { PromptCategory } from "@/data/prompts";
 import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptView } from "@/lib/promptView";
+import { splitFileLines } from "@/lib/splitFileLines";
 import { POSTED_PROMPTS_TABLE, SLUG_PATTERN } from "@/server/prompts/postedPromptsTable";
 import { createPublicSupabase } from "@/server/supabase/publicClient";
 
@@ -27,14 +28,21 @@ export interface PostedPromptRow {
   works_with: string[];
   content: string;
   preview_line_count: number;
+  /** The byline: the owner and co-authors with their usernames (embedded from post_authors). */
+  post_authors: { role: "owner" | "coauthor"; joined_at: string; profiles: { username: string } | null }[];
 }
 
 export const DETAIL_COLUMNS =
-  "slug, file_name, author_handle, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, content, preview_line_count";
+  "slug, file_name, author_handle, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, content, preview_line_count, post_authors(role, joined_at, profiles(username))";
 
-/** Lines of a file the way an editor counts them (a final newline doesn't add one). */
-export function splitFileLines(content: string): string[] {
-  return content.replace(/\r\n/g, "\n").replace(/\n$/, "").split("\n");
+/** "@owner, @coauthor…": the owner first, then co-authors in the order they joined. */
+function getByline(row: PostedPromptRow): string {
+  const usernames = [...(row.post_authors ?? [])]
+    .sort((first, second) =>
+      first.role === second.role ? first.joined_at.localeCompare(second.joined_at) : first.role === "owner" ? -1 : 1,
+    )
+    .flatMap((author) => (author.profiles ? [`@${author.profiles.username}`] : []));
+  return usernames.length > 0 ? usernames.join(", ") : row.author_handle;
 }
 
 export function toPromptView(row: PostedPromptRow): PromptView {
@@ -44,7 +52,7 @@ export function toPromptView(row: PostedPromptRow): PromptView {
     slug: row.slug,
     fileName: row.file_name,
     category: row.category,
-    author: row.author_handle,
+    author: getByline(row),
     // Posting is free for now; paid posts arrive with checkout.
     priceUsd: 0,
     lineCount: lines.length,
@@ -61,6 +69,7 @@ export function toPromptView(row: PostedPromptRow): PromptView {
     meantFor: row.meant_for,
     usageSteps: row.usage_steps,
     fullMarkdown: row.content,
+    isPosted: true,
   };
 }
 

@@ -81,11 +81,23 @@ describe("sign-in password", () => {
 });
 
 describe("signUpSchema", () => {
-  it("normalizes the email and rejects unknown fields", () => {
-    const parsedResult = signUpSchema.safeParse({ email: " Name@Domain.COM ", password: "Abcdefg1" });
+  it("normalizes the email and the username and rejects unknown fields", () => {
+    const parsedResult = signUpSchema.safeParse({
+      email: " Name@Domain.COM ",
+      username: " @Ana ",
+      password: "Abcdefg1",
+    });
     expect(parsedResult.success && parsedResult.data.email).toBe("name@domain.com");
-    expect(signUpSchema.safeParse({ email: "name@domain.com", password: "Abcdefg1", role: "admin" }).success).toBe(
-      false,
-    );
+    expect(parsedResult.success && parsedResult.data.username).toBe("Ana");
+    expect(
+      signUpSchema.safeParse({ email: "name@domain.com", username: "ana", password: "Abcdefg1", role: "admin" })
+        .success,
+    ).toBe(false);
+  });
+
+  it("requires a valid username", () => {
+    const parsedResult = signUpSchema.safeParse({ email: "name@domain.com", username: "a b", password: "Abcdefg1" });
+    expect(parsedResult.success).toBe(false);
+    expect(parsedResult.error?.issues[0].message).toBe("usernameFormat");
   });
 });

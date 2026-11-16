@@ -1,0 +1,221 @@
+{
+  "review": {
+    "meta": {
+      "title": "Revisión",
+      "queueTitle": "Revisiones pendientes",
+      "inviteTitle": "Invitación de coautoría"
+    },
+    "loading": "Cargando la revisión…",
+    "breadcrumb": {
+      "label": "Ruta de navegación",
+      "submissions": "Tus envíos",
+      "queue": "Revisiones pendientes"
+    },
+    "eyebrow": "// revisión #{number}",
+    "kindOf": {
+      "first": "Publicación nueva",
+      "update": "Cambio propuesto a la versión publicada"
+    },
+    "openedBy": "Abierta por @{username} el {date}",
+    "openedOn": "Abierta el {date}",
+    "status": {
+      "open": "Esperando revisión",
+      "changes_requested": "Cambios pedidos",
+      "approved": "Aprobada",
+      "rejected": "No aprobada",
+      "withdrawn": "Retirada"
+    },
+    "postStatus": {
+      "pending": "Aún no es pública",
+      "approved": "Publicada",
+      "rejected": "No es pública",
+      "withdrawn": "Retirada"
+    },
+    "viewPage": "Ver la página",
+    "tabs": {
+      "label": "Secciones de la revisión",
+      "conversation": "Conversación",
+      "file": "Archivo",
+      "changes": "Cambios",
+      "revise": "Subir una nueva versión"
+    },
+    "history": {
+      "title": "Revisiones de esta publicación",
+      "item": "#{number} · {status}",
+      "current": "Estás aquí"
+    },
+    "timeline": {
+      "label": "Conversación",
+      "revision": "@{username} subió la versión {number}",
+      "comment": "@{username} comentó",
+      "lineComment": "@{username} comentó la línea {line} de la versión {number}",
+      "decision": {
+        "approved": "@{username} aprobó esta revisión",
+        "changes_requested": "@{username} pidió cambios",
+        "rejected": "@{username} rechazó esta revisión",
+        "withdrawn": "@{username} retiró esta revisión"
+      },
+      "someone": "alguien",
+      "viewRevision": "Ver el archivo",
+      "viewChanges": "Ver los cambios"
+    },
+    "comment": {
+      "label": "Agrega un comentario",
+      "hint": "Comentarios para los autores y revisores, en texto plano.",
+      "submit": "Comentar",
+      "busy": "Enviando…",
+      "required": "Escribe un comentario primero.",
+      "tooLong": "Usa como máximo {max} caracteres.",
+      "cancel": "Cancelar",
+      "lineLabel": "Comentario sobre la línea {line}",
+      "lineButton": "Comentar la línea {line}",
+      "closed": "Esta revisión está cerrada y ya no acepta comentarios."
+    },
+    "decision": {
+      "title": "Tu revisión",
+      "lead": "Solo los administradores ven este recuadro.",
+      "legend": "Decisión",
+      "options": {
+        "approved": "Aprobar",
+        "changes_requested": "Pedir cambios",
+        "rejected": "Rechazar"
+      },
+      "hints": {
+        "approved": "Publica la versión {number} como versión publicada.",
+        "changes_requested": "La devuelve a los autores. Su próxima versión reabre la revisión.",
+        "rejectedFirst": "Cierra la revisión para siempre. La publicación no saldrá.",
+        "rejectedUpdate": "Cierra la revisión para siempre. La versión publicada se mantiene."
+      },
+      "messageLabel": "Mensaje",
+      "messageHint": "Obligatorio salvo al aprobar. Los autores lo leen en la conversación.",
+      "messageRequired": "Explica qué hay que cambiar.",
+      "submit": "Enviar revisión",
+      "busy": "Enviando…"
+    },
+    "file": {
+      "revisionsLabel": "Versiones en esta revisión",
+      "revision": "Versión {number}",
+      "latest": "última",
+      "pushedBy": "Subida por @{username} el {date}",
+      "listing": "Ficha",
+      "fileLabel": "{fileName}, {count, plural, one {# línea} other {# líneas}}",
+      "lineHelp": "Elige un número de línea para comentar esa línea.",
+      "fields": {
+        "kind": "Tipo",
+        "title": "Título",
+        "tagline": "Lema",
+        "summary": "Resumen",
+        "category": "Categoría",
+        "meant_for": "Pensado para",
+        "highlights": "Puntos clave",
+        "usage_steps": "Uso sugerido",
+        "works_with": "Probado con",
+        "preview_line_count": "Largo de la vista previa gratis",
+        "file_name": "Nombre del archivo"
+      }
+    },
+    "changes": {
+      "against": {
+        "previous": "Versión {number} comparada con la versión {base}.",
+        "live": "Versión {number} comparada con la versión publicada (versión {base}).",
+        "none": "La versión {number} es la primera, así que todo es nuevo."
+      },
+      "fieldsTitle": "Ficha",
+      "noFieldChanges": "El texto de la ficha no cambió.",
+      "before": "Antes",
+      "after": "Después",
+      "fileTitle": "Archivo",
+      "noFileChanges": "El archivo no cambió.",
+      "hidden": "{count, plural, one {# línea sin cambios} other {# líneas sin cambios}}",
+      "removed": "Línea eliminada",
+      "added": "Línea agregada",
+      "summary": "{added, plural, one {# línea agregada} other {# líneas agregadas}}, {removed, plural, one {# eliminada} other {# eliminadas}}"
+    },
+    "revise": {
+      "intoActive": "Tu nueva versión se suma a la revisión #{number} y vuelve a los revisores.",
+      "newReview": "Esto abre la revisión #{number}. La versión publicada se mantiene hasta que un administrador apruebe el cambio.",
+      "closed": "Esta publicación está cerrada y no acepta nuevas versiones.",
+      "onlyLatest": "Las nuevas versiones van a la revisión más reciente.",
+      "fileLabel": "Nuevo archivo Markdown (opcional)",
+      "fileHint": "Déjalo vacío para mantener {fileName}. Hasta 200 KB.",
+      "noteSection": "Para los revisores",
+      "noteLabel": "Qué cambió (opcional)",
+      "noteHint": "Se agrega a la conversación junto con tu versión.",
+      "submit": "Subir versión",
+      "submitting": "Subiendo…"
+    },
+    "authors": {
+      "title": "Autores",
+      "role": {
+        "owner": "Dueño",
+        "coauthor": "Coautor"
+      },
+      "you": "tú",
+      "remove": "Quitar a @{username}",
+      "confirmRemove": "Confirmar: quitar a @{username}",
+      "leave": "Dejar esta publicación",
+      "confirmLeave": "Confirmar: dejarla",
+      "addTitle": "Agrega un coautor",
+      "addLabel": "Su nombre de usuario",
+      "addHint": "Los coautores suben versiones y responden en las revisiones. Solo tú los agregas o quitas.",
+      "add": "Agregar",
+      "adding": "Agregando…",
+      "outcomes": {
+        "added": "@{username} ahora es coautor.",
+        "already_author": "@{username} ya es autor.",
+        "not_found": "Ninguna cuenta tiene el nombre de usuario @{username}."
+      },
+      "inviteTitle": "O invita con un enlace",
+      "inviteHint": "Quien lo abra con su sesión iniciada se une como coautor. Sirve una vez y vence en 7 días.",
+      "createInvite": "Crear enlace de invitación",
+      "creatingInvite": "Creando…",
+      "inviteLabel": "Enlace de invitación",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado",
+      "copyFailed": "No se pudo copiar. Selecciona el enlace y cópialo a mano."
+    },
+    "withdraw": {
+      "button": "Retirar esta revisión",
+      "confirm": "Confirmar: retirar",
+      "busy": "Retirando…",
+      "hintFirst": "La publicación no saldrá. Sus autores siguen teniendo acceso.",
+      "hintUpdate": "Descarta el cambio propuesto. La versión publicada se mantiene."
+    },
+    "pickUsername": "Elige un nombre de usuario para participar en las revisiones.",
+    "errors": {
+      "unauthenticated": "Tu sesión terminó. Inicia sesión otra vez para continuar.",
+      "forbidden": "No puedes hacer eso en esta publicación.",
+      "notFound": "No encontramos eso. Recarga la página e inténtalo de nuevo.",
+      "closed": "Esta revisión está cerrada. Recarga la página para ver su estado actual.",
+      "invalid": "Parte de lo que enviaste no es válido. Revísalo e inténtalo de nuevo.",
+      "usernameRequired": "Elige un nombre de usuario primero.",
+      "notConfigured": "Las revisiones aún no están disponibles. Inténtalo más tarde.",
+      "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}."
+    },
+    "queue": {
+      "eyebrow": "// admin",
+      "title": "Revisiones pendientes",
+      "lead": "Primero las que esperan una decisión, de la más antigua a la más nueva. Después las que esperan a sus autores.",
+      "empty": "No hay nada que revisar por ahora.",
+      "item": "Revisión #{number} · abierta el {date}",
+      "kind": {
+        "first": "Publicación nueva",
+        "update": "Cambio a una publicación publicada"
+      }
+    },
+    "invite": {
+      "eyebrow": "// invitación",
+      "title": "Únete a «{title}» como coautor",
+      "lead": "Los coautores suben nuevas versiones de la publicación y responden en sus revisiones. Tu @usuario aparece en su página.",
+      "accept": "Unirme como coautor",
+      "accepting": "Uniéndote…",
+      "states": {
+        "used": "Este enlace de invitación ya se usó. Pídele uno nuevo al dueño de la publicación.",
+        "expired": "Este enlace de invitación venció. Pídele uno nuevo al dueño de la publicación.",
+        "unknown": "Este enlace de invitación no es válido. Revisa que lo hayas copiado completo."
+      },
+      "signedOut": "Inicia sesión o crea una cuenta para aceptar la invitación.",
+      "signIn": "Iniciar sesión para continuar"
+    }
+  }
+}

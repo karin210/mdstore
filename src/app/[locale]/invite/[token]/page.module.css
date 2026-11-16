@@ -1,0 +1,9 @@
+.main {
+  flex: 1;
+  width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-block: var(--space-lg) var(--space-2xl);
+}

@@ -18,7 +18,6 @@ export interface ValidationIssue {
     | "chooseKind"
     | "chooseCategory"
     | "chooseTool"
-    | "handleFormat"
     | "fileRequired"
     | "fileType"
     | "fileTooLarge"
@@ -60,8 +59,7 @@ const LIST_LIMITS = {
 
 export type TextField = keyof typeof TEXT_LIMITS;
 export type ListField = keyof typeof LIST_LIMITS;
-export type PromptPostField =
-  TextField | ListField | "kind" | "category" | "authorHandle" | "worksWith" | "file" | "previewLineCount";
+export type PromptPostField = TextField | ListField | "kind" | "category" | "worksWith" | "file" | "previewLineCount";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
@@ -70,7 +68,6 @@ export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "tagline",
   "summary",
   "category",
-  "authorHandle",
   "meantFor",
   "highlights",
   "usageSteps",
@@ -123,21 +120,18 @@ export function checkCategory(value: string): ValidationIssue | null {
   return isPromptCategory(value) ? null : { key: "chooseCategory" };
 }
 
-export function checkAuthorHandle(valueRaw: string): ValidationIssue | null {
-  const valueTrimmed = valueRaw.trim();
-  if (valueTrimmed === "") return { key: "required" };
-  return /^@?[A-Za-z0-9._-]{2,39}$/.test(valueTrimmed) ? null : { key: "handleFormat" };
-}
-
 export function checkWorksWith(values: string[]): ValidationIssue | null {
   const knownTools: readonly string[] = WORKS_WITH_TOOLS;
   const knownValues = values.filter((value) => knownTools.includes(value));
   return knownValues.length > 0 && knownValues.length === values.length ? null : { key: "chooseTool" };
 }
 
-/** The file's metadata; its text content is checked on the server (see checkFileContent). */
-export function checkFile(file: { name: string; size: number } | null): ValidationIssue | null {
-  if (!file || file.name === "") return { key: "fileRequired" };
+/**
+ * The file's metadata; its text content is checked on the server (see checkFileContent).
+ * A revision may leave the file out (`is_optional`) to keep the previous version's file.
+ */
+export function checkFile(file: { name: string; size: number } | null, is_optional = false): ValidationIssue | null {
+  if (!file || file.name === "") return is_optional ? null : { key: "fileRequired" };
   if (!/\.md$/i.test(file.name)) return { key: "fileType" };
   if (file.size === 0) return { key: "fileEmpty" };
   if (file.size > MAX_FILE_BYTES) return { key: "fileTooLarge" };
@@ -192,13 +186,6 @@ export const promptPostSchema = z.strictObject({
     .string()
     .superRefine(asRefinement(checkCategory))
     .transform((value) => value as PromptCategory),
-  authorHandle: z
-    .string()
-    .superRefine(asRefinement(checkAuthorHandle))
-    .transform((value) => {
-      const valueTrimmed = value.trim();
-      return valueTrimmed.startsWith("@") ? valueTrimmed : `@${valueTrimmed}`;
-    }),
   meantFor: listSchema("meantFor"),
   highlights: listSchema("highlights"),
   usageSteps: listSchema("usageSteps"),
@@ -213,3 +200,23 @@ export const promptPostSchema = z.strictObject({
 });
 
 export type PromptPostInput = z.output<typeof promptPostSchema>;
+
+/** Longest "what changed" note sent with a revision (it becomes a comment in the review). */
+export const REVISION_NOTE_MAX_LENGTH = 1000;
+
+/**
+ * A new revision of an existing post: the same fields, a file that may be left out to keep the
+ * previous one, and an optional note for the reviewers.
+ */
+export const prompt_revision_schema = promptPostSchema.extend({
+  file: z
+    .custom<File | null>((value) => value === null || value instanceof File, { message: "fileRequired" })
+    .superRefine(asRefinement((file: File | null) => checkFile(file, true)))
+    .transform((file) => (file && file.name !== "" ? file : null)),
+  note: z
+    .string()
+    .max(REVISION_NOTE_MAX_LENGTH, { message: "tooLong" })
+    .transform((value) => value.trim()),
+});
+
+export type PromptRevisionInput = z.output<typeof prompt_revision_schema>;

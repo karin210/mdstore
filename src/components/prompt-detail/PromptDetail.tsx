@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import type { ReactElement } from "react";
+import { Suspense, type ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton";
+import { AuthorBar } from "@/components/prompt-detail/AuthorBar";
 import { InlineCode } from "@/components/prompt-detail/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples";
 import { TestedModels } from "@/components/prompt-detail/TestedModels";
@@ -43,10 +44,20 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
         </ol>
       </nav>
 
-      {prompt.reviewStatus && (
+      {prompt.reviewStatus ? (
         <p className={styles.reviewNotice} data-status={prompt.reviewStatus} role="status">
           {t(`reviewNotice.${prompt.reviewStatus}`)}
+          <Link className={styles.reviewLink} href={`/prompts/${prompt.slug}/review`}>
+            {t("reviewNotice.openReview")}
+          </Link>
         </p>
+      ) : (
+        prompt.isPosted && (
+          // Only this bar reads the session; the listing itself stays cached and shared.
+          <Suspense fallback={null}>
+            <AuthorBar slug={prompt.slug} />
+          </Suspense>
+        )
       )}
 
       <article className={styles.layout} aria-labelledby="prompt-title">

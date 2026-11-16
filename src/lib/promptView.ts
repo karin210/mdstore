@@ -16,7 +16,9 @@ export interface PromptView extends Omit<PromptListing, "slug"> {
   fullMarkdown: string | null;
   /**
    * Set only when a posted prompt is shown to its author or an admin before it is public
-   * ("pending" or "rejected"); the page then says so. Never set on a publicly readable prompt.
+   * ("pending", "rejected" or "withdrawn"); the page then says so. Never set on a publicly readable prompt.
    */
-  reviewStatus?: "pending" | "rejected";
+  reviewStatus?: "pending" | "rejected" | "withdrawn";
+  /** True for prompts posted by users (they have a review page); false for the curated catalogue. */
+  isPosted?: boolean;
 }

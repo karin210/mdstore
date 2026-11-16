@@ -33,7 +33,7 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - Vitest 5 for unit tests of plain TypeScript (validation rules, form classes, helpers), as `src/**/*.test.ts` next to the code, Node environment; `@/` resolves through Vite's built-in `resolve.tsconfigPaths`. Async Server Components need E2E tests (Playwright) instead, per the Next docs.
 - TypeScript 5: stay off TypeScript 7 until it ships a JavaScript API (the `next` editor plugin needs it).
 - Supabase CLI (dev dependency, config in `supabase/config.toml`): applies migrations and generates the table types.
-- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`.
+- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`. Database: `docs/database.md`. Review workflow (pull-request style reviews, co-authors, invites): `docs/review-workflow.md`. Local Supabase: `docs/local-supabase-setup.md`.
 - CI: `.github/workflows/ci.yml` runs lint, format check, tests and build on pushes to `main`/`dev` and on pull requests (Node from `mise.toml`, no secrets needed).
 
 ## Commands
@@ -45,6 +45,7 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - `npm run format` / `npm run format:check`: write / check Prettier formatting
 - `npm test` / `npm run test:watch`: Vitest once / in watch mode
 - `npm run db:push`: apply `supabase/migrations/` to the linked project (after `npx supabase login` and `npx supabase link --project-ref <ref>`)
+- `npm run db:test`: run the pgTAP tests in `supabase/tests/` against the local stack
 - `npm run db:types`: regenerate `src/lib/supabase/database.types.ts` from the linked project
 
 ## Structure
@@ -69,6 +70,13 @@ src/
 │  │                         prompts render on first request from cached Supabase reads)
 │  ├─ prompts/[slug]/download/route.ts
 │  │                         serves a free prompt's .md as an attachment
+│  ├─ prompts/[slug]/review/page.tsx
+│  │                         a post's review, like a pull request (authors + admins only):
+│  │                         conversation, file with line comments, changes between
+│  │                         revisions, "push a new version" form; `?review=&tab=&revision=`
+│  ├─ reviews/page.tsx       admins' review queue
+│  ├─ invite/[token]/page.tsx
+│  │                         co-author invite link (sign in, then confirm with a button)
 │  └─ not-found.tsx          branded 404 for every unmatched URL (real 404 status)
 ├─ components/
 │  ├─ global/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
@@ -90,7 +98,12 @@ src/
 │  │                         PromptDetailSkeleton (its Suspense fallback), OutputExamples
 │  │                         (screenshots from `outputExamples`, placeholders while empty),
 │  │                         TestedModels (the `tested_models` of a listing, from the
-│  │                         `ai_models` registry in src/data/aiModels.ts)
+│  │                         `ai_models` registry in src/data/aiModels.ts), AuthorBar (links to
+│  │                         the review for authors and admins)
+│  ├─ review/                review page, queue and invite: ReviewBody, ReviewTimeline,
+│  │                         RevisionFile, RevisionChanges, CommentForm, DecisionForm,
+│  │                         AuthorsPanel, WithdrawButton, ReviewQueue, InviteBody/InviteAccept
+│  │                         (one Review.module.css)
 │  └─ modals/                PromptPreviewDialog (dismissible)
 ├─ data/                     static catalogues: prompts.ts (listings), aiModels.ts (model
 │                            families, names and prices; the models and every listing's
@@ -103,10 +116,15 @@ src/
 │                            getPromptOrNotFound.ts (slug params → prompt or 404),
 │                            safeRedirect.ts, slugify.ts, supabase/ (env, browser client),
 │                            validation/ (credentials + prompt-post rules, shared with the
-│                            server), forms/ (BaseForm, SignInForm/SignUpForm, PromptPostForm)
+│                            server; username.ts), forms/ (BaseForm, SignInForm/SignUpForm,
+│                            UsernameForm, PromptPostForm), review/ (line diff, review types,
+│                            timeline and field changes), splitFileLines.ts
 ├─ server/                   server-only code ("server-only" import): supabase/ clients and
 │                            session refresh, auth/ (actions, getSignedInUser),
-│                            prompts/ (post action, cached posted-prompt reads, view resolver)
+│                            profiles/ (signed-in profile, set_username action),
+│                            prompts/ (post action, cached posted-prompt reads, view resolver,
+│                            my submissions), reviews/ (review page data, queue, invites,
+│                            actions calling the review functions with rpc)
 ├─ styles/globals.css        :root tokens, reset, typography, shared form + modal classes
 └─ proxy.ts                  rewrites unknown /prompts/[slug] (not in the catalogue, not an
                              approved post, and not a pending post of the signed-in author or an

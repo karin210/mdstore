@@ -1,0 +1,221 @@
+{
+  "review": {
+    "meta": {
+      "title": "Review",
+      "queueTitle": "Reviews to do",
+      "inviteTitle": "Co-author invite"
+    },
+    "loading": "Loading the review…",
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "submissions": "Your submissions",
+      "queue": "Reviews to do"
+    },
+    "eyebrow": "// review #{number}",
+    "kindOf": {
+      "first": "New post",
+      "update": "Proposed change to the live version"
+    },
+    "openedBy": "Opened by @{username} on {date}",
+    "openedOn": "Opened on {date}",
+    "status": {
+      "open": "Waiting for review",
+      "changes_requested": "Changes requested",
+      "approved": "Approved",
+      "rejected": "Not approved",
+      "withdrawn": "Withdrawn"
+    },
+    "postStatus": {
+      "pending": "Not public yet",
+      "approved": "Live",
+      "rejected": "Not public",
+      "withdrawn": "Withdrawn"
+    },
+    "viewPage": "View the page",
+    "tabs": {
+      "label": "Review sections",
+      "conversation": "Conversation",
+      "file": "File",
+      "changes": "Changes",
+      "revise": "Push a new version"
+    },
+    "history": {
+      "title": "Reviews of this post",
+      "item": "#{number} · {status}",
+      "current": "You are here"
+    },
+    "timeline": {
+      "label": "Conversation",
+      "revision": "@{username} pushed revision {number}",
+      "comment": "@{username} commented",
+      "lineComment": "@{username} commented on line {line} of revision {number}",
+      "decision": {
+        "approved": "@{username} approved this review",
+        "changes_requested": "@{username} requested changes",
+        "rejected": "@{username} rejected this review",
+        "withdrawn": "@{username} withdrew this review"
+      },
+      "someone": "someone",
+      "viewRevision": "View the file",
+      "viewChanges": "View the changes"
+    },
+    "comment": {
+      "label": "Add a comment",
+      "hint": "Feedback for the authors and reviewers, in plain text.",
+      "submit": "Comment",
+      "busy": "Sending…",
+      "required": "Write a comment first.",
+      "tooLong": "Use at most {max} characters.",
+      "cancel": "Cancel",
+      "lineLabel": "Comment on line {line}",
+      "lineButton": "Comment on line {line}",
+      "closed": "This review is closed, so it takes no more comments."
+    },
+    "decision": {
+      "title": "Your review",
+      "lead": "Only admins see this box.",
+      "legend": "Decision",
+      "options": {
+        "approved": "Approve",
+        "changes_requested": "Request changes",
+        "rejected": "Reject"
+      },
+      "hints": {
+        "approved": "Publishes revision {number} as the live version.",
+        "changes_requested": "Sends it back to the authors. Their next version reopens the review.",
+        "rejectedFirst": "Closes the review for good. The post won’t be published.",
+        "rejectedUpdate": "Closes the review for good. The live version stays as it is."
+      },
+      "messageLabel": "Message",
+      "messageHint": "Required unless you approve. The authors read it in the conversation.",
+      "messageRequired": "Explain what needs to change.",
+      "submit": "Submit review",
+      "busy": "Submitting…"
+    },
+    "file": {
+      "revisionsLabel": "Revisions in this review",
+      "revision": "Revision {number}",
+      "latest": "latest",
+      "pushedBy": "Pushed by @{username} on {date}",
+      "listing": "Listing",
+      "fileLabel": "{fileName}, {count, plural, one {# line} other {# lines}}",
+      "lineHelp": "Select a line number to comment on that line.",
+      "fields": {
+        "kind": "Type",
+        "title": "Title",
+        "tagline": "Tagline",
+        "summary": "Summary",
+        "category": "Category",
+        "meant_for": "Meant for",
+        "highlights": "Highlights",
+        "usage_steps": "Suggested use",
+        "works_with": "Tested with",
+        "preview_line_count": "Free preview length",
+        "file_name": "File name"
+      }
+    },
+    "changes": {
+      "against": {
+        "previous": "Revision {number} compared with revision {base}.",
+        "live": "Revision {number} compared with the live version (revision {base}).",
+        "none": "Revision {number} is the first version, so everything is new."
+      },
+      "fieldsTitle": "Listing",
+      "noFieldChanges": "The listing text didn’t change.",
+      "before": "Before",
+      "after": "After",
+      "fileTitle": "File",
+      "noFileChanges": "The file didn’t change.",
+      "hidden": "{count, plural, one {# unchanged line} other {# unchanged lines}}",
+      "removed": "Removed line",
+      "added": "Added line",
+      "summary": "{added, plural, one {# line added} other {# lines added}}, {removed, plural, one {# removed} other {# removed}}"
+    },
+    "revise": {
+      "intoActive": "Your new version joins review #{number} and goes back to the reviewers.",
+      "newReview": "This opens review #{number}. The live version stays as it is until an admin approves the change.",
+      "closed": "This post is closed, so it takes no new versions.",
+      "onlyLatest": "New versions go to the latest review.",
+      "fileLabel": "New Markdown file (optional)",
+      "fileHint": "Leave it empty to keep {fileName}. Up to 200 KB.",
+      "noteSection": "For the reviewers",
+      "noteLabel": "What changed (optional)",
+      "noteHint": "Added to the conversation with your revision.",
+      "submit": "Push revision",
+      "submitting": "Pushing…"
+    },
+    "authors": {
+      "title": "Authors",
+      "role": {
+        "owner": "Owner",
+        "coauthor": "Co-author"
+      },
+      "you": "you",
+      "remove": "Remove @{username}",
+      "confirmRemove": "Confirm: remove @{username}",
+      "leave": "Leave this post",
+      "confirmLeave": "Confirm: leave",
+      "addTitle": "Add a co-author",
+      "addLabel": "Their username",
+      "addHint": "Co-authors push versions and reply in reviews. Only you add or remove them.",
+      "add": "Add",
+      "adding": "Adding…",
+      "outcomes": {
+        "added": "@{username} is now a co-author.",
+        "already_author": "@{username} is already an author.",
+        "not_found": "No account has the username @{username}."
+      },
+      "inviteTitle": "Or invite with a link",
+      "inviteHint": "Whoever opens it while signed in joins as co-author. It works once and expires in 7 days.",
+      "createInvite": "Create invite link",
+      "creatingInvite": "Creating…",
+      "inviteLabel": "Invite link",
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "copyFailed": "Couldn’t copy. Select the link and copy it by hand."
+    },
+    "withdraw": {
+      "button": "Withdraw this review",
+      "confirm": "Confirm: withdraw",
+      "busy": "Withdrawing…",
+      "hintFirst": "The post won’t be published. Its authors keep access to it.",
+      "hintUpdate": "Drops the proposed change. The live version stays as it is."
+    },
+    "pickUsername": "Pick a username to take part in reviews.",
+    "errors": {
+      "unauthenticated": "Your session ended. Sign in again to continue.",
+      "forbidden": "You can’t do that on this post.",
+      "notFound": "We couldn’t find that. Reload the page and try again.",
+      "closed": "This review is closed. Reload the page to see its latest state.",
+      "invalid": "Some of what you sent isn’t valid. Check it and try again.",
+      "usernameRequired": "Pick a username first.",
+      "notConfigured": "Reviews aren’t available yet. Please try again later.",
+      "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}."
+    },
+    "queue": {
+      "eyebrow": "// admin",
+      "title": "Reviews to do",
+      "lead": "Reviews waiting for a decision come first, oldest first. Then the ones waiting on their authors.",
+      "empty": "Nothing to review right now.",
+      "item": "Review #{number} · opened {date}",
+      "kind": {
+        "first": "New post",
+        "update": "Change to a live post"
+      }
+    },
+    "invite": {
+      "eyebrow": "// invite",
+      "title": "Join “{title}” as co-author",
+      "lead": "Co-authors push new versions of the post and reply in its reviews. Your @username appears on its page.",
+      "accept": "Join as co-author",
+      "accepting": "Joining…",
+      "states": {
+        "used": "This invite link was already used. Ask the post’s owner for a new one.",
+        "expired": "This invite link has expired. Ask the post’s owner for a new one.",
+        "unknown": "This invite link isn’t valid. Check that you copied all of it."
+      },
+      "signedOut": "Sign in or create an account to accept the invite.",
+      "signIn": "Sign in to continue"
+    }
+  }
+}

@@ -6,21 +6,27 @@ import { headers } from "next/headers";
 import { getPathname, redirect } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { getSafeRedirectPath } from "@/lib/safeRedirect";
-import { signInSchema, signUpSchema, type CredentialField, type GuidanceKey } from "@/lib/validation/credentials";
+import { signInSchema, signUpSchema, type GuidanceKey, type SignUpField } from "@/lib/validation/credentials";
+import type { UsernameGuidanceKey } from "@/lib/validation/username";
 import { logServerError } from "@/server/logServerError";
+import { is_username_taken } from "@/server/profiles/profiles";
 import { createServerSupabase } from "@/server/supabase/serverClient";
 
 export type AuthErrorKey =
   "invalidCredentials" | "emailNotConfirmed" | "emailTaken" | "rateLimited" | "fixFields" | "server" | "notConfigured";
 
 export type AuthActionResult =
-  | { status: "invalid"; fieldErrors: Partial<Record<CredentialField, GuidanceKey>> }
+  | { status: "invalid"; fieldErrors: Partial<Record<SignUpField, FieldGuidanceKey>> }
   | { status: "error"; errorKey: AuthErrorKey; requestId?: string }
   | { status: "checkEmail"; email: string };
+
+export type FieldGuidanceKey = GuidanceKey | UsernameGuidanceKey | "usernameTaken";
 
 export interface CredentialsSubmission {
   email: string;
   password: string;
+  /** Sign-up only: the @username to create the account with. */
+  username?: string;
   locale: string;
   /** Where to go after signing in; validated as a same-site path. */
   next: string;
@@ -49,11 +55,11 @@ function toAuthError(context: string, error: AuthError): AuthActionResult {
 }
 
 function toFieldErrors(issues: { path: PropertyKey[]; message: string }[]): AuthActionResult {
-  const fieldErrors: Partial<Record<CredentialField, GuidanceKey>> = {};
+  const fieldErrors: Partial<Record<SignUpField, FieldGuidanceKey>> = {};
   issues.forEach((issue) => {
     const field = issue.path[0];
-    if ((field === "email" || field === "password") && !fieldErrors[field]) {
-      fieldErrors[field] = issue.message as GuidanceKey;
+    if ((field === "email" || field === "password" || field === "username") && !fieldErrors[field]) {
+      fieldErrors[field] = issue.message as FieldGuidanceKey;
     }
   });
   return { status: "invalid", fieldErrors };
@@ -81,19 +87,35 @@ export async function signIn(submission: CredentialsSubmission): Promise<AuthAct
  */
 export async function signUp(submission: CredentialsSubmission): Promise<AuthActionResult> {
   const locale = getLocale(submission.locale);
-  const parsed = signUpSchema.safeParse({ email: submission.email, password: submission.password });
+  const parsed = signUpSchema.safeParse({
+    email: submission.email,
+    username: submission.username ?? "",
+    password: submission.password,
+  });
   if (!parsed.success) return toFieldErrors(parsed.error.issues);
 
   const supabase = await createServerSupabase();
   if (!supabase) return { status: "error", errorKey: "notConfigured" };
 
+  const { email, password, username } = parsed.data;
+  try {
+    // Checked first so the form can say so; the database still enforces it (see create_profile_for_new_user).
+    if (await is_username_taken(supabase, username)) {
+      return { status: "invalid", fieldErrors: { username: "usernameTaken" } };
+    }
+  } catch (error) {
+    return { status: "error", errorKey: "server", requestId: logServerError("auth.signUp", error) };
+  }
+
   const nextPath = getSafeRedirectPath(submission.next);
   const origin = (await headers()).get("origin") ?? "";
   const confirmPath = getPathname({ href: { pathname: "/auth/confirm", query: { next: nextPath } }, locale });
 
+  // The username travels as user metadata; a database trigger turns it into the profile.
   const { data, error } = await supabase.auth.signUp({
-    ...parsed.data,
-    options: { emailRedirectTo: `${origin}${confirmPath}` },
+    email,
+    password,
+    options: { emailRedirectTo: `${origin}${confirmPath}`, data: { username } },
   });
   if (error) return toAuthError("auth.signUp", error);
 
@@ -101,5 +123,5 @@ export async function signUp(submission: CredentialsSubmission): Promise<AuthAct
     redirect({ href: nextPath, locale });
   }
   // Also reached for an email that already has an account: Supabase hides that on purpose.
-  return { status: "checkEmail", email: parsed.data.email };
+  return { status: "checkEmail", email };
 }

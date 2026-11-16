@@ -3,7 +3,12 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { findPromptBySlug } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
-import { postedPromptExists, postedPromptVisibleToRequest } from "@/server/prompts/postedPromptExists";
+import {
+  isAdminRequest,
+  postedPromptExists,
+  postedPromptVisibleToRequest,
+  postReviewVisibleToRequest,
+} from "@/server/prompts/postedPromptExists";
 import { refreshSupabaseSession } from "@/server/supabase/refreshSession";
 
 const handleLocale = createMiddleware(routing);
@@ -22,7 +27,25 @@ async function promptExists(slug: string, request: NextRequest): Promise<boolean
 }
 
 /**
- * 1. Unknown prompt slugs go to the branded 404 with a real 404 status.
+ * Whether a private page exists for this visitor: a post's review (its authors and the admins) or
+ * the review queue (admins). Everyone else gets the same 404 as an unknown URL.
+ */
+async function privatePageExists(
+  section: string | undefined,
+  slug: string | undefined,
+  more: string[],
+  request: NextRequest,
+): Promise<boolean> {
+  if (section === "prompts" && slug !== undefined && more.length === 1 && more[0] === "review") {
+    return postReviewVisibleToRequest(decodeURIComponent(slug), request);
+  }
+  if (section === "reviews" && slug === undefined) return isAdminRequest(request);
+  return true;
+}
+
+/**
+ * 1. Unknown prompt slugs go to the branded 404 with a real 404 status, and so do private pages
+ *    (reviews, the review queue) for visitors who may not see them.
  *    The detail page streams, so its own `notFound()` can only answer 200 on the first request
  *    (see "Status codes" in the loading.js docs); checking here runs before rendering starts.
  * 2. Everything else goes through next-intl: it detects the browser language on the first visit,
@@ -37,10 +60,11 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const [section, slug, ...more] = hasPrefix ? rest : [first, ...rest];
 
   if (
-    section === "prompts" &&
-    slug !== undefined &&
-    more.length === 0 &&
-    !(await promptExists(decodeURIComponent(slug), request))
+    (section === "prompts" &&
+      slug !== undefined &&
+      more.length === 0 &&
+      !(await promptExists(decodeURIComponent(slug), request))) ||
+    !(await privatePageExists(section, slug, more, request))
   ) {
     // Only the [...rest] catch-all matches this internal path, so the not-found page renders with a 404.
     return NextResponse.rewrite(new URL(`/${locale}/_unknown-prompt`, request.url));

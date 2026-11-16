@@ -425,3 +425,13 @@
 .reviewNotice[data-status="rejected"] {
   border-inline-start-color: var(--color-error);
 }
+
+.reviewNotice[data-status="withdrawn"] {
+  border-inline-start-color: var(--color-ink-muted);
+}
+
+.reviewLink {
+  margin-inline-start: var(--space-xs);
+  color: var(--color-primary);
+  font-weight: 600;
+}

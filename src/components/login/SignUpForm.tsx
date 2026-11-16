@@ -4,10 +4,12 @@ import { useTranslations } from "next-intl";
 import { useReducer, useState, type FormEvent, type ReactElement } from "react";
 import { FormAlert } from "@/components/global/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton";
+import { UsernameField } from "@/components/global/UsernameField";
 import { EmailField } from "@/components/login/EmailField";
 import { PasswordField } from "@/components/login/PasswordField";
-import { SignUpForm as SignUpFormModel, type CredentialValues } from "@/lib/forms/credentialForms";
-import { generateSuggestedPassword, type CredentialField } from "@/lib/validation/credentials";
+import { SignUpForm as SignUpFormModel, type SignUpValues } from "@/lib/forms/credentialForms";
+import { generateSuggestedPassword, type SignUpField } from "@/lib/validation/credentials";
+import type { UsernameGuidanceKey } from "@/lib/validation/username";
 import styles from "./CredentialsForm.module.css";
 
 /** Prefix of the field ids; the first wrong field is focused by id on submit. */
@@ -16,21 +18,31 @@ const FORM_ID = "sign-up";
 interface SignUpFormProps {
   isSubmitting: boolean;
   errorMessage: string;
-  onSubmit: (values: CredentialValues) => void;
+  /** Set when the server found the username taken; cleared as soon as the user edits it. */
+  isUsernameTaken: boolean;
+  onUsernameEdited: () => void;
+  onSubmit: (values: SignUpValues) => void;
 }
 
 /** Owns the sign-up fields, their validation and guidance; emits the values on a valid submit. */
-export function SignUpForm({ isSubmitting, errorMessage, onSubmit }: SignUpFormProps): ReactElement {
+export function SignUpForm({
+  isSubmitting,
+  errorMessage,
+  isUsernameTaken,
+  onUsernameEdited,
+  onSubmit,
+}: SignUpFormProps): ReactElement {
   const t = useTranslations("auth");
   const [form] = useState(() => new SignUpFormModel());
   const [, rerender] = useReducer((count: number) => count + 1, 0);
 
-  function updateField(field: CredentialField, value: string): void {
+  function updateField(field: SignUpField, value: string): void {
     form.setValue(field, value);
+    if (field === "username" && isUsernameTaken) onUsernameEdited();
     rerender();
   }
 
-  function leaveField(field: CredentialField): void {
+  function leaveField(field: SignUpField): void {
     form.markLeft(field);
     rerender();
   }
@@ -53,6 +65,10 @@ export function SignUpForm({ isSubmitting, errorMessage, onSubmit }: SignUpFormP
     onSubmit(form.getValues());
   }
 
+  const username_guidance = isUsernameTaken
+    ? "usernameTaken"
+    : (form.getGuidance("username") as UsernameGuidanceKey | null);
+
   return (
     <form className={styles.form} noValidate onSubmit={submitSignUp}>
       <EmailField
@@ -63,6 +79,15 @@ export function SignUpForm({ isSubmitting, errorMessage, onSubmit }: SignUpFormP
         borderMark={form.getBorderMark("email")}
         onChange={(value) => updateField("email", value)}
         onBlur={() => leaveField("email")}
+      />
+      <UsernameField
+        id={`${FORM_ID}-username`}
+        value={form.getValue("username")}
+        guidanceKey={username_guidance}
+        borderMark={isUsernameTaken ? "error" : form.getBorderMark("username")}
+        isValid={form.isFieldValid("username") && !isUsernameTaken}
+        onChange={(value) => updateField("username", value)}
+        onBlur={() => leaveField("username")}
       />
       <PasswordField
         id={`${FORM_ID}-password`}

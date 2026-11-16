@@ -69,6 +69,17 @@
   color: var(--color-error);
 }
 
+.item[data-status="withdrawn"] .badge {
+  color: var(--color-ink-muted);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0;
+}
+
 .meta,
 .note {
   margin: 0;

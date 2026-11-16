@@ -1,20 +1,22 @@
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
+import { PickUsernameForm } from "@/components/global/PickUsernameForm";
 import { SecondaryButton } from "@/components/global/SecondaryButton";
 import { SkeletonBlock } from "@/components/global/SkeletonBlock";
 import { MySubmissions } from "@/components/upload/MySubmissions";
 import { PostPromptForm } from "@/components/upload/PostPromptForm";
-import { getSignedInUser } from "@/server/auth/getSignedInUser";
+import { get_signed_in_profile } from "@/server/profiles/profiles";
 import styles from "./PostPromptSection.module.css";
 
 /**
- * The form's slot: the form for signed-in users, an invitation to sign in for everyone else.
+ * The form's slot: the form for signed-in users with a username, the "pick your username" form
+ * for older accounts without one, and an invitation to sign in for everyone else.
  * It reads the session, so it renders per request inside <Suspense>.
  */
 async function PostPromptSlot(): Promise<ReactElement> {
   const t = await getTranslations("upload.form");
-  const user = await getSignedInUser();
+  const user = await get_signed_in_profile();
 
   if (!user) {
     return (
@@ -26,7 +28,8 @@ async function PostPromptSlot(): Promise<ReactElement> {
       </div>
     );
   }
-  return <PostPromptForm email={user.email} />;
+  if (!user.username) return <PickUsernameForm />;
+  return <PostPromptForm mode="create" email={user.email} username={user.username} />;
 }
 
 /** Placeholder with the form's shape while the session is checked. */

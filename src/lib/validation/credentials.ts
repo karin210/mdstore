@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { username_schema } from "@/lib/validation/username";
 
 /**
  * Email and password rules shared by the login forms (client) and the auth actions (server), so
@@ -155,7 +156,10 @@ export const signInSchema = z.strictObject({
 
 export const signUpSchema = z.strictObject({
   email: emailSchema,
+  username: username_schema,
   password: z.string().superRefine(guidanceCheck(getSignUpPasswordGuidance)),
 });
 
 export type CredentialField = "email" | "password";
+/** Sign-up also asks for the @username shown on posts and reviews. */
+export type SignUpField = CredentialField | "username";

@@ -7,26 +7,41 @@ import { FormAlert } from "@/components/global/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField";
 import { promptCategories } from "@/data/prompts";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";
 import { PromptPostForm, type PromptPostValues } from "@/lib/forms/PromptPostForm";
 import {
   PREVIEW_LINES,
   PROMPT_KINDS,
   PROMPT_POST_FIELDS,
+  REVISION_NOTE_MAX_LENGTH,
   WORKS_WITH_TOOLS,
   type PromptPostField,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
 import { postPrompt, type PostPromptResult } from "@/server/prompts/actions";
+import { push_revision, type PushRevisionResult } from "@/server/reviews/actions";
 import styles from "./PostPromptForm.module.css";
 
 type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "file">;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
-interface PostPromptFormProps {
-  /** The signed-in user's email, shown so they know which account posts. */
-  email: string | null;
-}
+type PostPromptFormProps =
+  | {
+      mode: "create";
+      /** The signed-in user's email, shown so they know which account posts. */
+      email: string | null;
+      /** Shown as the byline, so they know how the post will be credited. */
+      username: string;
+    }
+  | {
+      /** A new revision of an existing post, starting from its latest revision. */
+      mode: "revision";
+      post_id: string;
+      slug: string;
+      initial_values: Omit<PromptPostValues, "file">;
+      /** The latest revision's file, kept when no new file is chosen. */
+      current_file_name: string;
+    };
 
 /** The id of a field's control, in kebab-case (`post-author-handle`); a checkbox group's first box is `${id}-0`. */
 function getFieldId(field: PromptPostField): string {
@@ -41,21 +56,27 @@ function focusField(field: PromptPostField): void {
 
 /**
  * The upload form: the fields /prompts/[slug] shows, plus the .md file. It validates as the user
- * types (rules shared with the server), focuses the first wrong field on submit, and clears itself
- * once the post is submitted for review. Submitted posts stay pending until an admin approves them.
+ * types (rules shared with the server) and focuses the first wrong field on submit.
+ * - create: posts a new prompt for review, clears itself and links to the new review.
+ * - revision: pushes a new version of an existing post to its review, then opens the review.
  */
-export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
+export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   const t = useTranslations("upload.form");
   const tValidation = useTranslations("upload.validation");
   const tCategories = useTranslations("prompts.categories");
+  const tReview = useTranslations("review");
   const router = useRouter();
-  const [form] = useState(() => new PromptPostForm());
+  const locale_router = useLocaleRouter();
+  const is_revision = props.mode === "revision";
+  const [form] = useState(() => new PromptPostForm(is_revision ? props.initial_values : undefined));
   const [, rerender] = useReducer((count: number) => count + 1, 0);
   // Bumping the key remounts the form, which clears the uncontrolled file input after a success.
   const [formKey, setFormKey] = useState(0);
   const [serverIssues, setServerIssues] = useState<IssueMap>({});
   const [errorMessage, setErrorMessage] = useState<ReactNode>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitted_slug, set_submitted_slug] = useState<string | null>(null);
+  const [note, set_note] = useState("");
+  const [is_note_too_long, set_is_note_too_long] = useState(false);
   const [isSubmitting, startSubmit] = useTransition();
 
   function getIssue(field: PromptPostField): ValidationIssue | null {
@@ -99,23 +120,48 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
     updateField("worksWith", isChecked ? [...tools, tool] : tools.filter((value) => value !== tool));
   }
 
+  function showFieldErrors(fieldErrors: IssueMap): void {
+    setServerIssues(fieldErrors);
+    setErrorMessage(t("fixFields"));
+    const firstWrongField = PROMPT_POST_FIELDS.find((field) => fieldErrors[field]);
+    if (firstWrongField) focusField(firstWrongField);
+    else document.getElementById("post-note")?.focus();
+  }
+
+  function showRevisionResult(result: PushRevisionResult): void {
+    if (props.mode !== "revision") return;
+    if (result.status === "ok") {
+      locale_router.push(`/prompts/${props.slug}/review`);
+      // The review page is rendered per request, so a refresh shows the new revision.
+      router.refresh();
+      return;
+    }
+    if (result.status === "invalid") {
+      set_is_note_too_long(result.note_too_long);
+      showFieldErrors(result.field_errors);
+      return;
+    }
+    setErrorMessage(tReview(`errors.${result.error_key}`, { requestId: result.request_id ?? "" }));
+  }
+
   function showResult(result: PostPromptResult): void {
     if (result.status === "submitted") {
       form.reset();
       setServerIssues({});
       setFormKey((key) => key + 1);
-      setIsSubmitted(true);
+      set_submitted_slug(result.slug);
       rerender();
       // The "my submissions" list is server-rendered, so ask the server to re-render it with the new post.
       router.refresh();
       return;
     }
     if (result.status === "invalid") {
-      setServerIssues(result.fieldErrors);
-      setErrorMessage(t("fixFields"));
-      const firstWrongField = PROMPT_POST_FIELDS.find((field) => result.fieldErrors[field]);
-      if (firstWrongField) focusField(firstWrongField);
+      showFieldErrors(result.fieldErrors);
       return;
+    }
+    if (result.errorKey === "usernameRequired") {
+      // The page asks for a username before showing the form; a refresh brings that back.
+      router.refresh();
     }
     if (result.errorKey === "unauthenticated") {
       setErrorMessage(
@@ -133,11 +179,18 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
     event.preventDefault();
     form.markAllEdited();
     setErrorMessage(null);
-    setIsSubmitted(false);
+    set_submitted_slug(null);
     rerender();
     const invalidField = form.firstInvalidField;
     if (invalidField) {
       focusField(invalidField);
+      return;
+    }
+    if (props.mode === "revision") {
+      const form_data = form.toFormData();
+      form_data.set("note", note);
+      const post_id = props.post_id;
+      startSubmit(async () => showRevisionResult(await push_revision(post_id, form_data)));
       return;
     }
     startSubmit(async () => {
@@ -176,7 +229,7 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
         ) : (
           <input
             type="text"
-            autoComplete={field === "authorHandle" ? "nickname" : "off"}
+            autoComplete="off"
             {...sharedProps}
             onChange={(event) => updateField(field, event.target.value)}
           />
@@ -189,7 +242,13 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
 
   return (
     <form key={formKey} className={styles.form} noValidate onSubmit={submitPost} aria-busy={isSubmitting}>
-      {email && <p className={styles.account}>{t("signedInAs", { email })}</p>}
+      {props.mode === "create" && (
+        <p className={styles.account}>
+          {props.email
+            ? t("signedInAsWithUsername", { email: props.email, username: props.username })
+            : t("postingAs", { username: props.username })}
+        </p>
+      )}
 
       <fieldset className={styles.group}>
         <legend className={styles.legend}>{t("sections.basics")}</legend>
@@ -238,7 +297,6 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
             ))}
           </select>
         </PostFormField>
-        {renderTextField("authorHandle")}
       </fieldset>
 
       <fieldset className={styles.group}>
@@ -283,8 +341,12 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
         <legend className={styles.legend}>{t("sections.file")}</legend>
         <PostFormField
           id="post-file"
-          label={t("fields.file.label")}
-          hint={t("fields.file.hint")}
+          label={is_revision ? tReview("revise.fileLabel") : t("fields.file.label")}
+          hint={
+            props.mode === "revision"
+              ? tReview("revise.fileHint", { fileName: props.current_file_name })
+              : t("fields.file.hint")
+          }
           guidanceText={getGuidanceText("file")}
         >
           <input
@@ -304,10 +366,49 @@ export function PostPromptForm({ email }: PostPromptFormProps): ReactElement {
         {renderTextField("previewLineCount")}
       </fieldset>
 
-      {isSubmitted && <FormAlert tone="success">{t("submitted")}</FormAlert>}
+      {is_revision && (
+        <fieldset className={styles.group}>
+          <legend className={styles.legend}>{tReview("revise.noteSection")}</legend>
+          <PostFormField
+            id="post-note"
+            label={tReview("revise.noteLabel")}
+            hint={tReview("revise.noteHint")}
+            guidanceText={is_note_too_long ? tValidation("tooLong", { max: REVISION_NOTE_MAX_LENGTH }) : ""}
+          >
+            <textarea
+              id="post-note"
+              name="note"
+              rows={3}
+              className="form-input"
+              maxLength={REVISION_NOTE_MAX_LENGTH}
+              value={note}
+              aria-describedby={getDescribedBy("post-note", true)}
+              aria-invalid={is_note_too_long}
+              onChange={(event) => {
+                set_note(event.target.value);
+                set_is_note_too_long(false);
+              }}
+            />
+          </PostFormField>
+        </fieldset>
+      )}
+
+      {submitted_slug && (
+        <FormAlert tone="success">
+          {t("submitted")} <Link href={`/prompts/${submitted_slug}/review`}>{t("openReview")}</Link>
+        </FormAlert>
+      )}
       {errorMessage && <FormAlert tone="error">{errorMessage}</FormAlert>}
       <div className={styles.actions}>
-        <SubmitButton label={t("submit")} busyLabel={t("submitting")} isBusy={isSubmitting} />
+        {is_revision ? (
+          <SubmitButton
+            label={tReview("revise.submit")}
+            busyLabel={tReview("revise.submitting")}
+            isBusy={isSubmitting}
+          />
+        ) : (
+          <SubmitButton label={t("submit")} busyLabel={t("submitting")} isBusy={isSubmitting} />
+        )}
       </div>
     </form>
   );

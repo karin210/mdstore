@@ -1,6 +1,6 @@
 # Database
 
-Status: schema written 2026-11-14, **not applied to any database yet** (no hosted project is linked, and there is no `.env.local`). This explains how mdstore's Supabase database is meant to work and the traps to know before changing it. The CLI and migration commands are in `docs/dev-tooling.md` (Supabase CLI).
+Status (2026-11-15): the first two migrations run on the hosted project and the local stack; the collaborative review migration runs on the local stack only (see `docs/local-supabase-setup.md`). This explains how mdstore's Supabase database is meant to work and the traps to know before changing it. The CLI and migration commands are in `docs/dev-tooling.md` (Supabase CLI).
 
 The goal of this part of the project is also to learn raw PostgreSQL, so there is no ORM: the schema, rules and (later) queries are plain SQL in `supabase/migrations/`.
 
@@ -10,7 +10,9 @@ The goal of this part of the project is also to learn raw PostgreSQL, so there i
 - Two independent databases can be built from those files: the **hosted** project (supabase.com, linked with `supabase link`, updated with `npm run db:push`) and an optional **local** one (`supabase start`, needs Docker, rebuilt with `supabase db reset`). They share no data, only the migrations.
 - Order so far:
   1. `20261110000000_create_posted_prompts.sql`: the `posted_prompts` table, its checks, an index and RLS.
-  2. `20261114000000_add_review_workflow.sql`: the review workflow below.
+  2. `20261114000000_add_review_workflow.sql`: post statuses, `admins` and `is_admin()`.
+  3. `20261116000000_add_collaborative_review.sql`: usernames, co-authors, reviews with revisions and comments, invite links (see [Collaborative review](#collaborative-review)). Applied to the local stack only so far.
+- Database tests: `supabase/tests/database/*.test.sql` (pgTAP), run with `npm run db:test` against the local stack. Each file runs in a transaction that is rolled back.
 
 ## `posted_prompts`
 
@@ -46,13 +48,29 @@ Posts are not public at once. Everything starts as `pending` and an admin decide
 - Extra columns: `kind` (`prompt` or `skill`), `review_note` (max 1000 chars, the reason for a rejection), `reviewed_at`, `reviewed_by`. A trigger (`stamp_review`) fills the last two whenever `status` changes, so nobody has to remember.
 - The second migration also creates the index `posted_prompts_status_created_at_idx`, which serves the public listing and the review queue. See [Indexes](#indexes).
 - The first migration's rows predate the workflow, so the second one marks them `approved`.
-- Reviewing is done by hand in the dashboard's SQL editor until there is an admin page:
+- Since the third migration, reviews happen in the app (`/reviews` for admins, `/prompts/[slug]/review` per post) through `decide_review()`. Direct updates of `posted_prompts` are no longer allowed from the API; the SQL editor still can, but bypasses the review history.
 
-  ```sql
-  select slug, title, created_at from posted_prompts where status = 'pending' order by created_at;
-  update posted_prompts set status = 'approved' where slug = '...';
-  update posted_prompts set status = 'rejected', review_note = '...' where slug = '...';
-  ```
+## Collaborative review
+
+Modelled on pull requests. Product rules, pages and code: [`review-workflow.md`](review-workflow.md). Every write goes through a `security definer` function (called with `supabase.rpc()` from `src/server/reviews/actions.ts`) that checks the caller; the tables only have select policies.
+
+| Table              | One row per                                         | Who can read it               |
+| ------------------ | --------------------------------------------------- | ----------------------------- |
+| `profiles`         | account with a `@username` (unique, ignoring case)  | everyone (bylines)            |
+| `post_authors`     | author of a post: one `owner`, any `coauthor`s      | whoever can see the post      |
+| `prompt_reviews`   | proposed change ("pull request"), numbered per post | the post's authors and admins |
+| `prompt_revisions` | version an author pushed ("commit"), a full copy    | the post's authors and admins |
+| `review_comments`  | comment, line comment or decision                   | the post's authors and admins |
+| `post_invites`     | one-time co-author link (only its SHA-256 is kept)  | nobody (functions only)       |
+
+- **Lifecycle.** Posting inserts into `posted_prompts`; a trigger (`start_post_review`) makes the poster the owner and opens review 1 with the post as revision 1. Authors `push_revision()`: it joins the review in progress (and turns "changes requested" back into "open"), or, for an approved post with none in progress, opens a new review whose `base_revision_id` is the live version. Admins `decide_review()`: `approved` copies the review's latest revision into `posted_prompts` (`live_revision_id`), `changes_requested` hands it back, `rejected` closes it (and rejects a post that was never approved; an approved post keeps its live version). The owner can `withdraw_review()`.
+- **What `posted_prompts` shows.** The latest revision while a post was never approved, then the live (approved) revision. Proposed changes don't touch the public page until approved.
+- **Usernames.** Sign-up sends `username` as user metadata; the `on_auth_user_created` trigger creates the profile (a taken or malformed name is skipped, and the app asks for one before posting, commenting or joining). Usernames can't be changed yet. Existing authors got the handle of their latest post.
+- **Co-authors.** The owner adds them with `add_post_coauthor()` (by username) or `create_post_invite()` (a link valid once for 7 days, accepted with `accept_post_invite()`); `remove_post_author()` removes a co-author or lets one leave. Co-authors push revisions and comment; only the owner manages authors or withdraws.
+- **Errors.** The functions raise their own SQLSTATE codes (`MD401` not signed in, `MD403` not allowed, `MD404` not found, `MD409` closed, `MD422` invalid, `MD428` no username); the server actions map them to messages.
+- **Admins may review their own posts**, since there's a single admin for now.
+- **PostgREST embeds between `posted_prompts` and `prompt_reviews` need the foreign key named** (`prompt_reviews!prompt_reviews_post_id_fkey`): `prompt_revisions` and `review_comments` also link the two tables, which makes an unnamed embed ambiguous.
+- **Not built yet:** notifications (authors learn about feedback by opening the review), editing or deleting comments, renaming usernames, and pagination (the review page loads every revision of a post, each up to 200 KB).
 
 ## Row-level security (RLS)
 
@@ -62,7 +80,7 @@ RLS is what makes it safe for the browser to talk to the database with a public 
 | --------- | --------------------------------------------------------------------------------------------------------------------------- |
 | select    | `status = 'approved'` or `auth.uid() = author_id` or `is_admin()`                                                           |
 | insert    | signed in, `auth.uid() = author_id`, and `status = 'pending'` with no review fields set (authors cannot approve themselves) |
-| update    | `is_admin()` only (authors cannot edit yet)                                                                                 |
+| update    | none since the collaborative review migration: changes go through `push_revision()` and `decide_review()`                   |
 | delete    | none, so denied                                                                                                             |
 
 Traps:
@@ -90,5 +108,6 @@ Traps:
 
 - Wire `npm run db:types` output into the Supabase clients so queries are type-checked.
 - Decide how app queries are written: Postgres functions called with `supabase.rpc()`, or a direct driver (`postgres` / `pg`) with hand-written SQL. A direct driver bypasses RLS, so authorization would move into the queries.
-- RLS tests with pgTAP (`supabase test db`, needs the local stack) before real users post.
+- More pgTAP coverage: `review_workflow.test.sql` covers the review functions and their policies; `posted_prompts` visibility and inserts have no tests of their own yet.
+- Apply `20261116000000_add_collaborative_review.sql` to `mdstore-prod` (`npm run db:push -- --remote`) together with the app code that uses it.
 - The CLI feature (separate worktree) must only download `approved` listings.
