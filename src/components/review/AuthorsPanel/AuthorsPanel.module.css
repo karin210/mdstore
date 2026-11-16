@@ -1,0 +1,25 @@
+.author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2xs) var(--space-sm);
+}
+
+.inlineForm,
+.invite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding-top: var(--space-sm);
+  border-top: 0.0625rem solid var(--color-border);
+}
+
+.invite > button {
+  align-self: flex-start;
+}
+
+.inputRow {
+  display: flex;
+  gap: var(--space-xs);
+}

@@ -4,6 +4,7 @@ import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
 import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/formatPrice";
+import utility_styles from "@/styles/utilities.module.css";
 import styles from "./PromptCard.module.css";
 
 interface PromptCardProps {
@@ -36,11 +37,11 @@ export function PromptCard({ prompt }: PromptCardProps): ReactElement {
       <footer className={styles.bottom}>
         <dl className={styles.meta}>
           <div>
-            <dt className="visually-hidden">{t("card.price")}</dt>
+            <dt className={utility_styles.visuallyHidden}>{t("card.price")}</dt>
             <dd className={styles.price}>{formatPrice(prompt.priceUsd, locale, tCommon("free"))}</dd>
           </div>
           <div>
-            <dt className="visually-hidden">{t("card.authorAndLength")}</dt>
+            <dt className={utility_styles.visuallyHidden}>{t("card.authorAndLength")}</dt>
             <dd className={styles.byline}>
               {prompt.author} · {t("lineCount", { count: prompt.lineCount })}
             </dd>

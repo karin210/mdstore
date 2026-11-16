@@ -9,6 +9,7 @@ import {
   SIGN_UP_PASSWORD_RULES_ATTRIBUTE,
   type SignInPasswordGuidanceKey,
 } from "@/lib/validation/credentials";
+import form_styles from "@/styles/form.module.css";
 import styles from "./PasswordField.module.css";
 
 interface PasswordFieldProps {
@@ -81,8 +82,8 @@ export function PasswordField({
   }));
 
   return (
-    <div className="form-field">
-      <label htmlFor={id} className="form-label">
+    <div className={form_styles.field}>
+      <label htmlFor={id} className={form_styles.label}>
         {t("fields.password")}
       </label>
       <div className={styles.control}>
@@ -94,7 +95,7 @@ export function PasswordField({
           // Safari's generator reads this to suggest a password the sign-up rule accepts.
           {...(isSignUp ? { passwordrules: SIGN_UP_PASSWORD_RULES_ATTRIBUTE } : {})}
           spellCheck={false}
-          className={`form-input ${styles.input}`}
+          className={`${form_styles.input} ${styles.input}`}
           value={value}
           aria-invalid={wasEdited && !isValid}
           aria-describedby={describedBy}
@@ -141,10 +142,10 @@ export function PasswordField({
             wasEdited={wasEdited}
           />
         )}
-        <p id={guidanceId} className="form-guidance" aria-live="polite" hidden={guidanceText === ""}>
+        <p id={guidanceId} className={form_styles.guidance} aria-live="polite" hidden={guidanceText === ""}>
           {guidanceText}
         </p>
-        <p className="form-hint" role="status" hidden={copyMessage === ""}>
+        <p className={form_styles.hint} role="status" hidden={copyMessage === ""}>
           {copyMessage}
         </p>
         {isSignUp && onSuggest && (

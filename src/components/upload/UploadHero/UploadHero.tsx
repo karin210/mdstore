@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
+import section_styles from "@/styles/section.module.css";
 import styles from "./UploadHero.module.css";
 
 export function UploadHero(): ReactElement {
@@ -9,7 +10,7 @@ export function UploadHero(): ReactElement {
   return (
     <section id="intro" className={styles.hero} aria-labelledby="upload-hero-title">
       <div className={styles.copy}>
-        <p className="eyebrow">{t("eyebrow")}</p>
+        <p className={section_styles.eyebrow}>{t("eyebrow")}</p>
         <h1 id="upload-hero-title" className={styles.title}>
           {t("title")}
         </h1>

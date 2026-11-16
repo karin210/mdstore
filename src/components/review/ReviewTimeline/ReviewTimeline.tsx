@@ -5,7 +5,8 @@ import { Link } from "@/i18n/navigation";
 import { build_timeline } from "@/lib/review/reviewView";
 import type { Review, ReviewComment, Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
+import styles from "./ReviewTimeline.module.css";
 
 interface ReviewTimelineProps {
   slug: string;
@@ -33,13 +34,13 @@ export async function ReviewTimeline({
   const review_number = is_latest ? undefined : review.number;
 
   return (
-    <ol className={styles.timeline}>
+    <ol className={review_styles.timeline}>
       {items.map((item) => {
         if (item.kind === "revision") {
           const { revision } = item;
           return (
-            <li key={`revision-${revision.id}`} className={styles.event} data-kind="revision">
-              <p className={styles.eventHeader}>
+            <li key={`revision-${revision.id}`} className={review_styles.event} data-kind="revision">
+              <p className={review_styles.eventHeader}>
                 <strong>{t("revision", { username: name_of(revision.created_by), number: revision.number })}</strong>
                 <time dateTime={revision.created_at}>{format_date(revision.created_at)}</time>
               </p>
@@ -69,11 +70,11 @@ export async function ReviewTimeline({
         return (
           <li
             key={`comment-${comment.id}`}
-            className={styles.event}
+            className={review_styles.event}
             data-kind={comment.decision ? "decision" : "comment"}
             data-decision={comment.decision ?? undefined}
           >
-            <p className={styles.eventHeader}>
+            <p className={review_styles.eventHeader}>
               <strong>{heading}</strong>
               <time dateTime={comment.created_at}>{format_date(comment.created_at)}</time>
             </p>
@@ -86,7 +87,7 @@ export async function ReviewTimeline({
                 <code>{line_text || " "}</code>
               </Link>
             )}
-            {comment.body && <p className={styles.body}>{comment.body}</p>}
+            {comment.body && <p className={review_styles.body}>{comment.body}</p>}
           </li>
         );
       })}

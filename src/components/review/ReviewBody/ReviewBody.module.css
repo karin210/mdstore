@@ -1,0 +1,101 @@
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.breadcrumb li + li::before {
+  content: "/";
+  margin-inline-end: var(--space-2xs);
+}
+
+.breadcrumb a {
+  color: var(--color-primary-text);
+  text-underline-offset: 0.25em;
+}
+
+.breadcrumb [aria-current="page"] {
+  font-family: var(--font-code);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs) var(--space-sm);
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* Tabs: links (each view has its own URL); the current one is marked with aria-current. */
+
+.tabs,
+.revisionPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tabs {
+  border-bottom: 0.0625rem solid var(--color-border);
+}
+
+.tab {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 0.1875rem solid transparent;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tab:hover {
+  color: var(--color-ink);
+}
+
+.tab[aria-current="page"] {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-ink);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.2em 0.8em;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.chip[aria-current="page"] {
+  border-color: var(--color-primary);
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-weight: 600;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.history a {
+  color: var(--color-primary-text);
+}
+
+.history [aria-current="page"] {
+  font-weight: 600;
+}

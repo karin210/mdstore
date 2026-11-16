@@ -20,6 +20,7 @@ import {
 } from "@/lib/validation/promptPost";
 import { postPrompt, type PostPromptResult } from "@/server/prompts/actions";
 import { push_revision, type PushRevisionResult } from "@/server/reviews/actions";
+import form_styles from "@/styles/form.module.css";
 import styles from "./PostPromptForm.module.css";
 
 type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "file">;
@@ -205,7 +206,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
     const sharedProps = {
       id,
       name: field,
-      className: "form-input",
+      className: form_styles.input,
       value: form.getValue(field),
       "aria-describedby": getDescribedBy(id, true),
       ...getControlState(field),
@@ -261,7 +262,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
           <select
             id="post-kind"
             name="kind"
-            className="form-input"
+            className={form_styles.input}
             value={form.getValue("kind")}
             aria-describedby={getDescribedBy("post-kind", true)}
             {...getControlState("kind")}
@@ -282,7 +283,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
           <select
             id="post-category"
             name="category"
-            className="form-input"
+            className={form_styles.input}
             value={form.getValue("category")}
             aria-describedby={getDescribedBy("post-category", false)}
             {...getControlState("category")}
@@ -309,7 +310,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
           aria-describedby="post-works-with-hint post-works-with-guidance"
           aria-invalid={getIssue("worksWith") !== null}
         >
-          <legend className="form-label">{t("fields.worksWith.label")}</legend>
+          <legend className={form_styles.label}>{t("fields.worksWith.label")}</legend>
           <ul className={styles.toolList}>
             {WORKS_WITH_TOOLS.map((tool, index) => (
               <li key={tool}>
@@ -328,10 +329,15 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
               </li>
             ))}
           </ul>
-          <p id="post-works-with-hint" className="form-hint">
+          <p id="post-works-with-hint" className={form_styles.hint}>
             {t("fields.worksWith.hint")}
           </p>
-          <p id="post-works-with-guidance" className="form-guidance" aria-live="polite" hidden={toolsGuidance === ""}>
+          <p
+            id="post-works-with-guidance"
+            className={form_styles.guidance}
+            aria-live="polite"
+            hidden={toolsGuidance === ""}
+          >
             {toolsGuidance}
           </p>
         </fieldset>
@@ -354,7 +360,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             name="file"
             type="file"
             accept=".md,text/markdown"
-            className="form-input"
+            className={form_styles.input}
             aria-describedby={getDescribedBy("post-file", true)}
             {...getControlState("file")}
             onChange={(event) => {
@@ -379,7 +385,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
               id="post-note"
               name="note"
               rows={3}
-              className="form-input"
+              className={form_styles.input}
               maxLength={REVISION_NOTE_MAX_LENGTH}
               value={note}
               aria-describedby={getDescribedBy("post-note", true)}

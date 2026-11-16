@@ -1,0 +1,15 @@
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.lineForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}

@@ -1,0 +1,33 @@
+.eventLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.eventLinks a {
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+
+.quotedLine {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-2xs) var(--space-sm);
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+  color: var(--color-code-ink);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.quotedLine code {
+  white-space: pre;
+}
+
+.lineNumber {
+  color: var(--color-code-muted);
+  font-family: var(--font-code);
+}

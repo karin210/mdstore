@@ -14,7 +14,7 @@
   pointer-events: none;
 }
 
-.control :global(.form-input) {
+.control .input {
   padding-left: calc(var(--space-sm) + 1.25ch);
   font-family: var(--font-code);
 }

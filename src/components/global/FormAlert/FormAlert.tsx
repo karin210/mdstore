@@ -1,5 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 import { AlertIcon, CheckCircleIcon } from "@/components/global/icons/icons";
+import styles from "./FormAlert.module.css";
 
 interface FormAlertProps {
   tone: "error" | "success";
@@ -12,7 +13,7 @@ interface FormAlertProps {
  */
 export function FormAlert({ tone, children }: FormAlertProps): ReactElement {
   return (
-    <p className="form-alert" data-tone={tone} role={tone === "error" ? "alert" : "status"}>
+    <p className={styles.alert} data-tone={tone} role={tone === "error" ? "alert" : "status"}>
       {tone === "error" ? <AlertIcon /> : <CheckCircleIcon />}
       <span>{children}</span>
     </p>

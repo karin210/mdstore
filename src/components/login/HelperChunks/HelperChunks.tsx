@@ -1,5 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Fragment, type ReactElement } from "react";
+import form_styles from "@/styles/form.module.css";
+import utility_styles from "@/styles/utilities.module.css";
 
 export interface HelperChunk {
   id: string;
@@ -26,7 +28,7 @@ export function HelperChunks({ id, label, chunks, separator, wasEdited }: Helper
   const t = useTranslations("auth");
 
   return (
-    <p id={id} className="form-hint" aria-live="polite">
+    <p id={id} className={form_styles.hint} aria-live="polite">
       {label}{" "}
       {chunks.map((chunk, index) => {
         const state = wasEdited ? (chunk.isMet ? "met" : "missing") : undefined;
@@ -34,7 +36,12 @@ export function HelperChunks({ id, label, chunks, separator, wasEdited }: Helper
           <Fragment key={chunk.id}>
             {index > 0 && separator}
             <span data-state={state}>{chunk.text}</span>
-            {state && <span className="visually-hidden"> {state === "met" ? t("chunkMet") : t("chunkMissing")}</span>}
+            {state && (
+              <span className={utility_styles.visuallyHidden}>
+                {" "}
+                {state === "met" ? t("chunkMet") : t("chunkMissing")}
+              </span>
+            )}
           </Fragment>
         );
       })}

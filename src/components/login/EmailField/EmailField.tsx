@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { HelperChunks } from "@/components/login/HelperChunks/HelperChunks";
 import { getEmailParts } from "@/lib/validation/credentials";
+import form_styles from "@/styles/form.module.css";
 
 interface EmailFieldProps {
   id: string;
@@ -39,8 +40,8 @@ export function EmailField({
   }));
 
   return (
-    <div className="form-field">
-      <label htmlFor={id} className="form-label">
+    <div className={form_styles.field}>
+      <label htmlFor={id} className={form_styles.label}>
         {t("fields.email")}
       </label>
       <input
@@ -50,7 +51,7 @@ export function EmailField({
         inputMode="email"
         autoComplete="username"
         spellCheck={false}
-        className="form-input"
+        className={form_styles.input}
         value={value}
         aria-invalid={wasEdited && !isValid}
         aria-describedby={helperId}

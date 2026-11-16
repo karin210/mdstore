@@ -1,0 +1,42 @@
+/* The shape of a page section and its heading, shared by the landing and upload pages. */
+.pageSection {
+  width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.sectionHeading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 44rem;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-size: var(--text-2xl);
+}
+
+.sectionHeading p {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-lg);
+}
+
+/* A heading that carries its Markdown level, as the landing page's sections do (data-md-level="2"). */
+.sectionHeading[data-md-level="2"] h2::before {
+  content: "## " / "";
+  color: var(--color-primary-text);
+  font-family: var(--font-code);
+  font-weight: 500;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  color: var(--color-primary-text);
+  letter-spacing: 0.04em;
+}

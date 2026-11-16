@@ -6,7 +6,9 @@ import { useEffect, useId, useRef, useState, useTransition, type FormEvent, type
 import { FormAlert } from "@/components/global/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
 import { add_review_comment, type ReviewActionResult } from "@/server/reviews/actions";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
+import form_styles from "@/styles/form.module.css";
+import styles from "./CommentForm.module.css";
 
 /** Same limit as the review_comments check in the database. */
 const COMMENT_MAX_LENGTH = 5000;
@@ -76,13 +78,13 @@ export function CommentForm({ review_id, line, onDone }: CommentFormProps): Reac
 
   return (
     <form className={line ? styles.lineForm : styles.commentForm} noValidate onSubmit={send_comment}>
-      <div className="form-field">
-        <label htmlFor={`${id}-body`} className="form-label">
+      <div className={form_styles.field}>
+        <label htmlFor={`${id}-body`} className={form_styles.label}>
           {line ? t("comment.lineLabel", { line: line.line_number }) : t("comment.label")}
         </label>
         <textarea
           id={`${id}-body`}
-          className="form-input"
+          className={form_styles.input}
           rows={line ? 3 : 4}
           value={body}
           ref={body_ref}
@@ -93,18 +95,18 @@ export function CommentForm({ review_id, line, onDone }: CommentFormProps): Reac
             set_guidance("");
           }}
         />
-        <p id={`${id}-hint`} className="form-hint">
+        <p id={`${id}-hint`} className={form_styles.hint}>
           {t("comment.hint")}
         </p>
-        <p id={`${id}-guidance`} className="form-guidance" aria-live="polite" hidden={guidance === ""}>
+        <p id={`${id}-guidance`} className={form_styles.guidance} aria-live="polite" hidden={guidance === ""}>
           {guidance}
         </p>
       </div>
       {error_message && <FormAlert tone="error">{error_message}</FormAlert>}
-      <div className={styles.formActions}>
+      <div className={review_styles.formActions}>
         <SubmitButton label={t("comment.submit")} busyLabel={t("comment.busy")} isBusy={is_sending} />
         {line && (
-          <button type="button" className={styles.textButton} onClick={onDone}>
+          <button type="button" className={review_styles.textButton} onClick={onDone}>
             {t("comment.cancel")}
           </button>
         )}

@@ -13,7 +13,11 @@ import {
   remove_post_author,
   type ReviewErrorKey,
 } from "@/server/reviews/actions";
-import styles from "@/components/review/shared/Review.module.css";
+import review_page_styles from "@/styles/reviewPage.module.css";
+import review_styles from "@/styles/review.module.css";
+import form_styles from "@/styles/form.module.css";
+import utility_styles from "@/styles/utilities.module.css";
+import styles from "./AuthorsPanel.module.css";
 
 interface AuthorsPanelProps {
   post_id: string;
@@ -115,11 +119,11 @@ export function AuthorsPanel({ post_id, slug, authors, viewer_user_id, viewer_ro
   }
 
   return (
-    <section className={styles.card} aria-labelledby="authors-title" aria-busy={is_busy}>
-      <h2 id="authors-title" className={styles.cardTitle}>
+    <section className={review_styles.card} aria-labelledby="authors-title" aria-busy={is_busy}>
+      <h2 id="authors-title" className={review_styles.cardTitle}>
         {t("authors.title")}
       </h2>
-      <ul className={styles.authors}>
+      <ul className={review_page_styles.sidebarList}>
         {authors.map((author) => {
           const is_viewer = author.user_id === viewer_user_id;
           const can_remove = author.role === "coauthor" && (is_owner || is_viewer);
@@ -128,7 +132,7 @@ export function AuthorsPanel({ post_id, slug, authors, viewer_user_id, viewer_ro
             <li key={author.user_id} className={styles.author}>
               <span>
                 <strong>@{author.username}</strong>{" "}
-                <span className={styles.muted}>
+                <span className={review_styles.muted}>
                   {t(`authors.role.${author.role}`)}
                   {is_viewer && ` · ${t("authors.you")}`}
                 </span>
@@ -136,7 +140,7 @@ export function AuthorsPanel({ post_id, slug, authors, viewer_user_id, viewer_ro
               {can_remove && (
                 <button
                   type="button"
-                  className={styles.textButton}
+                  className={review_styles.textButton}
                   data-confirming={is_confirming || undefined}
                   disabled={is_busy}
                   onClick={() => remove_author(author.user_id)}
@@ -154,15 +158,15 @@ export function AuthorsPanel({ post_id, slug, authors, viewer_user_id, viewer_ro
       {is_owner && (
         <>
           <form className={styles.inlineForm} noValidate onSubmit={add_coauthor}>
-            <div className="form-field">
-              <label htmlFor="coauthor-username" className="form-label">
+            <div className={form_styles.field}>
+              <label htmlFor="coauthor-username" className={form_styles.label}>
                 {t("authors.addTitle")}
               </label>
               <div className={styles.inputRow}>
                 <input
                   id="coauthor-username"
                   type="text"
-                  className="form-input"
+                  className={form_styles.input}
                   placeholder="@username"
                   autoComplete="off"
                   autoCapitalize="none"
@@ -175,16 +179,16 @@ export function AuthorsPanel({ post_id, slug, authors, viewer_user_id, viewer_ro
                     set_username_guidance("");
                   }}
                 />
-                <button type="submit" className={styles.secondaryButton} disabled={is_busy}>
+                <button type="submit" className={review_styles.secondaryButton} disabled={is_busy}>
                   {is_busy ? t("authors.adding") : t("authors.add")}
                 </button>
               </div>
-              <p id="coauthor-username-hint" className="form-hint">
+              <p id="coauthor-username-hint" className={form_styles.hint}>
                 {t("authors.addHint")}
               </p>
               <p
                 id="coauthor-username-guidance"
-                className="form-guidance"
+                className={form_styles.guidance}
                 aria-live="polite"
                 hidden={username_guidance === ""}
               >
@@ -194,27 +198,32 @@ export function AuthorsPanel({ post_id, slug, authors, viewer_user_id, viewer_ro
           </form>
 
           <div className={styles.invite}>
-            <p className="form-label">{t("authors.inviteTitle")}</p>
-            <p className="form-hint">{t("authors.inviteHint")}</p>
+            <p className={form_styles.label}>{t("authors.inviteTitle")}</p>
+            <p className={form_styles.hint}>{t("authors.inviteHint")}</p>
             {invite_url ? (
-              <div className="form-field">
-                <label htmlFor="invite-url" className="visually-hidden">
+              <div className={form_styles.field}>
+                <label htmlFor="invite-url" className={utility_styles.visuallyHidden}>
                   {t("authors.inviteLabel")}
                 </label>
                 <input
                   id="invite-url"
-                  className="form-input"
+                  className={form_styles.input}
                   readOnly
                   value={invite_url}
                   onFocus={(event) => event.target.select()}
                 />
-                <button type="button" className={styles.secondaryButton} onClick={copy_invite}>
+                <button type="button" className={review_styles.secondaryButton} onClick={copy_invite}>
                   {copy_state === "copied" ? t("authors.copied") : t("authors.copy")}
                 </button>
-                {copy_state === "failed" && <p className="form-guidance">{t("authors.copyFailed")}</p>}
+                {copy_state === "failed" && <p className={form_styles.guidance}>{t("authors.copyFailed")}</p>}
               </div>
             ) : (
-              <button type="button" className={styles.secondaryButton} disabled={is_busy} onClick={create_invite}>
+              <button
+                type="button"
+                className={review_styles.secondaryButton}
+                disabled={is_busy}
+                onClick={create_invite}
+              >
                 {is_busy ? t("authors.creatingInvite") : t("authors.createInvite")}
               </button>
             )}

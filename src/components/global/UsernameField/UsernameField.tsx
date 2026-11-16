@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import type { UsernameGuidanceKey } from "@/lib/validation/username";
+import form_styles from "@/styles/form.module.css";
 import styles from "./UsernameField.module.css";
 
 interface UsernameFieldProps {
@@ -30,8 +31,8 @@ export function UsernameField({
   const guidance_text = guidanceKey ? t(`guidance.${guidanceKey}`) : "";
 
   return (
-    <div className="form-field">
-      <label htmlFor={id} className="form-label">
+    <div className={form_styles.field}>
+      <label htmlFor={id} className={form_styles.label}>
         {t("fields.username")}
       </label>
       <div className={styles.control}>
@@ -46,7 +47,7 @@ export function UsernameField({
           autoCapitalize="none"
           spellCheck={false}
           maxLength={40}
-          className="form-input"
+          className={`${form_styles.input} ${styles.input}`}
           value={value}
           aria-invalid={guidanceKey !== null}
           aria-describedby={`${hint_id} ${guidance_id}`}
@@ -56,10 +57,10 @@ export function UsernameField({
           onBlur={onBlur}
         />
       </div>
-      <p id={hint_id} className="form-hint">
+      <p id={hint_id} className={form_styles.hint}>
         {t("usernameHint")}
       </p>
-      <p id={guidance_id} className="form-guidance" aria-live="polite" hidden={guidance_text === ""}>
+      <p id={guidance_id} className={form_styles.guidance} aria-live="polite" hidden={guidance_text === ""}>
         {guidance_text}
       </p>
     </div>

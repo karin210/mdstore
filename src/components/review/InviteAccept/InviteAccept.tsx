@@ -5,7 +5,7 @@ import { useState, useTransition, type ReactElement } from "react";
 import { FormAlert } from "@/components/global/FormAlert/FormAlert";
 import { useRouter } from "@/i18n/navigation";
 import { accept_post_invite } from "@/server/reviews/actions";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
 
 /** Joins the post as co-author, then opens its review. */
 export function InviteAccept({ token }: { token: string }): ReactElement {
@@ -27,10 +27,10 @@ export function InviteAccept({ token }: { token: string }): ReactElement {
   }
 
   return (
-    <div className={styles.formActions}>
+    <div className={review_styles.formActions}>
       <button
         type="button"
-        className={styles.secondaryButton}
+        className={review_styles.secondaryButton}
         disabled={is_joining}
         aria-busy={is_joining}
         onClick={accept}

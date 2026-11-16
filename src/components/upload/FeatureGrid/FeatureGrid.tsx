@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import section_styles from "@/styles/section.module.css";
 import styles from "./FeatureGrid.module.css";
 
 interface FeatureGridProps {
@@ -13,9 +14,9 @@ interface FeatureGridProps {
 /** A headed section with a grid of short title + text cards. */
 export function FeatureGrid({ id, eyebrow, title, lead, items }: FeatureGridProps): ReactElement {
   return (
-    <section id={id} className="page-section" aria-labelledby={`${id}-title`}>
-      <header className="section-heading">
-        <p className="eyebrow">{eyebrow}</p>
+    <section id={id} className={section_styles.pageSection} aria-labelledby={`${id}-title`}>
+      <header className={section_styles.sectionHeading}>
+        <p className={section_styles.eyebrow}>{eyebrow}</p>
         <h2 id={`${id}-title`}>{title}</h2>
         <p>{lead}</p>
       </header>

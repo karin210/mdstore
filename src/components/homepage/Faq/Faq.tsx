@@ -1,15 +1,16 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { faqEntryIds } from "@/data/faq";
+import section_styles from "@/styles/section.module.css";
 import styles from "./Faq.module.css";
 
 export function Faq(): ReactElement {
   const t = useTranslations("home.faq");
 
   return (
-    <section id="faq" className="page-section" aria-labelledby="faq-title">
-      <header className="section-heading">
-        <p className="eyebrow">{t("eyebrow")}</p>
+    <section id="faq" className={section_styles.pageSection} aria-labelledby="faq-title">
+      <header className={section_styles.sectionHeading} data-md-level="2">
+        <p className={section_styles.eyebrow}>{t("eyebrow")}</p>
         <h2 id="faq-title">{t("title")}</h2>
       </header>
       <div className={styles.list}>

@@ -1,0 +1,23 @@
+/* Styling shared by dialogs and popovers (see CLAUDE.md "Modals"). */
+.closeFloating {
+  position: absolute;
+  top: -0.875rem;
+  right: -0.875rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-fast);
+}
+
+.closeFloating:hover {
+  background: var(--color-secondary);
+}

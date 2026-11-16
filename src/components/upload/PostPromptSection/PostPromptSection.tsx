@@ -7,6 +7,7 @@ import { SkeletonBlock } from "@/components/global/SkeletonBlock/SkeletonBlock";
 import { MySubmissions } from "@/components/upload/MySubmissions/MySubmissions";
 import { PostPromptForm } from "@/components/upload/PostPromptForm/PostPromptForm";
 import { get_signed_in_profile } from "@/server/profiles/profiles";
+import section_styles from "@/styles/section.module.css";
 import styles from "./PostPromptSection.module.css";
 
 /**
@@ -49,9 +50,9 @@ export function PostPromptSection(): ReactElement {
   const t = useTranslations("upload.form");
 
   return (
-    <section id="post-prompt" className="page-section" aria-labelledby="post-prompt-title">
-      <header className="section-heading">
-        <p className="eyebrow">{t("eyebrow")}</p>
+    <section id="post-prompt" className={section_styles.pageSection} aria-labelledby="post-prompt-title">
+      <header className={section_styles.sectionHeading}>
+        <p className={section_styles.eyebrow}>{t("eyebrow")}</p>
         <h2 id="post-prompt-title">{t("title")}</h2>
         <p>{t("lead")}</p>
       </header>

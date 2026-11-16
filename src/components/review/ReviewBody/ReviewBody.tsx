@@ -16,7 +16,10 @@ import { get_review_revisions } from "@/lib/review/reviewView";
 import { is_review_active, type Review, type Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
 import { get_review_page } from "@/server/reviews/reviewData";
-import styles from "@/components/review/shared/Review.module.css";
+import review_page_styles from "@/styles/reviewPage.module.css";
+import review_styles from "@/styles/review.module.css";
+import section_styles from "@/styles/section.module.css";
+import styles from "./ReviewBody.module.css";
 
 interface ReviewBodyProps {
   params: Promise<{ slug: string }>;
@@ -68,7 +71,7 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
   const tabs: ReviewTab[] = can_revise ? [...REVIEW_TABS] : ["conversation", "file", "changes"];
 
   return (
-    <div className={styles.page}>
+    <div className={review_page_styles.page}>
       <nav className={styles.breadcrumb} aria-label={t("breadcrumb.label")}>
         <ol>
           <li>
@@ -84,13 +87,13 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
         </ol>
       </nav>
 
-      <header className={styles.header}>
-        <p className="eyebrow">
+      <header className={review_page_styles.header}>
+        <p className={section_styles.eyebrow}>
           {t("eyebrow", { number: review.number })} · {t(is_first_review ? "kindOf.first" : "kindOf.update")}
         </p>
-        <h1 className={styles.title}>{post.title}</h1>
+        <h1 className={review_page_styles.title}>{post.title}</h1>
         <p className={styles.meta}>
-          <span className={styles.status} data-status={review.status}>
+          <span className={review_styles.status} data-status={review.status}>
             {t(`status.${review.status}`)}
           </span>
           <span>
@@ -98,19 +101,19 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
               ? t("openedBy", { username: name_of(review.opened_by), date: format_date(review.created_at) })
               : t("openedOn", { date: format_date(review.created_at) })}
           </span>
-          <span className={styles.postStatus} data-status={post.status}>
+          <span className={review_styles.status} data-status={post.status}>
             {t(`postStatus.${post.status}`)}
           </span>
           {post.status === "approved" && (
-            <Link className={styles.inlineLink} href={`/prompts/${post.slug}`}>
+            <Link className={review_styles.inlineLink} href={`/prompts/${post.slug}`}>
               {t("viewPage")}
             </Link>
           )}
         </p>
       </header>
 
-      <div className={styles.layout}>
-        <div className={styles.content}>
+      <div className={review_page_styles.layout}>
+        <div className={review_page_styles.content}>
           <nav aria-label={t("tabs.label")}>
             <ul className={styles.tabs}>
               {tabs.map((tab_name) => (
@@ -166,8 +169,8 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 format_date={format_date}
               />
               {can_take_part && is_active && !viewer.username && (
-                <div className={styles.card}>
-                  <p className={styles.muted}>{t("pickUsername")}</p>
+                <div className={review_styles.card}>
+                  <p className={review_styles.muted}>{t("pickUsername")}</p>
                   <PickUsernameForm />
                 </div>
               )}
@@ -180,13 +183,13 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 />
               )}
               {can_take_part && is_active && viewer.username && <CommentForm review_id={review.id} />}
-              {!is_active && <p className={styles.muted}>{t("comment.closed")}</p>}
+              {!is_active && <p className={review_styles.muted}>{t("comment.closed")}</p>}
             </section>
           )}
 
           {tab === "file" && (
             <section className={styles.panel} aria-label={t("file.revision", { number: selected_revision.number })}>
-              <p className={styles.muted}>
+              <p className={review_styles.muted}>
                 {t("file.pushedBy", {
                   username: name_of(selected_revision.created_by),
                   date: format_date(selected_revision.created_at),
@@ -219,12 +222,12 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
 
           {tab === "revise" && (
             <section className={styles.panel} aria-label={t("tabs.revise")}>
-              <p className={styles.muted}>
+              <p className={review_styles.muted}>
                 {is_active
                   ? t("revise.intoActive", { number: review.number })
                   : t("revise.newReview", { number: latest_review.number + 1 })}
               </p>
-              <div className={styles.card}>
+              <div className={review_styles.card}>
                 <PostPromptForm
                   mode="revision"
                   post_id={post.id}
@@ -248,13 +251,13 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
           )}
         </div>
 
-        <aside className={styles.sidebar}>
+        <aside className={review_page_styles.sidebar}>
           {data.reviews.length > 1 && (
-            <section className={styles.card} aria-labelledby="review-history-title">
-              <h2 id="review-history-title" className={styles.cardTitle}>
+            <section className={review_styles.card} aria-labelledby="review-history-title">
+              <h2 id="review-history-title" className={review_styles.cardTitle}>
                 {t("history.title")}
               </h2>
-              <ol className={styles.history}>
+              <ol className={`${review_page_styles.sidebarList} ${styles.history}`}>
                 {[...data.reviews].reverse().map((item) => (
                   <li key={item.id}>
                     {item.id === review.id ? (

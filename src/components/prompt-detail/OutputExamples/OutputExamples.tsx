@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import type { ReactElement } from "react";
 import type { OutputExample } from "@/data/prompts";
+import utility_styles from "@/styles/utilities.module.css";
 import styles from "./OutputExamples.module.css";
 
 interface OutputExamplesProps {
@@ -54,7 +55,7 @@ export function OutputExamples({ examples, fileName }: OutputExamplesProps): Rea
                   </div>
                   <figcaption className={styles.caption}>
                     {t("placeholder", { number: index + 1 })}
-                    <span className="visually-hidden">{t("placeholderHidden")}</span>
+                    <span className={utility_styles.visuallyHidden}>{t("placeholderHidden")}</span>
                   </figcaption>
                 </figure>
               </li>

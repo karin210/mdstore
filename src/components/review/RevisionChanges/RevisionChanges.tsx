@@ -4,7 +4,9 @@ import { count_hidden_after, diff_lines, group_into_hunks, type DiffLine } from 
 import { diff_listing_fields, get_base_revision } from "@/lib/review/reviewView";
 import type { Review, Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
+import utility_styles from "@/styles/utilities.module.css";
+import styles from "./RevisionChanges.module.css";
 
 interface RevisionChangesProps {
   revision: Revision;
@@ -19,10 +21,10 @@ function DiffRow({ line, labels }: { line: DiffLine; labels: { removed: string; 
 
   return (
     <tr data-kind={line.kind}>
-      <td className={styles.diffNumber}>{old_number}</td>
-      <td className={styles.diffNumber}>{new_number}</td>
-      <td className={styles.diffCode}>
-        {line.kind !== "same" && <span className="visually-hidden">{labels[line.kind]}: </span>}
+      <td className={review_styles.diffNumber}>{old_number}</td>
+      <td className={review_styles.diffNumber}>{new_number}</td>
+      <td className={review_styles.diffCode}>
+        {line.kind !== "same" && <span className={utility_styles.visuallyHidden}>{labels[line.kind]}: </span>}
         <span aria-hidden="true" className={styles.diffMarker}>
           {marker}
         </span>
@@ -51,7 +53,7 @@ export async function RevisionChanges({ revision, review, revisions }: RevisionC
 
   return (
     <div className={styles.changes}>
-      <p className={styles.muted}>
+      <p className={review_styles.muted}>
         {base === null
           ? t("changes.against.none", { number: revision.number })
           : t(base_is_live ? "changes.against.live" : "changes.against.previous", {
@@ -61,12 +63,12 @@ export async function RevisionChanges({ revision, review, revisions }: RevisionC
       </p>
 
       {base && (
-        <section className={styles.card} aria-labelledby="changes-fields-title">
-          <h2 id="changes-fields-title" className={styles.cardTitle}>
+        <section className={review_styles.card} aria-labelledby="changes-fields-title">
+          <h2 id="changes-fields-title" className={review_styles.cardTitle}>
             {t("changes.fieldsTitle")}
           </h2>
           {field_changes.length === 0 ? (
-            <p className={styles.muted}>{t("changes.noFieldChanges")}</p>
+            <p className={review_styles.muted}>{t("changes.noFieldChanges")}</p>
           ) : (
             <dl className={styles.fieldChanges}>
               {field_changes.map((change) => (
@@ -89,18 +91,18 @@ export async function RevisionChanges({ revision, review, revisions }: RevisionC
         </section>
       )}
 
-      <section className={styles.card} aria-labelledby="changes-file-title">
-        <h2 id="changes-file-title" className={styles.cardTitle}>
-          {t("changes.fileTitle")} <code className={styles.fileName}>{revision.file_name}</code>
+      <section className={review_styles.card} aria-labelledby="changes-file-title">
+        <h2 id="changes-file-title" className={review_styles.cardTitle}>
+          {t("changes.fileTitle")} <code className={review_styles.fileName}>{revision.file_name}</code>
         </h2>
         {hunks.length === 0 ? (
-          <p className={styles.muted}>{t("changes.noFileChanges")}</p>
+          <p className={review_styles.muted}>{t("changes.noFileChanges")}</p>
         ) : (
           <>
-            <p className={styles.muted}>{t("changes.summary", { added, removed })}</p>
+            <p className={review_styles.muted}>{t("changes.summary", { added, removed })}</p>
             {/* Focusable so keyboard users can scroll wide lines */}
-            <div className={styles.codeScroller} tabIndex={0} aria-label={t("changes.fileTitle")}>
-              <table className={styles.diff}>
+            <div className={review_styles.codeScroller} tabIndex={0} aria-label={t("changes.fileTitle")}>
+              <table className={`${review_styles.codeTable} ${styles.diff}`}>
                 <tbody>
                   {hunks.map((hunk, index) => (
                     <Fragment key={index}>

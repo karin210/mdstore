@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
+import section_styles from "@/styles/section.module.css";
 import styles from "./HowItWorks.module.css";
 
 const tracks = [
@@ -11,9 +12,9 @@ export function HowItWorks(): ReactElement {
   const t = useTranslations("home.howItWorks");
 
   return (
-    <section id="how-it-works" className="page-section" aria-labelledby="how-title">
-      <header className="section-heading">
-        <p className="eyebrow">{t("eyebrow")}</p>
+    <section id="how-it-works" className={section_styles.pageSection} aria-labelledby="how-title">
+      <header className={section_styles.sectionHeading} data-md-level="2">
+        <p className={section_styles.eyebrow}>{t("eyebrow")}</p>
         <h2 id="how-title">{t("title")}</h2>
       </header>
       <div className={styles.tracks}>

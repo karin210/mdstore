@@ -6,7 +6,9 @@ import { useState, useTransition, type FormEvent, type ReactElement } from "reac
 import { FormAlert } from "@/components/global/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
 import { decide_review, type ReviewActionResult } from "@/server/reviews/actions";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
+import form_styles from "@/styles/form.module.css";
+import styles from "./DecisionForm.module.css";
 
 type Decision = "approved" | "changes_requested" | "rejected";
 const DECISIONS: Decision[] = ["approved", "changes_requested", "rejected"];
@@ -65,13 +67,13 @@ export function DecisionForm({
   return (
     <form className={styles.decision} noValidate onSubmit={submit_decision} aria-labelledby="decision-title">
       <header>
-        <h2 id="decision-title" className={styles.cardTitle}>
+        <h2 id="decision-title" className={review_styles.cardTitle}>
           {t("decision.title")}
         </h2>
-        <p className={styles.muted}>{t("decision.lead")}</p>
+        <p className={review_styles.muted}>{t("decision.lead")}</p>
       </header>
       <fieldset className={styles.options}>
-        <legend className="form-label">{t("decision.legend")}</legend>
+        <legend className={form_styles.label}>{t("decision.legend")}</legend>
         {DECISIONS.map((option) => (
           <label key={option} className={styles.option}>
             <input
@@ -87,20 +89,20 @@ export function DecisionForm({
             />
             <span>
               <span className={styles.optionLabel}>{t(`decision.options.${option}`)}</span>
-              <span id={`decision-hint-${option}`} className="form-hint">
+              <span id={`decision-hint-${option}`} className={form_styles.hint}>
                 {hint_for(option)}
               </span>
             </span>
           </label>
         ))}
       </fieldset>
-      <div className="form-field">
-        <label htmlFor="decision-message" className="form-label">
+      <div className={form_styles.field}>
+        <label htmlFor="decision-message" className={form_styles.label}>
           {t("decision.messageLabel")}
         </label>
         <textarea
           id="decision-message"
-          className="form-input"
+          className={form_styles.input}
           rows={4}
           maxLength={5000}
           value={message}
@@ -111,10 +113,10 @@ export function DecisionForm({
             set_guidance("");
           }}
         />
-        <p id="decision-message-hint" className="form-hint">
+        <p id="decision-message-hint" className={form_styles.hint}>
           {t("decision.messageHint")}
         </p>
-        <p id="decision-message-guidance" className="form-guidance" aria-live="polite" hidden={guidance === ""}>
+        <p id="decision-message-guidance" className={form_styles.guidance} aria-live="polite" hidden={guidance === ""}>
           {guidance}
         </p>
       </div>

@@ -1,4 +1,5 @@
 import type { ReactElement, ReactNode } from "react";
+import form_styles from "@/styles/form.module.css";
 
 interface PostFormFieldProps {
   id: string;
@@ -13,17 +14,17 @@ interface PostFormFieldProps {
 /** Label, control, a short description and the inline guidance below, for one upload-form field. */
 export function PostFormField({ id, label, hint, guidanceText, children }: PostFormFieldProps): ReactElement {
   return (
-    <div className="form-field">
-      <label htmlFor={id} className="form-label">
+    <div className={form_styles.field}>
+      <label htmlFor={id} className={form_styles.label}>
         {label}
       </label>
       {children}
       {hint && (
-        <p id={`${id}-hint`} className="form-hint">
+        <p id={`${id}-hint`} className={form_styles.hint}>
           {hint}
         </p>
       )}
-      <p id={`${id}-guidance`} className="form-guidance" aria-live="polite" hidden={guidanceText === ""}>
+      <p id={`${id}-guidance`} className={form_styles.guidance} aria-live="polite" hidden={guidanceText === ""}>
         {guidanceText}
       </p>
     </div>

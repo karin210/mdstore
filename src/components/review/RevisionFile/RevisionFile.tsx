@@ -3,7 +3,8 @@
 import { useTranslations } from "next-intl";
 import { Fragment, useState, type ReactElement } from "react";
 import { CommentForm } from "@/components/review/CommentForm/CommentForm";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
+import styles from "./RevisionFile.module.css";
 
 export interface LineComment {
   id: string;
@@ -44,14 +45,16 @@ export function RevisionFile({
   });
 
   return (
-    <div className={styles.card}>
-      <p className={styles.cardTitle}>
-        <code className={styles.fileName}>{t("file.fileLabel", { fileName: file_name, count: lines.length })}</code>
+    <div className={review_styles.card}>
+      <p className={review_styles.cardTitle}>
+        <code className={review_styles.fileName}>
+          {t("file.fileLabel", { fileName: file_name, count: lines.length })}
+        </code>
       </p>
-      {can_comment && <p className={styles.muted}>{t("file.lineHelp")}</p>}
+      {can_comment && <p className={review_styles.muted}>{t("file.lineHelp")}</p>}
       {/* Focusable so keyboard users can scroll wide lines */}
-      <div className={styles.codeScroller} tabIndex={0} aria-label={file_name}>
-        <table className={styles.fileTable}>
+      <div className={review_styles.codeScroller} tabIndex={0} aria-label={file_name}>
+        <table className={`${review_styles.codeTable} ${styles.fileTable}`}>
           <tbody>
             {lines.map((line, index) => {
               const line_number = index + 1;
@@ -59,7 +62,7 @@ export function RevisionFile({
               return (
                 <Fragment key={line_number}>
                   <tr data-commented={line_comments.length > 0 || undefined}>
-                    <td className={styles.diffNumber}>
+                    <td className={`${review_styles.diffNumber} ${styles.commentedNumber}`}>
                       {can_comment ? (
                         <button
                           type="button"
@@ -74,7 +77,7 @@ export function RevisionFile({
                         line_number
                       )}
                     </td>
-                    <td className={styles.diffCode}>{line || " "}</td>
+                    <td className={review_styles.diffCode}>{line || " "}</td>
                   </tr>
                   {(line_comments.length > 0 || open_line === line_number) && (
                     <tr data-kind="thread">
@@ -82,11 +85,11 @@ export function RevisionFile({
                         <div className={styles.lineThread}>
                           {line_comments.map((comment) => (
                             <article key={comment.id} className={styles.lineComment}>
-                              <p className={styles.eventHeader}>
+                              <p className={review_styles.eventHeader}>
                                 <strong>@{comment.username}</strong>
                                 <span>{comment.date}</span>
                               </p>
-                              <p className={styles.body}>{comment.body}</p>
+                              <p className={review_styles.body}>{comment.body}</p>
                             </article>
                           ))}
                           {open_line === line_number && (

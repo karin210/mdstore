@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactElement } from "react";
 import { FormAlert } from "@/components/global/FormAlert/FormAlert";
 import { withdraw_review } from "@/server/reviews/actions";
-import styles from "@/components/review/shared/Review.module.css";
+import review_styles from "@/styles/review.module.css";
+import utility_styles from "@/styles/utilities.module.css";
+import styles from "./WithdrawButton.module.css";
 
 /**
  * The owner withdraws the review in progress. Two steps (the first press asks to confirm) instead
@@ -42,12 +44,12 @@ export function WithdrawButton({
   }
 
   return (
-    <section className={styles.card} aria-labelledby="withdraw-title">
-      <h2 id="withdraw-title" className="visually-hidden">
+    <section className={review_styles.card} aria-labelledby="withdraw-title">
+      <h2 id="withdraw-title" className={utility_styles.visuallyHidden}>
         {t("withdraw.button")}
       </h2>
-      <p className={styles.muted}>{t(is_first_review ? "withdraw.hintFirst" : "withdraw.hintUpdate")}</p>
-      <div className={styles.formActions}>
+      <p className={review_styles.muted}>{t(is_first_review ? "withdraw.hintFirst" : "withdraw.hintUpdate")}</p>
+      <div className={review_styles.formActions}>
         <button
           type="button"
           className={styles.dangerButton}
@@ -59,7 +61,7 @@ export function WithdrawButton({
           {is_sending ? t("withdraw.busy") : is_confirming ? t("withdraw.confirm") : t("withdraw.button")}
         </button>
         {is_confirming && !is_sending && (
-          <button type="button" className={styles.textButton} onClick={() => set_is_confirming(false)}>
+          <button type="button" className={review_styles.textButton} onClick={() => set_is_confirming(false)}>
             {t("comment.cancel")}
           </button>
         )}

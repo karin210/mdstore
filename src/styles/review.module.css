@@ -1,0 +1,215 @@
+/* Styles several review components share: cards, text, status pills, the conversation, buttons and code tables. */
+
+/* Status pills: the colour carries the state, the text names it. */
+
+.status {
+  padding: 0.15em 0.75em;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.status[data-status="open"] {
+  border-color: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+.status[data-status="changes_requested"] {
+  border-color: var(--color-tertiary);
+}
+
+.status[data-status="approved"] {
+  border-color: var(--color-brand-green-strong);
+  color: var(--color-brand-green-strong);
+}
+
+.status[data-status="rejected"] {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.inlineLink {
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 0;
+  padding: var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.muted {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.fileName {
+  font-size: var(--text-sm);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 0.0625rem solid var(--color-border);
+  border-inline-start-width: 0.25rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.event[data-kind="revision"] {
+  border-inline-start-color: var(--color-primary);
+  background: var(--color-input-bg);
+}
+
+.event[data-decision="approved"] {
+  border-inline-start-color: var(--color-brand-green-strong);
+}
+
+.event[data-decision="changes_requested"] {
+  border-inline-start-color: var(--color-tertiary);
+}
+
+.event[data-decision="rejected"] {
+  border-inline-start-color: var(--color-error);
+}
+
+.event[data-decision="withdrawn"] {
+  border-inline-start-color: var(--color-ink-muted);
+}
+
+.eventHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2xs) var(--space-sm);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.eventHeader time,
+.eventHeader > span {
+  color: var(--color-ink-muted);
+}
+
+.body {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Tertiary kind: text buttons (cancel, remove, leave). */
+
+.textButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary-text);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.textButton[data-confirming] {
+  color: var(--color-error);
+}
+
+.textButton:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55em 1.2em;
+  border: 0.125rem solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-primary-text);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.secondaryButton:hover {
+  background: var(--color-secondary);
+}
+
+.secondaryButton:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+/* File and diff views: dark code blocks with line numbers in their own column. */
+
+.codeScroller {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  background: var(--color-code-bg);
+}
+
+.codeTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--color-code-ink);
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  line-height: var(--line-height-code);
+}
+
+.diffNumber {
+  width: 1%;
+  padding-inline: var(--space-xs);
+  color: var(--color-code-muted);
+  text-align: right;
+  vertical-align: top;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.diffCode {
+  padding-inline: var(--space-xs) var(--space-md);
+  white-space: pre;
+}

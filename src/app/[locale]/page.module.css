@@ -6,14 +6,6 @@
   padding-bottom: var(--space-lg);
 }
 
-/* Each section heading carries its Markdown level, matching the index. */
-.content :global(.section-heading) h2::before {
-  content: "## " / "";
-  color: var(--color-primary-text);
-  font-family: var(--font-code);
-  font-weight: 500;
-}
-
 /* Sections rise in as they enter the viewport; native scrolling is untouched and nothing is hidden without support. */
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {

@@ -11,6 +11,7 @@ import type { Locale } from "@/i18n/routing";
 import { formatPrice } from "@/lib/formatPrice";
 import { getPromptOrNotFound } from "@/lib/getPromptOrNotFound";
 import styles from "@/components/prompt-detail/shared/PromptDetail.module.css";
+import utility_styles from "@/styles/utilities.module.css";
 
 interface PromptDetailProps {
   /** The route's params promise, awaited here so the read happens inside the page's <Suspense>. */
@@ -102,7 +103,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
         </section>
 
         <aside className={styles.purchase} aria-labelledby="purchase-title">
-          <h2 id="purchase-title" className="visually-hidden">
+          <h2 id="purchase-title" className={utility_styles.visuallyHidden}>
             {t("purchase.title")}
           </h2>
           <p className={styles.price}>{formatPrice(prompt.priceUsd, locale, tPrice("free"))}</p>

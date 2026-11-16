@@ -3,6 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, type ReactElement } from "react";
 import { useActiveSection } from "@/lib/useActiveSection";
+import modal_styles from "@/styles/modal.module.css";
+import utility_styles from "@/styles/utilities.module.css";
 import styles from "./RouteIndex.module.css";
 
 const ROUTE_INDEX_POPOVER_ID = "route-index";
@@ -98,7 +100,7 @@ export function RouteIndexStatusBar({ sections, file_name }: RouteIndexProps): R
           {"#".repeat(activeSection.level)}
         </span>
         <span className={styles.current}>
-          <span className="visually-hidden">{t("reading")} </span>
+          <span className={utility_styles.visuallyHidden}>{t("reading")} </span>
           {activeSection.label}
         </span>
       </p>
@@ -113,7 +115,7 @@ export function RouteIndexStatusBar({ sections, file_name }: RouteIndexProps): R
         </nav>
         <button
           type="button"
-          className="modal-close-floating"
+          className={modal_styles.closeFloating}
           popoverTarget={ROUTE_INDEX_POPOVER_ID}
           popoverTargetAction="hide"
           aria-label={t("close")}

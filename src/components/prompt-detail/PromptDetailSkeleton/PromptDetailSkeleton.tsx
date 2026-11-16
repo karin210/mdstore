@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { SkeletonBlock } from "@/components/global/SkeletonBlock/SkeletonBlock";
 import styles from "@/components/prompt-detail/shared/PromptDetail.module.css";
+import utility_styles from "@/styles/utilities.module.css";
 
 /** Loading placeholder for PromptDetail; reuses its grid so the page doesn't jump when the listing arrives. */
 export function PromptDetailSkeleton(): ReactElement {
@@ -9,7 +10,7 @@ export function PromptDetailSkeleton(): ReactElement {
 
   return (
     <div className={styles.skeleton} aria-busy="true">
-      <p role="status" className="visually-hidden">
+      <p role="status" className={utility_styles.visuallyHidden}>
         {t("loading")}
       </p>
 

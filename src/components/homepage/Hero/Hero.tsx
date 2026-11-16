@@ -4,6 +4,7 @@ import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
 import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
 import { MarkdownField } from "@/components/homepage/MarkdownField/MarkdownField";
 import { hero_file_lines, type HeroFileSegment } from "@/data/heroEditorLines";
+import section_styles from "@/styles/section.module.css";
 import styles from "./Hero.module.css";
 
 export function Hero(): ReactElement {
@@ -19,7 +20,7 @@ export function Hero(): ReactElement {
 
       <div className={styles.content}>
         <div className={styles.copy}>
-          <p className="eyebrow">{t("eyebrow")}</p>
+          <p className={section_styles.eyebrow}>{t("eyebrow")}</p>
           <h1 id="hero-title" className={styles.title}>
             {t("titleStart")}
             {t("titleEnd") && ` ${t("titleEnd")}`}
