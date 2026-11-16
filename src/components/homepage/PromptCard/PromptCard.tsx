@@ -8,10 +8,9 @@ import styles from "./PromptCard.module.css";
 
 interface PromptCardProps {
   prompt: PromptListing;
-  onPreview: (prompt: PromptListing) => void;
 }
 
-export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement {
+export function PromptCard({ prompt }: PromptCardProps): ReactElement {
   const t = useTranslations("prompts");
   const tCommon = useTranslations("price");
   const locale = useLocale();
@@ -47,17 +46,8 @@ export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement
             </dd>
           </div>
         </dl>
-        <div className={styles.actions}>
-          {/* Tertiary kind: informational trigger with no purchase intent */}
-          <button
-            type="button"
-            className={styles.preview}
-            onClick={() => onPreview(prompt)}
-            aria-label={t("card.previewLabel", { fileName: prompt.fileName })}
-          >
-            {t("card.preview")}
-          </button>
-          {isFree(prompt) && (
+        {isFree(prompt) && (
+          <div className={styles.actions}>
             <PrimaryButton
               href={downloadHref(prompt)}
               download
@@ -66,8 +56,8 @@ export function PromptCard({ prompt, onPreview }: PromptCardProps): ReactElement
             >
               {t("card.download")}
             </PrimaryButton>
-          )}
-        </div>
+          </div>
+        )}
       </footer>
     </article>
   );

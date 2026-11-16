@@ -3,8 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState, type ReactElement } from "react";
 import { PromptCard } from "@/components/homepage/PromptCard/PromptCard";
-import { PromptPreviewDialog } from "@/components/modals/PromptPreviewDialog/PromptPreviewDialog";
-import { featuredPrompts, promptCategories, type PromptCategory, type PromptListing } from "@/data/prompts";
+import { featuredPrompts, promptCategories, type PromptCategory } from "@/data/prompts";
 import styles from "./FeaturedPrompts.module.css";
 
 type CategoryFilter = PromptCategory | "all";
@@ -19,7 +18,6 @@ export function FeaturedPrompts(): ReactElement {
   const t = useTranslations("home.featured");
   const tCategories = useTranslations("prompts.categories");
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
-  const [previewed, setPreviewed] = useState<PromptListing | null>(null);
 
   const visiblePrompts =
     activeFilter === "all" ? featuredPrompts : featuredPrompts.filter((prompt) => prompt.category === activeFilter);
@@ -53,12 +51,10 @@ export function FeaturedPrompts(): ReactElement {
       <ul className={styles.grid}>
         {visiblePrompts.map((prompt) => (
           <li key={prompt.slug} className={styles.item}>
-            <PromptCard prompt={prompt} onPreview={setPreviewed} />
+            <PromptCard prompt={prompt} />
           </li>
         ))}
       </ul>
-
-      <PromptPreviewDialog prompt={previewed} onClose={() => setPreviewed(null)} />
     </section>
   );
 }

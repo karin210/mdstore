@@ -130,7 +130,7 @@
   font-size: var(--text-xs);
 }
 
-/* Sits above the stretched link so Preview and Download keep their own clicks. */
+/* Sits above the stretched link so Download keeps its own click. */
 .actions {
   position: relative;
   z-index: 1;
@@ -139,25 +139,6 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2xs);
-}
-
-.preview {
-  padding: 0.5em 1em;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  color: var(--color-primary);
-  font: inherit;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.preview:hover {
-  background: var(--color-secondary);
 }
 
 @media (prefers-reduced-motion: reduce) {

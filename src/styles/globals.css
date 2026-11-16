@@ -455,16 +455,8 @@ textarea.form-input {
 }
 
 /* ==========================================================================
-   Modals (shared styling; see CLAUDE.md "Modals")
+   Dialogs and popovers (shared styling; see CLAUDE.md "Modals")
    ========================================================================== */
-
-.modal-title {
-  margin: 0;
-  font-family: var(--font-body); /* modal headings use the sober font */
-  font-weight: 700;
-  font-size: var(--text-xl);
-  letter-spacing: -0.01em;
-}
 
 .modal-close-floating {
   position: absolute;

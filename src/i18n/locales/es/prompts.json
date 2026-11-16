@@ -12,18 +12,10 @@
       "testedWith": "Probado con",
       "price": "Precio",
       "authorAndLength": "Autor y longitud",
-      "preview": "Vista previa",
-      "previewLabel": "Vista previa de {fileName}",
       "download": "Descargar"
     },
     "lineCount": "{count, plural, one {# línea} other {# líneas}}",
     "downloadFile": "Descargar {fileName}",
-    "previewDialog": {
-      "viewDetails": "Ver detalles",
-      "freeNote": "Las primeras líneas del archivo. Este es gratis: descarga el .md completo y agrégalo a tu repositorio.",
-      "paidNote": "Vista previa gratis: las primeras líneas del archivo. La versión completa se entrega como descarga .md después de la compra.",
-      "close": "Cerrar la vista previa"
-    },
     "listings": {
       "global": {
         "title": "Convenciones para proyectos web",

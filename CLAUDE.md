@@ -100,11 +100,10 @@ src/
 │  │                         TestedModels (the `tested_models` of a listing, from the
 │  │                         `ai_models` registry in src/data/aiModels.ts), AuthorBar (links to
 │  │                         the review for authors and admins)
-│  ├─ review/                review page, queue and invite: ReviewBody, ReviewTimeline,
-│  │                         RevisionFile, RevisionChanges, CommentForm, DecisionForm,
-│  │                         AuthorsPanel, WithdrawButton, ReviewQueue, InviteBody/InviteAccept
-│  │                         (one Review.module.css)
-│  └─ modals/                PromptPreviewDialog (dismissible)
+│  └─ review/                review page, queue and invite: ReviewBody, ReviewTimeline,
+│                            RevisionFile, RevisionChanges, CommentForm, DecisionForm,
+│                            AuthorsPanel, WithdrawButton, ReviewQueue, InviteBody/InviteAccept
+│                            (one Review.module.css)
 ├─ data/                     static catalogues: prompts.ts (listings), aiModels.ts (model
 │                            families, names and prices; the models and every listing's
 │                            tested models are invented placeholders), faq.ts
@@ -143,12 +142,12 @@ public/                      static files served as-is (favicon.ico, images, rob
 
 - **Colours** live only as tokens on `:root` in `globals.css` (light + `prefers-color-scheme: dark`). Roles: `--color-background` (tinted off-white / deep navy), `--color-primary` (brand indigo, header/footer/key CTAs), `--color-secondary` (lavender surfaces), `--color-tertiary` (coral, reserved for warnings/toasts), plus ink, surface, border, code and focus tokens. Never use raw hex in components.
 - **Sizes**: font sizes use the `--text-*` clamp tokens; spacing uses the `--space-*` clamp tokens; page width uses `--content-width`. Sections are separated with `gap` on `main`, not margins.
-- **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons (card "Preview", "Sign out"), interface controls (mobile menu toggle).
+- **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons ("Sign out"), interface controls (mobile menu toggle).
 - **Route index**: every multi-section route (today `/`, `/upload`, `/prompts/[slug]`) renders its <main> through `RouteIndexLayout`, passing `sections` (`id`, localized `label`, heading `level`) and a `file_name`. An entry is any block with that `id`, not necessarily a `<section>`; the shared UI strings are under `routeIndex` in `common.json`, each route's labels under its own `outline.sections`. Routes with a single block (login, invite, 404) have none. The rule is also in the `navigation-ux` skill.
 - **Auth**: only signed-in users can post; the server action re-checks the session (`get_signed_in_user`, verified with `getClaims()`) and RLS only accepts rows whose `author_id` is the caller. The header's `AccountControl` refreshes the page on sign-in/sign-out, so the upload form disappears when the session ends.
 - **Forms** follow the global auth-form rules: validation rules live once in `src/lib/validation/` (client checks + Zod schemas for the server), form state lives in `src/lib/forms/` classes, guidance is inline under each field, and submit focuses the first wrong field. Shared field styles (`.form-input`, `.form-hint`, `.form-guidance`, `data-mark`, `data-state`) are in `globals.css`.
 - **Naming**: camelCase for variables, functions, props and object keys; PascalCase for components and types; UPPER_SNAKE_CASE for module constants. snake_case appears only where an outside system owns the name: Supabase column names (`PostedPromptRow`, the insert in `src/server/prompts/actions.ts`, `DETAIL_COLUMNS`), Supabase error codes and parameters (`token_hash`, `email_change`) and cookie names (`mdstore_locale`). Until `npm run db:types` is wired into the clients, the insert's column names are not type-checked, so keep them in sync with the migration by hand.
-- **Modals**: `PromptPreviewDialog` is a dismissible native `<dialog>` (Escape, backdrop click, `.modal-close-floating` X). Shared modal classes are in `globals.css`.
+- **Modals and popovers**: there is no modal dialog right now. The route index's narrow-screen outline is a native `popover` that uses the shared `.modal-close-floating` X from `globals.css`; a new dismissible modal should be a native `<dialog>` (Escape, backdrop click, that same X).
 - **Titles**: format `Page | mdstore`, defined once in `src/lib/site.ts` (`titleTemplate`) and applied in the root layout; the home page uses `title.absolute` to lead with the brand.
 - **Behavioural state** uses attributes, not classes (`aria-pressed` on category filters, `data-size` on buttons, `data-token` in code previews).
 - Keep this file up to date as routes (listing pages, checkout, seller dashboard, auth) and the backend are added.

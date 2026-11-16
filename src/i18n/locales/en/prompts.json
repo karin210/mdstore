@@ -12,18 +12,10 @@
       "testedWith": "Tested with",
       "price": "Price",
       "authorAndLength": "Author and length",
-      "preview": "Preview",
-      "previewLabel": "Preview {fileName}",
       "download": "Download"
     },
     "lineCount": "{count, plural, one {# line} other {# lines}}",
     "downloadFile": "Download {fileName}",
-    "previewDialog": {
-      "viewDetails": "View details",
-      "freeNote": "The first lines of the file. This one is free: download the full .md and drop it into your repo.",
-      "paidNote": "Free preview: the first lines of the file. The full version is delivered as a .md download after purchase.",
-      "close": "Close preview"
-    },
     "listings": {
       "global": {
         "title": "Web project conventions",
