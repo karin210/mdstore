@@ -32,7 +32,9 @@ export function SiteHeader(): ReactElement {
           <div className={styles.language}>
             <LanguageSwitcher />
           </div>
-          <AccountControl />
+          <div className={styles.account}>
+            <AccountControl />
+          </div>
         </div>
       </div>
     </header>

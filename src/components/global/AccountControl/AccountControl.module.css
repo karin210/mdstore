@@ -29,3 +29,31 @@
 .signIn[data-ready="false"] {
   visibility: hidden;
 }
+
+.icon {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .label {
+    display: none;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Icon-only: a bare icon reads better than one boxed in a pill. */
+  .signIn,
+  .signOut {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+}

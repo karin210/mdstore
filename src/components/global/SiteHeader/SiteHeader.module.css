@@ -62,6 +62,16 @@
   .language {
     display: none;
   }
+
+  /* When the hamburger menu is present, move the account button to its left */
+  .account {
+    order: -1;
+  }
+}
+
+.account {
+  display: flex;
+  align-items: center;
 }
 
 .actions {
