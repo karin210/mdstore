@@ -89,15 +89,41 @@ A summary is `slug, title, tagline, category, kind, version, priceUsd, fileName,
 ### What `add` does
 
 1. Validates the slug, then fetches `GET /api/v1/prompts/<slug>`. A paid listing stops here with a link to its page, and so does a `prompt` (it says to copy or download it).
-2. Picks the tool: `--tool`, or the first marker found at the project root (`.claude/` or `CLAUDE.md`, `.cursor/`, `.github/copilot-instructions.md`, `CONVENTIONS.md` or `.aider*`, `AGENTS.md`), else `agents`.
+2. Picks the tool: `--tool`, or the first marker found at the project root (see the table below), else `agents`.
 3. Looks up the target for (kind, tool) in `targets.ts`. A tool with no known folder for the kind stops with a hint to use another `--tool` or `--path`. `--path` overrides the target.
 4. Downloads `/file` and compares its SHA-256 with the metadata's. Nothing is written on a mismatch.
 5. Writes the file byte for byte to its own path (`.claude/skills/<slug>/SKILL.md`, `.claude/agents/<slug>.md`). The CLI owns it, so nothing of the developer's is touched.
 6. Records the install in `mdstore.lock.json`: version, the hash of the file as written, path, kind and tool.
 
+### How skills and agents are installed, by tool
+
+The CLI installs only two kinds. A `prompt` is never installed: `add` stops before downloading anything and says to copy or download it from the listing page (the same with `--path`).
+
+**What is downloaded.** Both kinds are the listing's single `.md`, fetched from `GET /api/v1/prompts/<slug>/file` and checked against the `sha256` from the metadata. The CLI writes it unchanged, to a file it owns: it never edits a file the developer wrote, never merges into one, and `update` rewrites only that file. A skill is one `SKILL.md` for now; a skill that is a folder (extra files) is not supported yet (see `docs/cli-pending.md`).
+
+**Where it goes.** One table, `install_targets` in `packages/cli/src/targets.ts`, maps (kind, tool) to a project-relative path; `<name>` is the slug. The skill column is the skills matrix of the root `cli.md`, project scope only:
+
+| Tool (`--tool`) | Detected from                     | Skill                              | Agent                      |
+| --------------- | --------------------------------- | ---------------------------------- | -------------------------- |
+| `claude`        | `.claude/`, `CLAUDE.md`           | `.claude/skills/<name>/SKILL.md`   | `.claude/agents/<name>.md` |
+| `cursor`        | `.cursor/`                        | `.cursor/skills/<name>/SKILL.md`   | no known folder            |
+| `copilot`       | `.github/copilot-instructions.md` | `.github/skills/<name>/SKILL.md`   | no known folder            |
+| `opencode`      | `.opencode/`                      | `.opencode/skills/<name>/SKILL.md` | no known folder            |
+| `aider`         | `CONVENTIONS.md`, `.aider*`       | no skills folder                   | no known folder            |
+| `agents`        | `AGENTS.md`, `.agents/`           | `.agents/skills/<name>/SKILL.md`   | no known folder            |
+| `codex`, `zed`  | never (use `--tool`)              | `.agents/skills/<name>/SKILL.md`   | no known folder            |
+
+Codex, Zed and `agents` share `.agents/skills`, the folder Codex and Zed read natively, so they cannot be told apart from the project's files; with no marker found the CLI uses `agents`. The first marker in the order of the table wins (Claude Code first).
+
+**When a tool has no folder.** `add` stops before downloading with `mdstore doesn't know where <tool> keeps <skills|agents> yet`, and suggests another `--tool` or `--path <file>`. `--path` writes the file exactly there (inside the project root, links included) for any tool, so a developer is never blocked by a missing row.
+
+**Tool differences that are not handled yet.** Each tool gets its own copy of the file; there is no canonical `.agents/skills` store with symlinks into the tools' folders, and no user-level scope (`--global`, `~/`). Subagent files are written unchanged: frontmatter and file extension differ between tools, so a subagent is only installed where its format is known (Claude Code). Compiling a subagent per tool, as the root `cli.md` proposes, would need the registry to store a normalized format. These are listed in `docs/cli-pending.md`.
+
+**After the install.** The lockfile entry records version, hash, path, kind and tool, so `list`, `outdated` and `update` need no network to know what is on disk and where. `update` keeps the same path and tool.
+
 ### What `outdated` and `update` do
 
-Both read the lockfile and ask the API for each prompt's current version. `update` re-downloads the ones with a higher version into the same path, with the same tool and reference. It skips, with a warning and exit code 1:
+Both read the lockfile and ask the API for each prompt's current version. `update` re-downloads the ones with a higher version into the same path, with the same tool. It skips, with a warning and exit code 1:
 
 - a file whose hash no longer matches the lockfile, because the developer edited it (`--yes` replaces the edits);
 - a prompt that was removed from mdstore or became paid.
@@ -130,7 +156,7 @@ Older CLIs refuse prompts of a kind they don't know, so release the CLI before l
 
 ### Adding a tool
 
-Add it to `tools` in `kinds.ts`, give it targets in `install_targets`, add its marker to `tool_markers` (`targets.ts`), cover both in `targets.test.ts`, and add its column to the README table.
+Add it to `tools` in `kinds.ts`, give it its skill (and agent) path in `install_targets`, add its marker to `tool_markers` (`targets.ts`) if it has a recognisable folder, cover both in `targets.test.ts`, and add its row to the tables in `packages/cli/README.md` and in the section above. A tool's folders come from the root `cli.md`; check them against the tool's own docs first.
 
 ### Changing the production URL
 
@@ -143,8 +169,11 @@ npm run build && npm run start          # the site, with the API, on http://loca
 npm run cli:build                       # compile the CLI to packages/cli/dist
 cd <some test folder outside the repo>
 MDSTORE_API_URL=http://localhost:3000 node <repo>/packages/cli/dist/cli.js search modal
-MDSTORE_API_URL=http://localhost:3000 node <repo>/packages/cli/dist/cli.js add global --tool claude --yes
+MDSTORE_API_URL=http://localhost:3000 node <repo>/packages/cli/dist/cli.js add global --yes     # a prompt: refused, copy or download it
+MDSTORE_API_URL=http://localhost:3000 node <repo>/packages/cli/dist/cli.js add <skill-slug> --tool claude --yes
 ```
+
+The catalogue has no skill or agent yet, so the last command needs one: a posted skill (the site needs Supabase for that) or a temporary catalogue entry with `kind: "skill"`.
 
 On Windows PowerShell, set the variable first with `$env:MDSTORE_API_URL = "http://localhost:3000"`. Without Supabase env vars the site runs with the catalogue only, so posted prompts don't appear.
 
