@@ -143,33 +143,41 @@
    ========================================================================== */
 
 :root {
-  /* Semantic roles */
-  --color-background: #f5f4fa; /* tinted off-white body background */
-  --color-primary: #3b2f8f; /* brand indigo: header, footer, key CTAs */
-  --color-primary-hover: #2e2475;
-  --color-on-primary: #f8f7fc;
-  --color-secondary: #e7e4f6; /* lavender surfaces: cards, sections, helper buttons */
-  --color-secondary-hover: #d9d4f0;
-  --color-on-secondary: #241c63;
-  --color-tertiary: #e8533a; /* coral accent: warnings, helper tools, toasts */
-  --color-on-tertiary: #fff8f6;
+  /* Semantic roles. The brand colour is #087EA4 (a deep cyan-blue, hue ~195°); every other token is
+     derived from it: tinted neutrals on the same hue, its complement (burnt orange) for the tertiary. */
+  --color-background: #f3f8fa; /* cyan-tinted off-white body background */
+  --color-primary: #087ea4; /* brand cyan-blue: fills (header, CTAs, active states), borders, glows */
+  --color-primary-hover: #066a8a;
+  --color-primary-text: #066a8a; /* the primary as text on light surfaces (#087ea4 is 4.3:1 there) */
+  --color-on-primary: #ffffff; /* 4.6:1 on the primary */
+  --color-secondary: #e1f1f7; /* pale sky surfaces: cards, sections, helper buttons */
+  --color-secondary-hover: #cde7f1;
+  --color-on-secondary: #0a4458;
+  --color-tertiary: #c2410c; /* burnt orange (the primary's complement): warnings, helper tools, toasts */
+  --color-on-tertiary: #ffffff;
+
+  /* Site chrome: the header and footer bands */
+  --color-chrome: #087ea4; /* the brand colour in light mode, a deep teal band in dark mode */
+  --color-on-chrome: #ffffff;
+  --color-chrome-accent: #ffffff; /* the logo tile on the chrome */
 
   /* Neutrals (brand-tinted) */
-  --color-ink: #14122b;
-  --color-ink-muted: #4f4c6b;
+  --color-ink: #0b1c24;
+  --color-ink-muted: #475f6b;
   --color-surface: #ffffff; /* elevated cards on the off-white background */
-  --color-border: #d6d3e6;
-  --color-code-bg: #1b1934;
-  --color-code-ink: #e6e3f5;
-  --color-code-muted: #a29fc2;
-  --color-code-accent: #f5b97a;
-  --color-focus: #3b2f8f;
-  --color-scrim: rgb(20 18 43 / 0.6);
+  --color-border: #cfdfe6; /* decorative dividers and card outlines */
+  --color-border-strong: #6f8b98; /* form control outlines: 3:1 against their fill */
+  --color-code-bg: #0a1f29;
+  --color-code-ink: #dceef4;
+  --color-code-muted: #8eabb8;
+  --color-code-accent: #5ccbe6; /* headings in code previews: the brand hue, lit for the dark editor */
+  --color-focus: #087ea4;
+  --color-scrim: rgb(11 28 36 / 0.6);
 
   /* Status (traffic light): small elements only, always paired with text or an icon */
   --color-error: #b42318; /* AA as text on surface and background */
   --color-brand-green-strong: #15803d; /* success / valid, AA as text */
-  --color-input-bg: #fbfaff; /* inputs sit slightly recessed on the white surface */
+  --color-input-bg: #f8fbfc; /* inputs sit slightly recessed on the white surface */
 
   /* Typography (font families are injected by next/font in the root layout) */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
@@ -207,32 +215,38 @@
   --radius-lg: 1.375rem;
   --radius-pill: 999rem;
   --icon-button-size: 2.25rem;
-  --shadow-card: 0 0.0625rem 0.125rem rgb(20 18 43 / 0.06), 0 0.5rem 1.5rem rgb(20 18 43 / 0.06);
+  --shadow-card: 0 0.0625rem 0.125rem rgb(11 28 36 / 0.06), 0 0.5rem 1.5rem rgb(11 28 36 / 0.07);
   --transition-fast: 160ms ease;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #121124;
-    --color-primary: #a99cff;
-    --color-primary-hover: #c0b6ff;
-    --color-on-primary: #14122b;
-    --color-secondary: #25224a;
-    --color-secondary-hover: #302c5c;
-    --color-on-secondary: #e4e0fb;
-    --color-tertiary: #ff8a73;
-    --color-on-tertiary: #1f0d09;
+    --color-background: #0a161c;
+    --color-primary: #4fc3e3; /* the brand hue, lifted to stay bright on the dark background */
+    --color-primary-hover: #7ad3eb;
+    --color-primary-text: #4fc3e3;
+    --color-on-primary: #04161d;
+    --color-secondary: #11303c;
+    --color-secondary-hover: #173d4c;
+    --color-on-secondary: #d2eef7;
+    --color-tertiary: #ff9466;
+    --color-on-tertiary: #2a0d02;
 
-    --color-ink: #eceaf7;
-    --color-ink-muted: #b3b0cc;
-    --color-surface: #1c1a36;
-    --color-border: #34315a;
-    --color-code-bg: #0d0c1c;
-    --color-focus: #c0b6ff;
-    --color-scrim: rgb(5 4 14 / 0.72);
+    --color-chrome: #0d2a35;
+    --color-on-chrome: #e4f0f4;
+    --color-chrome-accent: #4fc3e3;
+
+    --color-ink: #e4f0f4;
+    --color-ink-muted: #9db5c0;
+    --color-surface: #10222b;
+    --color-border: #24414e;
+    --color-border-strong: #5f7d8a;
+    --color-code-bg: #061117;
+    --color-focus: #7ad3eb;
+    --color-scrim: rgb(2 8 11 / 0.72);
     --color-error: #ff9b8f;
     --color-brand-green-strong: #5ee08f;
-    --color-input-bg: #16142d;
+    --color-input-bg: #0c1b22;
     --shadow-card: 0 0.0625rem 0.125rem rgb(0 0 0 / 0.3), 0 0.5rem 1.5rem rgb(0 0 0 / 0.25);
   }
 }
@@ -352,7 +366,7 @@ summary,
   margin: 0;
   font-family: var(--font-code);
   font-size: var(--text-sm);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   letter-spacing: 0.04em;
 }
 
@@ -387,7 +401,7 @@ summary,
 .form-input {
   width: 100%;
   padding: var(--space-xs) var(--space-sm);
-  border: 0.125rem solid var(--color-border);
+  border: 0.125rem solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   background: var(--color-input-bg);
   color: var(--color-ink);

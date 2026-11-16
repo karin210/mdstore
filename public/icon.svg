@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- The SiteLogo mark. A favicon cannot read the CSS tokens, so these values mirror
+       the color-primary and color-on-primary tokens in src/styles/globals.css (light, then dark). -->
+  <style>
+    .tile { fill: #087ea4; }
+    .cut { fill: #ffffff; }
+    .glyph { stroke: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #4fc3e3; }
+      .cut { fill: #04161d; }
+      .glyph { stroke: #04161d; }
+    }
+  </style>
+  <path class="tile" d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" />
+  <path class="cut" d="M15 2v4a1 1 0 0 0 1 1h4Z" opacity="0.35" />
+  <path class="glyph" d="M9.75 10.5 8.75 18.5M13.25 10.5l-1 8M7.5 13h7M7 16h7" fill="none" stroke-width="1.6" stroke-linecap="round" />
+</svg>

@@ -30,7 +30,7 @@
 .question::after {
   content: "+";
   flex-shrink: 0;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-family: var(--font-code);
   font-size: var(--text-lg);
   transition: rotate var(--transition-fast);

@@ -2,8 +2,9 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  border-bottom: 0.0625rem solid color-mix(in srgb, var(--color-chrome-accent) 25%, transparent);
+  background: var(--color-chrome);
+  color: var(--color-on-chrome);
 }
 
 .inner {
@@ -36,13 +37,13 @@
 }
 
 .links a:hover {
-  background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+  background: color-mix(in srgb, var(--color-on-chrome) 14%, transparent);
 }
 
 .inner > :focus-visible,
 .links :focus-visible,
 .mobile summary:focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-on-chrome);
 }
 
 .mobile {

@@ -3,8 +3,9 @@
   flex-direction: column;
   gap: var(--space-lg);
   padding-block: var(--space-xl) var(--space-md);
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  border-top: 0.0625rem solid color-mix(in srgb, var(--color-chrome-accent) 25%, transparent);
+  background: var(--color-chrome);
+  color: var(--color-on-chrome);
 }
 
 .inner,
@@ -49,12 +50,12 @@
 }
 
 .footer :focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-on-chrome);
 }
 
 .legal {
   margin-block: 0;
   padding-top: var(--space-md);
-  border-top: 0.0625rem solid color-mix(in srgb, var(--color-on-primary) 20%, transparent);
+  border-top: 0.0625rem solid color-mix(in srgb, var(--color-on-chrome) 20%, transparent);
   font-size: var(--text-xs);
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ReactElement } from "react";
-import { LogOutIcon } from "@/components/global/icons/icons";
+import { LogInIcon, LogOutIcon } from "@/components/global/icons/icons";
 import { Link, useRouter } from "@/i18n/navigation";
 import { createBrowserSupabase } from "@/lib/supabase/browserClient";
 import { getSupabaseEnv } from "@/lib/supabase/env";
@@ -41,13 +40,7 @@ export function AccountControl(): ReactElement {
   if (accountState === "signedIn") {
     return (
       // Tertiary kind: account setting, no acquisition intent
-      <button
-        type="button"
-        className={styles.signOut}
-        onClick={signOut}
-        aria-label={t("signOut")}
-        title={t("signOut")}
-      >
+      <button type="button" className={styles.signOut} onClick={signOut} aria-label={t("signOut")} title={t("signOut")}>
         <span className={styles.label}>{t("signOut")}</span>
         <span className={styles.icon} aria-hidden="true">
           <LogOutIcon />
@@ -67,7 +60,7 @@ export function AccountControl(): ReactElement {
     >
       <span className={styles.label}>{t("signIn")}</span>
       <span className={styles.icon} aria-hidden="true">
-        <Image src="/sign-in-icon.svg" alt="" width={20} height={20} unoptimized />
+        <LogInIcon />
       </span>
     </Link>
   );

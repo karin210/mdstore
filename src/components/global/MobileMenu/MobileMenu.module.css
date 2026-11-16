@@ -17,7 +17,7 @@
 }
 
 .toggle:hover {
-  background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+  background: color-mix(in srgb, var(--color-on-chrome) 14%, transparent);
 }
 
 /* Three bars drawn with one element and its pseudo-elements */

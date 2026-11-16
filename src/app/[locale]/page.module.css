@@ -9,7 +9,7 @@
 /* Each section heading carries its Markdown level, matching the index. */
 .content :global(.section-heading) h2::before {
   content: "## " / "";
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-family: var(--font-code);
   font-weight: 500;
 }

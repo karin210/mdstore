@@ -45,7 +45,7 @@
 
 .marker {
   min-width: 2ch;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-family: var(--font-code);
   font-weight: 500;
 }

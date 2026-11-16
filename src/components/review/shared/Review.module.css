@@ -23,7 +23,7 @@
 }
 
 .breadcrumb a {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   text-underline-offset: 0.25em;
 }
 
@@ -65,7 +65,7 @@
 
 .status[data-status="open"] {
   border-color: var(--color-primary);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 .status[data-status="changes_requested"] {
@@ -85,7 +85,7 @@
 }
 
 .inlineLink {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 600;
 }
 
@@ -262,7 +262,7 @@
 }
 
 .eventLinks a {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 600;
 }
 
@@ -356,7 +356,7 @@
   padding: 0;
   border: 0;
   background: none;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font: inherit;
   font-size: var(--text-sm);
   font-weight: 600;
@@ -383,7 +383,7 @@
   border: 0.125rem solid var(--color-primary);
   border-radius: var(--radius-pill);
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font: inherit;
   font-size: var(--text-sm);
   font-weight: 600;
@@ -427,7 +427,7 @@
 }
 
 .history a {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 .history [aria-current="page"] {

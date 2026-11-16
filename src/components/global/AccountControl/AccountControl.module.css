@@ -3,10 +3,10 @@
 .signOut {
   display: block;
   padding: var(--space-2xs) var(--space-sm);
-  border: 0.0625rem solid color-mix(in srgb, var(--color-on-primary) 55%, transparent);
+  border: 0.0625rem solid color-mix(in srgb, var(--color-on-chrome) 55%, transparent);
   border-radius: var(--radius-pill);
   background: transparent;
-  color: var(--color-on-primary);
+  color: var(--color-on-chrome);
   font: inherit;
   font-size: var(--text-sm);
   font-weight: 600;
@@ -18,12 +18,12 @@
 
 .signIn:hover,
 .signOut:hover {
-  background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+  background: color-mix(in srgb, var(--color-on-chrome) 14%, transparent);
 }
 
 .signIn:focus-visible,
 .signOut:focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-on-chrome);
 }
 
 .signIn[data-ready="false"] {

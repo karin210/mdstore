@@ -63,7 +63,7 @@
 }
 
 .card:hover .titleLink {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 /* Show the keyboard focus ring around the whole card, matching the clickable area. */

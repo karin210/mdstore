@@ -45,7 +45,13 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: t("description"),
     // Static files live in public/; the icon link is declared here instead of app/favicon.ico.
-    icons: { icon: "/favicon.ico" },
+    // The SVG (the logo mark, theme-aware) for modern browsers, the .ico as the fallback.
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.svg", type: "image/svg+xml" },
+      ],
+    },
   };
 }
 

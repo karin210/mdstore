@@ -25,7 +25,7 @@
 }
 
 .breadcrumb a {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   text-underline-offset: 0.25em;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .fileName {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-size: var(--text-sm);
 }
 
@@ -112,7 +112,7 @@
 .tagline {
   max-width: 40rem;
   margin: 0;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-size: var(--text-xl);
   font-weight: 600;
 }
@@ -183,7 +183,7 @@
 }
 
 .highlights li::marker {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-family: var(--font-code);
   font-weight: 700;
 }
@@ -370,7 +370,7 @@
   gap: 0.4em;
   padding: 0.5em 1em;
   border-radius: var(--radius-pill);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-size: var(--text-sm);
   font-weight: 600;
   text-decoration: underline;
@@ -434,6 +434,6 @@
 
 .reviewLink {
   margin-inline-start: var(--space-xs);
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 600;
 }

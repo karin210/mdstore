@@ -160,7 +160,8 @@ function drawGlyphAtlas(cellWidth: number, cellHeight: number): HTMLCanvasElemen
   if (!context) return atlas;
   const fontFamily = getComputedStyle(document.documentElement).getPropertyValue("--font-code").trim() || "monospace";
   context.font = `500 ${Math.round(cellHeight * 0.78)}px ${fontFamily}`;
-  context.fillStyle = "#fff";
+  // A coverage mask: the shader reads only its alpha and tints glyphs with the colour tokens.
+  context.fillStyle = "white";
   context.textAlign = "center";
   context.textBaseline = "middle";
   [...GLYPHS].forEach((glyph, index) => {

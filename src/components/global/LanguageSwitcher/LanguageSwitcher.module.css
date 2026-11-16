@@ -18,13 +18,13 @@
 }
 
 a.item:hover {
-  background: color-mix(in srgb, var(--color-on-primary) 14%, transparent);
+  background: color-mix(in srgb, currentColor 14%, transparent);
 }
 
 .item[aria-current="true"] {
-  background: color-mix(in srgb, var(--color-on-primary) 22%, transparent);
+  background: color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .item:focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: currentColor;
 }

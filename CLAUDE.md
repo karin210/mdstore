@@ -149,7 +149,7 @@ supabase/migrations/         SQL for the posted_prompts table, its checks and RL
 packages/cli/                the `mdstore` CLI (npm workspace): src/cli.ts (args), api.ts, targets.ts
                              (kind × tool → path, tool detection), install.ts, lockfile.ts, paths.ts
                              (root containment), hash.ts, validation.ts, one *Command.ts per command
-public/                      static files served as-is (favicon.ico, images, robots.txt);
+public/                      static files served as-is (favicon.ico, icon.svg (the logo mark), images, robots.txt);
                              never put static files in src/app/
 ```
 
@@ -157,7 +157,7 @@ public/                      static files served as-is (favicon.ico, images, rob
 
 ## Conventions specific to this project
 
-- **Colours** live only as tokens on `:root` in `globals.css` (light + `prefers-color-scheme: dark`). Roles: `--color-background` (tinted off-white / deep navy), `--color-primary` (brand indigo, header/footer/key CTAs), `--color-secondary` (lavender surfaces), `--color-tertiary` (coral, reserved for warnings/toasts), plus ink, surface, border, code and focus tokens. Never use raw hex in components.
+- **Colours** live only as tokens on `:root` in `globals.css` (light + `prefers-color-scheme: dark`). The brand colour is `#087EA4` (deep cyan-blue) and every token derives from it. Roles: `--color-background` (cyan-tinted off-white / deep blue-teal), `--color-primary` (brand cyan-blue `#087EA4`, lifted to `#4FC3E3` in dark mode: key CTAs, active states, borders, glows), `--color-primary-text` (the primary as text: darker in light mode, where `#087EA4` is under 4.5:1 on the page background), `--color-secondary` (pale sky surfaces), `--color-tertiary` (burnt orange, the primary's complement, reserved for warnings/toasts), `--color-chrome` / `--color-on-chrome` / `--color-chrome-accent` (header and footer band: the brand colour in light mode, a deep teal band with a cyan logo in dark mode), plus ink, surface, border (`--color-border-strong` outlines form controls at 3:1), code and focus tokens. Never use raw hex in components; the only hard-coded copies are in `public/icon.svg` (a favicon cannot read tokens).
 - **Sizes**: font sizes use the `--text-*` clamp tokens; spacing uses the `--space-*` clamp tokens; page width uses `--content-width`. Sections are separated with `gap` on `main`, not margins.
 - **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons ("Sign out"), interface controls (mobile menu toggle).
 - **Route index**: every multi-section route (today `/`, `/upload`, `/prompts/[slug]`) renders its <main> through `RouteIndexLayout`, passing `sections` (`id`, localized `label`, heading `level`) and a `file_name`. An entry is any block with that `id`, not necessarily a `<section>`; the shared UI strings are under `routeIndex` in `common.json`, each route's labels under its own `outline.sections`. Routes with a single block (login, invite, 404) have none. The rule is also in the `navigation-ux` skill.
