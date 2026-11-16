@@ -1,13 +1,13 @@
 {
   "home": {
     "meta": {
-      "title": "Desarrolla, comparte y vende prompts de programación como archivos .md"
+      "title": "Encuentra y comparte instrucciones para agentes y crea algo increíble"
     },
     "hero": {
       "eyebrow": "// el hub para desarrollar prompts de programación",
-      "titleStart": "Desarrolla y comparte prompts de programación como archivos",
-      "titleEnd": ".",
-      "lead": "Los desarrolladores publican los prompts que han perfeccionado y la comunidad accede a instrucciones probadas y de alta calidad para Claude Code, Cursor y Copilot. Compártelos gratis o véndelos, y agrega cualquier archivo a tu repositorio para que tu agente trabaje como el suyo.",
+      "titleStart": "Encuentra y comparte instrucciones para agentes y crea algo increíble",
+      "titleEnd": "",
+      "lead": "Accede a prompts, skills y agentes verificados. Obtén instrucciones rigurosamente probadas, vistas previas de resultados reales, comparativas de tokens en múltiples modelos y guías de uso paso a paso diseñadas para resultados confiables.",
       "browse": "Explorar prompts",
       "upload": "Sube tu prompt",
       "highlights": {

@@ -1,13 +1,13 @@
 {
   "home": {
     "meta": {
-      "title": "Develop, share and sell coding prompts as .md files"
+      "title": "Find and share agent instructions to build something awesome"
     },
     "hero": {
-      "eyebrow": "// the hub for developing coding prompts",
-      "titleStart": "Develop and share coding prompts as",
-      "titleEnd": "files.",
-      "lead": "Developers publish the prompts they have refined, and the community gets high-quality, tested instructions for Claude Code, Cursor and Copilot. Share them for free or sell them, then drop any file into your repo so your agent works the way theirs does.",
+      "eyebrow": "// Hub for curated instructions for AI agents",
+      "titleStart": "Find and share agent instructions to build something awesome",
+      "titleEnd": "",
+      "lead": "Access vetted prompts, skills, and agents. Get thoroughly tested instructions, real output previews, multi-model token benchmarks, and step-by-step usage guides built for reliable results.",
       "browse": "Browse prompts",
       "upload": "Upload your prompt",
       "highlights": {

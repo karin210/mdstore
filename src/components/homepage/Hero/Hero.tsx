@@ -1,39 +1,12 @@
 import { useTranslations } from "next-intl";
-import type { CSSProperties, ReactElement } from "react";
+import { Fragment, type CSSProperties, type ReactElement } from "react";
 import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
 import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
 import { MarkdownField } from "@/components/homepage/MarkdownField/MarkdownField";
+import { hero_file_lines, type HeroFileSegment } from "@/data/heroEditorLines";
 import styles from "./Hero.module.css";
 
 const highlightKeys = ["noLockIn", "freePreview", "anyTool"] as const;
-
-/** The first lines of a prompt file, shown in the hero editor window. */
-const FILE_LINES: { token?: "heading" | "comment"; text: ReactElement | string }[] = [
-  { token: "heading", text: "# Senior Next.js pair programmer" },
-  { text: "" },
-  { token: "heading", text: "## Before writing code" },
-  { text: "- Read the installed framework docs first." },
-  { text: "- Ask when a requirement is ambiguous." },
-  { text: "" },
-  { token: "heading", text: "## Conventions" },
-  {
-    text: (
-      <>
-        - Explicit return types, <span data-token="inline">no any</span>.
-      </>
-    ),
-  },
-  { text: "- Semantic HTML, WCAG 2.1 AA." },
-  {
-    text: (
-      <>
-        - Colours only through <span data-token="inline">:root</span> tokens.
-      </>
-    ),
-  },
-  { text: "" },
-  { token: "comment", text: "<!-- 128 more lines -->" },
-];
 
 export function Hero(): ReactElement {
   const t = useTranslations("home.hero");
@@ -50,7 +23,8 @@ export function Hero(): ReactElement {
         <div className={styles.copy}>
           <p className="eyebrow">{t("eyebrow")}</p>
           <h1 id="hero-title" className={styles.title}>
-            {t("titleStart")} <span className={styles.highlight}>.md</span> {t("titleEnd")}
+            {t("titleStart")}
+            {t("titleEnd") && ` ${t("titleEnd")}`}
             <span className={styles.caret} aria-hidden="true" />
           </h1>
           <p className={styles.lead}>{t("lead")}</p>
@@ -81,14 +55,22 @@ export function Hero(): ReactElement {
             </figcaption>
             <pre className={styles.code}>
               <code className={styles.lines}>
-                {FILE_LINES.map((line, index) => (
+                {hero_file_lines.map((line, index) => (
                   <span
                     key={index}
                     className={styles.line}
                     data-token={line.token}
                     style={{ "--line-index": index } as CSSProperties}
                   >
-                    {line.text}
+                    {line.segments.map((segment: HeroFileSegment, segment_index: number) =>
+                      typeof segment === "string" ? (
+                        <Fragment key={segment_index}>{segment}</Fragment>
+                      ) : (
+                        <span key={segment_index} data-token="inline">
+                          {segment.inline}
+                        </span>
+                      ),
+                    )}
                     {"\n"}
                   </span>
                 ))}
