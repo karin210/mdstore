@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useRef, type ReactElement } from "react";
+import { LanguageSwitcher } from "@/components/global/LanguageSwitcher/LanguageSwitcher";
 import { Link } from "@/i18n/navigation";
 import styles from "./MobileMenu.module.css";
 
@@ -36,6 +37,9 @@ export function MobileMenu({ links }: MobileMenuProps): ReactElement {
             </Link>
           </li>
         ))}
+        <li className={styles.language}>
+          <LanguageSwitcher />
+        </li>
       </ul>
     </details>
   );

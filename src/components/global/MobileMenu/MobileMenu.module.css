@@ -102,3 +102,10 @@
 .panel a:focus-visible {
   outline-color: var(--color-focus);
 }
+
+/* The language choice sits under the page links, separated by a rule */
+.language {
+  margin-top: var(--space-2xs);
+  padding-top: var(--space-xs);
+  border-top: 0.0625rem solid var(--color-border);
+}

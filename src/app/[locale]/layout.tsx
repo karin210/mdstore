@@ -5,6 +5,7 @@ import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { locale as localeParam } from "next/root-params";
 import type { ReactElement, ReactNode } from "react";
+import { LanguageBanner } from "@/components/global/LanguageBanner/LanguageBanner";
 import { SiteFooter } from "@/components/global/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/global/SiteHeader/SiteHeader";
 import { routing } from "@/i18n/routing";
@@ -57,6 +58,7 @@ export default async function RootLayout({ children }: { children: ReactNode }):
       <body>
         <NextIntlClientProvider>
           <SiteHeader />
+          <LanguageBanner />
           {children}
           <SiteFooter />
         </NextIntlClientProvider>

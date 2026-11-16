@@ -29,7 +29,9 @@ export function SiteHeader(): ReactElement {
               <MobileMenu links={links} />
             </div>
           </nav>
-          <LanguageSwitcher />
+          <div className={styles.language}>
+            <LanguageSwitcher />
+          </div>
           <AccountControl />
         </div>
       </div>

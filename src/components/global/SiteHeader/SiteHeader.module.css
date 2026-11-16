@@ -57,6 +57,11 @@
   .mobile {
     display: block;
   }
+
+  /* Small screens: the switcher lives in the mobile menu instead */
+  .language {
+    display: none;
+  }
 }
 
 .actions {
