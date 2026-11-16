@@ -9,17 +9,12 @@
       "titleEnd": "",
       "lead": "Access vetted prompts, skills, and agents. Get thoroughly tested instructions, real output previews, multi-model token benchmarks, and step-by-step usage guides built for reliable results.",
       "browse": "Browse prompts",
-      "upload": "Upload your prompt",
-      "highlights": {
-        "noLockIn": "Plain Markdown, no lock-in",
-        "freePreview": "Free preview before you buy",
-        "anyTool": "Works with any AI coding tool"
-      }
+      "upload": "Upload your prompt"
     },
     "featured": {
       "eyebrow": "// featured",
-      "title": "Prompts developers are buying this week",
-      "lead": "Every file opens with a free preview, so you know exactly what your agent will be told.",
+      "title": "The most popular prompts",
+      "lead": "Prompts and skills that the community uses the most.",
       "filterLabel": "Filter by category",
       "all": "All",
       "showing": "Showing {count, plural, one {# prompt} other {# prompts}}"
