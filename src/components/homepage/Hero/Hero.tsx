@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Fragment, type CSSProperties, type ReactElement } from "react";
-import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
-import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
+import { PrimaryButton } from "@/components/shared/PrimaryButton/PrimaryButton";
+import { SecondaryButton } from "@/components/shared/SecondaryButton/SecondaryButton";
 import { MarkdownField } from "@/components/homepage/MarkdownField/MarkdownField";
 import { hero_file_lines, type HeroFileSegment } from "@/data/heroEditorLines";
 import section_styles from "@/styles/section.module.css";

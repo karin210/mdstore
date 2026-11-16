@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ReactElement } from "react";
-import { LogInIcon, LogOutIcon } from "@/components/global/icons/icons";
+import { LogInIcon, LogOutIcon } from "@/components/shared/icons/icons";
 import { Link, useRouter } from "@/i18n/navigation";
 import { createBrowserSupabase } from "@/lib/supabase/browserClient";
 import { getSupabaseEnv } from "@/lib/supabase/env";

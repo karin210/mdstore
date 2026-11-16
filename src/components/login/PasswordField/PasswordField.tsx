@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type ReactElement } from "react";
-import { CopyIcon, EyeIcon, EyeOffIcon } from "@/components/global/icons/icons";
+import { CopyIcon, EyeIcon, EyeOffIcon } from "@/components/shared/icons/icons";
 import { HelperChunks } from "@/components/login/HelperChunks/HelperChunks";
 import {
   getSignUpPasswordRules,

@@ -1,10 +1,10 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { AccountControl } from "@/components/global/AccountControl/AccountControl";
-import { LanguageSwitcher } from "@/components/global/LanguageSwitcher/LanguageSwitcher";
-import { MobileMenu } from "@/components/global/MobileMenu/MobileMenu";
-import { navLinks } from "@/components/global/navLinks/navLinks";
-import { SiteLogo } from "@/components/global/SiteLogo/SiteLogo";
+import { AccountControl } from "@/components/shared/AccountControl/AccountControl";
+import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher/LanguageSwitcher";
+import { MobileMenu } from "@/components/shared/MobileMenu/MobileMenu";
+import { navLinks } from "@/components/shared/navLinks/navLinks";
+import { SiteLogo } from "@/components/shared/SiteLogo/SiteLogo";
 import { Link } from "@/i18n/navigation";
 import styles from "./SiteHeader.module.css";
 

@@ -94,7 +94,7 @@ The database functions raise their own SQLSTATE codes; `ERROR_KEYS_BY_CODE` in `
 | `src/app/[locale]/prompts/[slug]/review/`, `reviews/`, `invite/[token]/` | Routes: thin shells that render their body inside `<Suspense>`.                       |
 | `src/components/review/`                                                 | Page bodies and forms; one `Review.module.css`; `reviewHref.ts` builds review links.  |
 | `src/components/prompt-detail/AuthorBar.tsx`                             | Link to the review on a live post's page.                                             |
-| `src/components/global/UsernameField.tsx`, `PickUsernameForm.tsx`        | Username input (sign-up, pick-a-username prompt).                                     |
+| `src/components/shared/UsernameField.tsx`, `PickUsernameForm.tsx`        | Username input (sign-up, pick-a-username prompt).                                     |
 | `src/lib/review/diffLines.ts`                                            | Line diff (Myers, no dependency) and hunks with context.                              |
 | `src/lib/review/reviewView.ts`, `types.ts`                               | Revisions of a review, the base to compare with, the timeline, listing field changes. |
 | `src/lib/validation/username.ts`, `promptPost.ts`                        | Username rules; the revision schema (optional file, note).                            |

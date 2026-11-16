@@ -1,6 +1,6 @@
 import { useLocale, useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
+import { PrimaryButton } from "@/components/shared/PrimaryButton/PrimaryButton";
 import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/formatPrice";

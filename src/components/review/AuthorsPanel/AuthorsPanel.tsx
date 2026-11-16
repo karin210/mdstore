@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type FormEvent, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { getPathname, useRouter as useLocaleRouter } from "@/i18n/navigation";
 import type { AuthorRole, PostAuthor } from "@/lib/review/types";
 import { get_username_guidance, normalize_username } from "@/lib/validation/username";

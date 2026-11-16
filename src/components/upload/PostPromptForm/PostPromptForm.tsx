@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useReducer, useState, useTransition, type FormEvent, type ReactElement, type ReactNode } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
-import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
+import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField/PostFormField";
 import { promptCategories } from "@/data/prompts";
 import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";

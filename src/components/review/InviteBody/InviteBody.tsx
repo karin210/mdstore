@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
-import { PickUsernameForm } from "@/components/global/PickUsernameForm/PickUsernameForm";
-import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
+import { PickUsernameForm } from "@/components/shared/PickUsernameForm/PickUsernameForm";
+import { SecondaryButton } from "@/components/shared/SecondaryButton/SecondaryButton";
 import { InviteAccept } from "@/components/review/InviteAccept/InviteAccept";
 import { get_signed_in_profile } from "@/server/profiles/profiles";
 import { get_post_invite } from "@/server/reviews/invites";

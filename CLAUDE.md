@@ -92,7 +92,7 @@ src/
 ├─ app/api/v1/prompts/       public JSON API, outside [locale]: route.ts (list), [slug]/route.ts
 │                            (metadata), [slug]/file/route.ts (free .md); one handler per purpose
 ├─ components/
-│  ├─ global/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
+│  ├─ shared/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
 │  │                         MobileMenu, AccountControl (sign in / sign out), PrimaryButton,
 │  │                         SecondaryButton, SubmitButton, FormAlert, SkeletonBlock, icons,
 │  │                         navLinks, LanguageSwitcher, LanguageBanner, RouteIndex (sticky rail on

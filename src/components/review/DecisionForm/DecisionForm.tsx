@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type FormEvent, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
-import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
+import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
 import { decide_review, type ReviewActionResult } from "@/server/reviews/actions";
 import review_styles from "@/styles/review.module.css";
 import form_styles from "@/styles/form.module.css";

@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { useReducer, useState, type FormEvent, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
-import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
+import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
 import { EmailField } from "@/components/login/EmailField/EmailField";
 import { PasswordField } from "@/components/login/PasswordField/PasswordField";
 import { SignInForm as SignInFormModel, type CredentialValues } from "@/lib/forms/credentialForms";

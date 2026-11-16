@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useReducer, useState, useTransition, type FormEvent, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
-import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
-import { UsernameField } from "@/components/global/UsernameField/UsernameField";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
+import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
+import { UsernameField } from "@/components/shared/UsernameField/UsernameField";
 import { UsernameForm } from "@/lib/forms/credentialForms";
 import { set_username, type SetUsernameResult } from "@/server/profiles/actions";
 import styles from "./PickUsernameForm.module.css";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import { SkeletonBlock } from "@/components/global/SkeletonBlock/SkeletonBlock";
+import { SkeletonBlock } from "@/components/shared/SkeletonBlock/SkeletonBlock";
 import { LoginPanel } from "@/components/login/LoginPanel/LoginPanel";
 import styles from "./page.module.css";
 

@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useRef, useState, useTransition, type KeyboardEvent, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { SignInForm } from "@/components/login/SignInForm/SignInForm";
 import { SignUpForm } from "@/components/login/SignUpForm/SignUpForm";
 import type { CredentialValues } from "@/lib/forms/credentialForms";

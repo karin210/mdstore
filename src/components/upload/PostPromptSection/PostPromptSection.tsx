@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import { PickUsernameForm } from "@/components/global/PickUsernameForm/PickUsernameForm";
-import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
-import { SkeletonBlock } from "@/components/global/SkeletonBlock/SkeletonBlock";
+import { PickUsernameForm } from "@/components/shared/PickUsernameForm/PickUsernameForm";
+import { SecondaryButton } from "@/components/shared/SecondaryButton/SecondaryButton";
+import { SkeletonBlock } from "@/components/shared/SkeletonBlock/SkeletonBlock";
 import { MySubmissions } from "@/components/upload/MySubmissions/MySubmissions";
 import { PostPromptForm } from "@/components/upload/PostPromptForm/PostPromptForm";
 import { get_signed_in_profile } from "@/server/profiles/profiles";

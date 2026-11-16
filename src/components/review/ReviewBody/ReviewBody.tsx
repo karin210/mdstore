@@ -1,7 +1,7 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
-import { PickUsernameForm } from "@/components/global/PickUsernameForm/PickUsernameForm";
+import { PickUsernameForm } from "@/components/shared/PickUsernameForm/PickUsernameForm";
 import { AuthorsPanel } from "@/components/review/AuthorsPanel/AuthorsPanel";
 import { CommentForm } from "@/components/review/CommentForm/CommentForm";
 import { DecisionForm } from "@/components/review/DecisionForm/DecisionForm";

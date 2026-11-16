@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useTransition, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { withdraw_review } from "@/server/reviews/actions";
 import review_styles from "@/styles/review.module.css";
 import utility_styles from "@/styles/utilities.module.css";

@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from "react";
-import { RouteIndexRail, RouteIndexStatusBar, type RouteIndexSection } from "@/components/global/RouteIndex/RouteIndex";
+import { RouteIndexRail, RouteIndexStatusBar, type RouteIndexSection } from "@/components/shared/RouteIndex/RouteIndex";
 import styles from "./RouteIndexLayout.module.css";
 
 interface RouteIndexLayoutProps {

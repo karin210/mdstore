@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
+import { PrimaryButton } from "@/components/shared/PrimaryButton/PrimaryButton";
 import { AuthorBar } from "@/components/prompt-detail/AuthorBar/AuthorBar";
 import { InlineCode } from "@/components/prompt-detail/InlineCode/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples/OutputExamples";

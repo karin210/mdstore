@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState, useTransition, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { useRouter } from "@/i18n/navigation";
 import { accept_post_invite } from "@/server/reviews/actions";
 import review_styles from "@/styles/review.module.css";

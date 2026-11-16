@@ -2,9 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import { useReducer, useState, type FormEvent, type ReactElement } from "react";
-import { FormAlert } from "@/components/global/FormAlert/FormAlert";
-import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
-import { UsernameField } from "@/components/global/UsernameField/UsernameField";
+import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
+import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
+import { UsernameField } from "@/components/shared/UsernameField/UsernameField";
 import { EmailField } from "@/components/login/EmailField/EmailField";
 import { PasswordField } from "@/components/login/PasswordField/PasswordField";
 import { SignUpForm as SignUpFormModel, type SignUpValues } from "@/lib/forms/credentialForms";

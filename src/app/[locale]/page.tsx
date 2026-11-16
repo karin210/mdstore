@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
-import { RouteIndexLayout } from "@/components/global/RouteIndexLayout/RouteIndexLayout";
+import { RouteIndexLayout } from "@/components/shared/RouteIndexLayout/RouteIndexLayout";
 import { Faq } from "@/components/homepage/Faq/Faq";
 import { FeaturedPrompts } from "@/components/homepage/FeaturedPrompts/FeaturedPrompts";
 import { Hero } from "@/components/homepage/Hero/Hero";

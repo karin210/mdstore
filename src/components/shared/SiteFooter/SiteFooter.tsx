@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { navLinks } from "@/components/global/navLinks/navLinks";
-import { SiteLogo } from "@/components/global/SiteLogo/SiteLogo";
+import { navLinks } from "@/components/shared/navLinks/navLinks";
+import { SiteLogo } from "@/components/shared/SiteLogo/SiteLogo";
 import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site";
 import styles from "./SiteFooter.module.css";

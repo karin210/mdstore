@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { SkeletonBlock } from "@/components/global/SkeletonBlock/SkeletonBlock";
+import { SkeletonBlock } from "@/components/shared/SkeletonBlock/SkeletonBlock";
 import styles from "@/components/prompt-detail/shared/PromptDetail.module.css";
 import utility_styles from "@/styles/utilities.module.css";
 

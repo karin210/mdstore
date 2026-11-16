@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { SecondaryButton } from "@/components/global/SecondaryButton/SecondaryButton";
+import { SecondaryButton } from "@/components/shared/SecondaryButton/SecondaryButton";
 import section_styles from "@/styles/section.module.css";
 import styles from "./UploadCta.module.css";
 

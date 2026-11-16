@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from "react";
-import { AlertIcon, CheckCircleIcon } from "@/components/global/icons/icons";
+import { AlertIcon, CheckCircleIcon } from "@/components/shared/icons/icons";
 import styles from "./FormAlert.module.css";
 
 interface FormAlertProps {
