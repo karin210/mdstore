@@ -5,9 +5,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
-  // The download route reads the .md files at request time; ship them with its server bundle.
+  // These routes read the .md files at request time; ship them with their server bundles.
   outputFileTracingIncludes: {
     "/[locale]/prompts/[slug]/download": ["./content/prompts/**/*"],
+    "/api/v1/prompts/[slug]": ["./content/prompts/**/*"],
+    "/api/v1/prompts/[slug]/file": ["./content/prompts/**/*"],
   },
 };
 

@@ -1,6 +1,7 @@
 import { BaseForm } from "@/lib/forms/BaseForm";
 import {
   checkCategory,
+  check_install_kind,
   checkFile,
   checkKind,
   checkList,
@@ -20,6 +21,8 @@ export interface PromptPostValues {
   tagline: string;
   summary: string;
   category: string;
+  /** Where the CLI installs the file. Chosen when posting; a revision keeps the post's. */
+  install_kind: string;
   meantFor: string;
   highlights: string;
   usageSteps: string;
@@ -34,6 +37,7 @@ const EMPTY_POST: PromptPostValues = {
   tagline: "",
   summary: "",
   category: "",
+  install_kind: "",
   meantFor: "",
   highlights: "",
   usageSteps: "",
@@ -71,6 +75,8 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkList(field, values[field]);
       case "category":
         return checkCategory(values.category);
+      case "install_kind":
+        return this.is_revision ? null : check_install_kind(values.install_kind);
       case "worksWith":
         return checkWorksWith(values.worksWith);
       case "file":
@@ -89,6 +95,7 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     formData.set("tagline", values.tagline);
     formData.set("summary", values.summary);
     formData.set("category", values.category);
+    if (!this.is_revision) formData.set("install_kind", values.install_kind);
     formData.set("meantFor", values.meantFor);
     formData.set("highlights", values.highlights);
     formData.set("usageSteps", values.usageSteps);

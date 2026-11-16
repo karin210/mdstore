@@ -62,6 +62,7 @@ async function insertPostedPrompt(
     tagline: input.tagline,
     summary: input.summary,
     category: input.category,
+    install_kind: input.install_kind,
     meant_for: input.meantFor,
     highlights: input.highlights,
     usage_steps: input.usageSteps,

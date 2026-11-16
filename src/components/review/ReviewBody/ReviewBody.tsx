@@ -236,6 +236,7 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                     tagline: latest_revision_of_post.tagline,
                     summary: latest_revision_of_post.summary,
                     category: latest_revision_of_post.category,
+                    install_kind: "", // not editable in a revision
                     meantFor: latest_revision_of_post.meant_for.join("\n"),
                     highlights: latest_revision_of_post.highlights.join("\n"),
                     usageSteps: latest_revision_of_post.usage_steps.join("\n"),

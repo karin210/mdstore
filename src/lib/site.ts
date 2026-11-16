@@ -4,6 +4,8 @@
  */
 export const siteConfig = {
   name: "mdstore",
+  /** The production site; the CLI's default server (production_url in packages/cli/src/config.ts). */
+  url: "https://mdstore-seven.vercel.app",
   titleSeparator: " | ",
   /** Placeholder contact inbox shown in the footer. */
   contactEmail: "hello@mdstore.dev",

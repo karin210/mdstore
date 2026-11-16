@@ -120,6 +120,16 @@
           "label": "Category",
           "placeholder": "Choose a category"
         },
+        "installKind": {
+          "label": "Kind of file",
+          "hint": "Tells the mdstore CLI where to install it in a developer’s repo.",
+          "placeholder": "Choose a kind",
+          "options": {
+            "instructions": "Instructions (project rules, like CLAUDE.md or AGENTS.md)",
+            "command": "Command (a slash command the developer runs)",
+            "agent": "Agent (a subagent or playbook the agent hands work to)"
+          }
+        },
         "meantFor": {
           "label": "Meant for",
           "hint": "The kinds of projects it suits, one per line (e.g. Next.js App Router)."
@@ -165,6 +175,7 @@
       "tooManyItems": "Use at most {max} lines.",
       "itemTooLong": "Keep each line under {max} characters.",
       "chooseCategory": "Choose a category.",
+      "chooseInstallKind": "Choose what kind of file it is.",
       "chooseTool": "Mark at least one tool.",
       "fileRequired": "Choose your .md file.",
       "fileType": "Choose a Markdown file ending in .md.",

@@ -135,6 +135,9 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
                 {tPrompts("downloadFile", { fileName: prompt.fileName })}
               </PrimaryButton>
               <p className={styles.note}>{t("purchase.freeNote")}</p>
+              <p className={styles.note}>
+                <InlineCode text={t("purchase.cliNote", { command: `npx mdstore add ${prompt.slug}` })} />
+              </p>
             </>
           ) : (
             <p className={styles.note}>{t("purchase.paidNote")}</p>

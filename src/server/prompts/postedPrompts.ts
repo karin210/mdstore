@@ -1,6 +1,6 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
-import type { PromptCategory } from "@/data/prompts";
+import type { InstallKind, PromptCategory } from "@/data/prompts";
 import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptView } from "@/lib/promptView";
 import { splitFileLines } from "@/lib/splitFileLines";
@@ -22,6 +22,8 @@ export interface PostedPromptRow {
   tagline: string;
   summary: string;
   category: PromptCategory;
+  install_kind: InstallKind;
+  version: number;
   meant_for: string[];
   highlights: string[];
   usage_steps: string[];
@@ -33,7 +35,18 @@ export interface PostedPromptRow {
 }
 
 export const DETAIL_COLUMNS =
-  "slug, file_name, author_handle, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, content, preview_line_count, post_authors(role, joined_at, profiles(username))";
+  "slug, file_name, author_handle, title, tagline, summary, category, install_kind, version, meant_for, highlights, usage_steps, works_with, content, preview_line_count, post_authors(role, joined_at, profiles(username))";
+
+/** What a list of posted prompts shows (GET /api/v1/prompts): no file content. */
+export type PostedPromptSummaryRow = Pick<
+  PostedPromptRow,
+  "slug" | "file_name" | "author_handle" | "title" | "tagline" | "category" | "install_kind" | "version"
+>;
+
+const SUMMARY_COLUMNS = "slug, file_name, author_handle, title, tagline, category, install_kind, version";
+
+/** Newest posts first; the cap keeps one response small until the list is paginated. */
+const max_listed_posts = 500;
 
 /** "@owner, @coauthor…": the owner first, then co-authors in the order they joined. */
 function getByline(row: PostedPromptRow): string {
@@ -52,6 +65,8 @@ export function toPromptView(row: PostedPromptRow): PromptView {
     slug: row.slug,
     fileName: row.file_name,
     category: row.category,
+    install_kind: row.install_kind,
+    version: row.version,
     author: getByline(row),
     // Posting is free for now; paid posts arrive with checkout.
     priceUsd: 0,
@@ -92,4 +107,26 @@ export async function getPostedPrompt(slug: string): Promise<PromptView | null> 
     .maybeSingle<PostedPromptRow>();
   if (error) throw new Error(`Couldn't load posted prompt "${slug}": ${error.message}`);
   return data ? toPromptView(data) : null;
+}
+
+/**
+ * Every posted prompt's summary, newest first (up to max_listed_posts); empty while Supabase isn't
+ * configured. Cached like getPostedPrompt: a failed query throws, so an outage is never cached.
+ */
+export async function list_posted_prompts(): Promise<PostedPromptSummaryRow[]> {
+  "use cache";
+  cacheTag(POSTED_PROMPTS_TAG);
+  cacheLife("hours");
+
+  const supabase = createPublicSupabase();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from(POSTED_PROMPTS_TABLE)
+    .select(SUMMARY_COLUMNS)
+    .order("created_at", { ascending: false })
+    .limit(max_listed_posts)
+    .overrideTypes<PostedPromptSummaryRow[], { merge: false }>();
+  if (error) throw new Error(`Couldn't list posted prompts: ${error.message}`);
+  return data ?? [];
 }

@@ -27,7 +27,9 @@ export function readSubmission(formData: FormData, with_note = false): Record<st
     file: formData.get("file"),
     previewLineCount: readText(formData, "previewLineCount"),
   };
+  // A revision keeps the post's install kind, so only a new post sends it.
   if (with_note) submission.note = readText(formData, "note");
+  else submission.install_kind = readText(formData, "install_kind");
   return submission;
 }
 

@@ -11,6 +11,16 @@
 
 Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs) and the branded 404. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; the full `.md` products live in `content/prompts/`: `global.md`, framework-agnostic web conventions, free; `nextjs-structure.md`, Next.js App Router project structure, paid; `dev-tools-advisor.md`, agent playbook that recommends dev tools and stack, free; and eighteen narrow deep-dives, all free: `commit-attribution.md`, `authentication-forms.md`, `modals.md`, `loading-states.md`, `error-handling-and-http-status.md`, `ai-discoverability-geo.md`, `security-validation-authorization.md`, `page-titles.md`, `routing-and-404.md`, `button-kinds.md`, `color-and-ui-system.md`, `web-visual-design-and-images.md`, `landing-and-hero-sections.md`, `api-route-handlers.md`, `classes-for-complex-objects.md`, `naming-conventions.md`, `css-layout-and-spacing.md` and `fluid-design-and-container-queries.md`. Most of them expand a topic that `global.md` covers in a short section, on purpose: each listing is one narrow job, and `global.md` stays the starting file) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. Posted prompts don't appear on the landing page grid yet (only on their own page). There is no checkout yet.
 
+Every prompt has an **install kind** (`install_kinds` in `src/data/prompts.ts`, column `install_kind`: `instructions`, `command` or `agent`; authors choose it on the upload form, a revision keeps it; not the review workflow's `kind`, which is `prompt` or `skill`) that decides where the CLI installs it, and a **version** (integer from 1, bumped by hand, by one, in the same commit that changes the catalogue file in `content/prompts/`; posts start at 1) that the CLI compares to find updates. Production: `siteConfig.url` in `src/lib/site.ts` (https://mdstore-seven.vercel.app), also the CLI's default server. How the feature works and how to change it: `docs/cli.md`; what it still needs: `docs/cli-pending.md`.
+
+**Public JSON API** (`src/app/api/v1/`, read-only, no auth, English copy; the proxy skips `/api`; mapping in `src/server/prompts/promptApi.ts`; errors are `{ status, message }` JSON):
+
+- `GET /api/v1/prompts?q=&category=`: catalogue and posted prompts as summaries (`slug, title, tagline, category, kind (the install kind), version, priceUsd, fileName, author`).
+- `GET /api/v1/prompts/[slug]`: the summary plus `sha256` (free prompts only, computed per request, never stored), `worksWith`, `lineCount`, `context_tokens`; 404 when unknown.
+- `GET /api/v1/prompts/[slug]/file`: a free prompt's raw `.md` (`text/markdown`); 403 for paid, 404 when unknown.
+
+**CLI** (`packages/cli`, npm workspace, package and bin `mdstore`, see its README): `npx mdstore add <slug> [--tool claude|cursor|copilot|aider|agents] [--path <file>] [--yes]`, `search`, `list`, `outdated`, `update [slug]`. Free prompts only. It installs by (kind, tool) from one table in `packages/cli/src/targets.ts`; shared files (`CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md`, `CONVENTIONS.md`) are never overwritten: the prompt goes to `.mdstore/<slug>.md` and the shared file gets one reference line. Installs are recorded in `mdstore.lock.json` at the user's project root. Free listing pages show its `npx mdstore add <slug>` line. The CLI keeps its own copy of the kind list; a test keeps it in step with `install_kinds` and the migration.
+
 ## Differentiators
 
 What sets mdstore apart from other prompt and skill marketplaces. Only output previews have a place in the UI so far (the "Output examples" section on each listing page, with placeholders until `outputExamples` has screenshots); design listings, data models and pages so they can carry the rest.
@@ -27,14 +37,14 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - Supabase (`@supabase/ssr` + `@supabase/supabase-js`): email/password auth and the `posted_prompts` table. Settings in `.env.local` (see `.env.example`); the schema and row-level security policies are in `supabase/migrations/`. Without the env vars the site still builds and runs, signed out, with posting unavailable.
 - Zod for the validation schemas shared by forms (client) and server actions.
 - Node 24, pinned in `mise.toml` so every machine and CI use the same version; run commands through the mise-activated shell. `@types/node` follows the same major.
-- npm (lockfile in the repo): working setup, no gain in switching.
+- npm (lockfile in the repo): working setup, no gain in switching. npm workspaces (`packages/*`): the root is the Next app, `packages/cli` the CLI (own `tsconfig.json`, ESM, compiled with `tsc` to `dist/`, zero runtime dependencies); the root `tsconfig.json` excludes `packages/` so the Next build ignores it, while root ESLint and Prettier cover it.
 - ESLint 9 with `eslint-config-next` (flat config): keeps the Next-specific rules (core web vitals, React hooks). Stay on 9 until the bundled plugins list ESLint 10 as a peer.
 - Prettier, pinned in the project (`.prettierrc.json`: `printWidth: 120`, LF), with `eslint-config-prettier` last in the ESLint config: same output in Zed, the CLI and CI. Chosen over Biome to keep the Next lint rules. `content/prompts/` is ignored because those files are the product, byte for byte. `.gitattributes` keeps LF on Windows.
-- Vitest 5 for unit tests of plain TypeScript (validation rules, form classes, helpers), as `src/**/*.test.ts` next to the code, Node environment; `@/` resolves through Vite's built-in `resolve.tsconfigPaths`. Async Server Components need E2E tests (Playwright) instead, per the Next docs.
+- Vitest 5 for unit tests of plain TypeScript (validation rules, form classes, helpers), as `*.test.ts` next to the code, Node environment, in two projects: `site` (`src/**`, `@/` resolves through Vite's built-in `resolve.tsconfigPaths`) and `cli` (`packages/cli/src/**`, relative imports). Async Server Components need E2E tests (Playwright) instead, per the Next docs.
 - TypeScript 5: stay off TypeScript 7 until it ships a JavaScript API (the `next` editor plugin needs it).
 - Supabase CLI (dev dependency, config in `supabase/config.toml`): applies migrations and generates the table types.
 - Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`. Database: `docs/database.md`. Review workflow (pull-request style reviews, co-authors, invites): `docs/review-workflow.md`. Local Supabase: `docs/local-supabase-setup.md`.
-- CI: `.github/workflows/ci.yml` runs lint, format check, tests and build on pushes to `main`/`dev` and on pull requests (Node from `mise.toml`, no secrets needed).
+- CI: `.github/workflows/ci.yml` runs lint, format check, tests and build (site, then the CLI's tests and build) on pushes to `main`/`dev` and on pull requests (Node from `mise.toml`, no secrets needed).
 
 ## Commands
 
@@ -43,7 +53,8 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - `npm run start`: serve the production build
 - `npm run lint`: ESLint
 - `npm run format` / `npm run format:check`: write / check Prettier formatting
-- `npm test` / `npm run test:watch`: Vitest once / in watch mode
+- `npm test` / `npm run test:watch`: Vitest once / in watch mode (site and CLI)
+- `npm run cli:build` / `npm run cli:test`: compile the CLI to `packages/cli/dist` / run only its tests; try it with `MDSTORE_API_URL=http://localhost:3000 node packages/cli/dist/cli.js search forms`
 - `npm run db:push`: apply `supabase/migrations/` to the linked project (after `npx supabase login` and `npx supabase link --project-ref <ref>`)
 - `npm run db:test`: run the pgTAP tests in `supabase/tests/` against the local stack
 - `npm run db:types`: regenerate `src/lib/supabase/database.types.ts` from the linked project
@@ -78,6 +89,8 @@ src/
 │  ├─ invite/[token]/page.tsx
 │  │                         co-author invite link (sign in, then confirm with a button)
 │  └─ not-found.tsx          branded 404 for every unmatched URL (real 404 status)
+├─ app/api/v1/prompts/       public JSON API, outside [locale]: route.ts (list), [slug]/route.ts
+│                            (metadata), [slug]/file/route.ts (free .md); one handler per purpose
 ├─ components/
 │  ├─ global/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
 │  │                         MobileMenu, AccountControl (sign in / sign out), PrimaryButton,
@@ -122,7 +135,7 @@ src/
 │                            session refresh, auth/ (actions, getSignedInUser),
 │                            profiles/ (signed-in profile, set_username action),
 │                            prompts/ (post action, cached posted-prompt reads, view resolver,
-│                            my submissions), reviews/ (review page data, queue, invites,
+│                            my submissions; promptApi: the API's summaries, details, sha256, errors), reviews/ (review page data, queue, invites,
 │                            actions calling the review functions with rpc)
 ├─ styles/globals.css        :root tokens, reset, typography, shared form + modal classes
 └─ proxy.ts                  rewrites unknown /prompts/[slug] (not in the catalogue, not an
@@ -131,7 +144,11 @@ src/
                              refreshes the Supabase session cookies on every request
 content/prompts/             the full .md files of the curated catalogue (keep excerpt/lineCount
                              in src/data/prompts.ts in sync)
-supabase/migrations/         SQL for the posted_prompts table, its checks and RLS policies
+supabase/migrations/         SQL for the posted_prompts table, its checks and RLS policies (new
+                             changes go in a new file, e.g. the install_kind + version columns)
+packages/cli/                the `mdstore` CLI (npm workspace): src/cli.ts (args), api.ts, targets.ts
+                             (kind × tool → path, tool detection), install.ts, lockfile.ts, paths.ts
+                             (root containment), hash.ts, validation.ts, one *Command.ts per command
 public/                      static files served as-is (favicon.ico, images, robots.txt);
                              never put static files in src/app/
 ```

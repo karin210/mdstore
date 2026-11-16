@@ -2,6 +2,7 @@
 .next
 next-env.d.ts
 src/lib/supabase/database.types.ts
+packages/*/dist
 
 # Product files sold or shared as-is: their exact bytes and line counts are the product
 content/prompts
@@ -14,3 +15,5 @@ AGENTS.md
 
 # Personal notes
 xd.md
+notes.md
+resources.md

@@ -1,4 +1,5 @@
-# Checks every push and pull request: lint, formatting, unit tests and a production build.
+# Checks every push and pull request: lint, formatting, unit tests and a production build, plus
+# the CLI workspace's tests and build.
 # The build runs without Supabase settings (the site supports that), so no secrets are needed.
 name: CI
 
@@ -29,5 +30,11 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run format:check
-      - run: npm test
+      # The site's unit tests (the CLI's run in their own step below).
+      - run: npm test -- --project site
       - run: npm run build
+
+      # The CLI (packages/cli): unit tests, then compile it and run the compiled entry point.
+      - run: npm run cli:test
+      - run: npm run cli:build
+      - run: node packages/cli/dist/cli.js --version
