@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
-import { PostPromptSection } from "@/components/upload/PostPromptSection";
-import { UploadBenefits } from "@/components/upload/UploadBenefits";
-import { UploadHero } from "@/components/upload/UploadHero";
-import { UploadListingTips } from "@/components/upload/UploadListingTips";
-import { UploadSteps } from "@/components/upload/UploadSteps";
+import { PostPromptSection } from "@/components/upload/PostPromptSection/PostPromptSection";
+import { UploadBenefits } from "@/components/upload/UploadBenefits/UploadBenefits";
+import { UploadHero } from "@/components/upload/UploadHero/UploadHero";
+import { UploadListingTips } from "@/components/upload/UploadListingTips/UploadListingTips";
+import { UploadSteps } from "@/components/upload/UploadSteps/UploadSteps";
 import styles from "./page.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {

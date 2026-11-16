@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
-import { PrimaryButton } from "@/components/global/PrimaryButton";
+import { PrimaryButton } from "@/components/global/PrimaryButton/PrimaryButton";
 import styles from "./not-found.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import { PromptDetail } from "@/components/prompt-detail/PromptDetail";
-import { PromptDetailSkeleton } from "@/components/prompt-detail/PromptDetailSkeleton";
+import { PromptDetail } from "@/components/prompt-detail/PromptDetail/PromptDetail";
+import { PromptDetailSkeleton } from "@/components/prompt-detail/PromptDetailSkeleton/PromptDetailSkeleton";
 import { featuredPrompts } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
 import { getPromptView } from "@/server/prompts/getPromptView";

@@ -137,7 +137,7 @@ public/                      static files served as-is (favicon.ico, images, rob
                              never put static files in src/app/
 ```
 
-- Imports use the `@/*` alias (→ `src/*`), never `../`. Each component's `*.module.css` sits next to it.
+- Imports use the `@/*` alias (→ `src/*`), never `../`. Every component lives in its own folder named after it (`components/homepage/Hero/Hero.tsx`) with its `*.module.css` beside it; a stylesheet used by several components of one feature goes in that feature's `shared/` folder.
 
 ## Conventions specific to this project
 

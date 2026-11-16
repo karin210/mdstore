@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
-import { Faq } from "@/components/homepage/Faq";
-import { FeaturedPrompts } from "@/components/homepage/FeaturedPrompts";
-import { Hero } from "@/components/homepage/Hero";
-import { HomeOutlineRail, HomeStatusBar } from "@/components/homepage/HomeOutline";
-import { HowItWorks } from "@/components/homepage/HowItWorks";
-import { UploadCta } from "@/components/homepage/UploadCta";
-import { WhyMarkdown } from "@/components/homepage/WhyMarkdown";
+import { Faq } from "@/components/homepage/Faq/Faq";
+import { FeaturedPrompts } from "@/components/homepage/FeaturedPrompts/FeaturedPrompts";
+import { Hero } from "@/components/homepage/Hero/Hero";
+import { HomeOutlineRail, HomeStatusBar } from "@/components/homepage/HomeOutline/HomeOutline";
+import { HowItWorks } from "@/components/homepage/HowItWorks/HowItWorks";
+import { UploadCta } from "@/components/homepage/UploadCta/UploadCta";
+import { WhyMarkdown } from "@/components/homepage/WhyMarkdown/WhyMarkdown";
 import { siteConfig } from "@/lib/site";
 import styles from "./page.module.css";
 

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import { ReviewBody } from "@/components/review/ReviewBody";
-import { ReviewSkeleton } from "@/components/review/ReviewSkeleton";
+import { ReviewBody } from "@/components/review/ReviewBody/ReviewBody";
+import { ReviewSkeleton } from "@/components/review/ReviewSkeleton/ReviewSkeleton";
 import styles from "./page.module.css";
 
 /**

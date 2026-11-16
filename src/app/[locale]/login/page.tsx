@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import { SkeletonBlock } from "@/components/global/SkeletonBlock";
-import { LoginPanel } from "@/components/login/LoginPanel";
+import { SkeletonBlock } from "@/components/global/SkeletonBlock/SkeletonBlock";
+import { LoginPanel } from "@/components/login/LoginPanel/LoginPanel";
 import styles from "./page.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
