@@ -98,10 +98,11 @@
       "fields": {
         "kind": {
           "label": "Type",
-          "hint": "Is it a prompt or a skill?",
+          "hint": "What is it: a prompt you copy, a skill the agent loads, or an agent (subagent) it hands work to?",
           "options": {
             "prompt": "Prompt",
-            "skill": "Skill"
+            "skill": "Skill",
+            "agent": "Agent"
           }
         },
         "title": {
@@ -119,16 +120,6 @@
         "category": {
           "label": "Category",
           "placeholder": "Choose a category"
-        },
-        "installKind": {
-          "label": "Kind of file",
-          "hint": "Tells the mdstore CLI where to install it in a developer’s repo.",
-          "placeholder": "Choose a kind",
-          "options": {
-            "instructions": "Instructions (project rules, like CLAUDE.md or AGENTS.md)",
-            "command": "Command (a slash command the developer runs)",
-            "agent": "Agent (a subagent or playbook the agent hands work to)"
-          }
         },
         "meantFor": {
           "label": "Meant for",
@@ -175,14 +166,13 @@
       "tooManyItems": "Use at most {max} lines.",
       "itemTooLong": "Keep each line under {max} characters.",
       "chooseCategory": "Choose a category.",
-      "chooseInstallKind": "Choose what kind of file it is.",
       "chooseTool": "Mark at least one tool.",
       "fileRequired": "Choose your .md file.",
       "fileType": "Choose a Markdown file ending in .md.",
       "fileTooLarge": "Choose a file up to 200 KB.",
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
       "previewRange": "Use a number from {min} to {max}.",
-      "chooseKind": "Choose prompt or skill."
+      "chooseKind": "Choose prompt, skill or agent."
     },
     "submissions": {
       "title": "Your submissions",

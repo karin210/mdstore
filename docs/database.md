@@ -45,7 +45,7 @@ Posts are not public at once. Everything starts as `pending` and an admin decide
 | `approved` | everyone (appears at `/prompts/...`) | an admin updates the row               |
 | `rejected` | the author and admins                | an admin updates it, ideally with note |
 
-- Extra columns: `kind` (`prompt` or `skill`), `review_note` (max 1000 chars, the reason for a rejection), `reviewed_at`, `reviewed_by`. A trigger (`stamp_review`) fills the last two whenever `status` changes, so nobody has to remember.
+- Extra columns: `kind` (`prompt`, `skill` or `agent`), `review_note` (max 1000 chars, the reason for a rejection), `reviewed_at`, `reviewed_by`. A trigger (`stamp_review`) fills the last two whenever `status` changes, so nobody has to remember.
 - The second migration also creates the index `posted_prompts_status_created_at_idx`, which serves the public listing and the review queue. See [Indexes](#indexes).
 - The first migration's rows predate the workflow, so the second one marks them `approved`.
 - Since the third migration, reviews happen in the app (`/reviews` for admins, `/prompts/[slug]/review` per post) through `decide_review()`. Direct updates of `posted_prompts` are no longer allowed from the API; the SQL editor still can, but bypasses the review history.

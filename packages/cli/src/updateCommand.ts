@@ -4,11 +4,10 @@ import { hash_file, IntegrityError } from "./hash.js";
 import { install_prompt, InstallCancelledError } from "./install.js";
 import { lockfile_name, read_lockfile, write_lockfile, type Lockfile } from "./lockfile.js";
 import { resolve_inside_root } from "./paths.js";
-import { reference_line } from "./targets.js";
 
 type UpdateOutcome = "updated" | "current" | "skipped";
 
-/** Updates one installed prompt in place (same path, tool and reference), recording it in `lock`. */
+/** Updates one installed prompt in place (same path and tool), recording it in `lock`. */
 async function update_one(
   context: CommandContext,
   lock: Lockfile,
@@ -51,10 +50,7 @@ async function update_one(
   }
 
   const content = await client.get_prompt_file(slug);
-  const plan = {
-    file: entry.path,
-    reference: entry.reference ? { file: entry.reference, line: reference_line(entry.tool, entry.path) } : null,
-  };
+  const plan = { file: entry.path };
   const result = await install_prompt({ root, details, content, tool: entry.tool, plan, assume_yes, previous: entry });
   lock.prompts[slug] = { ...result.entry, kind: entry.kind };
   await write_lockfile(root, lock);

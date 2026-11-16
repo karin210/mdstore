@@ -1,7 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import { getTranslations } from "next-intl/server";
-import { featuredPrompts, isFree, type PromptCategory, type InstallKind } from "@/data/prompts";
+import { featuredPrompts, isFree, type PromptCategory, type PromptKind } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
 import type { PromptView } from "@/lib/promptView";
 import { getPromptView } from "@/server/prompts/getPromptView";
@@ -19,7 +19,7 @@ export interface PromptSummary {
   title: string;
   tagline: string;
   category: PromptCategory;
-  kind: InstallKind;
+  kind: PromptKind;
   version: number;
   priceUsd: number;
   fileName: string;
@@ -48,16 +48,13 @@ export function sha256_hex(content: string): string {
   return createHash("sha256").update(content, "utf8").digest("hex");
 }
 
-/** What a summary is made from: a listing or a posted prompt, whose install kind is `install_kind`. */
-type SummarySource = Omit<PromptSummary, "kind"> & { install_kind: InstallKind };
-
-function to_prompt_summary(prompt: SummarySource): PromptSummary {
+function to_prompt_summary(prompt: PromptSummary): PromptSummary {
   return {
     slug: prompt.slug,
     title: prompt.title,
     tagline: prompt.tagline,
     category: prompt.category,
-    kind: prompt.install_kind,
+    kind: prompt.kind,
     version: prompt.version,
     priceUsd: prompt.priceUsd,
     fileName: prompt.fileName,
@@ -71,7 +68,7 @@ function posted_row_to_summary(row: PostedPromptSummaryRow): PromptSummary {
     title: row.title,
     tagline: row.tagline,
     category: row.category,
-    kind: row.install_kind,
+    kind: row.kind,
     version: row.version,
     // Posting is free for now (see toPromptView in postedPrompts.ts).
     priceUsd: 0,

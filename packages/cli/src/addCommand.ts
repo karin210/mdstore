@@ -3,7 +3,7 @@ import { install_prompt } from "./install.js";
 import type { Tool } from "./kinds.js";
 import { read_lockfile, write_lockfile } from "./lockfile.js";
 import { resolve_inside_root } from "./paths.js";
-import { detect_tool, plan_custom_path, plan_install } from "./targets.js";
+import { detect_tool, NoTargetError, plan_custom_path, plan_install, prompt_not_installable } from "./targets.js";
 import { is_valid_slug } from "./validation.js";
 
 export interface AddOptions {
@@ -26,6 +26,7 @@ export async function add_command(context: CommandContext, slug: string, options
   const lock = await read_lockfile(root);
   const details = await client.get_prompt(slug);
   if (details.priceUsd > 0 || details.sha256 === null) throw client.paid_error(slug);
+  if (details.kind === "prompt") throw new UserError(prompt_not_installable(slug));
 
   let tool = options.tool;
   if (!tool) {
@@ -34,12 +35,21 @@ export async function add_command(context: CommandContext, slug: string, options
     log(
       detected.marker
         ? `Detected ${tool} (found ${detected.marker}). Use --tool to pick another.`
-        : `No AI tool detected; installing for agents (AGENTS.md). Use --tool to pick another.`,
+        : `No AI tool detected; using agents. Use --tool to pick another.`,
     );
   }
 
+  // Checked before downloading. --path covers a skill or agent for a tool whose folder mdstore doesn't know.
+  let plan;
+  try {
+    plan = plan_install(details.kind, tool, slug);
+  } catch (error) {
+    if (!(error instanceof NoTargetError)) throw error;
+    if (options.path === undefined) throw new UserError(error.message);
+    plan = plan_custom_path(options.path);
+  }
+  if (options.path !== undefined) plan = plan_custom_path(options.path);
   const content = await client.get_prompt_file(slug);
-  const plan = options.path !== undefined ? plan_custom_path(options.path) : plan_install(details.kind, tool, slug);
   const result = await install_prompt({
     root,
     details,
@@ -58,11 +68,4 @@ export async function add_command(context: CommandContext, slug: string, options
       ? `Installed ${slug} v${details.version} (${details.kind}) to ${plan.file}.`
       : `${slug} v${details.version} is already in ${plan.file}.`,
   );
-  if (plan.reference) {
-    log(
-      result.added_reference
-        ? `Added "${plan.reference.line}" to ${plan.reference.file}.`
-        : `${plan.reference.file} already references it.`,
-    );
-  }
 }

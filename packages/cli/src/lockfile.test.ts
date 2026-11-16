@@ -19,14 +19,7 @@ const sample: Lockfile = {
   version: 1,
   prompts: {
     modals: { version: 2, sha256: hash, path: ".claude/agents/modals.md", kind: "agent", tool: "claude" },
-    global: {
-      version: 1,
-      sha256: hash,
-      path: ".mdstore/global.md",
-      kind: "instructions",
-      tool: "claude",
-      reference: "CLAUDE.md",
-    },
+    global: { version: 1, sha256: hash, path: ".claude/skills/global/SKILL.md", kind: "skill", tool: "claude" },
   },
 };
 
@@ -45,14 +38,13 @@ describe("serialize_lockfile / parse_lockfile", () => {
     ["a bad slug", JSON.stringify({ version: 1, prompts: { "../x": sample.prompts.global } })],
     ["a bad hash", JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, sha256: "nope" } } })],
     ["version 0", JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, version: 0 } } })],
-    ["an unknown kind", JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, kind: "skill" } } })],
+    [
+      "an unknown kind",
+      JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, kind: "instructions" } } }),
+    ],
     ["an unknown tool", JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, tool: "vim" } } })],
     ["a path outside", JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, path: "../a.md" } } })],
     ["an absolute path", JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, path: "/etc/a" } } })],
-    [
-      "a reference outside",
-      JSON.stringify({ version: 1, prompts: { a: { ...sample.prompts.global, reference: "../CLAUDE.md" } } }),
-    ],
   ])("rejects %s", (_label, text) => {
     expect(() => parse_lockfile(text)).toThrow(LockfileError);
   });

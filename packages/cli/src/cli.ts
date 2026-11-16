@@ -30,7 +30,7 @@ Options
   -h, --help      show this help
   -v, --version   show the CLI version
 
-Installed prompts are recorded in mdstore.lock.json. Set MDSTORE_API_URL to use another server.`;
+Installed skills and agents are recorded in mdstore.lock.json. Set MDSTORE_API_URL to use another server.`;
 
 /** Errors the user can act on: printed as one line, no stack trace. */
 const expected_errors = [UserError, ApiError, InstallCancelledError, IntegrityError, LockfileError, UnsafePathError];

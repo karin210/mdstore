@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { is_prompt_kind, is_tool, type PromptKind, type Tool } from "./kinds.js";
+import { is_kind, is_tool, type Kind, type Tool } from "./kinds.js";
 import { resolve_inside_root } from "./paths.js";
 import { is_positive_integer, is_sha256, is_valid_slug } from "./validation.js";
 
@@ -14,12 +14,10 @@ export interface LockEntry {
   version: number;
   /** SHA-256 of the file as written to `path`, to notice local edits before an update. */
   sha256: string;
-  /** Project-relative path of the prompt's file, with `/` separators. */
+  /** Project-relative path of the installed file, with `/` separators. */
   path: string;
-  kind: PromptKind;
+  kind: Kind;
   tool: Tool;
-  /** The shared file (CLAUDE.md, AGENTS.md…) that got a reference line, if any. */
-  reference?: string;
 }
 
 export interface Lockfile {
@@ -52,18 +50,16 @@ function parse_entry(slug: string, value: unknown): LockEntry {
   if (!is_positive_integer(entry.version)) fail("has an invalid version");
   if (!is_sha256(entry.sha256)) fail("has an invalid sha256");
   if (!is_safe_relative(entry.path)) fail("has a path outside the project");
-  if (!is_prompt_kind(entry.kind)) fail("has an unknown kind");
+  if (!is_kind(entry.kind)) fail("has an unknown kind");
   if (!is_tool(entry.tool)) fail("has an unknown tool");
-  if (entry.reference !== undefined && !is_safe_relative(entry.reference)) fail("has a reference outside the project");
 
   const parsed: LockEntry = {
     version: entry.version as number,
     sha256: entry.sha256 as string,
     path: entry.path as string,
-    kind: entry.kind as PromptKind,
+    kind: entry.kind as Kind,
     tool: entry.tool as Tool,
   };
-  if (typeof entry.reference === "string") parsed.reference = entry.reference;
   return parsed;
 }
 
@@ -102,7 +98,6 @@ export function serialize_lockfile(lock: Lockfile): string {
       tool: entry.tool,
       version: entry.version,
     };
-    if (entry.reference) sorted.reference = entry.reference;
     prompts[slug] = sorted;
   }
   return `${JSON.stringify({ version: 1, prompts }, null, 2)}\n`;

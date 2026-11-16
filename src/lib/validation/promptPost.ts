@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { install_kinds, promptCategories, type InstallKind, type PromptCategory } from "@/data/prompts";
+import { prompt_kinds, promptCategories, type PromptCategory, type PromptKind } from "@/data/prompts";
 
 /**
  * Rules for posting a prompt, shared by the upload form (client) and the create action (server).
@@ -17,7 +17,6 @@ export interface ValidationIssue {
     | "itemTooLong"
     | "chooseKind"
     | "chooseCategory"
-    | "chooseInstallKind"
     | "chooseTool"
     | "fileRequired"
     | "fileType"
@@ -39,9 +38,9 @@ export const WORKS_WITH_TOOLS = [
   "Zed",
 ] as const;
 
-/** What a post is: a prompt file or a skill. Matches the `kind` check on posted_prompts. */
-export const PROMPT_KINDS = ["prompt", "skill"] as const;
-export type PromptKind = (typeof PROMPT_KINDS)[number];
+/** What a post is: a prompt, a skill or an agent. Matches the `kind` check on posted_prompts. */
+export const PROMPT_KINDS = prompt_kinds;
+export type { PromptKind };
 
 export const MAX_FILE_BYTES = 200 * 1024;
 export const PREVIEW_LINES = { min: 5, max: 40, default: 12 } as const;
@@ -60,8 +59,7 @@ const LIST_LIMITS = {
 
 export type TextField = keyof typeof TEXT_LIMITS;
 export type ListField = keyof typeof LIST_LIMITS;
-export type PromptPostField =
-  TextField | ListField | "kind" | "category" | "install_kind" | "worksWith" | "file" | "previewLineCount";
+export type PromptPostField = TextField | ListField | "kind" | "category" | "worksWith" | "file" | "previewLineCount";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
@@ -70,7 +68,6 @@ export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "tagline",
   "summary",
   "category",
-  "install_kind",
   "meantFor",
   "highlights",
   "usageSteps",
@@ -121,15 +118,6 @@ export function checkKind(value: string): ValidationIssue | null {
 
 export function checkCategory(value: string): ValidationIssue | null {
   return isPromptCategory(value) ? null : { key: "chooseCategory" };
-}
-
-export function is_install_kind(value: string): value is InstallKind {
-  return (install_kinds as readonly string[]).includes(value);
-}
-
-/** The install kind decides where the CLI installs the file, so it has to be chosen (no default). */
-export function check_install_kind(value: string): ValidationIssue | null {
-  return is_install_kind(value) ? null : { key: "chooseInstallKind" };
 }
 
 export function checkWorksWith(values: string[]): ValidationIssue | null {
@@ -198,10 +186,6 @@ export const promptPostSchema = z.strictObject({
     .string()
     .superRefine(asRefinement(checkCategory))
     .transform((value) => value as PromptCategory),
-  install_kind: z
-    .string()
-    .superRefine(asRefinement(check_install_kind))
-    .transform((value) => value as InstallKind),
   meantFor: listSchema("meantFor"),
   highlights: listSchema("highlights"),
   usageSteps: listSchema("usageSteps"),
@@ -224,7 +208,7 @@ export const REVISION_NOTE_MAX_LENGTH = 1000;
  * A new revision of an existing post: the same fields, a file that may be left out to keep the
  * previous one, and an optional note for the reviewers.
  */
-export const prompt_revision_schema = promptPostSchema.omit({ install_kind: true }).extend({
+export const prompt_revision_schema = promptPostSchema.extend({
   file: z
     .custom<File | null>((value) => value === null || value instanceof File, { message: "fileRequired" })
     .superRefine(asRefinement((file: File | null) => checkFile(file, true)))

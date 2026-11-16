@@ -1,6 +1,6 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
-import type { InstallKind, PromptCategory } from "@/data/prompts";
+import type { PromptCategory, PromptKind } from "@/data/prompts";
 import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptView } from "@/lib/promptView";
 import { splitFileLines } from "@/lib/splitFileLines";
@@ -22,7 +22,7 @@ export interface PostedPromptRow {
   tagline: string;
   summary: string;
   category: PromptCategory;
-  install_kind: InstallKind;
+  kind: PromptKind;
   version: number;
   meant_for: string[];
   highlights: string[];
@@ -35,15 +35,15 @@ export interface PostedPromptRow {
 }
 
 export const DETAIL_COLUMNS =
-  "slug, file_name, author_handle, title, tagline, summary, category, install_kind, version, meant_for, highlights, usage_steps, works_with, content, preview_line_count, post_authors(role, joined_at, profiles(username))";
+  "slug, file_name, author_handle, title, tagline, summary, category, kind, version, meant_for, highlights, usage_steps, works_with, content, preview_line_count, post_authors(role, joined_at, profiles(username))";
 
 /** What a list of posted prompts shows (GET /api/v1/prompts): no file content. */
 export type PostedPromptSummaryRow = Pick<
   PostedPromptRow,
-  "slug" | "file_name" | "author_handle" | "title" | "tagline" | "category" | "install_kind" | "version"
+  "slug" | "file_name" | "author_handle" | "title" | "tagline" | "category" | "kind" | "version"
 >;
 
-const SUMMARY_COLUMNS = "slug, file_name, author_handle, title, tagline, category, install_kind, version";
+const SUMMARY_COLUMNS = "slug, file_name, author_handle, title, tagline, category, kind, version";
 
 /** Newest posts first; the cap keeps one response small until the list is paginated. */
 const max_listed_posts = 500;
@@ -65,7 +65,7 @@ export function toPromptView(row: PostedPromptRow): PromptView {
     slug: row.slug,
     fileName: row.file_name,
     category: row.category,
-    install_kind: row.install_kind,
+    kind: row.kind,
     version: row.version,
     author: getByline(row),
     // Posting is free for now; paid posts arrive with checkout.

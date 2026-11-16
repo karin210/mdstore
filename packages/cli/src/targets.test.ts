@@ -2,77 +2,47 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { prompt_kinds, tools } from "./kinds.js";
-import { detect_tool, plan_custom_path, plan_install, reference_line, render_for_target } from "./targets.js";
+import { detect_tool, NoTargetError, plan_custom_path, plan_install } from "./targets.js";
 
 describe("plan_install", () => {
+  // The skills matrix in cli.md.
   it.each([
-    ["claude", ".mdstore/global.md", "CLAUDE.md", "@.mdstore/global.md"],
-    ["agents", ".mdstore/global.md", "AGENTS.md", "- Follow the instructions in `.mdstore/global.md`."],
-    [
-      "copilot",
-      ".mdstore/global.md",
-      ".github/copilot-instructions.md",
-      "- Follow the instructions in `.mdstore/global.md`.",
-    ],
-    ["aider", ".mdstore/global.md", "CONVENTIONS.md", "- Follow the instructions in `.mdstore/global.md`."],
-  ] as const)("keeps shared %s instructions in .mdstore/ and references them", (tool, file, shared, line) => {
-    expect(plan_install("instructions", tool, "global")).toEqual({ file, reference: { file: shared, line } });
+    ["claude", ".claude/skills/review/SKILL.md"],
+    ["cursor", ".cursor/skills/review/SKILL.md"],
+    ["copilot", ".github/skills/review/SKILL.md"],
+    ["opencode", ".opencode/skills/review/SKILL.md"],
+    ["codex", ".agents/skills/review/SKILL.md"],
+    ["zed", ".agents/skills/review/SKILL.md"],
+    ["agents", ".agents/skills/review/SKILL.md"],
+  ] as const)("installs a skill for %s at %s", (tool, file) => {
+    expect(plan_install("skill", tool, "review")).toEqual({ file });
   });
 
-  it("gives Cursor rules their own .mdc file", () => {
-    expect(plan_install("instructions", "cursor", "global")).toEqual({
-      file: ".cursor/rules/global.mdc",
-      reference: null,
-    });
+  it("installs an agent for claude at its own file", () => {
+    expect(plan_install("agent", "claude", "review")).toEqual({ file: ".claude/agents/review.md" });
   });
 
-  it.each([
-    ["command", "claude", ".claude/commands/review.md"],
-    ["command", "cursor", ".cursor/commands/review.md"],
-    ["agent", "claude", ".claude/agents/review.md"],
-  ] as const)("installs a %s for %s at its own file", (kind, tool, file) => {
-    expect(plan_install(kind, tool, "review")).toEqual({ file, reference: null });
+  it("has no install for a prompt: it is copied or downloaded", () => {
+    expect(() => plan_install("prompt", "claude", "global")).toThrow(NoTargetError);
+    expect(() => plan_install("prompt", "claude", "global")).toThrow(/copy or download/);
   });
 
-  it("falls back to the instructions target when a tool has no place for the kind", () => {
-    expect(plan_install("agent", "cursor", "advisor")).toEqual(plan_install("instructions", "cursor", "advisor"));
-    expect(plan_install("agent", "agents", "advisor")).toEqual(plan_install("instructions", "agents", "advisor"));
-    expect(plan_install("command", "copilot", "x")).toEqual(plan_install("instructions", "copilot", "x"));
+  it("says where to look when a tool has no known folder for a skill", () => {
+    expect(() => plan_install("skill", "aider", "review")).toThrow(/--path/);
   });
 
-  it("has a target for every kind and tool", () => {
-    for (const kind of prompt_kinds) {
-      for (const tool of tools) expect(() => plan_install(kind, tool, "x")).not.toThrow();
-    }
-  });
-});
-
-describe("reference_line", () => {
-  it("uses Claude Code's import syntax only for claude", () => {
-    expect(reference_line("claude", ".mdstore/a.md")).toBe("@.mdstore/a.md");
-    expect(reference_line("agents", ".mdstore/a.md")).toContain("`.mdstore/a.md`");
-  });
+  it.each(["cursor", "copilot", "opencode", "codex", "zed", "aider", "agents"] as const)(
+    "says where to look when %s has no known folder for an agent",
+    (tool) => {
+      expect(() => plan_install("agent", tool, "review")).toThrow(NoTargetError);
+      expect(() => plan_install("agent", tool, "review")).toThrow(/--path/);
+    },
+  );
 });
 
 describe("plan_custom_path", () => {
-  it("writes exactly where asked, without a reference", () => {
-    expect(plan_custom_path("docs/rules.md")).toEqual({ file: "docs/rules.md", reference: null });
-  });
-});
-
-describe("render_for_target", () => {
-  const prompt = { kind: "instructions" as const, tagline: 'Rules with "quotes"' };
-
-  it("leaves Markdown targets byte for byte", () => {
-    expect(render_for_target("CLAUDE.md", "# Hi\n", prompt)).toBe("# Hi\n");
-  });
-
-  it("adds Cursor frontmatter with a safely quoted description", () => {
-    expect(render_for_target(".cursor/rules/a.mdc", "# Hi\n", prompt)).toBe(
-      '---\ndescription: "Rules with \\"quotes\\""\nalwaysApply: true\n---\n\n# Hi\n',
-    );
-    expect(render_for_target(".cursor/rules/a.mdc", "x", { ...prompt, kind: "agent" })).toContain("alwaysApply: false");
+  it("writes exactly where asked", () => {
+    expect(plan_custom_path("docs/rules.md")).toEqual({ file: "docs/rules.md" });
   });
 });
 
@@ -93,6 +63,8 @@ describe("detect_tool", () => {
     [".cursor", "cursor"],
     ["CONVENTIONS.md", "aider"],
     [".aider.conf.yml", "aider"],
+    [".opencode", "opencode"],
+    [".agents", "agents"],
     ["AGENTS.md", "agents"],
   ] as const)("detects %s as %s", (marker, tool) => {
     writeFileSync(path.join(root, marker), "");

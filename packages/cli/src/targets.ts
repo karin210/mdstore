@@ -1,87 +1,61 @@
 import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
-import type { PromptKind, Tool } from "./kinds.js";
+import { is_installable, type Kind, type Tool } from "./kinds.js";
 
 /**
- * Where a prompt goes, by kind and tool. `<name>` is the prompt's slug.
- *
- * A `shared` target is one file the whole project and the user already own (CLAUDE.md, AGENTS.md…).
- * The CLI never writes a prompt into it: the prompt goes to its own file in `.mdstore/` and the
- * shared file gets one reference line (created if the file doesn't exist). So installing never
- * clobbers the user's text, several prompts can share one target, and updates only touch the
- * files the CLI owns.
+ * Where a skill or an agent goes, by kind and tool. `<name>` is the listing's slug. Every target is a
+ * file of its own that the CLI owns, so installing never touches the developer's own files and
+ * updates only rewrite what the CLI wrote. Prompts have no target: they are copied or downloaded.
+ * A tool missing from a kind has no known place for it yet; `--path` still works.
  */
-interface TargetSpec {
-  path: string;
-  shared: boolean;
-}
-
-export const install_targets: Record<PromptKind, Partial<Record<Tool, TargetSpec>>> = {
-  instructions: {
-    claude: { path: "CLAUDE.md", shared: true },
-    cursor: { path: ".cursor/rules/<name>.mdc", shared: false },
-    copilot: { path: ".github/copilot-instructions.md", shared: true },
-    aider: { path: "CONVENTIONS.md", shared: true },
-    agents: { path: "AGENTS.md", shared: true },
+export const install_targets: Record<"skill" | "agent", Partial<Record<Tool, string>>> = {
+  // From the skills matrix in cli.md. `agents` is the shared `.agents/skills` folder that Codex and Zed
+  // read natively. Aider has no skills folder.
+  skill: {
+    claude: ".claude/skills/<name>/SKILL.md",
+    cursor: ".cursor/skills/<name>/SKILL.md",
+    copilot: ".github/skills/<name>/SKILL.md",
+    opencode: ".opencode/skills/<name>/SKILL.md",
+    codex: ".agents/skills/<name>/SKILL.md",
+    zed: ".agents/skills/<name>/SKILL.md",
+    agents: ".agents/skills/<name>/SKILL.md",
   },
-  command: {
-    claude: { path: ".claude/commands/<name>.md", shared: false },
-    cursor: { path: ".cursor/commands/<name>.md", shared: false },
-  },
+  // Subagents: only Claude Code's folder is known so far.
   agent: {
-    claude: { path: ".claude/agents/<name>.md", shared: false },
+    claude: ".claude/agents/<name>.md",
   },
 };
 
-/** Folder for prompts referenced from a shared target. */
-export const mdstore_dir = ".mdstore";
-
-/** What `add` writes: the prompt's file, and the reference line a shared target gets. */
+/** What `add` writes: the project-relative path of the listing's file, with `/` separators. */
 export interface InstallPlan {
-  /** Project-relative path of the prompt's own file, with `/` separators. */
   file: string;
-  /** The shared file and the line that points it at `file`; null for a dedicated target. */
-  reference: { file: string; line: string } | null;
 }
 
-/**
- * The line a shared file gets. Claude Code loads `@path` imports from CLAUDE.md; the other tools
- * have no import syntax, so their agent is told to read the file.
- */
-export function reference_line(tool: Tool, file: string): string {
-  return tool === "claude" ? `@${file}` : `- Follow the instructions in \`${file}\`.`;
+/** Thrown when a listing can't be installed for a tool; the message says what to do instead. */
+export class NoTargetError extends Error {}
+
+/** Why a prompt can't be installed, and what to do instead. */
+export function prompt_not_installable(name: string): string {
+  return `"${name}" is a prompt: copy or download it from its page on mdstore. The CLI installs skills and agents.`;
 }
 
-/** The target for a kind and tool; kinds a tool has no place for fall back to its instructions target. */
-export function get_target(kind: PromptKind, tool: Tool): TargetSpec {
-  const target = install_targets[kind][tool] ?? install_targets.instructions[tool];
-  if (!target) throw new Error(`No install target for ${tool}`);
-  return target;
+/** The kind's target for a tool. Throws NoTargetError for a prompt, or a tool with no known place. */
+export function plan_install(kind: Kind, tool: Tool, name: string): InstallPlan {
+  if (!is_installable(kind)) {
+    throw new NoTargetError(prompt_not_installable(name));
+  }
+  const target = install_targets[kind][tool];
+  if (!target) {
+    throw new NoTargetError(
+      `mdstore doesn't know where ${tool} keeps ${kind === "skill" ? "skills" : "agents"} yet. Pick another tool with --tool, or use --path <file> to choose the location.`,
+    );
+  }
+  return { file: target.replace("<name>", name) };
 }
 
-export function plan_install(kind: PromptKind, tool: Tool, name: string): InstallPlan {
-  const target = get_target(kind, tool);
-  if (!target.shared) return { file: target.path.replace("<name>", name), reference: null };
-
-  const file = `${mdstore_dir}/${name}.md`;
-  return { file, reference: { file: target.path, line: reference_line(tool, file) } };
-}
-
-/** A plan for a file the user chose with --path: written as-is, no reference line. */
+/** A plan for a file the user chose with --path: written as-is. */
 export function plan_custom_path(file: string): InstallPlan {
-  return { file: file.split(path.sep).join("/"), reference: null };
-}
-
-/** Cursor reads `.mdc` rules only with frontmatter; the other targets get the file unchanged. */
-export function render_for_target(
-  file: string,
-  content: string,
-  prompt: { kind: PromptKind; tagline: string },
-): string {
-  if (!file.endsWith(".mdc")) return content;
-  // JSON strings are valid YAML double-quoted scalars, so any tagline is safe here.
-  const always_apply = prompt.kind === "instructions";
-  return `---\ndescription: ${JSON.stringify(prompt.tagline)}\nalwaysApply: ${always_apply}\n---\n\n${content}`;
+  return { file: file.split(path.sep).join("/") };
 }
 
 /** Signs of each tool in a project root, checked in this order. */
@@ -99,11 +73,15 @@ const tool_markers: { tool: Tool; matches: (entries: string[], root: string) => 
     matches: (_entries, root) =>
       existsSync(path.join(root, ".github", "copilot-instructions.md")) ? ".github/copilot-instructions.md" : null,
   },
+  { tool: "opencode", matches: (entries) => entries.find((entry) => entry === ".opencode") ?? null },
   {
     tool: "aider",
     matches: (entries) => entries.find((entry) => entry === "CONVENTIONS.md" || entry.startsWith(".aider")) ?? null,
   },
-  { tool: "agents", matches: (entries) => entries.find((entry) => entry === "AGENTS.md") ?? null },
+  {
+    tool: "agents",
+    matches: (entries) => entries.find((entry) => entry === "AGENTS.md" || entry === ".agents") ?? null,
+  },
 ];
 
 /** The tool a project uses, from the files at its root, and the file that gave it away. Falls back to `agents`. */

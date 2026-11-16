@@ -1,4 +1,4 @@
-import { is_prompt_kind, type PromptKind } from "./kinds.js";
+import { is_kind, type Kind } from "./kinds.js";
 
 /**
  * Shapes the CLI accepts from the command line and the API. The slug and file-name patterns are the
@@ -32,7 +32,7 @@ export interface PromptSummary {
   title: string;
   tagline: string;
   category: string;
-  kind: PromptKind;
+  kind: Kind;
   version: number;
   priceUsd: number;
   fileName: string;
@@ -64,7 +64,7 @@ export function parse_prompt_summary(value: unknown): PromptSummary {
   if (!is_record(value)) throw new InvalidResponseError("a prompt is not an object");
   const { slug, kind, version, priceUsd, fileName } = value;
   if (!is_valid_slug(slug)) throw new InvalidResponseError(`invalid slug ${JSON.stringify(slug)}`);
-  if (!is_prompt_kind(kind)) {
+  if (!is_kind(kind)) {
     throw new InvalidResponseError(`"${slug}" has kind ${JSON.stringify(kind)}, which needs a newer mdstore CLI`);
   }
   if (!is_positive_integer(version)) throw new InvalidResponseError(`"${slug}" has an invalid version`);

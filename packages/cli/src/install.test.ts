@@ -14,7 +14,7 @@ const details: PromptDetails = {
   title: "Global",
   tagline: "Rules",
   category: "conventions",
-  kind: "instructions",
+  kind: "skill",
   version: 1,
   priceUsd: 0,
   fileName: "global.md",
@@ -35,7 +35,7 @@ function input(overrides: Partial<InstallInput> = {}): InstallInput {
     details,
     content,
     tool: "claude",
-    plan: plan_install("instructions", "claude", "global"),
+    plan: plan_install("skill", "claude", "global"),
     assume_yes: false,
     ask: never_ask,
     ...overrides,
@@ -47,31 +47,24 @@ beforeEach(() => {
 });
 afterEach(() => rmSync(root, { recursive: true, force: true }));
 
-describe("install_prompt into a shared file", () => {
-  it("keeps an existing CLAUDE.md and appends one import line", async () => {
-    writeFileSync(path.join(root, "CLAUDE.md"), "# My rules\nKeep it short.");
+describe("install_prompt", () => {
+  it("writes the skill's own file, byte for byte, and describes it for the lockfile", async () => {
     const result = await install_prompt(input());
 
-    expect(read(".mdstore/global.md")).toBe(content);
-    expect(read("CLAUDE.md")).toBe("# My rules\nKeep it short.\n\n@.mdstore/global.md\n");
+    expect(read(".claude/skills/global/SKILL.md")).toBe(content);
+    expect(result.wrote_file).toBe(true);
     expect(result.entry).toEqual({
       version: 1,
       sha256: sha256_hex(content),
-      path: ".mdstore/global.md",
-      kind: "instructions",
+      path: ".claude/skills/global/SKILL.md",
+      kind: "skill",
       tool: "claude",
-      reference: "CLAUDE.md",
     });
   });
 
-  it("creates the shared file when missing, and never adds the line twice", async () => {
-    await install_prompt(input({ tool: "agents", plan: plan_install("instructions", "agents", "global") }));
-    const second = await install_prompt(
-      input({ tool: "agents", plan: plan_install("instructions", "agents", "global") }),
-    );
-
-    expect(read("AGENTS.md")).toBe("- Follow the instructions in `.mdstore/global.md`.\n");
-    expect(second).toMatchObject({ wrote_file: false, added_reference: false });
+  it("does not write again when the file on disk is already identical", async () => {
+    await install_prompt(input());
+    expect(await install_prompt(input())).toMatchObject({ wrote_file: false });
   });
 });
 
@@ -80,10 +73,11 @@ describe("install_prompt over an existing file", () => {
 
   it("refuses to overwrite a different file without a terminal or --yes", async () => {
     await install_prompt(input());
-    writeFileSync(path.join(root, ".mdstore", "global.md"), "my edits");
+    const file = ".claude/skills/global/SKILL.md";
+    writeFileSync(path.join(root, file), "my edits");
 
     await expect(install_prompt(input({ ask: async () => "not_interactive" }))).rejects.toThrow(/--yes/);
-    expect(read(".mdstore/global.md")).toBe("my edits");
+    expect(read(file)).toBe("my edits");
   });
 
   it("keeps the file when the user answers no, and overwrites on yes", async () => {
@@ -116,8 +110,7 @@ describe("install_prompt over an existing file", () => {
 describe("install_prompt safety", () => {
   it("writes nothing when the download doesn't match its sha256", async () => {
     await expect(install_prompt(input({ content: "tampered" }))).rejects.toThrow(IntegrityError);
-    expect(existsSync(path.join(root, ".mdstore"))).toBe(false);
-    expect(existsSync(path.join(root, "CLAUDE.md"))).toBe(false);
+    expect(existsSync(path.join(root, ".claude"))).toBe(false);
   });
 
   it("refuses a --path outside the project", async () => {

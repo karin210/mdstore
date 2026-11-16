@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { prompt_kinds } from "./kinds.js";
+import { kinds } from "./kinds.js";
 
 /** Reads a string array literal (`name = [ "a", "b" ]`) from a source file of the mdstore repo. */
 function read_list(repo_file: string, pattern: RegExp): string[] {
@@ -12,13 +12,14 @@ function read_list(repo_file: string, pattern: RegExp): string[] {
 }
 
 // The CLI is published on its own, so it keeps a copy of the list; these checks keep it in step.
-describe("prompt_kinds", () => {
+describe("kinds", () => {
   it("matches the site's list in src/data/prompts.ts", () => {
-    expect(read_list("src/data/prompts.ts", /install_kinds = \[([^\]]*)\]/)).toEqual([...prompt_kinds]);
+    expect(read_list("src/data/prompts.ts", /prompt_kinds = \[([^\]]*)\]/)).toEqual([...kinds]);
   });
 
-  it("matches the posted_prompts install_kind check", () => {
-    const migration = "supabase/migrations/20261117000000_add_install_kind_and_version_to_posted_prompts.sql";
-    expect(read_list(migration, /install_kind in \(([^)]*)\)/)).toEqual([...prompt_kinds]);
+  it.each(["posted_prompts", "prompt_revisions"])("matches the %s kind check", (table) => {
+    const migration = "supabase/migrations/20261118000000_add_agent_kind.sql";
+    const check = new RegExp(`${table}_kind_check check \\(kind in \\(([^)]*)\\)\\)`);
+    expect(read_list(migration, check)).toEqual([...kinds]);
   });
 });

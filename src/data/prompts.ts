@@ -7,13 +7,14 @@ export const promptCategories = ["conventions", "agents", "frontend", "testing",
 export type PromptCategory = (typeof promptCategories)[number];
 
 /**
- * What a prompt file is, which decides where the mdstore CLI installs it (packages/cli/src/targets.ts):
- * `instructions` (project-wide rules such as CLAUDE.md or AGENTS.md), `command` (a slash command) or
- * `agent` (a subagent playbook). The posted_prompts install_kind check and the CLI keep the same list.
+ * What a listing is, which decides how a developer gets it: a `prompt` is copied or downloaded and used in a
+ * session; a `skill` is installed in the agent's skills folder; an `agent` is a subagent, installed in its
+ * agents folder. The mdstore CLI installs skills and agents (packages/cli/src/targets.ts), not prompts. The
+ * posted_prompts and prompt_revisions kind checks and the CLI keep the same list.
  */
-export const install_kinds = ["instructions", "command", "agent"] as const;
+export const prompt_kinds = ["prompt", "skill", "agent"] as const;
 
-export type InstallKind = (typeof install_kinds)[number];
+export type PromptKind = (typeof prompt_kinds)[number];
 
 /**
  * A listing's slug doubles as its catalogue key: its title, tagline, summary, highlights, "meant for"
@@ -34,8 +35,8 @@ export interface PromptListing {
   slug: PromptSlug;
   fileName: string;
   category: PromptCategory;
-  /** Where the CLI installs the file; see install_kinds. */
-  install_kind: InstallKind;
+  /** How a developer gets the file; see prompt_kinds. */
+  kind: PromptKind;
   /**
    * Starts at 1. Bump it by hand, by one, in the same commit that changes the file in content/prompts/:
    * the CLI compares it with its lockfile to find updates, so an unbumped change never reaches users.
@@ -82,7 +83,7 @@ export const featuredPrompts: PromptListing[] = [
     slug: "global",
     fileName: "global.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -111,7 +112,7 @@ Baseline conventions for any website or web app, whatever the framework. Apply t
     slug: "nextjs-structure",
     fileName: "nextjs-structure.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 5,
@@ -133,7 +134,7 @@ Where every file goes in a Next.js App Router project (TypeScript). Follow it wh
     slug: "dev-tools-advisor",
     fileName: "dev-tools-advisor.md",
     category: "agents",
-    install_kind: "agent",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -159,7 +160,7 @@ Recommends the tools and stack that fit the project and the developer's setup: l
     slug: "commit-attribution",
     fileName: "commit-attribution.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -181,7 +182,7 @@ Keeps commit messages, pull request texts and release notes free of credits to a
     slug: "authentication-forms",
     fileName: "authentication-forms.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -203,7 +204,7 @@ How to build sign-in, sign-up and password forms that are easy to get right: one
     slug: "modals",
     fileName: "modals.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -228,7 +229,7 @@ How to build modal dialogs: which kind to use, how each one closes, and how to s
     slug: "loading-states",
     fileName: "loading-states.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -250,7 +251,7 @@ What the interface shows while something asynchronous happens, and when it fails
     slug: "error-handling-and-http-status",
     fileName: "error-handling-and-http-status.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -272,7 +273,7 @@ How a server answers when something goes wrong, and how a client reads the answe
     slug: "ai-discoverability-geo",
     fileName: "ai-discoverability-geo.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -297,7 +298,7 @@ How to make a public website easy for AI assistants to find, read and quote. Fol
     slug: "security-validation-authorization",
     fileName: "security-validation-authorization.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -322,7 +323,7 @@ How to protect server code that handles input, accounts and data: check every in
     slug: "page-titles",
     fileName: "page-titles.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -344,7 +345,7 @@ How to give every page a meaningful, unique title. Follow it whenever you create
     slug: "routing-and-404",
     fileName: "routing-and-404.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -366,7 +367,7 @@ How to name routes, handle unknown URLs, redirect safely and protect privileged 
     slug: "button-kinds",
     fileName: "button-kinds.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -391,7 +392,7 @@ How to decide what a button looks like by the job it does. Follow it whenever yo
     slug: "color-and-ui-system",
     fileName: "color-and-ui-system.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -416,7 +417,7 @@ How to build a colour palette that expresses visual hierarchy: what the eye shou
     slug: "web-visual-design-and-images",
     fileName: "web-visual-design-and-images.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -441,7 +442,7 @@ How to decide what a web page looks like and how it communicates, from its audie
     slug: "landing-and-hero-sections",
     fileName: "landing-and-hero-sections.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -466,7 +467,7 @@ How to build a hero that explains the site at first sight, and the images and tr
     slug: "api-route-handlers",
     fileName: "api-route-handlers.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -491,7 +492,7 @@ How to organise API endpoints so that each one does one job, with its own rules 
     slug: "classes-for-complex-objects",
     fileName: "classes-for-complex-objects.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -513,7 +514,7 @@ When to model an object as a class, and what goes inside it, so its rules live i
     slug: "naming-conventions",
     fileName: "naming-conventions.md",
     category: "conventions",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -538,7 +539,7 @@ How to name things so a developer understands what a variable holds or what a fu
     slug: "css-layout-and-spacing",
     fileName: "css-layout-and-spacing.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,
@@ -563,7 +564,7 @@ How to arrange elements so the layout is set in one place, spacing comes from to
     slug: "fluid-design-and-container-queries",
     fileName: "fluid-design-and-container-queries.md",
     category: "frontend",
-    install_kind: "instructions",
+    kind: "prompt",
     version: 1,
     author: "@mdstore",
     priceUsd: 0,

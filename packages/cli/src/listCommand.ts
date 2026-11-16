@@ -13,13 +13,7 @@ export async function list_command(context: CommandContext): Promise<void> {
 
   const rows = slugs.map((slug) => {
     const entry = lock.prompts[slug]!;
-    return [
-      slug,
-      `v${entry.version}`,
-      entry.kind,
-      entry.tool,
-      entry.reference ? `${entry.path} (via ${entry.reference})` : entry.path,
-    ];
+    return [slug, `v${entry.version}`, entry.kind, entry.tool, entry.path];
   });
   context.log(format_table(["NAME", "VERSION", "KIND", "TOOL", "PATH"], rows));
 }

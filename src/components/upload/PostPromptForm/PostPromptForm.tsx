@@ -6,7 +6,7 @@ import { useReducer, useState, useTransition, type FormEvent, type ReactElement,
 import { FormAlert } from "@/components/global/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/global/SubmitButton/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField/PostFormField";
-import { install_kinds, promptCategories } from "@/data/prompts";
+import { promptCategories } from "@/data/prompts";
 import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";
 import { PromptPostForm, type PromptPostValues } from "@/lib/forms/PromptPostForm";
 import {
@@ -22,7 +22,7 @@ import { postPrompt, type PostPromptResult } from "@/server/prompts/actions";
 import { push_revision, type PushRevisionResult } from "@/server/reviews/actions";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<PromptPostField, "kind" | "category" | "install_kind" | "worksWith" | "file">;
+type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "file">;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 type PostPromptFormProps =
@@ -45,7 +45,7 @@ type PostPromptFormProps =
 
 /** The id of a field's control, in kebab-case (`post-author-handle`); a checkbox group's first box is `${id}-0`. */
 function getFieldId(field: PromptPostField): string {
-  return `post-${field.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`).replaceAll("_", "-")}`;
+  return `post-${field.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
 }
 
 /** Moves focus to a field (the first box of a checkbox group) to lead the user to what needs a change. */
@@ -297,32 +297,6 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             ))}
           </select>
         </PostFormField>
-        {props.mode === "create" && (
-          <PostFormField
-            id="post-install-kind"
-            label={t("fields.installKind.label")}
-            hint={t("fields.installKind.hint")}
-            guidanceText={getGuidanceText("install_kind")}
-          >
-            <select
-              id="post-install-kind"
-              name="install_kind"
-              className="form-input"
-              value={form.getValue("install_kind")}
-              aria-describedby={getDescribedBy("post-install-kind", true)}
-              {...getControlState("install_kind")}
-              onChange={(event) => updateField("install_kind", event.target.value)}
-              onBlur={() => leaveField("install_kind")}
-            >
-              <option value="">{t("fields.installKind.placeholder")}</option>
-              {install_kinds.map((install_kind) => (
-                <option key={install_kind} value={install_kind}>
-                  {t(`fields.installKind.options.${install_kind}`)}
-                </option>
-              ))}
-            </select>
-          </PostFormField>
-        )}
       </fieldset>
 
       <fieldset className={styles.group}>

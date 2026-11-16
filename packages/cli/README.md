@@ -1,13 +1,13 @@
 # mdstore CLI
 
-Install coding prompts from [mdstore](https://mdstore-seven.vercel.app) into your project: `CLAUDE.md` and `AGENTS.md` instructions, Cursor rules, slash commands and agent playbooks, each in the place your AI tool reads it.
+Install skills and agents from [mdstore](https://mdstore-seven.vercel.app) into your project, each in the folder your AI tool reads them from (Claude Code, Cursor, Copilot, OpenCode, Codex, Zed).
 
 ```sh
 npx mdstore search forms
-npx mdstore add global
+npx mdstore add <skill-or-agent-name>
 ```
 
-Only free prompts can be installed from the CLI for now. Paid prompts are bought on the site.
+Only free listings can be installed from the CLI for now. Paid ones are bought on the site. A **prompt** is not installed by the CLI: copy it or download it from its page on mdstore.
 
 ## Commands
 
@@ -22,26 +22,26 @@ Only free prompts can be installed from the CLI for now. Paid prompts are bought
 
 Run the commands from your project's root: it is where files and the lockfile are written.
 
-## Where prompts go
+## Where files go
 
-`--tool` is one of `claude`, `cursor`, `copilot`, `aider` or `agents`. Without it, the CLI looks at the project root and picks the first match: `.claude/` or `CLAUDE.md` (claude), `.cursor/` (cursor), `.github/copilot-instructions.md` (copilot), `CONVENTIONS.md` or `.aider*` (aider), `AGENTS.md` (agents). With no match it uses `agents`.
+`--tool` is one of `claude`, `cursor`, `copilot`, `opencode`, `codex`, `zed`, `aider` or `agents`. Without it, the CLI looks at the project root and picks the first match: `.claude/` or `CLAUDE.md` (claude), `.cursor/` (cursor), `.github/copilot-instructions.md` (copilot), `.opencode/` (opencode), `CONVENTIONS.md` or `.aider*` (aider), `AGENTS.md` or `.agents/` (agents). With no match it uses `agents`.
 
-Each prompt has a kind, set by its author:
+Each listing has a kind, set by its author. The CLI installs two of them, into the project (not your home folder):
 
-| Kind           | claude                       | cursor                       | copilot                             | aider              | agents          |
-| -------------- | ---------------------------- | ---------------------------- | ----------------------------------- | ------------------ | --------------- |
-| `instructions` | `CLAUDE.md`\*                | `.cursor/rules/<name>.mdc`   | `.github/copilot-instructions.md`\* | `CONVENTIONS.md`\* | `AGENTS.md`\*   |
-| `command`      | `.claude/commands/<name>.md` | `.cursor/commands/<name>.md` | as instructions                     | as instructions    | as instructions |
-| `agent`        | `.claude/agents/<name>.md`   | as instructions              | as instructions                     | as instructions    | as instructions |
+| Tool                     | `skill`                            | `agent`                       |
+| ------------------------ | ---------------------------------- | ----------------------------- |
+| `claude`                 | `.claude/skills/<name>/SKILL.md`   | `.claude/agents/<name>.md`    |
+| `cursor`                 | `.cursor/skills/<name>/SKILL.md`   | no known folder: use `--path` |
+| `copilot`                | `.github/skills/<name>/SKILL.md`   | no known folder: use `--path` |
+| `opencode`               | `.opencode/skills/<name>/SKILL.md` | no known folder: use `--path` |
+| `codex`, `zed`, `agents` | `.agents/skills/<name>/SKILL.md`   | no known folder: use `--path` |
+| `aider`                  | no skills folder: use `--path`     | no known folder: use `--path` |
 
-\* **Shared files are never overwritten.** `CLAUDE.md`, `AGENTS.md` and the like hold your own instructions, and several prompts may target the same one. So the prompt is written to `.mdstore/<name>.md`, and the shared file gets one line pointing at it (the file is created if it doesn't exist; the line is added only once):
+A `prompt` is not installed by the CLI: copy it or download it from its page on mdstore.
 
-- Claude Code: `@.mdstore/<name>.md`, an import Claude Code loads with `CLAUDE.md`.
-- Other tools: ``- Follow the instructions in `.mdstore/<name>.md`.``, which the agent follows by reading the file. Aider doesn't open other files on its own: also pass it with `aider --read .mdstore/<name>.md` (or `read:` in `.aider.conf.yml`).
+Files are written byte for byte as published, and always to a file of their own that the CLI owns, so installing never touches your own files. A skill is one `SKILL.md` for now; skills that carry more files are not supported yet.
 
-Cursor rules get a short frontmatter (`description`, `alwaysApply`) so Cursor picks them up; every other file is written byte for byte as published.
-
-`--path <file>` writes the prompt exactly there instead (it must stay inside the project), with no reference line.
+`--path <file>` writes a skill or an agent exactly there instead (it must stay inside the project). A prompt is refused with or without it.
 
 ## Safety
 
@@ -58,13 +58,12 @@ Cursor rules get a short frontmatter (`description`, `alwaysApply`) so Cursor pi
 {
   "version": 1,
   "prompts": {
-    "global": {
-      "kind": "instructions",
-      "path": ".mdstore/global.md",
+    "review": {
+      "kind": "skill",
+      "path": ".claude/skills/review/SKILL.md",
       "sha256": "…",
       "tool": "claude",
-      "version": 1,
-      "reference": "CLAUDE.md"
+      "version": 1
     }
   }
 }
