@@ -24,7 +24,7 @@
         "highlights": [
           "Un árbol src/ completo que muestra dónde va cada tipo de archivo",
           "app/ solo contiene rutas, con la página de inicio en un grupo de rutas (homepage)",
-          "Carpetas de componentes por ruta, por funcionalidad y global/, sin archivos sueltos",
+          "Carpetas de componentes por ruta, por funcionalidad y shared/, sin archivos sueltos",
           "Código exclusivo del servidor en src/server/, protegido con imports de server-only",
           "Archivos estáticos en public/; los archivos de pago o privados se sirven desde una ruta que verifica el acceso",
           "Imports con @/* sin archivos barrel, y una sola plantilla de título para todas las páginas",

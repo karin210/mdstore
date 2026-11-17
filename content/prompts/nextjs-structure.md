@@ -14,6 +14,7 @@ project/
 ├─ src/
 │  ├─ app/                      routes only
 │  │  ├─ layout.tsx             root layout: fonts, global CSS, title template, header/footer
+│  │  ├─ layout.module.css      styles for the markup the layout itself renders, if any
 │  │  ├─ not-found.tsx          branded 404 for every unmatched URL
 │  │  ├─ error.tsx              branded error boundary
 │  │  ├─ (homepage)/page.tsx    the home page, served at "/"
@@ -23,7 +24,7 @@ project/
 │  ├─ components/
 │  │  ├─ homepage/              components only the home page uses
 │  │  ├─ <route>/               components only that route uses (pricing/, products/)
-│  │  ├─ global/                components used by several pages or components
+│  │  ├─ shared/                components used by several pages or components
 │  │  └─ <feature>/             one feature's parts (auth/, checkout/, modals/)
 │  ├─ hooks/                    client hooks (useAuth.ts, useMediaQuery.ts)
 │  ├─ data/                     static data and catalogues
@@ -31,7 +32,8 @@ project/
 │  ├─ validation/               schemas shared by the client and the server
 │  ├─ types/                    shared types (core records used on both sides)
 │  ├─ server/                   server-only code: auth guards, database, services
-│  ├─ styles/globals.css        :root tokens, reset, typography, shared classes
+│  ├─ styles/                   globals.css (tokens, reset, typography, no classes) plus
+│  │                            shared, page-level and heavy *.module.css files
 │  ├─ proxy.ts                  request proxy (route guards, redirects), next to app/
 │  └─ instrumentation.ts        optional: monitoring and tracing
 ├─ public/                      static files served as-is (favicon.ico, images, robots.txt)
@@ -65,10 +67,10 @@ project/
 - **No loose files in `components/`.** Every component sits in a folder:
   - `homepage/` for components only the home page uses.
   - A folder named after the route (`pricing/`, `products/`) for components only that route uses.
-  - `global/` for components that several pages or components import (header, footer, buttons, logo).
+  - `shared/` for components that several pages or components import (header, footer, buttons, logo). Never call it `global`: that word belongs to `globals.css`.
   - Feature folders (`auth/`, `checkout/`, `modals/`) for the parts of one feature.
-- **Promote a component to `global/` as soon as a second page or component imports it.**
-- **One component per file, named after its export** (`PromptCard.tsx` exports `PromptCard`), with its stylesheet next to it (`PromptCard.module.css`) when the project uses CSS Modules.
+- **Promote a component to `shared/` as soon as a second page or component imports it.**
+- **One folder per component, named after it.** Every file under `components/` lives in a folder named after the file, at any depth: `components/homepage/PromptCard/PromptCard.tsx`, exporting `PromptCard`, with its stylesheet beside it (`PromptCard.module.css`) when the project uses CSS Modules. This holds for files that export several components (`shared/icons/icons.tsx`) and for plain helpers next to components. The pair moves and gets deleted together.
 - **Server Components are the default.** Add `"use client"` only to the components that need state, effects, event handlers or browser APIs, and keep those client components as small as possible, close to the leaves of the tree.
 
 ## 5. Everything else under `src/`
@@ -82,7 +84,13 @@ project/
 - **`validation/`:** the schemas (Zod, Valibot) that both the client and the server run, so they accept exactly the same values.
 - **`types/`:** core record types shared by the client and the server (`BookingRecord`, `UserRecord`). Keep a type next to its only consumer when nothing else uses it (component props stay in the component file).
 - **`server/`:** code that must never reach the browser: auth guards (`requireUser`, `requireRole`), database access, services that call third-party APIs with secrets. Start each file with `import "server-only";` so an accidental client import fails the build.
-- **`styles/globals.css`:** the global styles (tokens, reset, typography, shared classes such as modal classes), imported **once**, at the top of the root layout. Everything else is scoped to its component. Never import the global stylesheet anywhere else, and never write global styles inside a component.
+- **Style files live in exactly three places:** the component's own folder (including those under `components/shared/`), the route's own folder in `app/` (a `page.module.css` or `layout.module.css` beside the file it styles), and `src/styles/`. No `shared/` stylesheet folder inside a feature, no stylesheet sitting loose in a feature folder. Anything used by more than one component or route goes to `src/styles/`, as a module.
+- **`styles/globals.css` holds no classes.** It is for the `:root` tokens, the reset, typography and element-level defaults, imported **once**, at the top of the root layout. Never write a component's or a feature's class in it, so templates never mix plain class names with module classes: every class comes from a CSS Module (`styles.card`). If it grows long, split it into `tokens.css`, `reset.css` and `typography.css` pulled in with `@import`, so the layout still imports one file. Never import it anywhere else.
+- **`src/styles/` also holds modules, named for what they style,** imported through the alias (`@/styles/review.module.css`):
+  - **Shared modules:** styles several components of one feature use (`review.module.css`: card, muted text, buttons).
+  - **Page-level modules:** the layout of a page (grid, columns, sidebar), named for the page (`reviewPage.module.css`), for when the page body and its other parts, such as its loading skeleton, share the same layout classes.
+  - **Heavy modules:** styles that cost load or render time, such as complicated animations or large effects (`heroAnimation.module.css`). Import them only where used, so they load with that component and not on every page.
+  A style used by only one component stays in that component's own module.
 - **State stores** (Zustand, Redux, Jotai), when the project needs them, go in `src/stores/`, one file per domain. Keep a fetch in the component that uses it when no other component needs the data.
 
 ## 6. Static files: `public/`
@@ -110,7 +118,7 @@ export const metadata: Metadata = {
 }
 ```
 
-- **Import from the module that owns the code** (`@/components/global/SiteHeader`). Don't add barrel `index.ts` files that re-export a whole folder: they hide where code lives and can pull server code into client bundles.
+- **Import from the module that owns the code** (`@/components/shared/SiteHeader/SiteHeader`). Don't add barrel `index.ts` files that re-export a whole folder: they hide where code lives and can pull server code into client bundles.
 
 ## 8. Page titles and metadata
 

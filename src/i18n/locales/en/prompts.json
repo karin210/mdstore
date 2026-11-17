@@ -24,7 +24,7 @@
         "highlights": [
           "A complete src/ tree showing where every kind of file belongs",
           "app/ holds routes only, with the home page in a (homepage) route group",
-          "Component folders per route, per feature and global/, with no loose files",
+          "Component folders per route, per feature and shared/, with no loose files",
           "Server-only code in src/server/, guarded with server-only imports",
           "Static files in public/; paid or private files served through an access-checked route",
           "@/* imports with no barrel files, and one title template for every page",
