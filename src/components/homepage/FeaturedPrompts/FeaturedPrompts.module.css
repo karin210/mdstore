@@ -40,8 +40,10 @@
 
 .item {
   display: flex;
+  min-width: 0; /* a grid item never grows past its column because of what is inside it */
 }
 
 .item > * {
   flex: 1;
+  min-width: 0;
 }

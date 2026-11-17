@@ -1,6 +1,7 @@
 .card {
   position: relative; /* anchors the stretched title link */
   display: flex;
+  min-width: 0; /* the card shrinks with its column; long content wraps instead of spilling out */
   cursor: pointer;
   flex-direction: column;
   gap: var(--space-sm);
@@ -46,6 +47,7 @@
 .title {
   margin: 0;
   font-size: var(--text-xl);
+  overflow-wrap: anywhere;
 }
 
 .titleLink {
@@ -79,6 +81,7 @@
 .summary {
   margin: 0;
   flex-grow: 1;
+  overflow-wrap: anywhere;
   color: var(--color-ink-muted);
   font-size: var(--text-sm);
 }
@@ -102,6 +105,7 @@
 
 .bottom {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-sm);
@@ -112,6 +116,7 @@
 .meta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   margin: 0;
 }
 
@@ -126,6 +131,7 @@
 }
 
 .byline {
+  overflow-wrap: anywhere;
   color: var(--color-ink-muted);
   font-size: var(--text-xs);
 }
