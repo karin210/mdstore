@@ -56,6 +56,13 @@ export interface Review {
   closed_at: string | null;
 }
 
+/**
+ * Which file a line comment's line_number counts in: the revision's own file ("new", the File tab
+ * and added or unchanged lines of the Changes tab), or the file it is compared with ("old", the
+ * removed lines of the Changes tab; see get_base_revision).
+ */
+export type LineSide = "new" | "old";
+
 export interface ReviewComment {
   id: string;
   review_id: string;
@@ -63,6 +70,8 @@ export interface ReviewComment {
   body: string | null;
   revision_id: string | null;
   line_number: number | null;
+  /** "new" for comments on the whole review too (the database default). */
+  line_side: LineSide;
   decision: ReviewDecision | null;
   created_at: string;
 }

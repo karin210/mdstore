@@ -111,7 +111,7 @@ export async function get_review_page(slug: string): Promise<ReviewPageData | nu
       .returns<Revision[]>(),
     supabase
       .from("review_comments")
-      .select("id, review_id, author_id, body, revision_id, line_number, decision, created_at")
+      .select("id, review_id, author_id, body, revision_id, line_number, line_side, decision, created_at")
       .eq("post_id", post.id)
       .order("created_at")
       .returns<ReviewComment[]>(),

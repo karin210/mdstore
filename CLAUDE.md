@@ -87,7 +87,8 @@ src/
 │  ├─ prompts/[slug]/review/page.tsx
 │  │                         a post's review, like a pull request (authors + admins only):
 │  │                         conversation, file with line comments, changes between
-│  │                         revisions, "push a new version" form; `?review=&tab=&revision=`
+│  │                         revisions with line comments on either side (like a PR diff),
+│  │                         "push a new version" form; `?review=&tab=&revision=`
 │  ├─ reviews/page.tsx       admins' review queue
 │  ├─ invite/[token]/page.tsx
 │  │                         co-author invite link (sign in, then confirm with a button)
@@ -122,7 +123,8 @@ src/
 │  │                         `ai_models` registry in src/data/aiModels.ts), AuthorBar (links to
 │  │                         the review for authors and admins)
 │  └─ review/                review page, queue and invite: ReviewBody, ReviewTimeline,
-│                            RevisionFile, RevisionChanges, CommentForm, DecisionForm,
+│                            RevisionFile, RevisionChanges, DiffTable, LineThread (a line's
+│                            comments, shared by both), CommentForm, DecisionForm,
 │                            AuthorsPanel, WithdrawButton, ReviewQueue, InviteBody/InviteAccept
 │                            (own modules + src/styles/review.module.css and reviewPage.module.css)
 ├─ data/                     static catalogues: prompts.ts (listings), aiModels.ts (model

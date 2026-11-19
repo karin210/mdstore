@@ -23,6 +23,11 @@
   text-decoration: none;
 }
 
+/* A removed line, tinted as in the Changes tab's diff. */
+.quotedLine[data-side="old"] {
+  background: color-mix(in srgb, var(--color-error) 28%, var(--color-code-bg));
+}
+
 .quotedLine code {
   white-space: pre;
 }

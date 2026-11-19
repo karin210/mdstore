@@ -5,6 +5,7 @@ import { PickUsernameForm } from "@/components/shared/PickUsernameForm/PickUsern
 import { AuthorsPanel } from "@/components/review/AuthorsPanel/AuthorsPanel";
 import { CommentForm } from "@/components/review/CommentForm/CommentForm";
 import { DecisionForm } from "@/components/review/DecisionForm/DecisionForm";
+import type { LineComment } from "@/components/review/LineThread/LineThread";
 import { review_href, REVIEW_TABS, type ReviewTab } from "@/components/review/reviewHref/reviewHref";
 import { RevisionChanges } from "@/components/review/RevisionChanges/RevisionChanges";
 import { RevisionFile } from "@/components/review/RevisionFile/RevisionFile";
@@ -69,6 +70,18 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
   const tab: ReviewTab = requested_tab === "revise" && !can_revise ? "conversation" : requested_tab;
   const is_first_review = review.base_revision_id === null && review.number === 1;
   const tabs: ReviewTab[] = can_revise ? [...REVIEW_TABS] : ["conversation", "file", "changes"];
+  const can_comment_on_lines = can_take_part && is_active && viewer.username !== null;
+  // The selected revision's line comments, ready to show; the File tab takes the "new" side only.
+  const line_comments: LineComment[] = data.comments
+    .filter((comment) => comment.revision_id === selected_revision.id && comment.line_number !== null)
+    .map((comment) => ({
+      id: comment.id,
+      line_number: comment.line_number ?? 0,
+      side: comment.line_side,
+      username: name_of(comment.author_id),
+      body: comment.body ?? "",
+      date: format_date(comment.created_at),
+    }));
 
   return (
     <div className={review_page_styles.page}>
@@ -200,23 +213,21 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 revision_id={selected_revision.id}
                 file_name={selected_revision.file_name}
                 lines={splitFileLines(selected_revision.content)}
-                comments={data.comments
-                  .filter((comment) => comment.revision_id === selected_revision.id && comment.line_number !== null)
-                  .map((comment) => ({
-                    id: comment.id,
-                    line_number: comment.line_number ?? 0,
-                    username: name_of(comment.author_id),
-                    body: comment.body ?? "",
-                    date: format_date(comment.created_at),
-                  }))}
-                can_comment={can_take_part && is_active && viewer.username !== null}
+                comments={line_comments.filter((comment) => comment.side === "new")}
+                can_comment={can_comment_on_lines}
               />
             </section>
           )}
 
           {tab === "changes" && (
             <section className={styles.panel} aria-label={t("tabs.changes")}>
-              <RevisionChanges revision={selected_revision} review={review} revisions={data.revisions} />
+              <RevisionChanges
+                revision={selected_revision}
+                review={review}
+                revisions={data.revisions}
+                comments={line_comments}
+                can_comment={can_comment_on_lines}
+              />
             </section>
           )}
 

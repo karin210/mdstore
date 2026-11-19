@@ -14,6 +14,7 @@ The goal of this part of the project is also to learn raw PostgreSQL, so there i
   3. `20261116000000_add_collaborative_review.sql`: usernames, co-authors, reviews with revisions and comments, invite links (see [Collaborative review](#collaborative-review)). Applied to the local stack only so far.
   4. `20261117000000_add_version_to_posted_prompts.sql` and `20261118000000_add_agent_kind.sql`: the listing version and the `agent` kind.
   5. `20261119000000_allow_username_change.sql`: `profiles.username_changed_at` and `change_username()` (rename from `/profile`, 30-day cool-down). Tests: `supabase/tests/database/username_change.test.sql`.
+  6. `20261120000000_add_line_comment_side.sql`: `review_comments.line_side` (`new` or `old`) and `add_review_comment(..., p_line_side)`, so the Changes tab can take comments on removed lines; `old` counts lines in the file the revision is compared with. Tests: `supabase/tests/database/line_comment_side.test.sql`.
 - Database tests: `supabase/tests/database/*.test.sql` (pgTAP), run with `npm run db:test` against the local stack. Each file runs in a transaction that is rolled back.
 
 ## `posted_prompts`

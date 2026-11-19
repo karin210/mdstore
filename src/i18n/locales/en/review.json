@@ -49,6 +49,7 @@
       "revision": "@{username} pushed revision {number}",
       "comment": "@{username} commented",
       "lineComment": "@{username} commented on line {line} of revision {number}",
+      "lineCommentOld": "@{username} commented on removed line {line} of revision {number}",
       "decision": {
         "approved": "@{username} approved this review",
         "changes_requested": "@{username} requested changes",
@@ -68,7 +69,9 @@
       "tooLong": "Use at most {max} characters.",
       "cancel": "Cancel",
       "lineLabel": "Comment on line {line}",
+      "lineLabelOld": "Comment on removed line {line}",
       "lineButton": "Comment on line {line}",
+      "lineButtonOld": "Comment on removed line {line}",
       "closed": "This review is closed, so it takes no more comments."
     },
     "decision": {
@@ -129,7 +132,8 @@
       "hidden": "{count, plural, one {# unchanged line} other {# unchanged lines}}",
       "removed": "Removed line",
       "added": "Added line",
-      "summary": "{added, plural, one {# line added} other {# lines added}}, {removed, plural, one {# removed} other {# removed}}"
+      "summary": "{added, plural, one {# line added} other {# lines added}}, {removed, plural, one {# removed} other {# removed}}",
+      "lineHelp": "Select a line number to comment on that line: the old number on a removed line, the new number on any other."
     },
     "revise": {
       "intoActive": "Your new version joins review #{number} and goes back to the reviewers.",

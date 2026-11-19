@@ -49,6 +49,7 @@
       "revision": "@{username} subió la versión {number}",
       "comment": "@{username} comentó",
       "lineComment": "@{username} comentó la línea {line} de la versión {number}",
+      "lineCommentOld": "@{username} comentó la línea eliminada {line} de la versión {number}",
       "decision": {
         "approved": "@{username} aprobó esta revisión",
         "changes_requested": "@{username} pidió cambios",
@@ -68,7 +69,9 @@
       "tooLong": "Usa como máximo {max} caracteres.",
       "cancel": "Cancelar",
       "lineLabel": "Comentario sobre la línea {line}",
+      "lineLabelOld": "Comentario sobre la línea eliminada {line}",
       "lineButton": "Comentar la línea {line}",
+      "lineButtonOld": "Comentar la línea eliminada {line}",
       "closed": "Esta revisión está cerrada y ya no acepta comentarios."
     },
     "decision": {
@@ -129,7 +132,8 @@
       "hidden": "{count, plural, one {# línea sin cambios} other {# líneas sin cambios}}",
       "removed": "Línea eliminada",
       "added": "Línea agregada",
-      "summary": "{added, plural, one {# línea agregada} other {# líneas agregadas}}, {removed, plural, one {# eliminada} other {# eliminadas}}"
+      "summary": "{added, plural, one {# línea agregada} other {# líneas agregadas}}, {removed, plural, one {# eliminada} other {# eliminadas}}",
+      "lineHelp": "Selecciona un número de línea para comentarla: el número anterior en una línea eliminada, el nuevo en cualquier otra."
     },
     "revise": {
       "intoActive": "Tu nueva versión se suma a la revisión #{number} y vuelve a los revisores.",

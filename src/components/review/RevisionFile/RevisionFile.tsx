@@ -2,23 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import { Fragment, useState, type ReactElement } from "react";
-import { CommentForm } from "@/components/review/CommentForm/CommentForm";
+import { group_line_comments, line_key, LineThread, type LineComment } from "@/components/review/LineThread/LineThread";
 import review_styles from "@/styles/review.module.css";
-import styles from "./RevisionFile.module.css";
-
-export interface LineComment {
-  id: string;
-  line_number: number;
-  username: string;
-  body: string;
-  date: string;
-}
 
 interface RevisionFileProps {
   review_id: string;
   revision_id: string;
   file_name: string;
   lines: string[];
+  /** The revision's comments on its own file (the "new" side). */
   comments: LineComment[];
   /** Authors and admins of a review in progress who have a username. */
   can_comment: boolean;
@@ -39,10 +31,7 @@ export function RevisionFile({
 }: RevisionFileProps): ReactElement {
   const t = useTranslations("review");
   const [open_line, set_open_line] = useState<number | null>(null);
-  const comments_by_line = new Map<number, LineComment[]>();
-  comments.forEach((comment) => {
-    comments_by_line.set(comment.line_number, [...(comments_by_line.get(comment.line_number) ?? []), comment]);
-  });
+  const comments_by_line = group_line_comments(comments);
 
   return (
     <div className={review_styles.card}>
@@ -54,22 +43,25 @@ export function RevisionFile({
       {can_comment && <p className={review_styles.muted}>{t("file.lineHelp")}</p>}
       {/* Focusable so keyboard users can scroll wide lines */}
       <div className={review_styles.codeScroller} tabIndex={0} aria-label={file_name}>
-        <table className={`${review_styles.codeTable} ${styles.fileTable}`}>
+        <table className={review_styles.codeTable}>
           <tbody>
             {lines.map((line, index) => {
               const line_number = index + 1;
-              const line_comments = comments_by_line.get(line_number) ?? [];
+              const line_comments = comments_by_line.get(line_key("new", line_number)) ?? [];
+              const is_open = open_line === line_number;
               return (
                 <Fragment key={line_number}>
-                  <tr data-commented={line_comments.length > 0 || undefined}>
-                    <td className={`${review_styles.diffNumber} ${styles.commentedNumber}`}>
+                  <tr>
+                    <td
+                      className={`${review_styles.diffNumber} ${line_comments.length > 0 ? review_styles.commentedNumber : ""}`}
+                    >
                       {can_comment ? (
                         <button
                           type="button"
-                          className={styles.lineButton}
+                          className={review_styles.lineButton}
                           aria-label={t("comment.lineButton", { line: line_number })}
-                          aria-expanded={open_line === line_number}
-                          onClick={() => set_open_line(open_line === line_number ? null : line_number)}
+                          aria-expanded={is_open}
+                          onClick={() => set_open_line(is_open ? null : line_number)}
                         >
                           {line_number}
                         </button>
@@ -79,27 +71,18 @@ export function RevisionFile({
                     </td>
                     <td className={review_styles.diffCode}>{line || " "}</td>
                   </tr>
-                  {(line_comments.length > 0 || open_line === line_number) && (
-                    <tr data-kind="thread">
+                  {(line_comments.length > 0 || is_open) && (
+                    <tr className={review_styles.threadRow}>
                       <td colSpan={2}>
-                        <div className={styles.lineThread}>
-                          {line_comments.map((comment) => (
-                            <article key={comment.id} className={styles.lineComment}>
-                              <p className={review_styles.eventHeader}>
-                                <strong>@{comment.username}</strong>
-                                <span>{comment.date}</span>
-                              </p>
-                              <p className={review_styles.body}>{comment.body}</p>
-                            </article>
-                          ))}
-                          {open_line === line_number && (
-                            <CommentForm
-                              review_id={review_id}
-                              line={{ revision_id, line_number }}
-                              onDone={() => set_open_line(null)}
-                            />
-                          )}
-                        </div>
+                        <LineThread
+                          review_id={review_id}
+                          revision_id={revision_id}
+                          line_number={line_number}
+                          side="new"
+                          comments={line_comments}
+                          is_form_open={is_open}
+                          on_close={() => set_open_line(null)}
+                        />
                       </td>
                     </tr>
                   )}

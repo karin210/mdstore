@@ -139,11 +139,17 @@ export function diff_lines(old_lines: string[], new_lines: string[]): DiffLine[]
 /**
  * The changed lines with `context` unchanged lines around each change, like a unified diff.
  * Changes closer than twice the context share one hunk. No hunks when nothing changed.
+ * `is_pinned` marks unchanged lines to show anyway (with their context), such as lines that carry
+ * review comments, so no comment is hidden in a collapsed stretch.
  */
-export function group_into_hunks(lines: DiffLine[], context = 3): DiffHunk[] {
+export function group_into_hunks(
+  lines: DiffLine[],
+  context = 3,
+  is_pinned: (line: DiffLine) => boolean = () => false,
+): DiffHunk[] {
   const shown = new Array<boolean>(lines.length).fill(false);
   lines.forEach((line, index) => {
-    if (line.kind === "same") return;
+    if (line.kind === "same" && !is_pinned(line)) return;
     for (let near = Math.max(0, index - context); near <= Math.min(lines.length - 1, index + context); near++) {
       shown[near] = true;
     }

@@ -1,0 +1,16 @@
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 44rem;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-sm);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}

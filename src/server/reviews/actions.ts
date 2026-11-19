@@ -2,6 +2,7 @@
 
 import type { PostgrestError } from "@supabase/supabase-js";
 import { updateTag } from "next/cache";
+import type { LineSide } from "@/lib/review/types";
 import { checkFileContent, prompt_revision_schema } from "@/lib/validation/promptPost";
 import { logServerError } from "@/server/logServerError";
 import { getPostedPromptTag, POSTED_PROMPTS_TAG } from "@/server/prompts/postedPrompts";
@@ -136,6 +137,8 @@ export interface CommentInput {
   /** Both set for a comment on one line of a revision's file. */
   revision_id?: string;
   line_number?: number;
+  /** Which file the line counts in; "new" (the revision's own file) when left out. */
+  line_side?: LineSide;
 }
 
 export async function add_review_comment(input: CommentInput): Promise<ReviewActionResult> {
@@ -144,6 +147,7 @@ export async function add_review_comment(input: CommentInput): Promise<ReviewAct
     p_body: input.body,
     p_revision_id: input.revision_id ?? null,
     p_line_number: input.line_number ?? null,
+    p_line_side: input.line_side ?? "new",
   });
   return result.status === "ok" ? { status: "ok" } : result;
 }

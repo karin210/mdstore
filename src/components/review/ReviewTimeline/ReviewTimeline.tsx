@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
 import { review_href } from "@/components/review/reviewHref/reviewHref";
 import { Link } from "@/i18n/navigation";
-import { build_timeline } from "@/lib/review/reviewView";
+import { build_timeline, get_base_revision } from "@/lib/review/reviewView";
 import type { Review, ReviewComment, Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
 import review_styles from "@/styles/review.module.css";
@@ -59,12 +59,23 @@ export async function ReviewTimeline({
         const { comment } = item;
         const username = name_of(comment.author_id);
         const line_revision = comment.revision_id ? revisions_by_id.get(comment.revision_id) : undefined;
+        const is_old_side = comment.line_side === "old";
+        // A removed line is quoted from the file the revision replaced (see get_base_revision).
+        const quoted_file = line_revision
+          ? is_old_side
+            ? get_base_revision(line_revision, review, revisions)
+            : line_revision
+          : null;
         const line_text =
-          line_revision && comment.line_number ? splitFileLines(line_revision.content)[comment.line_number - 1] : null;
+          quoted_file && comment.line_number ? splitFileLines(quoted_file.content)[comment.line_number - 1] : null;
         const heading = comment.decision
           ? t(`decision.${comment.decision}`, { username })
           : line_revision && comment.line_number
-            ? t("lineComment", { username, line: comment.line_number, number: line_revision.number })
+            ? t(is_old_side ? "lineCommentOld" : "lineComment", {
+                username,
+                line: comment.line_number,
+                number: line_revision.number,
+              })
             : t("comment", { username });
 
         return (
@@ -81,7 +92,12 @@ export async function ReviewTimeline({
             {line_text !== null && line_text !== undefined && line_revision && (
               <Link
                 className={styles.quotedLine}
-                href={review_href(slug, { review: review_number, tab: "file", revision: line_revision.number })}
+                data-side={comment.line_side}
+                href={review_href(slug, {
+                  review: review_number,
+                  tab: is_old_side ? "changes" : "file",
+                  revision: line_revision.number,
+                })}
               >
                 <span className={styles.lineNumber}>{comment.line_number}</span>
                 <code>{line_text || " "}</code>

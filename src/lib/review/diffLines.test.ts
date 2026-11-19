@@ -84,4 +84,13 @@ describe("group_into_hunks", () => {
     // Hunk 1 ends at line 6 (change on line 4 + 2), hunk 2 starts at line 16: lines 7 to 15 are hidden.
     expect(hunks[1].hidden_before).toBe(9);
   });
+
+  it("shows a pinned unchanged line, with its context, in a stretch that would be hidden", () => {
+    const new_lines = old_lines.map((line, index) => (index === 1 ? "changed" : line));
+    const lines = diff_lines(old_lines, new_lines);
+    const hunks = group_into_hunks(lines, 1, (line) => line.kind === "same" && line.new_number === 15);
+    expect(hunks).toHaveLength(2);
+    expect(render(hunks[1].lines)).toEqual([" line 14", " line 15", " line 16"]);
+    expect(count_hidden_after(lines, hunks)).toBe(4);
+  });
 });

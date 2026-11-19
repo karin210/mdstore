@@ -1,55 +1,50 @@
 import { getTranslations } from "next-intl/server";
 import { Fragment, type ReactElement } from "react";
-import { count_hidden_after, diff_lines, group_into_hunks, type DiffLine } from "@/lib/review/diffLines";
+import { DiffTable } from "@/components/review/DiffTable/DiffTable";
+import type { LineComment } from "@/components/review/LineThread/LineThread";
+import { count_hidden_after, diff_lines, group_into_hunks } from "@/lib/review/diffLines";
 import { diff_listing_fields, get_base_revision } from "@/lib/review/reviewView";
 import type { Review, Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
 import review_styles from "@/styles/review.module.css";
-import utility_styles from "@/styles/utilities.module.css";
 import styles from "./RevisionChanges.module.css";
 
 interface RevisionChangesProps {
   revision: Revision;
   review: Review;
   revisions: Revision[];
-}
-
-function DiffRow({ line, labels }: { line: DiffLine; labels: { removed: string; added: string } }): ReactElement {
-  const old_number = line.kind === "added" ? "" : line.old_number;
-  const new_number = line.kind === "removed" ? "" : line.new_number;
-  const marker = line.kind === "added" ? "+" : line.kind === "removed" ? "−" : " ";
-
-  return (
-    <tr data-kind={line.kind}>
-      <td className={review_styles.diffNumber}>{old_number}</td>
-      <td className={review_styles.diffNumber}>{new_number}</td>
-      <td className={review_styles.diffCode}>
-        {line.kind !== "same" && <span className={utility_styles.visuallyHidden}>{labels[line.kind]}: </span>}
-        <span aria-hidden="true" className={styles.diffMarker}>
-          {marker}
-        </span>
-        {line.text}
-      </td>
-    </tr>
-  );
+  /** The revision's line comments, on both sides. */
+  comments: LineComment[];
+  /** Authors and admins of a review in progress who have a username. */
+  can_comment: boolean;
 }
 
 /**
  * What a revision changed: the listing fields that differ, then the file as a unified diff with
- * a few unchanged lines around each change. Compared with the previous revision of the review,
- * or with the live version for the first revision of a proposed change.
+ * a few unchanged lines around each change, where reviewers comment on lines as in a pull request.
+ * Compared with the previous revision of the review, or with the live version for the first
+ * revision of a proposed change.
  */
-export async function RevisionChanges({ revision, review, revisions }: RevisionChangesProps): Promise<ReactElement> {
+export async function RevisionChanges({
+  revision,
+  review,
+  revisions,
+  comments,
+  can_comment,
+}: RevisionChangesProps): Promise<ReactElement> {
   const t = await getTranslations("review");
   const base = get_base_revision(revision, review, revisions);
   const base_is_live = base !== null && base.review_id !== review.id;
   const lines = diff_lines(base ? splitFileLines(base.content) : [], splitFileLines(revision.content));
-  const hunks = group_into_hunks(lines);
+  // Unchanged lines with comments stay visible, so no thread hides in a collapsed stretch.
+  const commented_new_lines = new Set(
+    comments.filter((comment) => comment.side === "new").map((comment) => comment.line_number),
+  );
+  const hunks = group_into_hunks(lines, 3, (line) => line.kind === "same" && commented_new_lines.has(line.new_number));
   const hidden_after = count_hidden_after(lines, hunks);
   const added = lines.filter((line) => line.kind === "added").length;
   const removed = lines.filter((line) => line.kind === "removed").length;
   const field_changes = base ? diff_listing_fields(base, revision) : [];
-  const labels = { removed: t("changes.removed"), added: t("changes.added") };
 
   return (
     <div className={styles.changes}>
@@ -100,30 +95,16 @@ export async function RevisionChanges({ revision, review, revisions }: RevisionC
         ) : (
           <>
             <p className={review_styles.muted}>{t("changes.summary", { added, removed })}</p>
-            {/* Focusable so keyboard users can scroll wide lines */}
-            <div className={review_styles.codeScroller} tabIndex={0} aria-label={t("changes.fileTitle")}>
-              <table className={`${review_styles.codeTable} ${styles.diff}`}>
-                <tbody>
-                  {hunks.map((hunk, index) => (
-                    <Fragment key={index}>
-                      {hunk.hidden_before > 0 && (
-                        <tr data-kind="hidden">
-                          <td colSpan={3}>{t("changes.hidden", { count: hunk.hidden_before })}</td>
-                        </tr>
-                      )}
-                      {hunk.lines.map((line, line_index) => (
-                        <DiffRow key={line_index} line={line} labels={labels} />
-                      ))}
-                    </Fragment>
-                  ))}
-                  {hidden_after > 0 && (
-                    <tr data-kind="hidden">
-                      <td colSpan={3}>{t("changes.hidden", { count: hidden_after })}</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            {can_comment && <p className={review_styles.muted}>{t("changes.lineHelp")}</p>}
+            <DiffTable
+              review_id={review.id}
+              revision_id={revision.id}
+              hunks={hunks}
+              hidden_after={hidden_after}
+              comments={comments}
+              can_comment={can_comment}
+              label={t("changes.fileTitle")}
+            />
           </>
         )}
       </section>

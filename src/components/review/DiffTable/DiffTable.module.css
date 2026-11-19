@@ -1,0 +1,20 @@
+.diffMarker {
+  display: inline-block;
+  width: 1.5ch;
+  color: var(--color-code-muted);
+}
+
+.diff tr[data-kind="added"] {
+  background: color-mix(in srgb, var(--color-brand-green-strong) 28%, var(--color-code-bg));
+}
+
+.diff tr[data-kind="removed"] {
+  background: color-mix(in srgb, var(--color-error) 28%, var(--color-code-bg));
+}
+
+.diff tr[data-kind="hidden"] td {
+  padding: var(--space-2xs) var(--space-sm);
+  background: color-mix(in srgb, var(--color-primary) 18%, var(--color-code-bg));
+  color: var(--color-code-muted);
+  font-family: var(--font-body);
+}

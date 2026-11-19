@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, useTransition, type FormEvent, type ReactElement } from "react";
 import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
+import type { LineSide } from "@/lib/review/types";
 import { add_review_comment, type ReviewActionResult } from "@/server/reviews/actions";
 import review_styles from "@/styles/review.module.css";
 import form_styles from "@/styles/form.module.css";
@@ -15,8 +16,8 @@ const COMMENT_MAX_LENGTH = 5000;
 
 interface CommentFormProps {
   review_id: string;
-  /** Set for a comment on one line of a revision's file. */
-  line?: { revision_id: string; line_number: number };
+  /** Set for a comment on one line: of the revision's own file ("new"), or of the file it replaces ("old"). */
+  line?: { revision_id: string; line_number: number; side: LineSide };
   /** Called after a line comment is sent or cancelled (closes the inline form). */
   onDone?: () => void;
 }
@@ -71,6 +72,7 @@ export function CommentForm({ review_id, line, onDone }: CommentFormProps): Reac
           body: body_trimmed,
           revision_id: line?.revision_id,
           line_number: line?.line_number,
+          line_side: line?.side,
         }),
       ),
     );
@@ -80,7 +82,9 @@ export function CommentForm({ review_id, line, onDone }: CommentFormProps): Reac
     <form className={line ? styles.lineForm : styles.commentForm} noValidate onSubmit={send_comment}>
       <div className={form_styles.field}>
         <label htmlFor={`${id}-body`} className={form_styles.label}>
-          {line ? t("comment.lineLabel", { line: line.line_number }) : t("comment.label")}
+          {line
+            ? t(line.side === "old" ? "comment.lineLabelOld" : "comment.lineLabel", { line: line.line_number })
+            : t("comment.label")}
         </label>
         <textarea
           id={`${id}-body`}
