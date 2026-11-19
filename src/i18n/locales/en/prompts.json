@@ -240,26 +240,6 @@
           "Check the result against the checklist at the end of the file."
         ]
       },
-      "naming-conventions": {
-        "title": "Naming variables and functions",
-        "tagline": "Names a developer understands at first sight.",
-        "summary": "How to name variables, functions and handlers by the value they store or the goal they serve: suffixes for the roles of a field, names that say how a value was transformed, and the prefixes for getters, booleans and event handlers.",
-        "highlights": [
-          "Variables named by the value they store, with context when needed",
-          "Role suffixes for the related variables of one field: emailValue, emailRef",
-          "Transformed values named by their state: phoneValueRaw, phoneValueTrimmed",
-          "Prefixes for getters, setters, booleans and event handlers",
-          "Function names that carry the goal, not the last click: setRole, nextStep",
-          "Worked examples of broad names and their fixes"
-        ],
-        "meantFor": ["Any language or stack", "Any AI coding agent", "New projects", "Existing codebases"],
-        "usageSteps": [
-          "Download `naming-conventions.md`. It's free.",
-          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@naming-conventions.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
-          "Ask the agent to write or rename code. It names variables and functions by value, state and goal.",
-          "Check the result against the checklist at the end of the file."
-        ]
-      },
       "css-layout-and-spacing": {
         "title": "CSS layout and spacing",
         "tagline": "Layout set in one place, spacing from tokens.",
@@ -278,27 +258,8 @@
           "Ask the agent to build a layout or to clean up your CSS. It moves spacing to the parents and replaces raw values with tokens.",
           "Check the result against the checklist at the end of the file."
         ]
-      },
-      "fluid-design-and-container-queries": {
-        "title": "Fluid design and container queries",
-        "tagline": "Layouts that scale with the screen and with the space they sit in.",
-        "summary": "How to make a layout scale continuously in width and height with clamp() and the right viewport units, decide who yields on short screens, and size components by their container with container queries and cqi.",
-        "highlights": [
-          "Fluid values first, with media queries only for structural changes",
-          "min-height in svh instead of fixed heights, so nothing is cut off on phones",
-          "A rule for who yields when space runs out: media shrinks, text and calls to action stay whole",
-          "Container queries for components, declared by the parent and mobile-first",
-          "cqi for continuous scaling, with clamp() bounds from the tokens",
-          "Test steps for the narrowest container, 320×568 and landscape phones"
-        ],
-        "meantFor": ["CSS and styling", "Any framework or stack", "New projects", "Existing codebases"],
-        "usageSteps": [
-          "Download `fluid-design-and-container-queries.md`. It's free.",
-          "Save it in your project's root and reference it from the instruction file your agent reads (for example the line `@fluid-design-and-container-queries.md` in `CLAUDE.md`, or its content in `AGENTS.md` or your Cursor rules).",
-          "Ask the agent to make a layout responsive or to build a component that lives in different spaces. It uses fluid values and container queries.",
-          "Check the result against the checklist at the end of the file."
-        ]
       }
     }
-  }
+  },
+  "listings": {}
 }

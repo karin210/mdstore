@@ -290,31 +290,6 @@
           "Comprueba el resultado con la lista de verificación del final del archivo."
         ]
       },
-      "naming-conventions": {
-        "title": "Nombres de variables y funciones",
-        "tagline": "Nombres que un desarrollador entiende a primera vista.",
-        "summary": "Cómo nombrar variables, funciones y handlers por el valor que guardan o el objetivo que cumplen: sufijos para los roles de un campo, nombres que dicen cómo se transformó un valor y los prefijos de getters, booleanos y manejadores de eventos.",
-        "highlights": [
-          "Variables nombradas por el valor que guardan, con contexto cuando hace falta",
-          "Sufijos de rol para las variables relacionadas de un campo: emailValue, emailRef",
-          "Valores transformados nombrados por su estado: phoneValueRaw, phoneValueTrimmed",
-          "Prefijos para getters, setters, booleanos y manejadores de eventos",
-          "Nombres de función que expresan el objetivo y no el último clic: setRole, nextStep",
-          "Ejemplos resueltos de nombres demasiado amplios y su corrección"
-        ],
-        "meantFor": [
-          "Cualquier lenguaje o stack",
-          "Cualquier agente de programación con IA",
-          "Proyectos nuevos",
-          "Proyectos existentes"
-        ],
-        "usageSteps": [
-          "Descarga `naming-conventions.md`. Es gratis.",
-          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@naming-conventions.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
-          "Pide al agente que escriba o renombre código. Nombra variables y funciones según el valor, el estado y el objetivo.",
-          "Comprueba el resultado con la lista de verificación del final del archivo."
-        ]
-      },
       "css-layout-and-spacing": {
         "title": "Layout y espaciado en CSS",
         "tagline": "El layout definido en un solo lugar y el espaciado desde tokens.",
@@ -333,27 +308,8 @@
           "Pide al agente que construya un layout o que limpie tu CSS. Mueve el espaciado a los contenedores y reemplaza los valores sueltos por tokens.",
           "Comprueba el resultado con la lista de verificación del final del archivo."
         ]
-      },
-      "fluid-design-and-container-queries": {
-        "title": "Diseño fluido y container queries",
-        "tagline": "Layouts que se adaptan a la pantalla y al espacio donde están.",
-        "summary": "Cómo hacer que un layout escale de forma continua en ancho y alto con clamp() y las unidades de viewport adecuadas, decidir quién cede en pantallas bajas y dimensionar componentes según su contenedor con container queries y cqi.",
-        "highlights": [
-          "Valores fluidos primero, con media queries solo para cambios estructurales",
-          "min-height en svh en lugar de alturas fijas, para que nada se corte en móviles",
-          "Una regla de quién cede cuando falta espacio: el medio se reduce, el texto y los llamados a la acción se mantienen completos",
-          "Container queries para los componentes, declaradas por el contenedor y con enfoque mobile-first",
-          "cqi para un escalado continuo, con límites de clamp() tomados de los tokens",
-          "Pasos de prueba para el contenedor más estrecho, 320×568 y móviles apaisados"
-        ],
-        "meantFor": ["CSS y estilos", "Cualquier framework o stack", "Proyectos nuevos", "Proyectos existentes"],
-        "usageSteps": [
-          "Descarga `fluid-design-and-container-queries.md`. Es gratis.",
-          "Guárdalo en la raíz de tu proyecto y haz referencia a él desde el archivo de instrucciones que lee tu agente (por ejemplo la línea `@fluid-design-and-container-queries.md` en `CLAUDE.md`, o su contenido en `AGENTS.md` o en tus reglas de Cursor).",
-          "Pide al agente que haga responsive un layout o que construya un componente que vive en espacios distintos. Usa valores fluidos y container queries.",
-          "Comprueba el resultado con la lista de verificación del final del archivo."
-        ]
       }
     }
-  }
+  },
+  "listings": {}
 }

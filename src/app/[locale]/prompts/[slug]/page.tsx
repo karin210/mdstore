@@ -6,18 +6,8 @@ import type { RouteIndexSection } from "@/components/shared/RouteIndex/RouteInde
 import { RouteIndexLayout } from "@/components/shared/RouteIndexLayout/RouteIndexLayout";
 import { PromptDetail } from "@/components/prompt-detail/PromptDetail/PromptDetail";
 import { PromptDetailSkeleton } from "@/components/prompt-detail/PromptDetailSkeleton/PromptDetailSkeleton";
-import { featuredPrompts } from "@/data/prompts";
-import { routing } from "@/i18n/routing";
 import { getPromptView } from "@/server/prompts/getPromptView";
 import styles from "./page.module.css";
-
-/**
- * Catalogue listings are known at build time, so their pages are prerendered in every locale.
- * Prompts posted by users render on their first request (their data is cached, see postedPrompts.ts).
- */
-export function generateStaticParams(): { locale: string; slug: string }[] {
-  return routing.locales.flatMap((locale) => featuredPrompts.map((prompt) => ({ locale, slug: prompt.slug })));
-}
 
 /**
  * Metadata only reads public prompts, so it never touches the visitor's session. A post still in
