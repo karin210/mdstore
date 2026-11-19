@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
-import { HelperChunks } from "@/components/login/HelperChunks/HelperChunks";
+import { HelperChunks } from "@/components/shared/HelperChunks/HelperChunks";
 import { getEmailParts } from "@/lib/validation/credentials";
 import form_styles from "@/styles/form.module.css";
 
@@ -12,6 +12,10 @@ interface EmailFieldProps {
   borderMark: "error" | "valid" | undefined;
   onChange: (value: string) => void;
   onBlur: () => void;
+  /** Visible label; "Email" by default ("New email" on /profile). */
+  label?: string;
+  /** "username" for signing in (the account's email), "email" for a new address. */
+  auto_complete?: "username" | "email";
 }
 
 /** Email input with the live "Example: name@domain.com" helper (it doubles as the field's guidance). */
@@ -23,6 +27,8 @@ export function EmailField({
   borderMark,
   onChange,
   onBlur,
+  label,
+  auto_complete = "username",
 }: EmailFieldProps): ReactElement {
   const t = useTranslations("auth");
   const helperId = `${id}-helper`;
@@ -42,14 +48,14 @@ export function EmailField({
   return (
     <div className={form_styles.field}>
       <label htmlFor={id} className={form_styles.label}>
-        {t("fields.email")}
+        {label ?? t("fields.email")}
       </label>
       <input
         id={id}
         name="email"
         type="email"
         inputMode="email"
-        autoComplete="username"
+        autoComplete={auto_complete}
         spellCheck={false}
         className={form_styles.input}
         value={value}

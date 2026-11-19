@@ -1,0 +1,110 @@
+{
+  "account": {
+    "profile": {
+      "meta": {
+        "title": "Tu perfil"
+      },
+      "outline": {
+        "file": "profile.md",
+        "sections": {
+          "account": "Cuenta",
+          "recent": "Últimas subidas",
+          "username": "Nombre de usuario",
+          "email": "Correo",
+          "password": "Contraseña"
+        }
+      },
+      "eyebrow": "Cuenta",
+      "title": "Tu perfil",
+      "lead": "Los datos de tu cuenta, tus últimas subidas y los formularios para cambiar tu nombre de usuario, tu correo o tu contraseña.",
+      "details": {
+        "username": "Nombre de usuario",
+        "email": "Correo electrónico",
+        "memberSince": "Miembro desde",
+        "noUsername": "Aún sin elegir"
+      },
+      "recent": {
+        "title": "Últimas subidas",
+        "lead": "Tus cinco publicaciones más recientes, de la más nueva a la más antigua.",
+        "showAll": "Ver todos mis prompts"
+      },
+      "username": {
+        "title": "Cambia tu nombre de usuario",
+        "lead": "Tus publicaciones, revisiones y comentarios muestran el nuevo @usuario al instante. Puedes cambiarlo una vez cada 30 días, y tu nombre anterior queda libre para cualquiera.",
+        "submit": "Guardar nombre de usuario",
+        "busy": "Guardando…",
+        "saved": "Guardado. Ahora eres @{username}.",
+        "nextChange": "Cambiaste tu nombre de usuario hace poco. Podrás cambiarlo otra vez el {date}.",
+        "errors": {
+          "tooSoon": "Cambiaste tu nombre de usuario hace menos de 30 días. Inténtalo más adelante.",
+          "usernameRequired": "Primero elige un nombre de usuario. Recarga la página para continuar."
+        }
+      },
+      "email": {
+        "title": "Cambia tu correo",
+        "lead": "Enviamos un enlace de confirmación a la nueva dirección. Tu correo cambia cuando lo abres; hasta entonces sigues iniciando sesión con {email}.",
+        "field": "Nuevo correo",
+        "submit": "Enviar enlace de confirmación",
+        "busy": "Enviando…",
+        "checkEmail": "Casi listo: enviamos un enlace a {email}. Ábrelo para confirmar el cambio. Si también escribimos a tu dirección actual, abre ese enlace también.",
+        "errors": {
+          "sameEmail": "Ese ya es tu correo.",
+          "emailTaken": "Otra cuenta ya usa este correo."
+        }
+      },
+      "password": {
+        "title": "Cambia tu contraseña",
+        "lead": "Escribe primero tu contraseña actual, para que nadie pueda cambiarla desde una sesión que dejaste abierta.",
+        "current": "Contraseña actual",
+        "new": "Nueva contraseña",
+        "submit": "Cambiar contraseña",
+        "busy": "Guardando…",
+        "saved": "Tu contraseña cambió. Usa la nueva la próxima vez que inicies sesión."
+      },
+      "errors": {
+        "unauthenticated": "Tu sesión terminó. Inicia sesión otra vez para continuar.",
+        "notConfigured": "Las cuentas aún no están disponibles. Inténtalo más tarde.",
+        "rateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+        "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}."
+      }
+    },
+    "myPrompts": {
+      "meta": {
+        "title": "Mis prompts"
+      },
+      "eyebrow": "Cuenta",
+      "title": "Mis prompts",
+      "lead": "Todos los prompts, skills y agentes de los que eres dueño o coautor, del más nuevo al más antiguo. Cada uno tiene una revisión donde lees comentarios y subes nuevas versiones.",
+      "upload": "Subir un prompt nuevo",
+      "backToProfile": "Volver a tu perfil"
+    },
+    "submissions": {
+      "empty": "Todavía no has publicado nada.",
+      "status": {
+        "pending": "Esperando revisión",
+        "approved": "Publicado",
+        "rejected": "No aprobado",
+        "withdrawn": "Retirado"
+      },
+      "role": {
+        "owner": "Dueño",
+        "coauthor": "Coautor"
+      },
+      "liveReview": {
+        "open": "Hay un cambio esperando revisión.",
+        "changes_requested": "Un revisor pidió cambios a tu actualización propuesta.",
+        "approved": "La versión publicada está al día.",
+        "rejected": "Tu último cambio propuesto no se aprobó; la versión publicada se mantiene.",
+        "withdrawn": "Retiraste tu último cambio propuesto; la versión publicada se mantiene."
+      },
+      "openReview": "Abrir revisión",
+      "view": "Ver página",
+      "posted": "Publicado el {date}",
+      "kind": {
+        "prompt": "Prompt",
+        "skill": "Skill",
+        "agent": "Agente"
+      }
+    }
+  }
+}

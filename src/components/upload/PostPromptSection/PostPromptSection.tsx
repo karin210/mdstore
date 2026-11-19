@@ -4,7 +4,6 @@ import { Suspense, type ReactElement } from "react";
 import { PickUsernameForm } from "@/components/shared/PickUsernameForm/PickUsernameForm";
 import { SecondaryButton } from "@/components/shared/SecondaryButton/SecondaryButton";
 import { SkeletonBlock } from "@/components/shared/SkeletonBlock/SkeletonBlock";
-import { MySubmissions } from "@/components/upload/MySubmissions/MySubmissions";
 import { PostPromptForm } from "@/components/upload/PostPromptForm/PostPromptForm";
 import { get_signed_in_profile } from "@/server/profiles/profiles";
 import section_styles from "@/styles/section.module.css";
@@ -61,9 +60,6 @@ export function PostPromptSection(): ReactElement {
           <PostPromptSlot />
         </Suspense>
       </div>
-      <Suspense fallback={null}>
-        <MySubmissions />
-      </Suspense>
     </section>
   );
 }

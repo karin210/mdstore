@@ -9,7 +9,7 @@
 - **Buyers** browse listings by category, read a free preview of each file (its first lines), buy it once, and drop the `.md` into their repo. Purchases include future versions of the file.
 - **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use, tools tested with), the `.md` file and the free-preview length. The post is published at once on its own `/prompts/[slug]` page. Posting is free for now; paid posts come with checkout.
 
-Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs) and the branded 404. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. Posted prompts don't appear on the landing page grid yet (only on their own page). There is no checkout yet.
+Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs), the signed-in **profile** (`/profile`: account details, the five latest uploads with a link to all of them, and forms to change the username, email and password) and **my prompts** (`/my-prompts`: every post the user owns or co-authors, newest first), and the branded 404. Signed-out visitors of `/profile` and `/my-prompts` are redirected to `/login` by `src/proxy.ts`. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. Posted prompts don't appear on the landing page grid yet (only on their own page). There is no checkout yet.
 
 Every listing has a **kind** (`prompt_kinds` in `src/data/prompts.ts`, column `kind`, revisioned: `prompt`, `skill` or `agent`; authors choose it on the upload form) that decides how a developer gets it (a prompt is copied or downloaded; the CLI installs skills and agents), and a **version** (integer from 1, bumped by hand, by one, in the same commit that changes the catalogue file in `content/prompts/`; posts start at 1) that the CLI compares to find updates. Production: `siteConfig.url` in `src/lib/site.ts` (https://mdstore-seven.vercel.app), also the CLI's default server. How the feature works and how to change it: `docs/cli.md`; what it still needs: `docs/cli-pending.md`.
 
@@ -68,6 +68,9 @@ src/
 │  ├─ page.tsx               landing page (composes the homepage sections)
 │  ├─ upload/page.tsx        "Upload your prompts": hero, benefits, tips, steps, posting form
 │  ├─ login/page.tsx         sign-up / sign-in tabs (LoginPanel inside <Suspense>)
+│  ├─ profile/page.tsx       signed-in account: details, latest five uploads, change username /
+│  │                         email / password (each session read inside <Suspense>)
+│  ├─ my-prompts/page.tsx    every post the user owns or co-authors, newest first
 │  ├─ auth/confirm/route.ts  confirmation-email landing (token_hash or PKCE code)
 │  ├─ prompts/[slug]/page.tsx
 │  │                         thin shell: reads `params` only inside <Suspense> (in
@@ -93,8 +96,10 @@ src/
 │                            (metadata), [slug]/file/route.ts (free .md); one handler per purpose
 ├─ components/
 │  ├─ shared/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
-│  │                         MobileMenu, AccountControl (sign in / sign out), PrimaryButton,
+│  │                         MobileMenu, AccountControl (sign in / profile / sign out), PrimaryButton,
 │  │                         SecondaryButton, SubmitButton, FormAlert, SkeletonBlock, icons,
+│  │                         EmailField, PasswordField, HelperChunks (login + profile forms),
+│  │                         SubmissionList (a user's posts, for /profile and /my-prompts),
 │  │                         navLinks, LanguageSwitcher, LanguageBanner, RouteIndex (sticky rail on
 │  │                         wide screens, status bar with an Outline popover on narrow ones; driven
 │  │                         by `sections` props) and RouteIndexLayout (the <main> grid that holds it)
@@ -104,8 +109,11 @@ src/
 │  │                         (hero's WebGL backdrop, lazy, see src/lib/markdownFieldRenderer.ts)
 │  ├─ upload/                used only by /upload: its sections, PostPromptSection (session
 │  │                         check in <Suspense>), PostPromptForm, PostFormField
-│  ├─ login/                 LoginPanel (tabs, owns mode + submission), SignUpForm, SignInForm,
-│  │                         EmailField, PasswordField, HelperChunks
+│  ├─ profile/               used only by /profile: ProfileSection, AccountDetails, RecentUploads,
+│  │                         UsernameSlot / EmailSlot (session reads), ChangeUsernameForm,
+│  │                         ChangeEmailForm, ChangePasswordForm
+│  ├─ my-prompts/            used only by /my-prompts: MyPromptsList
+│  ├─ login/                 LoginPanel (tabs, owns mode + submission), SignUpForm, SignInForm
 │  ├─ prompt-detail/         used only by /prompts/[slug]: PromptDetail (the page body),
 │  │                         InlineCode (renders `backticks` in listing copy as <code>),
 │  │                         PromptDetailSkeleton (its Suspense fallback), OutputExamples
@@ -133,9 +141,10 @@ src/
 │                            timeline and field changes), splitFileLines.ts
 ├─ server/                   server-only code ("server-only" import): supabase/ clients and
 │                            session refresh, auth/ (actions, getSignedInUser),
-│                            profiles/ (signed-in profile, set_username action),
+│                            profiles/ (signed-in profile, account profile, require_account_profile,
+│                            actions: set_username, change_username, change_email, change_password),
 │                            prompts/ (post action, cached posted-prompt reads, view resolver,
-│                            my submissions; promptApi: the API's summaries, details, sha256, errors), reviews/ (review page data, queue, invites,
+│                            the user's posts (mySubmissions); promptApi: the API's summaries, details, sha256, errors), reviews/ (review page data, queue, invites,
 │                            actions calling the review functions with rpc)
 ├─ styles/globals.css        :root tokens, reset, typography, element defaults (no classes)
 │  *.module.css              shared (review, form, section, modal, utilities), page-level (reviewPage)
@@ -162,7 +171,7 @@ public/                      static files served as-is (favicon.ico, icon.svg (t
 - **Colours** live only as tokens on `:root` in `globals.css` (light + `prefers-color-scheme: dark`). The brand colour is `#31606B` (deep, muted teal) and every token derives from it. Roles: `--color-background` (teal-tinted off-white / near-black teal), `--color-primary` (brand teal `#31606B`, lifted to `#7DB9C5` in dark mode: key CTAs, active states, borders, glows), `--color-primary-text` (the primary as text; equal to the primary today, since `#31606B` is AA as text, kept so a lighter brand colour can get its own text shade), `--color-secondary` (pale teal surfaces), `--color-tertiary` (burnt orange, the primary's complement, reserved for warnings/toasts), `--color-chrome` / `--color-on-chrome` / `--color-chrome-accent` (header and footer band: the brand colour in light mode, a deep teal band with a light-teal logo in dark mode), plus ink, surface, border (`--color-border-strong` outlines form controls at 3:1), code and focus tokens. Never use raw hex in components; the only hard-coded copies are in `public/icon.svg` (a favicon cannot read tokens).
 - **Sizes**: font sizes use the `--text-*` clamp tokens; spacing uses the `--space-*` clamp tokens; page width uses `--content-width`. Sections are separated with `gap` on `main`, not margins.
 - **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons ("Sign out"), interface controls (mobile menu toggle).
-- **Route index**: every multi-section route (today `/`, `/upload`, `/prompts/[slug]`) renders its <main> through `RouteIndexLayout`, passing `sections` (`id`, localized `label`, heading `level`) and a `file_name`. An entry is any block with that `id`, not necessarily a `<section>`; the shared UI strings are under `routeIndex` in `common.json`, each route's labels under its own `outline.sections`. Routes with a single block (login, invite, 404) have none. The rule is also in the `navigation-ux` skill.
+- **Route index**: every multi-section route (today `/`, `/upload`, `/prompts/[slug]`, `/profile`) renders its <main> through `RouteIndexLayout`, passing `sections` (`id`, localized `label`, heading `level`) and a `file_name`. An entry is any block with that `id`, not necessarily a `<section>`; the shared UI strings are under `routeIndex` in `common.json`, each route's labels under its own `outline.sections`. Routes with a single block (login, my prompts, invite, 404) have none. The rule is also in the `navigation-ux` skill.
 - **Auth**: only signed-in users can post; the server action re-checks the session (`get_signed_in_user`, verified with `getClaims()`) and RLS only accepts rows whose `author_id` is the caller. The header's `AccountControl` refreshes the page on sign-in/sign-out, so the upload form disappears when the session ends.
 - **Forms** follow the global auth-form rules: validation rules live once in `src/lib/validation/` (client checks + Zod schemas for the server), form state lives in `src/lib/forms/` classes, guidance is inline under each field, and submit focuses the first wrong field. Shared field styles (`field`, `label`, `input`, `hint`, `guidance`, with `data-mark` / `data-valid`) are in `src/styles/form.module.css`; the `data-state` colours of helper chunks are element-level rules in `globals.css`.
 - **Naming**: camelCase for variables, functions, props and object keys; PascalCase for components and types; UPPER_SNAKE_CASE for module constants. snake_case appears only where an outside system owns the name: Supabase column names (`PostedPromptRow`, the insert in `src/server/prompts/actions.ts`, `DETAIL_COLUMNS`), Supabase error codes and parameters (`token_hash`, `email_change`) and cookie names (`mdstore_locale`). Until `npm run db:types` is wired into the clients, the insert's column names are not type-checked, so keep them in sync with the migration by hand.

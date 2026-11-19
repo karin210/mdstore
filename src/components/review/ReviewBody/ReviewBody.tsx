@@ -78,7 +78,7 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
             {viewer.is_admin && !is_author ? (
               <Link href="/reviews">{t("breadcrumb.queue")}</Link>
             ) : (
-              <Link href={{ pathname: "/upload", hash: "my-submissions-title" }}>{t("breadcrumb.submissions")}</Link>
+              <Link href="/my-prompts">{t("breadcrumb.submissions")}</Link>
             )}
           </li>
           <li>

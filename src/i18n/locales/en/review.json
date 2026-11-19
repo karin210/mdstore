@@ -8,7 +8,7 @@
     "loading": "Loading the review…",
     "breadcrumb": {
       "label": "Breadcrumb",
-      "submissions": "Your submissions",
+      "submissions": "My prompts",
       "queue": "Reviews to do"
     },
     "eyebrow": "// review #{number}",

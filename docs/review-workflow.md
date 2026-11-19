@@ -8,18 +8,18 @@ Posted prompts go through a review that works like a pull request: authors push 
 
 These were decided with the project owner before building:
 
-| Topic                     | Decision                                                                                                                        |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Feedback                  | A conversation thread plus comments on single lines of a revision's file.                                                       |
-| Outcomes                  | **Approve**, **Request changes** or **Reject**. A message is required unless approving.                                         |
-| Updates to approved posts | Authors propose a new revision in a new review; the live version stays public until that review is approved.                    |
-| Visibility                | A review is visible to the post's authors and the admins only. Everyone else gets a 404.                                        |
-| Several authors           | One **owner** (who posted it) and any number of **co-authors**.                                                                 |
-| Adding co-authors         | By `@username`, or with a one-time invite link.                                                                                 |
-| Roles                     | Co-authors push revisions and comment. Only the owner adds or removes co-authors and withdraws a review. A co-author can leave. |
-| Byline                    | The owner's `@username` first, then the co-authors (`@owner, @coauthor`).                                                       |
-| Usernames                 | Chosen at sign-up; accounts without one are asked for it before posting, commenting or joining. They can't be changed yet.      |
-| Self-review               | Allowed: there is a single admin for now.                                                                                       |
+| Topic                     | Decision                                                                                                                                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feedback                  | A conversation thread plus comments on single lines of a revision's file.                                                                    |
+| Outcomes                  | **Approve**, **Request changes** or **Reject**. A message is required unless approving.                                                      |
+| Updates to approved posts | Authors propose a new revision in a new review; the live version stays public until that review is approved.                                 |
+| Visibility                | A review is visible to the post's authors and the admins only. Everyone else gets a 404.                                                     |
+| Several authors           | One **owner** (who posted it) and any number of **co-authors**.                                                                              |
+| Adding co-authors         | By `@username`, or with a one-time invite link.                                                                                              |
+| Roles                     | Co-authors push revisions and comment. Only the owner adds or removes co-authors and withdraws a review. A co-author can leave.              |
+| Byline                    | The owner's `@username` first, then the co-authors (`@owner, @coauthor`).                                                                    |
+| Usernames                 | Chosen at sign-up; accounts without one are asked for it before posting, commenting or joining. Renamed from `/profile`, once every 30 days. |
+| Self-review               | Allowed: there is a single admin for now.                                                                                                    |
 
 ## Lifecycle
 

@@ -1,5 +1,12 @@
+.signedIn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
 /* Sits on the primary-coloured header: outlined in the header's text colour. */
 .signIn,
+.profile,
 .signOut {
   display: block;
   padding: var(--space-2xs) var(--space-sm);
@@ -17,11 +24,13 @@
 }
 
 .signIn:hover,
+.profile:hover,
 .signOut:hover {
   background: color-mix(in srgb, var(--color-on-chrome) 14%, transparent);
 }
 
 .signIn:focus-visible,
+.profile:focus-visible,
 .signOut:focus-visible {
   outline-color: var(--color-on-chrome);
 }
@@ -47,6 +56,7 @@
 
   /* Icon-only: a bare icon reads better than one boxed in a pill. */
   .signIn,
+  .profile,
   .signOut {
     width: 2.75rem;
     height: 2.75rem;

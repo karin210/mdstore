@@ -1,0 +1,110 @@
+{
+  "account": {
+    "profile": {
+      "meta": {
+        "title": "Your profile"
+      },
+      "outline": {
+        "file": "profile.md",
+        "sections": {
+          "account": "Account",
+          "recent": "Latest uploads",
+          "username": "Username",
+          "email": "Email",
+          "password": "Password"
+        }
+      },
+      "eyebrow": "Account",
+      "title": "Your profile",
+      "lead": "Your account details, your latest uploads, and the forms to change your username, email or password.",
+      "details": {
+        "username": "Username",
+        "email": "Email",
+        "memberSince": "Member since",
+        "noUsername": "Not picked yet"
+      },
+      "recent": {
+        "title": "Latest uploads",
+        "lead": "Your five most recent posts, newest first.",
+        "showAll": "Show all my prompts"
+      },
+      "username": {
+        "title": "Change your username",
+        "lead": "Your posts, reviews and comments show the new @username at once. You can change it once every 30 days, and your old name becomes free for anyone.",
+        "submit": "Save username",
+        "busy": "Saving…",
+        "saved": "Saved. You are now @{username}.",
+        "nextChange": "You changed your username recently. You can change it again on {date}.",
+        "errors": {
+          "tooSoon": "You changed your username less than 30 days ago. Try again later.",
+          "usernameRequired": "Pick a username first. Reload the page to continue."
+        }
+      },
+      "email": {
+        "title": "Change your email",
+        "lead": "We send a confirmation link to the new address. Your email changes once you open it; until then you keep signing in with {email}.",
+        "field": "New email",
+        "submit": "Send confirmation link",
+        "busy": "Sending…",
+        "checkEmail": "Almost done: we sent a link to {email}. Open it to confirm the change. If we also emailed your current address, open that link too.",
+        "errors": {
+          "sameEmail": "That is already your email.",
+          "emailTaken": "Another account already uses this email."
+        }
+      },
+      "password": {
+        "title": "Change your password",
+        "lead": "Type your current password first, so nobody can change it from a session you left open.",
+        "current": "Current password",
+        "new": "New password",
+        "submit": "Change password",
+        "busy": "Saving…",
+        "saved": "Your password has changed. Use the new one next time you sign in."
+      },
+      "errors": {
+        "unauthenticated": "Your session has ended. Sign in again to continue.",
+        "notConfigured": "Accounts aren’t available yet. Please try again later.",
+        "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+        "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}."
+      }
+    },
+    "myPrompts": {
+      "meta": {
+        "title": "My prompts"
+      },
+      "eyebrow": "Account",
+      "title": "My prompts",
+      "lead": "Every prompt, skill and agent you own or co-author, newest first. Each one has a review where you read feedback and push new versions.",
+      "upload": "Upload a new prompt",
+      "backToProfile": "Back to your profile"
+    },
+    "submissions": {
+      "empty": "You haven’t posted anything yet.",
+      "status": {
+        "pending": "Waiting for review",
+        "approved": "Live",
+        "rejected": "Not approved",
+        "withdrawn": "Withdrawn"
+      },
+      "role": {
+        "owner": "Owner",
+        "coauthor": "Co-author"
+      },
+      "liveReview": {
+        "open": "A change is waiting for review.",
+        "changes_requested": "A reviewer asked for changes to your proposed update.",
+        "approved": "The live version is up to date.",
+        "rejected": "Your last proposed change wasn’t approved; the live version stays.",
+        "withdrawn": "Your last proposed change was withdrawn; the live version stays."
+      },
+      "openReview": "Open review",
+      "view": "View page",
+      "posted": "Posted {date}",
+      "kind": {
+        "prompt": "Prompt",
+        "skill": "Skill",
+        "agent": "Agent"
+      }
+    }
+  }
+}

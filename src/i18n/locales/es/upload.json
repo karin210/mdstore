@@ -150,6 +150,7 @@
       "submitting": "Publicando…",
       "submitted": "Enviado a revisión. Se publica cuando un administrador lo apruebe.",
       "openReview": "Abrir su revisión",
+      "myPrompts": "Ver todos mis prompts",
       "fixFields": "Algunos campos necesitan un cambio antes de publicar. Están marcados abajo.",
       "errors": {
         "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para publicar tu prompt.",
@@ -173,30 +174,6 @@
       "fileEmpty": "El archivo está vacío. Elige el archivo con tu prompt.",
       "previewRange": "Usa un número del {min} al {max}.",
       "chooseKind": "Elige prompt, skill o agente."
-    },
-    "submissions": {
-      "title": "Tus envíos",
-      "lead": "Las publicaciones de las que eres dueño o coautor. Cada una tiene una revisión donde lees comentarios y subes nuevas versiones.",
-      "empty": "Todavía no has publicado nada.",
-      "status": {
-        "pending": "Esperando revisión",
-        "approved": "Publicado",
-        "rejected": "No aprobado",
-        "withdrawn": "Retirado"
-      },
-      "role": {
-        "owner": "Dueño",
-        "coauthor": "Coautor"
-      },
-      "liveReview": {
-        "open": "Hay un cambio esperando revisión.",
-        "changes_requested": "Un revisor pidió cambios a tu actualización propuesta.",
-        "approved": "La versión publicada está al día.",
-        "rejected": "Tu último cambio propuesto no se aprobó; la versión publicada se mantiene.",
-        "withdrawn": "Retiraste tu último cambio propuesto; la versión publicada se mantiene."
-      },
-      "openReview": "Abrir revisión",
-      "view": "Ver página"
     },
     "outline": {
       "file": "upload.md",

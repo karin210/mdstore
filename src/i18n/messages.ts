@@ -6,7 +6,7 @@ import type { Locale } from "@/i18n/routing";
  * domain file wraps its keys in a matching root key (`home.json` → `{ "home": { … } }`) to keep them
  * from colliding. `common.json` is the exception and stays top-level, since its keys are global.
  */
-const CATALOGUE_FILES = ["common", "home", "prompts", "promptDetail", "upload", "auth", "review"] as const;
+const CATALOGUE_FILES = ["common", "home", "prompts", "promptDetail", "upload", "auth", "review", "account"] as const;
 
 type EnglishMessages = typeof import("./locales/en/common.json") &
   typeof import("./locales/en/home.json") &
@@ -14,7 +14,8 @@ type EnglishMessages = typeof import("./locales/en/common.json") &
   typeof import("./locales/en/promptDetail.json") &
   typeof import("./locales/en/upload.json") &
   typeof import("./locales/en/auth.json") &
-  typeof import("./locales/en/review.json");
+  typeof import("./locales/en/review.json") &
+  typeof import("./locales/en/account.json");
 
 type SpanishMessages = typeof import("./locales/es/common.json") &
   typeof import("./locales/es/home.json") &
@@ -22,7 +23,8 @@ type SpanishMessages = typeof import("./locales/es/common.json") &
   typeof import("./locales/es/promptDetail.json") &
   typeof import("./locales/es/upload.json") &
   typeof import("./locales/es/auth.json") &
-  typeof import("./locales/es/review.json");
+  typeof import("./locales/es/review.json") &
+  typeof import("./locales/es/account.json");
 
 /** Shape of the merged catalogue; English is the reference both locales must match. */
 export type Messages = EnglishMessages;

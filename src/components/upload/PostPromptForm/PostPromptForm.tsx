@@ -152,8 +152,6 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
       setFormKey((key) => key + 1);
       set_submitted_slug(result.slug);
       rerender();
-      // The "my submissions" list is server-rendered, so ask the server to re-render it with the new post.
-      router.refresh();
       return;
     }
     if (result.status === "invalid") {
@@ -401,7 +399,8 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
 
       {submitted_slug && (
         <FormAlert tone="success">
-          {t("submitted")} <Link href={`/prompts/${submitted_slug}/review`}>{t("openReview")}</Link>
+          {t("submitted")} <Link href={`/prompts/${submitted_slug}/review`}>{t("openReview")}</Link>{" "}
+          <Link href="/my-prompts">{t("myPrompts")}</Link>
         </FormAlert>
       )}
       {errorMessage && <FormAlert tone="error">{errorMessage}</FormAlert>}

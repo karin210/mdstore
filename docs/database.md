@@ -12,6 +12,8 @@ The goal of this part of the project is also to learn raw PostgreSQL, so there i
   1. `20261110000000_create_posted_prompts.sql`: the `posted_prompts` table, its checks, an index and RLS.
   2. `20261114000000_add_review_workflow.sql`: post statuses, `admins` and `is_admin()`.
   3. `20261116000000_add_collaborative_review.sql`: usernames, co-authors, reviews with revisions and comments, invite links (see [Collaborative review](#collaborative-review)). Applied to the local stack only so far.
+  4. `20261117000000_add_version_to_posted_prompts.sql` and `20261118000000_add_agent_kind.sql`: the listing version and the `agent` kind.
+  5. `20261119000000_allow_username_change.sql`: `profiles.username_changed_at` and `change_username()` (rename from `/profile`, 30-day cool-down). Tests: `supabase/tests/database/username_change.test.sql`.
 - Database tests: `supabase/tests/database/*.test.sql` (pgTAP), run with `npm run db:test` against the local stack. Each file runs in a transaction that is rolled back.
 
 ## `posted_prompts`
@@ -26,10 +28,10 @@ One row per listing posted from `/upload` (a prompt or a skill). It holds the li
 
 An index is a sorted lookup structure Postgres keeps next to a table, so it can find matching rows without reading every row. Both indexes below are created by migrations on `posted_prompts`; nothing is applied to a database yet (see the status line at the top).
 
-| Index                                  | Columns                | Created by                             | Queries it serves                                                                                                    |
-| -------------------------------------- | ---------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `posted_prompts_author_id_idx`         | `author_id`            | `20261110000000_create_posted_prompts` | lookups by author: the author branch of the select policy, deleting a user's rows, the planned "my submissions" view |
-| `posted_prompts_status_created_at_idx` | `status`, `created_at` | `20261114000000_add_review_workflow`   | the public listing (`status = 'approved'`) and the review queue (`status = 'pending'`, oldest first)                 |
+| Index                                  | Columns                | Created by                             | Queries it serves                                                                                                                    |
+| -------------------------------------- | ---------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `posted_prompts_author_id_idx`         | `author_id`            | `20261110000000_create_posted_prompts` | lookups by author: the author branch of the select policy, deleting a user's rows, the "my prompts" list (`/my-prompts`, `/profile`) |
+| `posted_prompts_status_created_at_idx` | `status`, `created_at` | `20261114000000_add_review_workflow`   | the public listing (`status = 'approved'`) and the review queue (`status = 'pending'`, oldest first)                                 |
 
 **Why `(status, created_at)` is one composite index:** both queries filter `status` by equality and then sort by `created_at`, so a single index returns the rows already in order. Two separate indexes would force Postgres to combine them or sort afterwards. `status` goes first (equality filter), `created_at` second (ordering only).
 
@@ -65,7 +67,7 @@ Modelled on pull requests. Product rules, pages and code: [`review-workflow.md`]
 
 - **Lifecycle.** Posting inserts into `posted_prompts`; a trigger (`start_post_review`) makes the poster the owner and opens review 1 with the post as revision 1. Authors `push_revision()`: it joins the review in progress (and turns "changes requested" back into "open"), or, for an approved post with none in progress, opens a new review whose `base_revision_id` is the live version. Admins `decide_review()`: `approved` copies the review's latest revision into `posted_prompts` (`live_revision_id`), `changes_requested` hands it back, `rejected` closes it (and rejects a post that was never approved; an approved post keeps its live version). The owner can `withdraw_review()`.
 - **What `posted_prompts` shows.** The latest revision while a post was never approved, then the live (approved) revision. Proposed changes don't touch the public page until approved.
-- **Usernames.** Sign-up sends `username` as user metadata; the `on_auth_user_created` trigger creates the profile (a taken or malformed name is skipped, and the app asks for one before posting, commenting or joining). Usernames can't be changed yet. Existing authors got the handle of their latest post.
+- **Usernames.** Sign-up sends `username` as user metadata; the `on_auth_user_created` trigger creates the profile (a taken or malformed name is skipped, and the app asks for one before posting, commenting or joining). Since `20261119000000_allow_username_change`, users rename themselves from `/profile` through `change_username()` (at most once every 30 days, tracked in `profiles.username_changed_at`); it also rewrites `posted_prompts.author_handle` on the posts they own. Old names aren't reserved. Existing authors got the handle of their latest post.
 - **Co-authors.** The owner adds them with `add_post_coauthor()` (by username) or `create_post_invite()` (a link valid once for 7 days, accepted with `accept_post_invite()`); `remove_post_author()` removes a co-author or lets one leave. Co-authors push revisions and comment; only the owner manages authors or withdraws.
 - **Errors.** The functions raise their own SQLSTATE codes (`MD401` not signed in, `MD403` not allowed, `MD404` not found, `MD409` closed, `MD422` invalid, `MD428` no username); the server actions map them to messages.
 - **Admins may review their own posts**, since there's a single admin for now.

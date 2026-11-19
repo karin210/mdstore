@@ -144,7 +144,7 @@ function guidanceCheck(getGuidance: (value: string) => GuidanceKey | null) {
   };
 }
 
-const emailSchema = z
+export const emailSchema = z
   .string()
   .superRefine(guidanceCheck(getEmailGuidance))
   .transform((value) => value.trim().toLowerCase());

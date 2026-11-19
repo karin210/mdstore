@@ -150,6 +150,7 @@
       "submitting": "Posting…",
       "submitted": "Sent for review. It goes live once an admin approves it.",
       "openReview": "Open its review",
+      "myPrompts": "See all my prompts",
       "fixFields": "Some fields need a change before posting. They’re marked below.",
       "errors": {
         "unauthenticated": "Your session ended. Sign in again to post your prompt.",
@@ -173,30 +174,6 @@
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
       "previewRange": "Use a number from {min} to {max}.",
       "chooseKind": "Choose prompt, skill or agent."
-    },
-    "submissions": {
-      "title": "Your submissions",
-      "lead": "Posts you own or co-author. Each one has a review where you read feedback and push new versions.",
-      "empty": "You haven’t posted anything yet.",
-      "status": {
-        "pending": "Waiting for review",
-        "approved": "Live",
-        "rejected": "Not approved",
-        "withdrawn": "Withdrawn"
-      },
-      "role": {
-        "owner": "Owner",
-        "coauthor": "Co-author"
-      },
-      "liveReview": {
-        "open": "A change is waiting for review.",
-        "changes_requested": "A reviewer asked for changes to your proposed update.",
-        "approved": "The live version is up to date.",
-        "rejected": "Your last proposed change wasn’t approved; the live version stays.",
-        "withdrawn": "Your last proposed change was withdrawn; the live version stays."
-      },
-      "openReview": "Open review",
-      "view": "View page"
     },
     "outline": {
       "file": "upload.md",

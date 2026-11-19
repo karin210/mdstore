@@ -1,0 +1,26 @@
+.main {
+  flex: 1;
+  width: min(48rem, var(--content-width));
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding-block: var(--space-lg) var(--space-2xl);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-2xl);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.back {
+  color: var(--color-primary-text);
+  font-weight: 600;
+}

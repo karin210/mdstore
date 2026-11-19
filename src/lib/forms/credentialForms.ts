@@ -1,5 +1,10 @@
 import { BaseForm } from "@/lib/forms/BaseForm";
 import {
+  get_new_password_guidance,
+  type ChangePasswordField,
+  type NewPasswordGuidanceKey,
+} from "@/lib/validation/accountChanges";
+import {
   getEmailGuidance,
   getSignInPasswordGuidance,
   getSignUpPasswordGuidance,
@@ -43,13 +48,41 @@ export class SignUpForm extends BaseForm<SignUpField, SignUpValues, GuidanceKey 
   }
 }
 
-/** The "pick your username" form, for accounts created before usernames existed. */
+/**
+ * A single @username: the "pick your username" form (accounts created before usernames existed)
+ * starts empty, the profile's "change username" form starts with the current one.
+ */
 export class UsernameForm extends BaseForm<"username", { username: string }, UsernameGuidanceKey> {
-  constructor() {
-    super({ username: "" }, ["username"]);
+  constructor(initial_username = "") {
+    super({ username: initial_username }, ["username"]);
   }
 
   protected getFieldIssue(): UsernameGuidanceKey | null {
     return get_username_guidance(this.values.username);
+  }
+}
+
+/** The profile's "change email" form: one well-formed email. */
+export class EmailChangeForm extends BaseForm<"email", { email: string }, GuidanceKey> {
+  constructor() {
+    super({ email: "" }, ["email"]);
+  }
+
+  protected getFieldIssue(): GuidanceKey | null {
+    return getEmailGuidance(this.values.email);
+  }
+}
+
+export type PasswordChangeValues = Record<ChangePasswordField, string>;
+
+/** The profile's "change password" form: the current password, then a new one that follows the rules. */
+export class PasswordChangeForm extends BaseForm<ChangePasswordField, PasswordChangeValues, NewPasswordGuidanceKey> {
+  constructor() {
+    super({ current_password: "", new_password: "" }, ["current_password", "new_password"]);
+  }
+
+  protected getFieldIssue(field: ChangePasswordField): NewPasswordGuidanceKey | null {
+    if (field === "current_password") return getSignInPasswordGuidance(this.values.current_password);
+    return get_new_password_guidance(this.values.new_password, this.values.current_password);
   }
 }

@@ -13,6 +13,9 @@ import { refreshSupabaseSession } from "@/server/supabase/refreshSession";
 
 const handleLocale = createMiddleware(routing);
 
+/** Pages only a signed-in user has: everyone else is sent to /login, and back here afterwards. */
+const ACCOUNT_PAGES = new Set(["profile", "my-prompts"]);
+
 /**
  * Whether /prompts/[slug] has something to show this visitor: a catalogue listing, a public posted
  * prompt, or (for its author or an admin) a post still in review. Checked in that order, so the
@@ -52,6 +55,9 @@ async function privatePageExists(
  *    redirects to the right locale and remembers the choice in a cookie.
  * 3. The Supabase session is refreshed on that response, so signed-in users stay signed in
  *    (Server Components can't write the renewed cookies themselves).
+ * 4. Signed-out visitors of the account pages (/profile, /my-prompts) are redirected to /login,
+ *    which returns them to the page after signing in. A locale redirect from step 2 goes first, so
+ *    the login page opens in the visitor's language.
  */
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const [first, ...rest] = request.nextUrl.pathname.split("/").filter(Boolean);
@@ -69,7 +75,15 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     // Only the [...rest] catch-all matches this internal path, so the not-found page renders with a 404.
     return NextResponse.rewrite(new URL(`/${locale}/_unknown-prompt`, request.url));
   }
-  return refreshSupabaseSession(request, handleLocale(request));
+  const { response, is_signed_in } = await refreshSupabaseSession(request, handleLocale(request));
+  if (section !== undefined && ACCOUNT_PAGES.has(section) && slug === undefined && !is_signed_in) {
+    if (response.headers.has("location")) return response;
+    // Built by hand: the locale-aware getPathname() can't run in the proxy. English has no prefix.
+    const login_url = new URL(`${locale === routing.defaultLocale ? "" : `/${locale}`}/login`, request.url);
+    login_url.searchParams.set("next", `/${section}`);
+    return NextResponse.redirect(login_url);
+  }
+  return response;
 }
 
 export const config = {

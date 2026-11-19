@@ -8,7 +8,7 @@
     "loading": "Cargando la revisión…",
     "breadcrumb": {
       "label": "Ruta de navegación",
-      "submissions": "Tus envíos",
+      "submissions": "Mis prompts",
       "queue": "Revisiones pendientes"
     },
     "eyebrow": "// revisión #{number}",

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type ReactElement } from "react";
-import { LogInIcon, LogOutIcon } from "@/components/shared/icons/icons";
+import { LogInIcon, LogOutIcon, UserIcon } from "@/components/shared/icons/icons";
 import { Link, useRouter } from "@/i18n/navigation";
 import { createBrowserSupabase } from "@/lib/supabase/browserClient";
 import { getSupabaseEnv } from "@/lib/supabase/env";
@@ -11,7 +11,8 @@ import styles from "./AccountControl.module.css";
 type AccountState = "unknown" | "signedOut" | "signedIn";
 
 /**
- * Header control: "Sign in" for visitors, "Sign out" for signed-in users.
+ * Header control: "Sign in" for visitors; "Profile" (which leads to /my-prompts too) and "Sign out"
+ * for signed-in users.
  * It also listens for auth changes (here or in another tab) and refreshes the server-rendered
  * parts of the page, so a signed-out user immediately loses the upload form. The server checks
  * the session on every post anyway; this only keeps the UI honest.
@@ -39,13 +40,27 @@ export function AccountControl(): ReactElement {
 
   if (accountState === "signedIn") {
     return (
-      // Tertiary kind: account setting, no acquisition intent
-      <button type="button" className={styles.signOut} onClick={signOut} aria-label={t("signOut")} title={t("signOut")}>
-        <span className={styles.label}>{t("signOut")}</span>
-        <span className={styles.icon} aria-hidden="true">
-          <LogOutIcon />
-        </span>
-      </button>
+      <div className={styles.signedIn}>
+        <Link href="/profile" className={styles.profile} aria-label={t("profile")} title={t("profile")}>
+          <span className={styles.label}>{t("profile")}</span>
+          <span className={styles.icon} aria-hidden="true">
+            <UserIcon />
+          </span>
+        </Link>
+        {/* Tertiary kind: account setting, no acquisition intent */}
+        <button
+          type="button"
+          className={styles.signOut}
+          onClick={signOut}
+          aria-label={t("signOut")}
+          title={t("signOut")}
+        >
+          <span className={styles.label}>{t("signOut")}</span>
+          <span className={styles.icon} aria-hidden="true">
+            <LogOutIcon />
+          </span>
+        </button>
+      </div>
     );
   }
 

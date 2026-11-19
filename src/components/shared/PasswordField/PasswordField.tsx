@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import { CopyIcon, EyeIcon, EyeOffIcon } from "@/components/shared/icons/icons";
-import { HelperChunks } from "@/components/login/HelperChunks/HelperChunks";
+import { HelperChunks } from "@/components/shared/HelperChunks/HelperChunks";
 import {
   getSignUpPasswordRules,
   SIGN_UP_PASSWORD_RULES_ATTRIBUTE,
@@ -20,8 +20,13 @@ interface PasswordFieldProps {
   wasEdited: boolean;
   isValid: boolean;
   borderMark: "error" | "valid" | undefined;
-  /** Sign-in only: what is wrong with the value (sign-up uses the rules helper instead). */
-  guidanceKey: SignInPasswordGuidanceKey | null;
+  /**
+   * What is wrong with the value: sign-in rules, or (on /profile) a wrong current password or a new
+   * one equal to it. The sign-up rules show in the rules helper instead.
+   */
+  guidanceKey: SignInPasswordGuidanceKey | "currentPasswordWrong" | "passwordUnchanged" | null;
+  /** Visible label; "Password" by default (the profile asks for the current and the new one). */
+  label?: string;
   onChange: (value: string) => void;
   onBlur: () => void;
   onSuggest?: () => void;
@@ -35,6 +40,7 @@ export function PasswordField({
   isValid,
   borderMark,
   guidanceKey,
+  label,
   onChange,
   onBlur,
   onSuggest,
@@ -84,7 +90,7 @@ export function PasswordField({
   return (
     <div className={form_styles.field}>
       <label htmlFor={id} className={form_styles.label}>
-        {t("fields.password")}
+        {label ?? t("fields.password")}
       </label>
       <div className={styles.control}>
         <input

@@ -1,15 +1,16 @@
 import "server-only";
+import type { PromptKind } from "@/data/prompts";
 import { SLUG_PATTERN } from "@/server/prompts/postedPromptsTable";
 import type { AuthorRole, PostStatus, ReviewStatus } from "@/server/reviews/reviewData";
 import { createServerSupabase } from "@/server/supabase/serverClient";
 
 export type SubmissionStatus = PostStatus;
 
-/** One post the signed-in user owns or co-authors, as the "my submissions" list shows it. */
+/** One post the signed-in user owns or co-authors, as /my-prompts and /profile list it. */
 export interface MySubmission {
   slug: string;
   title: string;
-  kind: "prompt" | "skill";
+  kind: PromptKind;
   status: SubmissionStatus;
   role: AuthorRole;
   /** The latest review's status: for a live post, whether a proposed change is in review. */
@@ -22,7 +23,7 @@ interface MembershipRow {
   post: {
     slug: string;
     title: string;
-    kind: "prompt" | "skill";
+    kind: PromptKind;
     status: SubmissionStatus;
     created_at: string;
     prompt_reviews: { number: number; status: ReviewStatus }[];
