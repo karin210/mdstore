@@ -78,7 +78,38 @@
         "outputExamples": "Ejemplos de resultados",
         "testedModels": "Modelos probados",
         "preview": "Vista previa gratis",
-        "usage": "Uso sugerido"
+        "usage": "Uso sugerido",
+        "ratings": "Valoraciones"
+      }
+    },
+    "ratings": {
+      "title": "Valoraciones",
+      "none": "Aún sin valoraciones",
+      "average": "{average} de 5",
+      "count": "{count, plural, one {(# valoración)} other {(# valoraciones)}}",
+      "yourRating": "Valora este prompt",
+      "yourSavedRating": "Tu valoración",
+      "starLabel": "{count, plural, one {# estrella} other {# estrellas}}",
+      "pickStars": "Elige primero de 1 a 5 estrellas.",
+      "save": "Guardar valoración",
+      "saving": "Guardando…",
+      "remove": "Quitar mi valoración",
+      "removing": "Quitando…",
+      "saved": "Gracias, tu valoración está guardada.",
+      "removed": "Tu valoración se ha quitado.",
+      "signInNote": "Inicia sesión para valorar este prompt.",
+      "signIn": "Inicia sesión para valorar",
+      "author": "No puedes valorar un prompt que escribiste.",
+      "notApproved": "Las valoraciones se abren cuando este prompt se aprueba.",
+      "catalogue": "Los prompts del catálogo aún no se pueden valorar.",
+      "errors": {
+        "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión para valorar.",
+        "forbidden": "No puedes valorar un prompt que escribiste.",
+        "notFound": "Este prompt no se puede valorar ahora mismo.",
+        "invalid": "Elige de 1 a 5 estrellas.",
+        "notConfigured": "Las valoraciones no están disponibles en este servidor.",
+        "server": "No pudimos guardar tu valoración. Inténtalo de nuevo.",
+        "serverWithId": "No pudimos guardar tu valoración. Inténtalo de nuevo (referencia {id})."
       }
     }
   }

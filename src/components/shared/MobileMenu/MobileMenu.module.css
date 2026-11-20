@@ -109,3 +109,11 @@
   padding-top: var(--space-xs);
   border-top: 0.0625rem solid var(--color-border);
 }
+
+/* Wide screens: the header bar shows its own links and the language switcher, so the menu skips them */
+@media (min-width: 48.0625rem) {
+  .panel li[data-in-header-bar="true"],
+  .language {
+    display: none;
+  }
+}

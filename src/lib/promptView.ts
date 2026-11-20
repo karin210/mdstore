@@ -1,4 +1,5 @@
 import type { PromptListing } from "@/data/prompts";
+import type { PromptRating } from "@/lib/rating";
 
 /**
  * Everything /prompts/[slug] shows about one prompt, whatever its source: a catalogue listing
@@ -21,4 +22,6 @@ export interface PromptView extends Omit<PromptListing, "slug"> {
   reviewStatus?: "pending" | "rejected" | "withdrawn";
   /** True for prompts posted by users (they have a review page); false for the curated catalogue. */
   isPosted?: boolean;
+  /** Readers' stars; only posted prompts can be rated, so catalogue listings have none. */
+  rating?: PromptRating;
 }

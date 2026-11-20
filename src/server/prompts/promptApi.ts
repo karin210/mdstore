@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { featuredPrompts, isFree, type PromptCategory, type PromptKind } from "@/data/prompts";
 import { routing } from "@/i18n/routing";
 import type { PromptView } from "@/lib/promptView";
+import { to_prompt_rating, type PromptRating } from "@/lib/rating";
 import { getPromptView } from "@/server/prompts/getPromptView";
 import { list_posted_prompts, type PostedPromptSummaryRow } from "@/server/prompts/postedPrompts";
 
@@ -24,6 +25,8 @@ export interface PromptSummary {
   priceUsd: number;
   fileName: string;
   author: string;
+  /** Readers' mean stars (one decimal) and how many rated; null for catalogue listings, which can't be rated. */
+  rating: PromptRating | null;
 }
 
 /** GET /api/v1/prompts/[slug]: the summary plus what the CLI checks before and after downloading. */
@@ -48,7 +51,7 @@ export function sha256_hex(content: string): string {
   return createHash("sha256").update(content, "utf8").digest("hex");
 }
 
-function to_prompt_summary(prompt: PromptSummary): PromptSummary {
+function to_prompt_summary(prompt: Omit<PromptSummary, "rating"> & { rating?: PromptRating | null }): PromptSummary {
   return {
     slug: prompt.slug,
     title: prompt.title,
@@ -59,6 +62,7 @@ function to_prompt_summary(prompt: PromptSummary): PromptSummary {
     priceUsd: prompt.priceUsd,
     fileName: prompt.fileName,
     author: prompt.author,
+    rating: prompt.rating ?? null,
   };
 }
 
@@ -74,6 +78,7 @@ function posted_row_to_summary(row: PostedPromptSummaryRow): PromptSummary {
     priceUsd: 0,
     fileName: row.file_name,
     author: row.author_handle,
+    rating: to_prompt_rating(row.rating_count, row.rating_sum),
   };
 }
 

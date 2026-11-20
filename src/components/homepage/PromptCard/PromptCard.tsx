@@ -1,21 +1,26 @@
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { PrimaryButton } from "@/components/shared/PrimaryButton/PrimaryButton";
-import { downloadHref, isFree, promptHref, type PromptListing } from "@/data/prompts";
+import { RatingStars } from "@/components/shared/RatingStars/RatingStars";
+import { downloadHref, isFree, promptHref } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/formatPrice";
+import type { PromptCardData } from "@/lib/promptCard";
 import utility_styles from "@/styles/utilities.module.css";
 import styles from "./PromptCard.module.css";
 
 interface PromptCardProps {
-  prompt: PromptListing;
+  prompt: PromptCardData;
 }
 
 export function PromptCard({ prompt }: PromptCardProps): ReactElement {
   const t = useTranslations("prompts");
   const tCommon = useTranslations("price");
+  const tRatings = useTranslations("promptDetail.ratings");
+  const format = useFormatter();
   const locale = useLocale();
   const titleId = `prompt-${prompt.slug}-title`;
+  const average = format.number(prompt.rating.average, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
   return (
     <article className={styles.card} aria-labelledby={titleId}>
@@ -25,10 +30,21 @@ export function PromptCard({ prompt }: PromptCardProps): ReactElement {
       </header>
       <h3 id={titleId} className={styles.title}>
         <Link href={promptHref(prompt)} className={styles.titleLink}>
-          {t(`listings.${prompt.slug}.title`)}
+          {prompt.title}
         </Link>
       </h3>
-      <p className={styles.summary}>{t(`listings.${prompt.slug}.summary`)}</p>
+      <p className={styles.rating}>
+        <RatingStars average={prompt.rating.average} />
+        {prompt.rating.count === 0 ? (
+          <span className={styles.ratingMuted}>{tRatings("none")}</span>
+        ) : (
+          <span>
+            <strong>{tRatings("average", { average })}</strong>{" "}
+            <span className={styles.ratingMuted}>{tRatings("count", { count: prompt.rating.count })}</span>
+          </span>
+        )}
+      </p>
+      <p className={styles.summary}>{prompt.summary}</p>
       <ul className={styles.tools} aria-label={t("card.testedWith")}>
         {prompt.worksWith.map((tool) => (
           <li key={tool}>{tool}</li>

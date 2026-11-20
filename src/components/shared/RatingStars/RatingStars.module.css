@@ -1,0 +1,33 @@
+/* Two rows of stars stacked: the filled row is clipped to the average (--rating-fill). */
+.stars {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  --star-size: 1rem;
+}
+
+.stars[data-size="large"] {
+  --star-size: 1.5rem;
+}
+
+.empty,
+.filled {
+  display: inline-flex;
+  gap: 0.125rem;
+}
+
+.empty {
+  color: var(--color-border-strong);
+}
+
+.filled {
+  position: absolute;
+  inset: 0;
+  color: var(--color-primary);
+  clip-path: inset(0 calc(100% - var(--rating-fill)) 0 0);
+}
+
+.stars svg {
+  width: var(--star-size);
+  height: var(--star-size);
+}

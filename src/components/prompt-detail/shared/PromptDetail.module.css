@@ -46,7 +46,8 @@
     "examples"
     "models"
     "preview"
-    "usage";
+    "usage"
+    "ratings";
   gap: var(--space-lg);
 }
 
@@ -61,9 +62,10 @@
       "examples purchase"
       "models purchase"
       "preview purchase"
-      "usage purchase";
+      "usage purchase"
+      "ratings purchase";
     /* The last row absorbs any extra height, so the sections above stay compact. */
-    grid-template-rows: repeat(7, auto) 1fr;
+    grid-template-rows: repeat(8, auto) 1fr;
     align-items: start;
   }
 
@@ -436,4 +438,26 @@
   margin-inline-start: var(--space-xs);
   color: var(--color-primary-text);
   font-weight: 600;
+}
+
+/* Ratings */
+
+.ratingLink {
+  align-self: flex-start;
+  border-radius: var(--radius-sm);
+  color: inherit;
+  text-decoration: none;
+}
+
+.ratingLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.ratingsSection {
+  grid-area: ratings;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
 }

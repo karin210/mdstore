@@ -3,6 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import type { PromptCategory, PromptKind } from "@/data/prompts";
 import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptView } from "@/lib/promptView";
+import { to_prompt_rating } from "@/lib/rating";
 import { splitFileLines } from "@/lib/splitFileLines";
 import { POSTED_PROMPTS_TABLE, SLUG_PATTERN } from "@/server/prompts/postedPromptsTable";
 import { createPublicSupabase } from "@/server/supabase/publicClient";
@@ -30,20 +31,33 @@ export interface PostedPromptRow {
   works_with: string[];
   content: string;
   preview_line_count: number;
+  /** Rating totals, kept by rate_prompt() (see the ratings migration). */
+  rating_count: number;
+  rating_sum: number;
   /** The byline: the owner and co-authors with their usernames (embedded from post_authors). */
   post_authors: { role: "owner" | "coauthor"; joined_at: string; profiles: { username: string } | null }[];
 }
 
 export const DETAIL_COLUMNS =
-  "slug, file_name, author_handle, title, tagline, summary, category, kind, version, meant_for, highlights, usage_steps, works_with, content, preview_line_count, post_authors(role, joined_at, profiles(username))";
+  "slug, file_name, author_handle, title, tagline, summary, category, kind, version, meant_for, highlights, usage_steps, works_with, content, preview_line_count, rating_count, rating_sum, post_authors(role, joined_at, profiles(username))";
 
 /** What a list of posted prompts shows (GET /api/v1/prompts): no file content. */
 export type PostedPromptSummaryRow = Pick<
   PostedPromptRow,
-  "slug" | "file_name" | "author_handle" | "title" | "tagline" | "category" | "kind" | "version"
+  | "slug"
+  | "file_name"
+  | "author_handle"
+  | "title"
+  | "tagline"
+  | "category"
+  | "kind"
+  | "version"
+  | "rating_count"
+  | "rating_sum"
 >;
 
-const SUMMARY_COLUMNS = "slug, file_name, author_handle, title, tagline, category, kind, version";
+const SUMMARY_COLUMNS =
+  "slug, file_name, author_handle, title, tagline, category, kind, version, rating_count, rating_sum";
 
 /** Newest posts first; the cap keeps one response small until the list is paginated. */
 const max_listed_posts = 500;
@@ -85,6 +99,7 @@ export function toPromptView(row: PostedPromptRow): PromptView {
     usageSteps: row.usage_steps,
     fullMarkdown: row.content,
     isPosted: true,
+    rating: to_prompt_rating(row.rating_count, row.rating_sum),
   };
 }
 

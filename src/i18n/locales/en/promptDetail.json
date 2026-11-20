@@ -78,7 +78,38 @@
         "outputExamples": "Output examples",
         "testedModels": "Tested models",
         "preview": "Free preview",
-        "usage": "Suggested use"
+        "usage": "Suggested use",
+        "ratings": "Ratings"
+      }
+    },
+    "ratings": {
+      "title": "Ratings",
+      "none": "No ratings yet",
+      "average": "{average} out of 5",
+      "count": "{count, plural, one {(# rating)} other {(# ratings)}}",
+      "yourRating": "Rate this prompt",
+      "yourSavedRating": "Your rating",
+      "starLabel": "{count, plural, one {# star} other {# stars}}",
+      "pickStars": "Pick from 1 to 5 stars first.",
+      "save": "Save rating",
+      "saving": "Saving…",
+      "remove": "Remove my rating",
+      "removing": "Removing…",
+      "saved": "Thanks, your rating is saved.",
+      "removed": "Your rating is removed.",
+      "signInNote": "Sign in to rate this prompt.",
+      "signIn": "Sign in to rate",
+      "author": "You can't rate a prompt you wrote.",
+      "notApproved": "Ratings open once this prompt is approved.",
+      "catalogue": "Catalogue listings can't be rated yet.",
+      "errors": {
+        "unauthenticated": "Your session ended. Sign in again to rate.",
+        "forbidden": "You can't rate a prompt you wrote.",
+        "notFound": "This prompt can't be rated right now.",
+        "invalid": "Pick from 1 to 5 stars.",
+        "notConfigured": "Ratings aren't available on this server.",
+        "server": "We couldn't save your rating. Please try again.",
+        "serverWithId": "We couldn't save your rating. Please try again (reference {id})."
       }
     }
   }

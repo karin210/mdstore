@@ -46,6 +46,7 @@ export default function PromptDetailPage({ params }: PageProps<"/[locale]/prompt
     { id: "tested-models", level: 2, label: t("sections.testedModels") },
     { id: "preview", level: 2, label: t("sections.preview") },
     { id: "usage", level: 2, label: t("sections.usage") },
+    { id: "ratings", level: 2, label: t("sections.ratings") },
   ];
 
   return (

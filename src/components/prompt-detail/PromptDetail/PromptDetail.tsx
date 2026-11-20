@@ -4,6 +4,8 @@ import { PrimaryButton } from "@/components/shared/PrimaryButton/PrimaryButton";
 import { AuthorBar } from "@/components/prompt-detail/AuthorBar/AuthorBar";
 import { InlineCode } from "@/components/prompt-detail/InlineCode/InlineCode";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples/OutputExamples";
+import { PromptRatings } from "@/components/prompt-detail/PromptRatings/PromptRatings";
+import { RatingSummary } from "@/components/prompt-detail/RatingSummary/RatingSummary";
 import { TestedModels } from "@/components/prompt-detail/TestedModels/TestedModels";
 import { downloadHref, isFree } from "@/data/prompts";
 import { Link } from "@/i18n/navigation";
@@ -71,6 +73,11 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
             {prompt.title}
           </h1>
           <h2 className={styles.tagline}>{prompt.tagline}</h2>
+          {prompt.rating && (
+            <a className={styles.ratingLink} href="#ratings">
+              <RatingSummary rating={prompt.rating} />
+            </a>
+          )}
         </header>
 
         <section id="summary" className={styles.summarySection} aria-labelledby="summary-title">
@@ -214,6 +221,23 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
               </li>
             ))}
           </ol>
+        </section>
+
+        <section id="ratings" className={styles.ratingsSection} aria-labelledby="ratings-title">
+          <h2 id="ratings-title" className={styles.sectionTitle}>
+            {t("ratings.title")}
+          </h2>
+          {prompt.rating ? (
+            <>
+              <RatingSummary rating={prompt.rating} size="large" />
+              {/* Only this part reads the session; the listing itself stays cached and shared. */}
+              <Suspense fallback={null}>
+                <PromptRatings slug={prompt.slug} />
+              </Suspense>
+            </>
+          ) : (
+            <p className={styles.note}>{t("ratings.catalogue")}</p>
+          )}
         </section>
       </article>
     </>

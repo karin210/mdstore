@@ -63,6 +63,8 @@ approved post + author pushes ──► review #2 opens, compared against the li
 
 ## Access control
 
+The roles and the full permission table for the whole site are in [`roles-and-access.md`](roles-and-access.md).
+
 Three layers, each enough on its own to stop a write:
 
 1. **Database:** every write is a `security definer` function that checks the caller (author, owner or admin) and the review's state; the tables only have select policies, and RLS hides reviews, revisions and comments from everyone but the post's authors and the admins. `post_invites` has no policies at all and stores only the SHA-256 of each token.

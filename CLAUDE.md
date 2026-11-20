@@ -9,13 +9,13 @@
 - **Buyers** browse listings by category, read a free preview of each file (its first lines), buy it once, and drop the `.md` into their repo. Purchases include future versions of the file.
 - **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use, tools tested with), the `.md` file and the free-preview length. The post is published at once on its own `/prompts/[slug]` page. Posting is free for now; paid posts come with checkout.
 
-Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs), the signed-in **profile** (`/profile`: account details, the five latest uploads with a link to all of them, and forms to change the username, email and password) and **my prompts** (`/my-prompts`: every post the user owns or co-authors, newest first), and the branded 404. Signed-out visitors of `/profile` and `/my-prompts` are redirected to `/login` by `src/proxy.ts`. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. Posted prompts don't appear on the landing page grid yet (only on their own page). There is no checkout yet.
+Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs), the signed-in **profile** (`/profile`: account details, the five latest uploads with a link to all of them, and forms to change the username, email and password) and **my prompts** (`/my-prompts`: every post the user owns or co-authors, newest first), and the branded 404. Signed-out visitors of `/profile` and `/my-prompts` are redirected to `/login` by `src/proxy.ts`. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. The landing page's "most popular prompts" grid shows up to six approved posts: highest average stars first, newest first among equal averages, then unrated posts newest first (so with no ratings, the six newest); the rule is the database function `popular_prompts()`, read by `src/server/prompts/popularPrompts.ts`. Catalogue listings aren't in it (they have no ratings or dates). Signed-in readers rate approved posts from 1 to 5 stars on the listing page ("Ratings" section; authors can't rate their own); the average and count show under the tagline and in the API. There is no checkout yet.
 
 Every listing has a **kind** (`prompt_kinds` in `src/data/prompts.ts`, column `kind`, revisioned: `prompt`, `skill` or `agent`; authors choose it on the upload form) that decides how a developer gets it (a prompt is copied or downloaded; the CLI installs skills and agents), and a **version** (integer from 1, bumped by hand, by one, in the same commit that changes the catalogue file in `content/prompts/`; posts start at 1) that the CLI compares to find updates. Production: `siteConfig.url` in `src/lib/site.ts` (https://mdstore-seven.vercel.app), also the CLI's default server. How the feature works and how to change it: `docs/cli.md`; what it still needs: `docs/cli-pending.md`.
 
 **Public JSON API** (`src/app/api/v1/`, read-only, no auth, English copy; the proxy skips `/api`; mapping in `src/server/prompts/promptApi.ts`; errors are `{ status, message }` JSON):
 
-- `GET /api/v1/prompts?q=&category=`: catalogue and posted prompts as summaries (`slug, title, tagline, category, kind, version, priceUsd, fileName, author`).
+- `GET /api/v1/prompts?q=&category=`: catalogue and posted prompts as summaries (`slug, title, tagline, category, kind, version, priceUsd, fileName, author, rating`; `rating` is `{ average, count }`, null for catalogue listings).
 - `GET /api/v1/prompts/[slug]`: the summary plus `sha256` (free prompts only, computed per request, never stored), `worksWith`, `lineCount`, `context_tokens`; 404 when unknown.
 - `GET /api/v1/prompts/[slug]/file`: a free prompt's raw `.md` (`text/markdown`); 403 for paid, 404 when unknown.
 
@@ -43,7 +43,7 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - Vitest 5 for unit tests of plain TypeScript (validation rules, form classes, helpers), as `*.test.ts` next to the code, Node environment, in two projects: `site` (`src/**`, `@/` resolves through Vite's built-in `resolve.tsconfigPaths`) and `cli` (`packages/cli/src/**`, relative imports). Async Server Components need E2E tests (Playwright) instead, per the Next docs.
 - TypeScript 5: stay off TypeScript 7 until it ships a JavaScript API (the `next` editor plugin needs it).
 - Supabase CLI (dev dependency, config in `supabase/config.toml`): applies migrations and generates the table types.
-- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`. Database: `docs/database.md`. Review workflow (pull-request style reviews, co-authors, invites): `docs/review-workflow.md`. Local Supabase: `docs/local-supabase-setup.md`.
+- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`. Database: `docs/database.md`. Review workflow (pull-request style reviews, co-authors, invites): `docs/review-workflow.md`. Roles (visitor, signed-in user, owner, co-author, admin), what each can do and where it is enforced: `docs/roles-and-access.md`. Local Supabase: `docs/local-supabase-setup.md`.
 - CI: `.github/workflows/ci.yml` runs lint, format check, tests and build (site, then the CLI's tests and build) on pushes to `main`/`dev` and on pull requests (Node from `mise.toml`, no secrets needed).
 
 ## Commands
@@ -97,14 +97,17 @@ src/
 │                            (metadata), [slug]/file/route.ts (free .md); one handler per purpose
 ├─ components/
 │  ├─ shared/                shared by several pages: SiteHeader, SiteFooter, SiteLogo,
-│  │                         MobileMenu, AccountControl (sign in / profile / sign out), PrimaryButton,
+│  │                         MobileMenu (the header's menu on every screen size: overflow links, plus Reviews for admins via useIsAdmin), AccountControl (sign in / profile / sign out), PrimaryButton,
 │  │                         SecondaryButton, SubmitButton, FormAlert, SkeletonBlock, icons,
 │  │                         EmailField, PasswordField, HelperChunks (login + profile forms),
-│  │                         SubmissionList (a user's posts, for /profile and /my-prompts),
+│  │                         SubmissionList (a user's posts, for /profile and /my-prompts), RatingStars,
 │  │                         navLinks, LanguageSwitcher, LanguageBanner, RouteIndex (sticky rail on
 │  │                         wide screens, status bar with an Outline popover on narrow ones; driven
 │  │                         by `sections` props) and RouteIndexLayout (the <main> grid that holds it)
-│  ├─ homepage/              landing-only sections: Hero, FeaturedPrompts, PromptCard,
+│  ├─ homepage/              landing-only sections: Hero, FeaturedPrompts (static heading +
+│  │                         PopularPrompts in <Suspense>, which loads the ranked posts and renders
+│  │                         FeaturedPromptGrid: category filters + cards), PromptCard (from
+│  │                         PromptCardData in src/lib/promptCard.ts),
 │  │                         HowItWorks, WhyMarkdown, UploadCta, Faq; the page reads as one
 │  │                         Markdown file: homeSections (the route index's order), MarkdownField
 │  │                         (hero's WebGL backdrop, lazy, see src/lib/markdownFieldRenderer.ts)
@@ -121,7 +124,8 @@ src/
 │  │                         (screenshots from `outputExamples`, placeholders while empty),
 │  │                         TestedModels (the `tested_models` of a listing, from the
 │  │                         `ai_models` registry in src/data/aiModels.ts), AuthorBar (links to
-│  │                         the review for authors and admins)
+│  │                         the review for authors and admins), RatingSummary (stars, average,
+│  │                         count), PromptRatings (session read in <Suspense>) + RatingForm
 │  └─ review/                review page, queue and invite: ReviewBody, ReviewTimeline,
 │                            RevisionFile, RevisionChanges, DiffTable, LineThread (a line's
 │                            comments, shared by both), CommentForm, DecisionForm,
@@ -145,8 +149,8 @@ src/
 │                            session refresh, auth/ (actions, getSignedInUser),
 │                            profiles/ (signed-in profile, account profile, require_account_profile,
 │                            actions: set_username, change_username, change_email, change_password),
-│                            prompts/ (post action, cached posted-prompt reads, view resolver,
-│                            the user's posts (mySubmissions); promptApi: the API's summaries, details, sha256, errors), reviews/ (review page data, queue, invites,
+│                            prompts/ (post action, cached posted-prompt reads, popular prompts, view resolver,
+│                            the user's posts (mySubmissions); promptApi: the API's summaries, details, sha256, errors), ratings/ (the visitor's own rating, the rate_prompt action), reviews/ (review page data, queue, invites,
 │                            actions calling the review functions with rpc)
 ├─ styles/globals.css        :root tokens, reset, typography, element defaults (no classes)
 │  *.module.css              shared (review, form, section, modal, utilities), page-level (reviewPage)
@@ -172,7 +176,7 @@ public/                      static files served as-is (favicon.ico, icon.svg (t
 
 - **Colours** live only as tokens on `:root` in `globals.css` (light + `prefers-color-scheme: dark`). The brand colour is `#31606B` (deep, muted teal) and every token derives from it. Roles: `--color-background` (teal-tinted off-white / near-black teal), `--color-primary` (brand teal `#31606B`, lifted to `#7DB9C5` in dark mode: key CTAs, active states, borders, glows), `--color-primary-text` (the primary as text; equal to the primary today, since `#31606B` is AA as text, kept so a lighter brand colour can get its own text shade), `--color-secondary` (pale teal surfaces), `--color-tertiary` (burnt orange, the primary's complement, reserved for warnings/toasts), `--color-chrome` / `--color-on-chrome` / `--color-chrome-accent` (header and footer band: the brand colour in light mode, a deep teal band with a light-teal logo in dark mode), plus ink, surface, border (`--color-border-strong` outlines form controls at 3:1), code and focus tokens. Never use raw hex in components; the only hard-coded copies are in `public/icon.svg` (a favicon cannot read tokens).
 - **Sizes**: font sizes use the `--text-*` clamp tokens; spacing uses the `--space-*` clamp tokens; page width uses `--content-width`. Sections are separated with `gap` on `main`, not margins.
-- **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons ("Sign out"), interface controls (mobile menu toggle).
+- **Button kinds**: `PrimaryButton` (purchase CTAs: hero "Browse prompts"), `SubmitButton` (form submits, stays enabled while invalid, disabled only in flight), `SecondaryButton` (acquisition/contact: "Upload your prompt", "Sign in to post"), tertiary text buttons ("Sign out"), interface controls (header menu toggle).
 - **Route index**: every multi-section route (today `/`, `/upload`, `/prompts/[slug]`, `/profile`) renders its <main> through `RouteIndexLayout`, passing `sections` (`id`, localized `label`, heading `level`) and a `file_name`. An entry is any block with that `id`, not necessarily a `<section>`; the shared UI strings are under `routeIndex` in `common.json`, each route's labels under its own `outline.sections`. Routes with a single block (login, my prompts, invite, 404) have none. The rule is also in the `navigation-ux` skill.
 - **Auth**: only signed-in users can post; the server action re-checks the session (`get_signed_in_user`, verified with `getClaims()`) and RLS only accepts rows whose `author_id` is the caller. The header's `AccountControl` refreshes the page on sign-in/sign-out, so the upload form disappears when the session ends.
 - **Forms** follow the global auth-form rules: validation rules live once in `src/lib/validation/` (client checks + Zod schemas for the server), form state lives in `src/lib/forms/` classes, guidance is inline under each field, and submit focuses the first wrong field. Shared field styles (`field`, `label`, `input`, `hint`, `guidance`, with `data-mark` / `data-valid`) are in `src/styles/form.module.css`; the `data-state` colours of helper chunks are element-level rules in `globals.css`.

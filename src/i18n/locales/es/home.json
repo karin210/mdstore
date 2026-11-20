@@ -14,10 +14,13 @@
     "featured": {
       "eyebrow": "// destacados",
       "title": "Los prompts más populares",
-      "lead": "Prompts y skills que más usa la comunidad.",
+      "lead": "Los prompts y skills mejor valorados por la comunidad, y los más nuevos mientras llegan las valoraciones.",
       "filterLabel": "Filtrar por categoría",
       "all": "Todos",
-      "showing": "{count, plural, one {Se muestra # prompt} other {Se muestran # prompts}}"
+      "showing": "{count, plural, one {Se muestra # prompt} other {Se muestran # prompts}}",
+      "loading": "Cargando los prompts más populares",
+      "empty": "Aún no se ha publicado ningún prompt.",
+      "emptyAction": "Sube el primero"
     },
     "howItWorks": {
       "eyebrow": "// cómo funciona",

@@ -152,3 +152,17 @@
     translate: none;
   }
 }
+
+/* Rating line: stars, then the average and count (or "No ratings yet") */
+.rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.ratingMuted {
+  color: var(--color-ink-muted);
+}

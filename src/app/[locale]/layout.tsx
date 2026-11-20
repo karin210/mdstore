@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { locale as localeParam } from "next/root-params";
-import type { ReactElement, ReactNode } from "react";
+import { Suspense, type ReactElement, type ReactNode } from "react";
 import { LanguageBanner } from "@/components/shared/LanguageBanner/LanguageBanner";
 import { SiteFooter } from "@/components/shared/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/shared/SiteHeader/SiteHeader";
@@ -64,7 +64,10 @@ export default async function RootLayout({ children }: { children: ReactNode }):
       <body>
         <NextIntlClientProvider>
           <SiteHeader />
-          <LanguageBanner />
+          {/* Reads the URL, which routes with unknown params (a posted prompt's slug) only have at runtime. */}
+          <Suspense fallback={null}>
+            <LanguageBanner />
+          </Suspense>
           {children}
           <SiteFooter />
         </NextIntlClientProvider>

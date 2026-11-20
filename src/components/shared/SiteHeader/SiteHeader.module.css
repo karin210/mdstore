@@ -42,32 +42,23 @@
 
 .inner > :focus-visible,
 .links :focus-visible,
-.mobile summary:focus-visible {
+.actions summary:focus-visible {
   outline-color: var(--color-on-chrome);
 }
 
-.mobile {
-  display: none;
-}
-
+/* Small screens: every link and the language switcher live in the menu instead */
 @media (max-width: 48rem) {
-  .links {
-    display: none;
-  }
-
-  .mobile {
-    display: block;
-  }
-
-  /* Small screens: the switcher lives in the mobile menu instead */
+  .mainNav,
   .language {
     display: none;
   }
+}
 
-  /* When the hamburger menu is present, move the account button to its left */
-  .account {
-    order: -1;
-  }
+/* Keeps the switcher's space while it waits for the URL, so the bar doesn't jump. */
+.languagePlaceholder {
+  display: block;
+  width: 4.75rem;
+  height: 1.75rem;
 }
 
 .account {
