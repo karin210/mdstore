@@ -30,16 +30,18 @@
       "placeholderHidden": ": screenshot coming soon"
     },
     "models": {
-      "title": "Tested models",
+      "title": "Tested with",
       "note": "The specific models {fileName} was tested against, by family. The recommended ones gave the best results.",
-      "empty": "The author hasn't listed the models this prompt was tested against yet.",
+      "empty": "The author hasn't listed the tools or models this prompt was tested with yet.",
       "recommended": "Recommended",
       "table": {
         "caption": "Cost by model, in US dollars per one million tokens",
         "model": "Model",
         "input": "Input",
         "output": "Output"
-      }
+      },
+      "tools": "Tools",
+      "toolsOnly": "The AI coding tools {fileName} was tested with. The author hasn't listed specific models yet."
     },
     "preview": {
       "title": "Free preview",
@@ -76,7 +78,7 @@
         "meantFor": "Meant for",
         "highlights": "Highlights",
         "outputExamples": "Output examples",
-        "testedModels": "Tested models",
+        "testedModels": "Tested with",
         "preview": "Free preview",
         "usage": "Suggested use",
         "ratings": "Ratings"

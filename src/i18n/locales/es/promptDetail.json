@@ -30,16 +30,18 @@
       "placeholderHidden": ": captura disponible pronto"
     },
     "models": {
-      "title": "Modelos probados",
+      "title": "Probado con",
       "note": "Los modelos concretos con los que se probó {fileName}, por familia. Los recomendados dieron los mejores resultados.",
-      "empty": "El autor aún no ha indicado con qué modelos se probó este prompt.",
+      "empty": "El autor aún no ha indicado las herramientas ni los modelos con los que probó este prompt.",
       "recommended": "Recomendado",
       "table": {
         "caption": "Coste por modelo, en dólares estadounidenses por millón de tokens",
         "model": "Modelo",
         "input": "Entrada",
         "output": "Salida"
-      }
+      },
+      "tools": "Herramientas",
+      "toolsOnly": "Las herramientas de IA para programar con las que se probó {fileName}. El autor aún no ha indicado modelos concretos."
     },
     "preview": {
       "title": "Vista previa gratis",
@@ -76,7 +78,7 @@
         "meantFor": "Pensado para",
         "highlights": "Puntos clave",
         "outputExamples": "Ejemplos de resultados",
-        "testedModels": "Modelos probados",
+        "testedModels": "Probado con",
         "preview": "Vista previa gratis",
         "usage": "Uso sugerido",
         "ratings": "Valoraciones"

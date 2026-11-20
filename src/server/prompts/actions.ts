@@ -66,6 +66,8 @@ async function insertPostedPrompt(
     highlights: input.highlights,
     usage_steps: input.usageSteps,
     works_with: input.worksWith,
+    tested_models: input.testedModels.map((model) => model.model_id),
+    recommended_models: input.testedModels.filter((model) => model.recommended).map((model) => model.model_id),
     content,
     preview_line_count: input.previewLineCount,
   });

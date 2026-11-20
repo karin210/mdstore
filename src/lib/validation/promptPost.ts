@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { is_model_id } from "@/data/aiModels";
 import { prompt_kinds, promptCategories, type PromptCategory, type PromptKind } from "@/data/prompts";
 
 /**
@@ -18,6 +19,7 @@ export interface ValidationIssue {
     | "chooseKind"
     | "chooseCategory"
     | "chooseTool"
+    | "unknownModel"
     | "fileRequired"
     | "fileType"
     | "fileTooLarge"
@@ -59,7 +61,14 @@ const LIST_LIMITS = {
 
 export type TextField = keyof typeof TEXT_LIMITS;
 export type ListField = keyof typeof LIST_LIMITS;
-export type PromptPostField = TextField | ListField | "kind" | "category" | "worksWith" | "file" | "previewLineCount";
+/** One model the author tested with (an id of src/data/aiModels.ts), and whether they recommend it. */
+export interface TestedModelChoice {
+  model_id: string;
+  recommended: boolean;
+}
+
+export type PromptPostField =
+  TextField | ListField | "kind" | "category" | "worksWith" | "testedModels" | "file" | "previewLineCount";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
@@ -72,6 +81,7 @@ export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "highlights",
   "usageSteps",
   "worksWith",
+  "testedModels",
   "file",
   "previewLineCount",
 ];
@@ -124,6 +134,13 @@ export function checkWorksWith(values: string[]): ValidationIssue | null {
   const knownTools: readonly string[] = WORKS_WITH_TOOLS;
   const knownValues = values.filter((value) => knownTools.includes(value));
   return knownValues.length > 0 && knownValues.length === values.length ? null : { key: "chooseTool" };
+}
+
+/** Optional: every model must be in the registry, once. */
+export function check_tested_models(models: TestedModelChoice[]): ValidationIssue | null {
+  const ids = models.map((model) => model.model_id);
+  const is_known = ids.every((id) => is_model_id(id));
+  return is_known && new Set(ids).size === ids.length ? null : { key: "unknownModel" };
 }
 
 /**
@@ -190,6 +207,9 @@ export const promptPostSchema = z.strictObject({
   highlights: listSchema("highlights"),
   usageSteps: listSchema("usageSteps"),
   worksWith: z.array(z.string()).superRefine(asRefinement(checkWorksWith)),
+  testedModels: z
+    .array(z.strictObject({ model_id: z.string(), recommended: z.boolean() }))
+    .superRefine(asRefinement(check_tested_models)),
   file: z
     .custom<File>((value) => value instanceof File, { message: "fileRequired" })
     .superRefine(asRefinement(checkFile)),

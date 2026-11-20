@@ -254,6 +254,10 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                     highlights: latest_revision_of_post.highlights.join("\n"),
                     usageSteps: latest_revision_of_post.usage_steps.join("\n"),
                     worksWith: latest_revision_of_post.works_with,
+                    testedModels: latest_revision_of_post.tested_models.map((model_id) => ({
+                      model_id,
+                      recommended: latest_revision_of_post.recommended_models.includes(model_id),
+                    })),
                     previewLineCount: String(latest_revision_of_post.preview_line_count),
                   }}
                 />

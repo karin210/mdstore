@@ -149,3 +149,22 @@
   background: var(--color-primary);
   color: var(--color-on-primary);
 }
+
+/* Tools the author tested with: pills, like the listing's other tags */
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tools li {
+  padding: 0.25em 0.75em;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: var(--text-sm);
+}

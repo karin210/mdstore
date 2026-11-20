@@ -41,6 +41,8 @@ export interface Revision {
   highlights: string[];
   usage_steps: string[];
   works_with: string[];
+  tested_models: string[];
+  recommended_models: string[];
   content: string;
   preview_line_count: number;
 }

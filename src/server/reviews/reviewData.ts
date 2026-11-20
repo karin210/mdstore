@@ -37,7 +37,7 @@ export interface ReviewPageData {
 }
 
 const REVISION_COLUMNS =
-  "id, review_id, number, created_by, created_at, kind, file_name, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, content, preview_line_count";
+  "id, review_id, number, created_by, created_at, kind, file_name, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, tested_models, recommended_models, content, preview_line_count";
 
 function fail(what: string, error: { message: string }): never {
   throw new Error(`Couldn't load the review's ${what}: ${error.message}`);

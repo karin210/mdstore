@@ -112,7 +112,9 @@
         "meant_for": "Meant for",
         "highlights": "Highlights",
         "usage_steps": "Suggested use",
-        "works_with": "Tested with",
+        "works_with": "Tools tested with",
+        "tested_models": "Models tested with",
+        "recommended_models": "Recommended models",
         "preview_line_count": "Free preview length",
         "file_name": "File name"
       }

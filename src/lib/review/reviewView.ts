@@ -1,3 +1,4 @@
+import { ai_models, is_model_id } from "@/data/aiModels";
 import type { Review, ReviewComment, Revision } from "@/lib/review/types";
 
 /**
@@ -17,6 +18,8 @@ export const LISTING_FIELDS = [
   "highlights",
   "usage_steps",
   "works_with",
+  "tested_models",
+  "recommended_models",
   "preview_line_count",
   "file_name",
 ] as const;
@@ -72,15 +75,18 @@ export function build_timeline(review: Review, revisions: Revision[], comments: 
   });
 }
 
-function format_field(value: Revision[ListingField]): string {
-  return Array.isArray(value) ? value.join("\n") : String(value);
+function format_field(field: ListingField, value: Revision[ListingField]): string {
+  if (!Array.isArray(value)) return String(value);
+  // Model ids read as the models' names; an id the registry no longer knows stays as it is.
+  const is_models = field === "tested_models" || field === "recommended_models";
+  return value.map((item) => (is_models && is_model_id(item) ? ai_models[item].name : item)).join("\n");
 }
 
 /** The listing fields whose value differs between two revisions. */
 export function diff_listing_fields(base: Revision, revision: Revision): FieldChange[] {
   return LISTING_FIELDS.flatMap((field): FieldChange[] => {
-    const before = format_field(base[field]);
-    const after = format_field(revision[field]);
+    const before = format_field(field, base[field]);
+    const after = format_field(field, revision[field]);
     return before === after ? [] : [{ field, before, after }];
   });
 }

@@ -19,6 +19,8 @@ function make_revision(overrides: Partial<Revision>): Revision {
     highlights: ["One"],
     usage_steps: ["Drop it in"],
     works_with: ["Cursor"],
+    tested_models: [],
+    recommended_models: [],
     content: "line 1\n",
     preview_line_count: 5,
     ...overrides,

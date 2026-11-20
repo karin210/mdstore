@@ -7,6 +7,8 @@ import styles from "./TestedModels.module.css";
 
 interface TestedModelsProps {
   models: TestedModel[];
+  /** The AI coding tools the author tested with (`worksWith`, "Tools tested with" on the upload form). */
+  tools: string[];
   fileName: string;
 }
 
@@ -26,13 +28,22 @@ function RecommendedTag({ label }: { label: string }): ReactElement {
   );
 }
 
-/** The specific models a prompt was tested against, by family, with the recommended ones highlighted and a cost table. */
-export function TestedModels({ models, fileName }: TestedModelsProps): ReactElement {
+/**
+ * What a prompt was tested with: the AI coding tools, then the specific models by family (the
+ * recommended ones highlighted) and a cost table. Posts list tools only, until the upload form
+ * asks for models.
+ */
+export function TestedModels({ models, tools, fileName }: TestedModelsProps): ReactElement {
   const t = useTranslations("promptDetail.models");
   const locale = useLocale() as Locale;
   const families = model_families
     .map((family) => ({ family, models: get_family_models(models, family) }))
     .filter((group) => group.models.length > 0);
+
+  function get_note(): string {
+    if (families.length > 0) return t("note", { fileName });
+    return tools.length > 0 ? t("toolsOnly", { fileName }) : t("empty");
+  }
 
   return (
     <section id="tested-models" className={styles.section} aria-labelledby="models-title">
@@ -40,8 +51,21 @@ export function TestedModels({ models, fileName }: TestedModelsProps): ReactElem
         <h2 id="models-title" className={styles.title}>
           {t("title")}
         </h2>
-        <p className={styles.note}>{families.length > 0 ? t("note", { fileName }) : t("empty")}</p>
+        <p className={styles.note}>{get_note()}</p>
       </header>
+
+      {tools.length > 0 && (
+        <section className={styles.family} aria-labelledby="models-tools">
+          <h3 id="models-tools" className={styles.familyName}>
+            {t("tools")}
+          </h3>
+          <ul className={styles.tools}>
+            {tools.map((tool) => (
+              <li key={tool}>{tool}</li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {families.length > 0 && (
         <>

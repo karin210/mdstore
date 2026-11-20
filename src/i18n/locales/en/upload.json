@@ -134,8 +134,14 @@
           "hint": "The steps to start using it, one per line. Wrap file names in `backticks`."
         },
         "worksWith": {
-          "label": "Tested with",
+          "label": "Tools tested with",
           "hint": "The AI tools you used it with."
+        },
+        "testedModels": {
+          "label": "Models tested with (optional)",
+          "hint": "The specific models you ran it with. Mark the ones that gave the best results as recommended.",
+          "recommended": "Recommended",
+          "recommendedLabel": "Recommend {model}"
         },
         "file": {
           "label": "Markdown file",
@@ -173,7 +179,8 @@
       "fileTooLarge": "Choose a file up to 200 KB.",
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
       "previewRange": "Use a number from {min} to {max}.",
-      "chooseKind": "Choose prompt, skill or agent."
+      "chooseKind": "Choose prompt, skill or agent.",
+      "unknownModel": "Pick models from the list only, once each."
     },
     "outline": {
       "file": "upload.md",

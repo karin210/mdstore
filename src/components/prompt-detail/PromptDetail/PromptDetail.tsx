@@ -160,7 +160,7 @@ export async function PromptDetail({ params }: PromptDetailProps): Promise<React
         </div>
 
         <div className={styles.models}>
-          <TestedModels models={prompt.tested_models} fileName={prompt.fileName} />
+          <TestedModels models={prompt.tested_models} tools={prompt.worksWith} fileName={prompt.fileName} />
         </div>
 
         <section id="preview" className={styles.preview} aria-labelledby="preview-title">

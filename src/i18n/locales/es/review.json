@@ -112,7 +112,9 @@
         "meant_for": "Pensado para",
         "highlights": "Puntos clave",
         "usage_steps": "Uso sugerido",
-        "works_with": "Probado con",
+        "works_with": "Herramientas con las que se probó",
+        "tested_models": "Modelos con los que se probó",
+        "recommended_models": "Modelos recomendados",
         "preview_line_count": "Largo de la vista previa gratis",
         "file_name": "Nombre del archivo"
       }

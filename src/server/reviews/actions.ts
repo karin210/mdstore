@@ -127,6 +127,8 @@ export async function push_revision(post_id: string, formData: FormData): Promis
     p_content: content,
     p_preview_line_count: input.previewLineCount,
     p_note: input.note || null,
+    p_tested_models: input.testedModels.map((model) => model.model_id),
+    p_recommended_models: input.testedModels.filter((model) => model.recommended).map((model) => model.model_id),
   });
   return result.status === "ok" ? { status: "ok", number: result.value } : result;
 }

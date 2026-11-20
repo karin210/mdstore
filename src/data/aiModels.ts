@@ -1,8 +1,11 @@
 /**
  * The specific AI models a listing can say it was tested against, grouped by family.
  *
- * PLACEHOLDER DATA: the model list, the prices and every listing's `tested_models` are invented
- * for now. Replace them with real test results and the providers' current prices before launch.
+ * The upload form offers these models, and posts store their ids (posted_prompts.tested_models).
+ *
+ * PLACEHOLDER DATA: the model list and the prices are invented for now. Replace them with real
+ * models and the providers' current prices before launch; keep the ids of models posts already use,
+ * or those posts lose them (unknown ids are left out, see to_tested_models).
  */
 
 /** Model families, in the order the detail page lists them. */
@@ -53,4 +56,18 @@ export function build_tested_models(recommended: ModelId[], others: ModelId[]): 
     ...recommended.map((model_id) => ({ model_id, recommended: true })),
     ...others.map((model_id) => ({ model_id, recommended: false })),
   ];
+}
+
+export function is_model_id(value: string): value is ModelId {
+  return Object.hasOwn(ai_models, value);
+}
+
+/**
+ * A post's tested models from its two stored lists (posted_prompts.tested_models and
+ * recommended_models), in the registry's order. Ids the registry doesn't know are left out.
+ */
+export function to_tested_models(tested: string[], recommended: string[]): TestedModel[] {
+  return (Object.keys(ai_models) as ModelId[])
+    .filter((model_id) => tested.includes(model_id))
+    .map((model_id) => ({ model_id, recommended: recommended.includes(model_id) }));
 }

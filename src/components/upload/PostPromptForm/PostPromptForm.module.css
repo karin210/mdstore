@@ -86,3 +86,60 @@
   display: flex;
   justify-content: flex-end;
 }
+
+/* Models tested with: one column per family; a tested model gets a "Recommended" toggle beside it */
+
+.modelFamilies {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--space-md);
+}
+
+.modelFamily {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.modelFamilyName {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.modelList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.modelRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.recommend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.recommend:has(input:checked) {
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+
+.recommend:has(input:focus-visible) {
+  outline: 0.1875rem solid var(--color-focus);
+  outline-offset: 0.1875rem;
+  border-radius: var(--radius-sm);
+}

@@ -7,10 +7,12 @@ import {
   checkPreviewLineCount,
   checkText,
   checkWorksWith,
+  check_tested_models,
   PREVIEW_LINES,
   PROMPT_POST_FIELDS,
   type PromptKind,
   type PromptPostField,
+  type TestedModelChoice,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
 
@@ -24,6 +26,7 @@ export interface PromptPostValues {
   highlights: string;
   usageSteps: string;
   worksWith: string[];
+  testedModels: TestedModelChoice[];
   file: File | null;
   previewLineCount: string;
 }
@@ -38,6 +41,7 @@ const EMPTY_POST: PromptPostValues = {
   highlights: "",
   usageSteps: "",
   worksWith: [],
+  testedModels: [],
   file: null,
   previewLineCount: String(PREVIEW_LINES.default),
 };
@@ -73,6 +77,8 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkCategory(values.category);
       case "worksWith":
         return checkWorksWith(values.worksWith);
+      case "testedModels":
+        return check_tested_models(values.testedModels);
       case "file":
         return checkFile(values.file, this.is_revision);
       case "previewLineCount":
@@ -93,6 +99,11 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     formData.set("highlights", values.highlights);
     formData.set("usageSteps", values.usageSteps);
     values.worksWith.forEach((tool) => formData.append("worksWith", tool));
+    // Two lists, the way the database stores them: every tested model, then the recommended ones.
+    values.testedModels.forEach((model) => {
+      formData.append("testedModels", model.model_id);
+      if (model.recommended) formData.append("recommendedModels", model.model_id);
+    });
     if (values.file) formData.set("file", values.file);
     formData.set("previewLineCount", values.previewLineCount);
     return formData;

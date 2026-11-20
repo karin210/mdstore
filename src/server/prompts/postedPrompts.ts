@@ -1,5 +1,6 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
+import { to_tested_models } from "@/data/aiModels";
 import type { PromptCategory, PromptKind } from "@/data/prompts";
 import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptView } from "@/lib/promptView";
@@ -29,6 +30,9 @@ export interface PostedPromptRow {
   highlights: string[];
   usage_steps: string[];
   works_with: string[];
+  /** Model ids (src/data/aiModels.ts); recommended_models is a subset of tested_models. */
+  tested_models: string[];
+  recommended_models: string[];
   content: string;
   preview_line_count: number;
   /** Rating totals, kept by rate_prompt() (see the ratings migration). */
@@ -39,7 +43,7 @@ export interface PostedPromptRow {
 }
 
 export const DETAIL_COLUMNS =
-  "slug, file_name, author_handle, title, tagline, summary, category, kind, version, meant_for, highlights, usage_steps, works_with, content, preview_line_count, rating_count, rating_sum, post_authors(role, joined_at, profiles(username))";
+  "slug, file_name, author_handle, title, tagline, summary, category, kind, version, meant_for, highlights, usage_steps, works_with, tested_models, recommended_models, content, preview_line_count, rating_count, rating_sum, post_authors(role, joined_at, profiles(username))";
 
 /** What a list of posted prompts shows (GET /api/v1/prompts): no file content. */
 export type PostedPromptSummaryRow = Pick<
@@ -87,8 +91,7 @@ export function toPromptView(row: PostedPromptRow): PromptView {
     lineCount: lines.length,
     context_tokens: estimate_context_tokens(row.content),
     worksWith: row.works_with,
-    // Posts don't record tested models yet.
-    tested_models: [],
+    tested_models: to_tested_models(row.tested_models, row.recommended_models),
     excerpt: lines.slice(0, row.preview_line_count).join("\n"),
     outputExamples: [],
     title: row.title,

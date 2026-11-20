@@ -4,6 +4,19 @@ import type { PromptPostField, ValidationIssue } from "@/lib/validation/promptPo
 
 export type FieldErrors = Partial<Record<PromptPostField, ValidationIssue>>;
 
+function read_list(formData: FormData, field: string): string[] {
+  return formData.getAll(field).filter((value) => typeof value === "string");
+}
+
+/** The two model lists the form sends, as one choice per tested model. */
+function read_tested_models(formData: FormData): { model_id: string; recommended: boolean }[] {
+  const recommended = read_list(formData, "recommendedModels");
+  return read_list(formData, "testedModels").map((model_id) => ({
+    model_id,
+    recommended: recommended.includes(model_id),
+  }));
+}
+
 function readText(formData: FormData, field: string): string {
   const value = formData.get(field);
   return typeof value === "string" ? value : "";
@@ -23,7 +36,8 @@ export function readSubmission(formData: FormData, with_note = false): Record<st
     meantFor: readText(formData, "meantFor"),
     highlights: readText(formData, "highlights"),
     usageSteps: readText(formData, "usageSteps"),
-    worksWith: formData.getAll("worksWith").filter((value) => typeof value === "string"),
+    worksWith: read_list(formData, "worksWith"),
+    testedModels: read_tested_models(formData),
     file: formData.get("file"),
     previewLineCount: readText(formData, "previewLineCount"),
   };

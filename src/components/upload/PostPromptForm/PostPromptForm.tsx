@@ -6,6 +6,7 @@ import { useReducer, useState, useTransition, type FormEvent, type ReactElement,
 import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField/PostFormField";
+import { ai_models, model_families, model_family_names, type ModelId } from "@/data/aiModels";
 import { promptCategories } from "@/data/prompts";
 import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";
 import { PromptPostForm, type PromptPostValues } from "@/lib/forms/PromptPostForm";
@@ -23,7 +24,7 @@ import { push_revision, type PushRevisionResult } from "@/server/reviews/actions
 import form_styles from "@/styles/form.module.css";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "file">;
+type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "testedModels" | "file">;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 type PostPromptFormProps =
@@ -51,7 +52,8 @@ function getFieldId(field: PromptPostField): string {
 
 /** Moves focus to a field (the first box of a checkbox group) to lead the user to what needs a change. */
 function focusField(field: PromptPostField): void {
-  const id = field === "worksWith" ? `${getFieldId(field)}-0` : getFieldId(field);
+  const is_group = field === "worksWith" || field === "testedModels";
+  const id = is_group ? `${getFieldId(field)}-0` : getFieldId(field);
   document.getElementById(id)?.focus();
 }
 
@@ -119,6 +121,24 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   function toggleTool(tool: string, isChecked: boolean): void {
     const tools = form.getValue("worksWith");
     updateField("worksWith", isChecked ? [...tools, tool] : tools.filter((value) => value !== tool));
+  }
+
+  /** Ticking a model marks it tested; unticking it also drops its recommendation. */
+  function toggle_model(model_id: ModelId, is_tested: boolean): void {
+    const models = form.getValue("testedModels");
+    updateField(
+      "testedModels",
+      is_tested ? [...models, { model_id, recommended: false }] : models.filter((model) => model.model_id !== model_id),
+    );
+  }
+
+  function toggle_recommended(model_id: ModelId, is_recommended: boolean): void {
+    updateField(
+      "testedModels",
+      form
+        .getValue("testedModels")
+        .map((model) => (model.model_id === model_id ? { ...model, recommended: is_recommended } : model)),
+    );
   }
 
   function showFieldErrors(fieldErrors: IssueMap): void {
@@ -238,6 +258,9 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   }
 
   const toolsGuidance = getGuidanceText("worksWith");
+  const models_guidance = getGuidanceText("testedModels");
+  // Every model, numbered in reading order so the first box gets the field's focus id (`-0`).
+  const model_ids = Object.keys(ai_models) as ModelId[];
 
   return (
     <form key={formKey} className={styles.form} noValidate onSubmit={submitPost} aria-busy={isSubmitting}>
@@ -337,6 +360,70 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             hidden={toolsGuidance === ""}
           >
             {toolsGuidance}
+          </p>
+        </fieldset>
+        <fieldset
+          className={styles.tools}
+          aria-describedby="post-tested-models-hint post-tested-models-guidance"
+          aria-invalid={getIssue("testedModels") !== null}
+        >
+          <legend className={form_styles.label}>{t("fields.testedModels.label")}</legend>
+          <p id="post-tested-models-hint" className={form_styles.hint}>
+            {t("fields.testedModels.hint")}
+          </p>
+          <div className={styles.modelFamilies}>
+            {model_families.map((family) => (
+              <div key={family} className={styles.modelFamily}>
+                <p className={styles.modelFamilyName} aria-hidden="true">
+                  {model_family_names[family]}
+                </p>
+                <ul className={styles.modelList} aria-label={model_family_names[family]}>
+                  {model_ids
+                    .filter((model_id) => ai_models[model_id].family === family)
+                    .map((model_id) => {
+                      const choice = form.getValue("testedModels").find((model) => model.model_id === model_id);
+                      const name = ai_models[model_id].name;
+                      return (
+                        <li key={model_id} className={styles.modelRow}>
+                          <label className={styles.tool}>
+                            <input
+                              id={`${getFieldId("testedModels")}-${model_ids.indexOf(model_id)}`}
+                              type="checkbox"
+                              name="testedModels"
+                              value={model_id}
+                              checked={choice !== undefined}
+                              onChange={(event) => toggle_model(model_id, event.target.checked)}
+                              onBlur={() => leaveField("testedModels")}
+                            />
+                            {name}
+                          </label>
+                          {choice && (
+                            <label className={styles.recommend}>
+                              <input
+                                type="checkbox"
+                                name="recommendedModels"
+                                value={model_id}
+                                checked={choice.recommended}
+                                aria-label={t("fields.testedModels.recommendedLabel", { model: name })}
+                                onChange={(event) => toggle_recommended(model_id, event.target.checked)}
+                              />
+                              <span aria-hidden="true">{t("fields.testedModels.recommended")}</span>
+                            </label>
+                          )}
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p
+            id="post-tested-models-guidance"
+            className={form_styles.guidance}
+            aria-live="polite"
+            hidden={models_guidance === ""}
+          >
+            {models_guidance}
           </p>
         </fieldset>
       </fieldset>
