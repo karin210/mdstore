@@ -115,9 +115,11 @@
         "works_with": "Tools tested with",
         "tested_models": "Models tested with",
         "recommended_models": "Recommended models",
+        "output_examples": "Output examples",
         "preview_line_count": "Free preview length",
         "file_name": "File name"
-      }
+      },
+      "examples": "Output examples"
     },
     "changes": {
       "against": {

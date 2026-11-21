@@ -20,6 +20,7 @@ export const LISTING_FIELDS = [
   "works_with",
   "tested_models",
   "recommended_models",
+  "output_examples",
   "preview_line_count",
   "file_name",
 ] as const;
@@ -77,9 +78,15 @@ export function build_timeline(review: Review, revisions: Revision[], comments: 
 
 function format_field(field: ListingField, value: Revision[ListingField]): string {
   if (!Array.isArray(value)) return String(value);
+  // Examples read as their captions (or the stored file's name when there is none), one per line.
+  if (field === "output_examples") {
+    return (value as Revision["output_examples"])
+      .map((example) => example.caption || example.path.split("/").pop() || example.path)
+      .join("\n");
+  }
   // Model ids read as the models' names; an id the registry no longer knows stays as it is.
   const is_models = field === "tested_models" || field === "recommended_models";
-  return value.map((item) => (is_models && is_model_id(item) ? ai_models[item].name : item)).join("\n");
+  return (value as string[]).map((item) => (is_models && is_model_id(item) ? ai_models[item].name : item)).join("\n");
 }
 
 /** The listing fields whose value differs between two revisions. */

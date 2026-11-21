@@ -7,6 +7,7 @@ import {
   checkPreviewLineCount,
   checkText,
   checkWorksWith,
+  check_output_examples,
   check_tested_models,
   PREVIEW_LINES,
   PROMPT_POST_FIELDS,
@@ -15,6 +16,17 @@ import {
   type TestedModelChoice,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
+
+/**
+ * One output example on the form: a picked image (`file`, uploaded on submit; `path` stays null until
+ * then) or one already stored (`path` set, no file), like those of the previous version.
+ */
+export interface OutputExampleItem {
+  id: string;
+  caption: string;
+  path: string | null;
+  file: File | null;
+}
 
 export interface PromptPostValues {
   kind: PromptKind;
@@ -29,6 +41,7 @@ export interface PromptPostValues {
   testedModels: TestedModelChoice[];
   file: File | null;
   previewLineCount: string;
+  outputExamples: OutputExampleItem[];
 }
 
 const EMPTY_POST: PromptPostValues = {
@@ -44,6 +57,7 @@ const EMPTY_POST: PromptPostValues = {
   testedModels: [],
   file: null,
   previewLineCount: String(PREVIEW_LINES.default),
+  outputExamples: [],
 };
 
 /**
@@ -83,10 +97,15 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkFile(values.file, this.is_revision);
       case "previewLineCount":
         return checkPreviewLineCount(values.previewLineCount);
+      case "outputExamples":
+        return check_output_examples(values.outputExamples);
     }
   }
 
-  /** The values as the multipart body the server actions read (the file travels as a File). */
+  /**
+   * The values as the multipart body the server actions read (the file travels as a File). The output
+   * examples travel as storage paths, so every picked image must be uploaded first (those without a path are left out).
+   */
   toFormData(): FormData {
     const formData = new FormData();
     const values = this.values;
@@ -103,6 +122,11 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     values.testedModels.forEach((model) => {
       formData.append("testedModels", model.model_id);
       if (model.recommended) formData.append("recommendedModels", model.model_id);
+    });
+    values.outputExamples.forEach((example) => {
+      if (!example.path) return;
+      formData.append("outputExample", example.path);
+      formData.append("outputExampleCaption", example.caption);
     });
     if (values.file) formData.set("file", values.file);
     formData.set("previewLineCount", values.previewLineCount);

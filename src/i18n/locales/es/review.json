@@ -115,9 +115,11 @@
         "works_with": "Herramientas con las que se probó",
         "tested_models": "Modelos con los que se probó",
         "recommended_models": "Modelos recomendados",
+        "output_examples": "Ejemplos de resultado",
         "preview_line_count": "Largo de la vista previa gratis",
         "file_name": "Nombre del archivo"
-      }
+      },
+      "examples": "Ejemplos de resultado"
     },
     "changes": {
       "against": {

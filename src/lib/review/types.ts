@@ -43,6 +43,8 @@ export interface Revision {
   works_with: string[];
   tested_models: string[];
   recommended_models: string[];
+  /** Screenshots of the output: paths in the `output-examples` bucket with captions. */
+  output_examples: { path: string; caption: string }[];
   content: string;
   preview_line_count: number;
 }

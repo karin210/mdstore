@@ -21,6 +21,7 @@ function make_revision(overrides: Partial<Revision>): Revision {
     works_with: ["Cursor"],
     tested_models: [],
     recommended_models: [],
+    output_examples: [],
     content: "line 1\n",
     preview_line_count: 5,
     ...overrides,

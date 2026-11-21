@@ -143,3 +143,65 @@
   outline-offset: 0.1875rem;
   border-radius: var(--radius-sm);
 }
+
+/* Output examples: the picked or stored images, each with a caption and a remove button */
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.thumb {
+  flex: none;
+  width: 6rem;
+  height: 4rem;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.thumb[data-placeholder="true"] {
+  background: var(--color-secondary);
+}
+
+.exampleBody {
+  display: flex;
+  flex: 1 1 14rem;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+
+.exampleName {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-ink-muted);
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+}
+
+.removeExample {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary-text);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}

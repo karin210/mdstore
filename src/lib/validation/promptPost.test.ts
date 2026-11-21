@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { prompt_kinds } from "@/data/prompts";
-import { check_tested_models, checkKind, promptPostSchema } from "@/lib/validation/promptPost";
+import { check_output_examples, check_tested_models, checkKind, promptPostSchema } from "@/lib/validation/promptPost";
 
 describe("checkKind", () => {
   it.each(prompt_kinds)("accepts %s", (kind) => {
@@ -26,6 +26,7 @@ describe("promptPostSchema kind", () => {
     testedModels: [],
     file: new File(["# Form UX\n"], "form-ux.md"),
     previewLineCount: "12",
+    outputExamples: [],
   };
 
   it.each(prompt_kinds)("accepts the %s kind", (kind) => {
@@ -60,5 +61,39 @@ describe("check_tested_models", () => {
         { model_id: "gpt-5-1", recommended: true },
       ]),
     ).toEqual({ key: "unknownModel" });
+  });
+});
+
+describe("check_output_examples", () => {
+  const png = { type: "image/png", size: 1024 };
+  const stored = (path = "11111111-1111-1111-1111-111111111111/22222222-2222-2222-2222-222222222222.png") => ({
+    caption: "",
+    path,
+    file: null,
+  });
+
+  it("accepts no examples, picked images and stored ones together", () => {
+    expect(check_output_examples([])).toBeNull();
+    expect(check_output_examples([{ caption: "A form", path: null, file: png }, stored()])).toBeNull();
+  });
+
+  it("refuses more than six, other file types, big files and long captions", () => {
+    expect(check_output_examples(Array.from({ length: 7 }, () => stored()))).toEqual({
+      key: "tooManyImages",
+      values: { max: 6 },
+    });
+    expect(check_output_examples([{ caption: "", path: null, file: { type: "image/gif", size: 10 } }])).toEqual({
+      key: "imageType",
+    });
+    expect(check_output_examples([{ caption: "", path: null, file: { type: "image/png", size: 0 } }])).toEqual({
+      key: "imageType",
+    });
+    expect(
+      check_output_examples([{ caption: "", path: null, file: { type: "image/png", size: 2 * 1024 * 1024 + 1 } }]),
+    ).toEqual({ key: "imageTooLarge" });
+    expect(check_output_examples([{ caption: "x".repeat(121), path: null, file: png }])).toEqual({
+      key: "tooLong",
+      values: { max: 120 },
+    });
   });
 });

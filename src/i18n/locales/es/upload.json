@@ -93,7 +93,8 @@
       "sections": {
         "basics": "Lo básico",
         "details": "Qué hace",
-        "file": "El archivo"
+        "file": "El archivo",
+        "examples": "Ejemplos de resultado"
       },
       "fields": {
         "kind": {
@@ -150,6 +151,13 @@
         "previewLineCount": {
           "label": "Largo de la vista previa gratis (líneas)",
           "hint": "Cuántas líneas iniciales leen los visitantes antes de descargar."
+        },
+        "outputExamples": {
+          "label": "Capturas del resultado (opcional)",
+          "hint": "Muestra lo que produce el prompt: hasta {max} imágenes PNG, JPEG o WebP, de 2 MB cada una. Quien compra juzga un prompt por sus resultados.",
+          "captionLabel": "Descripción del ejemplo {number} (opcional)",
+          "stored": "Ejemplo {number}, ya guardado",
+          "remove": "Quitar el ejemplo {number}"
         }
       },
       "submit": "Publicar prompt",
@@ -162,7 +170,8 @@
         "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para publicar tu prompt.",
         "usernameRequired": "Elige un nombre de usuario antes de publicar.",
         "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}.",
-        "notConfigured": "Publicar aún no está disponible. Inténtalo más tarde."
+        "notConfigured": "Publicar aún no está disponible. Inténtalo más tarde.",
+        "imageUpload": "No se pudieron subir las imágenes. Revisa tu conexión e inténtalo de nuevo."
       }
     },
     "validation": {
@@ -180,7 +189,10 @@
       "fileEmpty": "El archivo está vacío. Elige el archivo con tu prompt.",
       "previewRange": "Usa un número del {min} al {max}.",
       "chooseKind": "Elige prompt, skill o agente.",
-      "unknownModel": "Elige modelos solo de la lista, una vez cada uno."
+      "unknownModel": "Elige modelos solo de la lista, una vez cada uno.",
+      "imageType": "Usa imágenes PNG, JPEG o WebP de hasta 2 MB, de tu propia cuenta.",
+      "imageTooLarge": "Cada imagen puede pesar hasta 2 MB.",
+      "tooManyImages": "Usa como máximo {max} imágenes."
     },
     "outline": {
       "file": "upload.md",

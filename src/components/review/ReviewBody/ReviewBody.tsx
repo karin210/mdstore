@@ -1,4 +1,5 @@
 import { getFormatter, getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { ReactElement } from "react";
 import { PickUsernameForm } from "@/components/shared/PickUsernameForm/PickUsernameForm";
@@ -13,6 +14,7 @@ import { ReviewTimeline } from "@/components/review/ReviewTimeline/ReviewTimelin
 import { WithdrawButton } from "@/components/review/WithdrawButton/WithdrawButton";
 import { PostPromptForm } from "@/components/upload/PostPromptForm/PostPromptForm";
 import { Link } from "@/i18n/navigation";
+import { output_example_url } from "@/lib/outputExamples";
 import { get_review_revisions } from "@/lib/review/reviewView";
 import { is_review_active, type Review, type Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
@@ -216,6 +218,33 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 comments={line_comments.filter((comment) => comment.side === "new")}
                 can_comment={can_comment_on_lines}
               />
+              {selected_revision.output_examples.length > 0 && (
+                <div className={review_styles.card}>
+                  <p className={review_styles.cardTitle}>{t("file.examples")}</p>
+                  <ul className={styles.examples}>
+                    {selected_revision.output_examples.map((example) => {
+                      const src = output_example_url(example.path);
+                      return (
+                        src && (
+                          <li key={example.path}>
+                            <figure className={styles.example}>
+                              <Image
+                                src={src}
+                                alt={example.caption || selected_revision.title}
+                                width={320}
+                                height={200}
+                                unoptimized
+                                className={styles.exampleImage}
+                              />
+                              {example.caption && <figcaption>{example.caption}</figcaption>}
+                            </figure>
+                          </li>
+                        )
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             </section>
           )}
 
@@ -259,6 +288,12 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                       recommended: latest_revision_of_post.recommended_models.includes(model_id),
                     })),
                     previewLineCount: String(latest_revision_of_post.preview_line_count),
+                    outputExamples: latest_revision_of_post.output_examples.map((example) => ({
+                      id: example.path,
+                      caption: example.caption,
+                      path: example.path,
+                      file: null,
+                    })),
                   }}
                 />
               </div>

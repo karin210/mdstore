@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useReducer, useState, useTransition, type FormEvent, type ReactElement, type ReactNode } from "react";
 import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
@@ -9,8 +10,13 @@ import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField
 import { ai_models, model_families, model_family_names, type ModelId } from "@/data/aiModels";
 import { promptCategories } from "@/data/prompts";
 import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";
-import { PromptPostForm, type PromptPostValues } from "@/lib/forms/PromptPostForm";
+import { PromptPostForm, type OutputExampleItem, type PromptPostValues } from "@/lib/forms/PromptPostForm";
+import { new_output_example_path, OUTPUT_EXAMPLES_BUCKET, output_example_url } from "@/lib/outputExamples";
+import { createBrowserSupabase } from "@/lib/supabase/browserClient";
 import {
+  MAX_OUTPUT_IMAGES,
+  OUTPUT_CAPTION_MAX_LENGTH,
+  OUTPUT_IMAGE_TYPES,
   PREVIEW_LINES,
   PROMPT_KINDS,
   PROMPT_POST_FIELDS,
@@ -24,7 +30,10 @@ import { push_revision, type PushRevisionResult } from "@/server/reviews/actions
 import form_styles from "@/styles/form.module.css";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<PromptPostField, "kind" | "category" | "worksWith" | "testedModels" | "file">;
+type TextField = Exclude<
+  PromptPostField,
+  "kind" | "category" | "worksWith" | "testedModels" | "file" | "outputExamples"
+>;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 type PostPromptFormProps =
@@ -141,6 +150,74 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
     );
   }
 
+  /** A picked image's size for the list, e.g. "340 KB". */
+  function format_size(bytes: number): string {
+    if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  function add_example_images(files: FileList | null): void {
+    if (!files || files.length === 0) return;
+    const picked: OutputExampleItem[] = Array.from(files).map((file) => ({
+      id: crypto.randomUUID(),
+      caption: "",
+      path: null,
+      file,
+    }));
+    updateField("outputExamples", [...form.getValue("outputExamples"), ...picked]);
+    leaveField("outputExamples");
+  }
+
+  function change_example_caption(id: string, caption: string): void {
+    updateField(
+      "outputExamples",
+      form.getValue("outputExamples").map((example) => (example.id === id ? { ...example, caption } : example)),
+    );
+  }
+
+  function remove_example(id: string): void {
+    const removed = form.getValue("outputExamples").find((example) => example.id === id);
+    updateField(
+      "outputExamples",
+      form.getValue("outputExamples").filter((example) => example.id !== id),
+    );
+    // A picked image that already went to Storage (in a submit that failed later) is no longer wanted: best effort.
+    if (removed?.file && removed.path) {
+      void createBrowserSupabase()?.storage.from(OUTPUT_EXAMPLES_BUCKET).remove([removed.path]);
+    }
+  }
+
+  /**
+   * Uploads the picked images straight to Storage, into the user's own folder: a Server Action can't
+   * carry them (hosting caps request bodies at 4.5 MB), so the action only receives their paths. The ones
+   * that went up keep their path, so a retry after a failure doesn't send them again.
+   */
+  async function upload_example_images(): Promise<boolean> {
+    const pending = form.getValue("outputExamples").filter((example) => example.file && !example.path);
+    if (pending.length === 0) return true;
+    const supabase = createBrowserSupabase();
+    const user_id = supabase ? (await supabase.auth.getClaims()).data?.claims.sub : undefined;
+    if (!supabase || !user_id) return false;
+
+    const results = await Promise.all(
+      pending.map(async (example) => {
+        const file = example.file as File;
+        const path = new_output_example_path(user_id, file.type);
+        const { error } = await supabase.storage
+          .from(OUTPUT_EXAMPLES_BUCKET)
+          .upload(path, file, { contentType: file.type, cacheControl: "31536000" });
+        return { id: example.id, path: error ? null : path };
+      }),
+    );
+    const paths = new Map(results.map((result) => [result.id, result.path]));
+    form.setValue(
+      "outputExamples",
+      form.getValue("outputExamples").map((example) => ({ ...example, path: paths.get(example.id) ?? example.path })),
+    );
+    rerender();
+    return results.every((result) => result.path !== null);
+  }
+
   function showFieldErrors(fieldErrors: IssueMap): void {
     setServerIssues(fieldErrors);
     setErrorMessage(t("fixFields"));
@@ -205,14 +282,17 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
       focusField(invalidField);
       return;
     }
-    if (props.mode === "revision") {
-      const form_data = form.toFormData();
-      form_data.set("note", note);
-      const post_id = props.post_id;
-      startSubmit(async () => showRevisionResult(await push_revision(post_id, form_data)));
-      return;
-    }
     startSubmit(async () => {
+      if (!(await upload_example_images())) {
+        setErrorMessage(t("errors.imageUpload"));
+        return;
+      }
+      if (props.mode === "revision") {
+        const form_data = form.toFormData();
+        form_data.set("note", note);
+        showRevisionResult(await push_revision(props.post_id, form_data));
+        return;
+      }
       showResult(await postPrompt(form.toFormData()));
     });
   }
@@ -257,6 +337,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
     );
   }
 
+  const examples = form.getValue("outputExamples");
   const toolsGuidance = getGuidanceText("worksWith");
   const models_guidance = getGuidanceText("testedModels");
   // Every model, numbered in reading order so the first box gets the field's focus id (`-0`).
@@ -455,6 +536,71 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
           />
         </PostFormField>
         {renderTextField("previewLineCount")}
+      </fieldset>
+
+      <fieldset className={styles.group}>
+        <legend className={styles.legend}>{t("sections.examples")}</legend>
+        <PostFormField
+          id="post-output-examples"
+          label={t("fields.outputExamples.label")}
+          hint={t("fields.outputExamples.hint", { max: MAX_OUTPUT_IMAGES })}
+          guidanceText={getGuidanceText("outputExamples")}
+        >
+          <input
+            id="post-output-examples"
+            type="file"
+            multiple
+            accept={OUTPUT_IMAGE_TYPES.join(",")}
+            className={form_styles.input}
+            aria-describedby={getDescribedBy("post-output-examples", true)}
+            {...getControlState("outputExamples")}
+            onChange={(event) => {
+              add_example_images(event.target.files);
+              // Cleared so choosing the same file again (after removing it) still fires a change.
+              event.target.value = "";
+            }}
+          />
+        </PostFormField>
+        {examples.length > 0 && (
+          <ul className={styles.examples}>
+            {examples.map((example, index) => {
+              const number = index + 1;
+              const caption_id = `post-output-example-caption-${index}`;
+              const stored_url = example.file ? null : example.path ? output_example_url(example.path) : null;
+              return (
+                <li key={example.id} className={styles.example}>
+                  {stored_url ? (
+                    <Image src={stored_url} alt="" width={96} height={64} unoptimized className={styles.thumb} />
+                  ) : (
+                    <span className={styles.thumb} data-placeholder="true" aria-hidden="true" />
+                  )}
+                  <div className={styles.exampleBody}>
+                    <p className={styles.exampleName}>
+                      {example.file
+                        ? `${example.file.name} · ${format_size(example.file.size)}`
+                        : t("fields.outputExamples.stored", { number })}
+                    </p>
+                    <label htmlFor={caption_id} className={form_styles.label}>
+                      {t("fields.outputExamples.captionLabel", { number })}
+                    </label>
+                    <input
+                      id={caption_id}
+                      type="text"
+                      autoComplete="off"
+                      className={form_styles.input}
+                      maxLength={OUTPUT_CAPTION_MAX_LENGTH}
+                      value={example.caption}
+                      onChange={(event) => change_example_caption(example.id, event.target.value)}
+                    />
+                  </div>
+                  <button type="button" className={styles.removeExample} onClick={() => remove_example(example.id)}>
+                    {t("fields.outputExamples.remove", { number })}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </fieldset>
 
       {is_revision && (

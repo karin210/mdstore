@@ -22,7 +22,10 @@ export type PromptKind = (typeof prompt_kinds)[number];
  */
 export type PromptSlug = keyof Messages["prompts"]["listings"];
 
-/** A screenshot of what the prompt produced, served from public/ (e.g. "/examples/global/form.webp"). */
+/**
+ * A screenshot of what the prompt produced: a file under public/ (e.g. "/examples/global/form.webp") or, for
+ * posts, a public Storage URL (see src/lib/outputExamples.ts). The caption is empty when the author wrote none.
+ */
 export interface OutputExample {
   src: string;
   /** Describes what the screenshot shows, for screen readers. */

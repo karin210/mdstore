@@ -13,6 +13,7 @@ import {
   toFieldErrors,
   type FieldErrors,
 } from "@/server/prompts/submission";
+import { can_use_output_examples, to_output_examples } from "@/server/prompts/outputExamples";
 import { INVITE_TOKEN_PATTERN } from "@/server/reviews/invites";
 import { createServerSupabase } from "@/server/supabase/serverClient";
 
@@ -91,14 +92,28 @@ export async function push_revision(post_id: string, formData: FormData): Promis
   const { data: latest, error: latest_error } = await supabase
     .from("prompt_revisions")
     // Named foreign key: posted_prompts.live_revision_id links the two tables the other way too.
-    .select("file_name, content, posted_prompts!prompt_revisions_post_id_fkey(slug)")
+    .select("file_name, content, output_examples, posted_prompts!prompt_revisions_post_id_fkey(slug)")
     .eq("post_id", post_id)
     .order("number", { ascending: false })
     .limit(1)
-    .maybeSingle<{ file_name: string; content: string; posted_prompts: { slug: string } | null }>();
+    .maybeSingle<{
+      file_name: string;
+      content: string;
+      output_examples: unknown;
+      posted_prompts: { slug: string } | null;
+    }>();
   if (latest_error) return to_error("reviews.pushRevision", latest_error);
   if (!latest?.posted_prompts) return { status: "error", error_key: "notFound" };
   const slug = latest.posted_prompts.slug;
+
+  // Examples are either fresh uploads in the user's own folder or ones kept from the latest revision.
+  const { data: claims } = await supabase.auth.getClaims();
+  const user_id = claims?.claims.sub;
+  if (!user_id) return { status: "error", error_key: "unauthenticated" };
+  const kept_paths = to_output_examples(latest.output_examples).map((example) => example.path);
+  if (!can_use_output_examples(input.outputExamples, user_id, kept_paths)) {
+    return { status: "invalid", field_errors: { outputExamples: { key: "imageType" } }, note_too_long: false };
+  }
 
   let content = latest.content;
   let file_name = latest.file_name;
@@ -129,6 +144,7 @@ export async function push_revision(post_id: string, formData: FormData): Promis
     p_note: input.note || null,
     p_tested_models: input.testedModels.map((model) => model.model_id),
     p_recommended_models: input.testedModels.filter((model) => model.recommended).map((model) => model.model_id),
+    p_output_examples: input.outputExamples,
   });
   return result.status === "ok" ? { status: "ok", number: result.value } : result;
 }

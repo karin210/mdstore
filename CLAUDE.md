@@ -43,7 +43,7 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 - Vitest 5 for unit tests of plain TypeScript (validation rules, form classes, helpers), as `*.test.ts` next to the code, Node environment, in two projects: `site` (`src/**`, `@/` resolves through Vite's built-in `resolve.tsconfigPaths`) and `cli` (`packages/cli/src/**`, relative imports). Async Server Components need E2E tests (Playwright) instead, per the Next docs.
 - TypeScript 5: stay off TypeScript 7 until it ships a JavaScript API (the `next` editor plugin needs it).
 - Supabase CLI (dev dependency, config in `supabase/config.toml`): applies migrations and generates the table types.
-- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`. Database: `docs/database.md`. Review workflow (pull-request style reviews, co-authors, invites): `docs/review-workflow.md`. Roles (visitor, signed-in user, owner, co-author, admin), what each can do and where it is enforced: `docs/roles-and-access.md`. Local Supabase: `docs/local-supabase-setup.md`.
+- Full reasoning, traps and pending work for the tooling: `docs/dev-tooling.md`. Database: `docs/database.md`. Review workflow (pull-request style reviews, co-authors, invites): `docs/review-workflow.md`. Authentication (sign-up, sign-in, email links, sessions, account changes): `docs/authentication.md`. Roles (visitor, signed-in user, owner, co-author, admin), what each can do and where it is enforced: `docs/roles-and-access.md`. Local Supabase: `docs/local-supabase-setup.md`.
 - CI: `.github/workflows/ci.yml` runs lint, format check, tests and build (site, then the CLI's tests and build) on pushes to `main`/`dev` and on pull requests (Node from `mise.toml`, no secrets needed).
 
 ## Commands

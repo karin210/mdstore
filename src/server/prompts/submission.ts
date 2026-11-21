@@ -17,6 +17,12 @@ function read_tested_models(formData: FormData): { model_id: string; recommended
   }));
 }
 
+/** The output examples the form sends as two parallel lists: the storage paths, and a caption for each. */
+function read_output_examples(formData: FormData): { path: string; caption: string }[] {
+  const captions = read_list(formData, "outputExampleCaption");
+  return read_list(formData, "outputExample").map((path, index) => ({ path, caption: captions[index] ?? "" }));
+}
+
 function readText(formData: FormData, field: string): string {
   const value = formData.get(field);
   return typeof value === "string" ? value : "";
@@ -40,6 +46,7 @@ export function readSubmission(formData: FormData, with_note = false): Record<st
     testedModels: read_tested_models(formData),
     file: formData.get("file"),
     previewLineCount: readText(formData, "previewLineCount"),
+    outputExamples: read_output_examples(formData),
   };
   if (with_note) submission.note = readText(formData, "note");
   return submission;

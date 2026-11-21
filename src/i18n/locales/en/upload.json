@@ -93,7 +93,8 @@
       "sections": {
         "basics": "The basics",
         "details": "What it does",
-        "file": "The file"
+        "file": "The file",
+        "examples": "Output examples"
       },
       "fields": {
         "kind": {
@@ -150,6 +151,13 @@
         "previewLineCount": {
           "label": "Free preview length (lines)",
           "hint": "How many opening lines visitors read before downloading."
+        },
+        "outputExamples": {
+          "label": "Screenshots of the output (optional)",
+          "hint": "Show what the prompt produces: up to {max} images, PNG, JPEG or WebP, 2 MB each. Buyers judge a prompt by its results.",
+          "captionLabel": "Caption for example {number} (optional)",
+          "stored": "Example {number}, already saved",
+          "remove": "Remove example {number}"
         }
       },
       "submit": "Post prompt",
@@ -162,7 +170,8 @@
         "unauthenticated": "Your session ended. Sign in again to post your prompt.",
         "usernameRequired": "Pick a username before posting.",
         "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}.",
-        "notConfigured": "Posting isn’t available yet. Please try again later."
+        "notConfigured": "Posting isn’t available yet. Please try again later.",
+        "imageUpload": "Couldn’t upload the images. Check your connection and try again."
       }
     },
     "validation": {
@@ -180,7 +189,10 @@
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
       "previewRange": "Use a number from {min} to {max}.",
       "chooseKind": "Choose prompt, skill or agent.",
-      "unknownModel": "Pick models from the list only, once each."
+      "unknownModel": "Pick models from the list only, once each.",
+      "imageType": "Use PNG, JPEG or WebP images of up to 2 MB, in your own account.",
+      "imageTooLarge": "Each image can be up to 2 MB.",
+      "tooManyImages": "Use at most {max} images."
     },
     "outline": {
       "file": "upload.md",

@@ -24,6 +24,9 @@ export interface ValidationIssue {
     | "fileType"
     | "fileTooLarge"
     | "fileEmpty"
+    | "imageType"
+    | "imageTooLarge"
+    | "tooManyImages"
     | "previewRange";
   values?: Record<string, number>;
 }
@@ -45,6 +48,12 @@ export const PROMPT_KINDS = prompt_kinds;
 export type { PromptKind };
 
 export const MAX_FILE_BYTES = 200 * 1024;
+
+/** Output examples: screenshots of what the prompt produces (the bucket's own limits match; see the migration). */
+export const OUTPUT_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"] as const;
+export const MAX_OUTPUT_IMAGES = 6;
+export const MAX_OUTPUT_IMAGE_BYTES = 2 * 1024 * 1024;
+export const OUTPUT_CAPTION_MAX_LENGTH = 120;
 export const PREVIEW_LINES = { min: 5, max: 40, default: 12 } as const;
 
 const TEXT_LIMITS = {
@@ -67,8 +76,32 @@ export interface TestedModelChoice {
   recommended: boolean;
 }
 
+/** One output example as the server stores it: a path in the `output-examples` bucket and its caption. */
+export interface OutputExample {
+  path: string;
+  caption: string;
+}
+
+/**
+ * One example on the form: either already stored (`path` set, from the previous version or a finished
+ * upload) or a picked image (`file`) the browser uploads on submit, straight to Storage.
+ */
+export interface OutputExampleDraft {
+  caption: string;
+  path: string | null;
+  file: { type: string; size: number } | null;
+}
+
 export type PromptPostField =
-  TextField | ListField | "kind" | "category" | "worksWith" | "testedModels" | "file" | "previewLineCount";
+  | TextField
+  | ListField
+  | "kind"
+  | "category"
+  | "worksWith"
+  | "testedModels"
+  | "file"
+  | "previewLineCount"
+  | "outputExamples";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
@@ -84,6 +117,7 @@ export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "testedModels",
   "file",
   "previewLineCount",
+  "outputExamples",
 ];
 
 // ---------------------------------------------------------------------------
@@ -159,6 +193,26 @@ export function checkFileContent(content: string): ValidationIssue | null {
   return content.trim() === "" ? { key: "fileEmpty" } : null;
 }
 
+/** Where an example is stored: the uploader's folder, then a file named by a random id. */
+export const OUTPUT_EXAMPLE_PATH_PATTERN =
+  /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(png|jpg|webp)$/;
+
+/**
+ * Optional: up to MAX_OUTPUT_IMAGES examples, each a PNG, JPEG or WebP of up to MAX_OUTPUT_IMAGE_BYTES (checked
+ * while it is still a picked file), each caption short. Whose files they are is checked on the server.
+ */
+export function check_output_examples(examples: OutputExampleDraft[]): ValidationIssue | null {
+  if (examples.length > MAX_OUTPUT_IMAGES) return { key: "tooManyImages", values: { max: MAX_OUTPUT_IMAGES } };
+  const accepted_types: readonly string[] = OUTPUT_IMAGE_TYPES;
+  const files = examples.flatMap((example) => (example.file ? [example.file] : []));
+  if (files.some((file) => !accepted_types.includes(file.type) || file.size === 0)) return { key: "imageType" };
+  if (files.some((file) => file.size > MAX_OUTPUT_IMAGE_BYTES)) return { key: "imageTooLarge" };
+  if (examples.some((example) => example.caption.trim().length > OUTPUT_CAPTION_MAX_LENGTH)) {
+    return { key: "tooLong", values: { max: OUTPUT_CAPTION_MAX_LENGTH } };
+  }
+  return null;
+}
+
 export function checkPreviewLineCount(valueRaw: string): ValidationIssue | null {
   const valueNumber = Number(valueRaw);
   const isInRange =
@@ -191,7 +245,18 @@ const listSchema = (field: ListField) =>
     .superRefine(asRefinement((value: string) => checkList(field, value)))
     .transform(splitLines);
 
-export const promptPostSchema = z.strictObject({
+const output_examples_schema = z
+  .array(z.strictObject({ path: z.string(), caption: z.string().transform((value) => value.trim()) }))
+  .superRefine((examples, ctx) => {
+    const issue =
+      check_output_examples(examples.map((example) => ({ ...example, file: null }))) ??
+      (examples.every((example) => OUTPUT_EXAMPLE_PATH_PATTERN.test(example.path))
+        ? null
+        : { key: "imageType" as const });
+    if (issue) ctx.addIssue({ code: "custom", message: issue.key, params: issue.values });
+  });
+
+const prompt_post_object = z.strictObject({
   kind: z
     .string()
     .superRefine(asRefinement(checkKind))
@@ -217,7 +282,11 @@ export const promptPostSchema = z.strictObject({
     .string()
     .superRefine(asRefinement(checkPreviewLineCount))
     .transform((value) => Number(value)),
+  /** New uploads (in the poster's folder) and, for a revision, examples kept from the previous version. */
+  outputExamples: output_examples_schema,
 });
+
+export const promptPostSchema = prompt_post_object;
 
 export type PromptPostInput = z.output<typeof promptPostSchema>;
 
@@ -228,7 +297,7 @@ export const REVISION_NOTE_MAX_LENGTH = 1000;
  * A new revision of an existing post: the same fields, a file that may be left out to keep the
  * previous one, and an optional note for the reviewers.
  */
-export const prompt_revision_schema = promptPostSchema.extend({
+export const prompt_revision_schema = prompt_post_object.extend({
   file: z
     .custom<File | null>((value) => value === null || value instanceof File, { message: "fileRequired" })
     .superRefine(asRefinement((file: File | null) => checkFile(file, true)))

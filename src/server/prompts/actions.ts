@@ -8,6 +8,7 @@ import { checkFileContent, promptPostSchema, type PromptPostInput } from "@/lib/
 import { logServerError } from "@/server/logServerError";
 import { get_signed_in_profile } from "@/server/profiles/profiles";
 import { getPostedPromptTag, POSTED_PROMPTS_TAG } from "@/server/prompts/postedPrompts";
+import { can_use_output_examples } from "@/server/prompts/outputExamples";
 import { POSTED_PROMPTS_TABLE } from "@/server/prompts/postedPromptsTable";
 import {
   getFileName,
@@ -68,6 +69,7 @@ async function insertPostedPrompt(
     works_with: input.worksWith,
     tested_models: input.testedModels.map((model) => model.model_id),
     recommended_models: input.testedModels.filter((model) => model.recommended).map((model) => model.model_id),
+    output_examples: input.outputExamples,
     content,
     preview_line_count: input.previewLineCount,
   });
@@ -92,6 +94,11 @@ export async function postPrompt(formData: FormData): Promise<PostPromptResult> 
 
   const parsed = promptPostSchema.safeParse(readSubmission(formData));
   if (!parsed.success) return { status: "invalid", fieldErrors: toFieldErrors(parsed.error.issues) };
+
+  // The images were uploaded by the browser straight to the user's own Storage folder; only paths arrive here.
+  if (!can_use_output_examples(parsed.data.outputExamples, profile.user_id)) {
+    return { status: "invalid", fieldErrors: { outputExamples: { key: "imageType" } } };
+  }
 
   const content = await readMarkdown(parsed.data.file);
   const contentIssue = content === null ? { key: "fileType" as const } : checkFileContent(content);
