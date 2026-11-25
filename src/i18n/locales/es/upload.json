@@ -112,7 +112,7 @@
         },
         "tagline": {
           "label": "Frase destacada",
-          "hint": "Una oración que les diga a los desarrolladores por qué lo quieren."
+          "hint": "Una oración atractiva que describa el resultado principal que obtendrán los desarrolladores."
         },
         "summary": {
           "label": "Resumen",

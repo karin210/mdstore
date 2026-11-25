@@ -112,7 +112,7 @@
         },
         "tagline": {
           "label": "Tagline",
-          "hint": "One sentence that tells developers why they want it."
+          "hint": "Appealing sentence that describes the main result that developers will get."
         },
         "summary": {
           "label": "Summary",
