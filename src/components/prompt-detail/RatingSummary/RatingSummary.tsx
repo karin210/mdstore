@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from "next-intl/server";
+import { useFormatter, useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { RatingStars } from "@/components/shared/RatingStars/RatingStars";
 import type { PromptRating } from "@/lib/rating";
@@ -9,10 +9,13 @@ interface RatingSummaryProps {
   size?: "small" | "large";
 }
 
-/** A post's public rating: stars, the mean out of 5 and how many readers rated it. */
-export async function RatingSummary({ rating, size = "small" }: RatingSummaryProps): Promise<ReactElement> {
-  const t = await getTranslations("promptDetail.ratings");
-  const format = await getFormatter();
+/**
+ * A post's public rating: stars, the mean out of 5 and how many readers rated it. Synchronous (hooks,
+ * not `getTranslations`), so the listing page and the client-side upload preview can both render it.
+ */
+export function RatingSummary({ rating, size = "small" }: RatingSummaryProps): ReactElement {
+  const t = useTranslations("promptDetail.ratings");
+  const format = useFormatter();
 
   if (rating.count === 0) {
     return (

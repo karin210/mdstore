@@ -53,6 +53,7 @@
       "fullLabel": "Full {fileName}"
     },
     "usage": "Suggested use",
+    "unnamedFile": "your file",
     "loading": "Loading prompt…",
     "download": {
       "notFound": "This prompt doesn't exist.",

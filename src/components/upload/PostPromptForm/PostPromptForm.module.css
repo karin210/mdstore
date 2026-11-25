@@ -84,7 +84,46 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-end;
+  gap: var(--space-sm) var(--space-md);
+}
+
+/* Live preview: a link that opens /upload/preview in a new tab, at the top and beside the submit button */
+
+.previewBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2xs) var(--space-sm);
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border: 0.0625rem dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.previewHint {
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+.previewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  border-radius: var(--radius-sm);
+  color: var(--color-primary-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+/* "Opens in a new tab" mark; the visually hidden text says it to screen readers. */
+.previewLink::after {
+  content: "↗" / "";
+  text-decoration: none;
 }
 
 /* Models tested with: one column per family; a tested model gets a "Recommended" toggle beside it */

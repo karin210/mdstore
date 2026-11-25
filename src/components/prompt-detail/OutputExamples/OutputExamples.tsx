@@ -39,8 +39,9 @@ export function OutputExamples({ examples, fileName }: OutputExamplesProps): Rea
                       fill
                       sizes="(min-width: 60rem) 24rem, 90vw"
                       className={styles.image}
-                      // Storage URLs are on another origin (and, locally, a private address the optimizer refuses).
-                      unoptimized={example.src.startsWith("http")}
+                      // Storage URLs are on another origin (and, locally, a private address the optimizer refuses);
+                      // the upload preview shows picked images as blob: URLs, which only the browser can read.
+                      unoptimized={!example.src.startsWith("/")}
                     />
                   </div>
                   {example.caption && <figcaption className={styles.caption}>{example.caption}</figcaption>}

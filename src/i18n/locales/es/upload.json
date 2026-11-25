@@ -160,6 +160,11 @@
           "remove": "Quitar el ejemplo {number}"
         }
       },
+      "preview": {
+        "open": "Vista previa del anuncio",
+        "newTab": "(se abre en una pestaña nueva)",
+        "hint": "Mira tu anuncio tal como se verá publicado, en una pestaña nueva. Se actualiza mientras escribes."
+      },
       "submit": "Publicar prompt",
       "submitting": "Publicando…",
       "submitted": "Enviado a revisión. Se publica cuando un administrador lo apruebe.",
@@ -172,6 +177,20 @@
         "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}.",
         "notConfigured": "Publicar aún no está disponible. Inténtalo más tarde.",
         "imageUpload": "No se pudieron subir las imágenes. Revisa tu conexión e inténtalo de nuevo."
+      }
+    },
+    "preview": {
+      "meta": {
+        "title": "Vista previa del anuncio"
+      },
+      "banner": {
+        "live": "Vista previa: este anuncio aún no está publicado. Sigue a tu formulario mientras escribes; los espacios en blanco son lo que aún no completaste.",
+        "closed": "Se cerró la pestaña del formulario, así que esta vista previa dejó de actualizarse. Vuelve a abrir el formulario para seguir editando."
+      },
+      "noForm": {
+        "title": "No hay formulario que mostrar",
+        "text": "Abre el formulario de publicación en otra pestaña de este navegador y usa “Vista previa del anuncio”. Esta página mostrará tu anuncio mientras lo completas.",
+        "action": "Abrir el formulario de publicación"
       }
     },
     "validation": {

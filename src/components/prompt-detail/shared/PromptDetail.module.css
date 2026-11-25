@@ -461,3 +461,18 @@
   gap: var(--space-md);
   min-width: 0;
 }
+
+/* Upload preview: a part the author hasn't filled in yet stays blank but keeps its space, so the
+   layout doesn't jump as they type. */
+.layout [data-empty] {
+  min-height: 1lh;
+}
+
+.layout .excerpt[data-empty] {
+  min-height: 8lh;
+}
+
+/* A blank pill keeps its place in the line without showing an empty outline. */
+.layout .category[data-empty] {
+  visibility: hidden;
+}

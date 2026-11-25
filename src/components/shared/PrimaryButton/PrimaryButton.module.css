@@ -33,3 +33,16 @@
 .button:active {
   transform: translateY(0.0625rem);
 }
+
+/* A stand-in that looks like the real button but does nothing (the upload preview). */
+.button[aria-disabled="true"] {
+  cursor: default;
+}
+
+.button[aria-disabled="true"]:hover {
+  background: var(--color-primary);
+}
+
+.button[aria-disabled="true"]:active {
+  transform: none;
+}

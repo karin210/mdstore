@@ -32,7 +32,7 @@ The app has two levels of roles: one for the whole site, and one per post.
 | Action                                                    | Visitor | Signed-in user | Co-author | Owner | Admin |
 | --------------------------------------------------------- | :-----: | :------------: | :-------: | :---: | :---: |
 | Browse approved prompts, download free ones, use the API  |   yes   |      yes       |    yes    |  yes  |  yes  |
-| Post a prompt (`/upload`)                                 |         |      yes       |    yes    |  yes  |  yes  |
+| Post a prompt (`/upload`), preview it (`/upload/preview`) |         |      yes       |    yes    |  yes  |  yes  |
 | Profile and my prompts (`/profile`, `/my-prompts`)        |         |      yes       |    yes    |  yes  |  yes  |
 | See a post that isn't approved yet, and its review        |         |                |    yes    |  yes  |  yes  |
 | Push a new revision                                       |         |                |    yes    |  yes  |       |
@@ -57,7 +57,7 @@ Each rule is checked in up to three layers. The database is the one that matters
    - `/prompts/[slug]/review` answers the branded 404, with a real 404 status, to visitors who are neither authors nor admins (`postReviewVisibleToRequest`).
    - `/reviews` answers the same 404 to everyone who isn't an admin (`isAdminRequest`, which calls `is_admin()` as the visitor). The page's existence isn't revealed.
    - A pending post's public page (`/prompts/[slug]`) answers 404 to everyone but its authors and the admins (`postedPromptVisibleToRequest`).
-   - `/profile` and `/my-prompts` redirect signed-out visitors to `/login`, which brings them back after signing in.
+   - `/profile`, `/my-prompts` and `/upload/preview` redirect signed-out visitors to `/login`, which brings them back after signing in.
    - The lookup helpers are in `src/server/prompts/postedPromptExists.ts`. When a lookup itself fails (not "no", but an error), the proxy lets the request through rather than show a misleading 404; the page then decides.
 2. **Page**, while rendering:
    - `/reviews`: `get_review_queue()` (`src/server/reviews/reviewQueue.ts`) calls `is_admin()` again and the page answers `notFound()` unless it returns true.

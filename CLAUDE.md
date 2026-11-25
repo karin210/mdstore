@@ -7,9 +7,9 @@
 **mdstore** is a hub for developing coding prompts. Developers share the prompts they author, and the community gets access to high-quality, tested ones. The prompts are packaged as plain Markdown (`.md`) files: `CLAUDE.md` / `AGENTS.md` instructions, Cursor rules, custom commands and agent playbooks for AI coding tools (Claude Code, Cursor, GitHub Copilot, Aider…). Selling prompts is one of the core features, not the main pitch: the home page H1 and lead lead with developing and sharing, not buying.
 
 - **Buyers** browse listings by category, read a free preview of each file (its first lines), buy it once, and drop the `.md` into their repo. Purchases include future versions of the file.
-- **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use, tools tested with, and optionally the specific models tested with, each one markable as recommended), the `.md` file and the free-preview length. The post is published at once on its own `/prompts/[slug]` page. Posting is free for now; paid posts come with checkout.
+- **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use, tools tested with, and optionally the specific models tested with, each one markable as recommended), the `.md` file and the free-preview length. The post is published at once on its own `/prompts/[slug]` page. Posting is free for now; paid posts come with checkout. While filling in the form, "Preview listing" opens `/upload/preview` in a new tab: the listing exactly as it will look, updated live as they type (also from the "push a new version" form on a review page).
 
-Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), the **login page** (`/login`, sign-up / sign-in tabs), the signed-in **profile** (`/profile`: account details, the five latest uploads with a link to all of them, and forms to change the username, email and password) and **my prompts** (`/my-prompts`: every post the user owns or co-authors, newest first), and the branded 404. Signed-out visitors of `/profile` and `/my-prompts` are redirected to `/login` by `src/proxy.ts`. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. The landing page's "most popular prompts" grid shows up to six approved posts: highest average stars first, newest first among equal averages, then unrated posts newest first (so with no ratings, the six newest); the rule is the database function `popular_prompts()`, read by `src/server/prompts/popularPrompts.ts`. Catalogue listings aren't in it (they have no ratings or dates). Signed-in readers rate approved posts from 1 to 5 stars on the listing page ("Ratings" section; authors can't rate their own); the average and count show under the tagline and in the API. There is no checkout yet.
+Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), its **live preview** (`/upload/preview`, signed-in only), the **login page** (`/login`, sign-up / sign-in tabs), the signed-in **profile** (`/profile`: account details, the five latest uploads with a link to all of them, and forms to change the username, email and password) and **my prompts** (`/my-prompts`: every post the user owns or co-authors, newest first), and the branded 404. Signed-out visitors of `/profile`, `/my-prompts` and `/upload/preview` are redirected to `/login` by `src/proxy.ts`. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. The landing page's "most popular prompts" grid shows up to six approved posts: highest average stars first, newest first among equal averages, then unrated posts newest first (so with no ratings, the six newest); the rule is the database function `popular_prompts()`, read by `src/server/prompts/popularPrompts.ts`. Catalogue listings aren't in it (they have no ratings or dates). Signed-in readers rate approved posts from 1 to 5 stars on the listing page ("Ratings" section; authors can't rate their own); the average and count show under the tagline and in the API. There is no checkout yet.
 
 Every listing has a **kind** (`prompt_kinds` in `src/data/prompts.ts`, column `kind`, revisioned: `prompt`, `skill` or `agent`; authors choose it on the upload form) that decides how a developer gets it (a prompt is copied or downloaded; the CLI installs skills and agents), and a **version** (integer from 1, bumped by hand, by one, in the same commit that changes the catalogue file in `content/prompts/`; posts start at 1) that the CLI compares to find updates. Production: `siteConfig.url` in `src/lib/site.ts` (https://mdstore-seven.vercel.app), also the CLI's default server. How the feature works and how to change it: `docs/cli.md`; what it still needs: `docs/cli-pending.md`.
 
@@ -67,6 +67,9 @@ src/
 │  ├─ layout.tsx             root layout: fonts, metadata title template, header + footer
 │  ├─ page.tsx               landing page (composes the homepage sections)
 │  ├─ upload/page.tsx        "Upload your prompts": hero, benefits, tips, steps, posting form
+│  ├─ upload/preview/page.tsx
+│  │                         live preview of the posting form, in its own tab: the listing's layout
+│  │                         and route index, filled from the form's tab (PostPreview, client-side)
 │  ├─ login/page.tsx         sign-up / sign-in tabs (LoginPanel inside <Suspense>)
 │  ├─ profile/page.tsx       signed-in account: details, latest five uploads, change username /
 │  │                         email / password (each session read inside <Suspense>)
@@ -112,13 +115,19 @@ src/
 │  │                         Markdown file: homeSections (the route index's order), MarkdownField
 │  │                         (hero's WebGL backdrop, lazy, see src/lib/markdownFieldRenderer.ts)
 │  ├─ upload/                used only by /upload: its sections, PostPromptSection (session
-│  │                         check in <Suspense>), PostPromptForm, PostFormField
+│  │                         check in <Suspense>), PostPromptForm, PostFormField,
+│  │                         usePostPreviewSender (the form's side of the live preview) and
+│  │                         PostPreview (the /upload/preview body, reads PostPreviewReceiver)
 │  ├─ profile/               used only by /profile: ProfileSection, AccountDetails, RecentUploads,
 │  │                         UsernameSlot / EmailSlot (session reads), ChangeUsernameForm,
 │  │                         ChangeEmailForm, ChangePasswordForm
 │  ├─ my-prompts/            used only by /my-prompts: MyPromptsList
 │  ├─ login/                 LoginPanel (tabs, owns mode + submission), SignUpForm, SignInForm
-│  ├─ prompt-detail/         used only by /prompts/[slug]: PromptDetail (the page body),
+│  ├─ prompt-detail/         used by /prompts/[slug] (and /upload/preview): PromptDetail (the page
+│  │                         body: breadcrumb, review notice, then PromptListing), PromptListing
+│  │                         (`#prompt-content`, the listing itself, shared with the upload preview;
+│  │                         synchronous and server-free so it renders in the browser too),
+│  │                         listingSections (the route index of a listing, for both routes),
 │  │                         InlineCode (renders `backticks` in listing copy as <code>),
 │  │                         PromptDetailSkeleton (its Suspense fallback), OutputExamples
 │  │                         (screenshots from `outputExamples`, placeholders while empty),
@@ -139,6 +148,9 @@ src/
 │                            prompts.ts in step with the files),
 │                            promptFiles.ts (reads a content/prompts/ file; cached),
 │                            promptView.ts (what a prompt page shows, from either source),
+│                            postPreview.ts (live preview: channel protocol + build_preview_listing,
+│                            form values → listing), PostPreviewReceiver.ts (the preview tab's side),
+│                            postFileName.ts (a post's file name, shared with the server actions),
 │                            getPromptOrNotFound.ts (slug params → prompt or 404),
 │                            safeRedirect.ts, slugify.ts, supabase/ (env, browser client),
 │                            validation/ (credentials + prompt-post rules, shared with the
@@ -155,7 +167,8 @@ src/
 ├─ styles/globals.css        :root tokens, reset, typography, element defaults (no classes)
 │  *.module.css              shared (review, form, section, modal, utilities), page-level (reviewPage)
 │                            and heavy modules, imported as `@/styles/x.module.css`
-└─ proxy.ts                  rewrites unknown /prompts/[slug] (not in the catalogue, not an
+└─ proxy.ts                  redirects signed-out visitors of the account pages (ACCOUNT_PAGES) to
+                             /login; rewrites unknown /prompts/[slug] (not in the catalogue, not an
                              approved post, and not a pending post of the signed-in author or an
                              admin) to the 404 page for a real 404 status, runs next-intl, and
                              refreshes the Supabase session cookies on every request

@@ -25,3 +25,16 @@ export interface PromptView extends Omit<PromptListing, "slug"> {
   /** Readers' stars; only posted prompts can be rated, so catalogue listings have none. */
   rating?: PromptRating;
 }
+
+/**
+ * What the listing block (PromptListing) shows. The page around it keeps the rest: the review notice, the
+ * posted flag, the version, and the category id (the listing takes its label, already translated).
+ */
+export type PromptListingView = Omit<PromptView, "category" | "reviewStatus" | "isPosted" | "version">;
+
+/**
+ * The parts of a listing the upload preview leaves blank (keeping their space) while the author hasn't filled
+ * them in. `file` covers everything measured from the file: its name, length, context and excerpt.
+ */
+export type ListingEmptyField =
+  "file" | "category" | "title" | "tagline" | "summary" | "meantFor" | "highlights" | "usageSteps";

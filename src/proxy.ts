@@ -13,8 +13,11 @@ import { refreshSupabaseSession } from "@/server/supabase/refreshSession";
 
 const handleLocale = createMiddleware(routing);
 
-/** Pages only a signed-in user has: everyone else is sent to /login, and back here afterwards. */
-const ACCOUNT_PAGES = new Set(["profile", "my-prompts"]);
+/**
+ * Pages only a signed-in user has, as paths without the locale: everyone else is sent to /login, and back
+ * here afterwards. The upload preview shows the signed-in user's own form, so it is one of them.
+ */
+const ACCOUNT_PAGES = new Set(["profile", "my-prompts", "upload/preview"]);
 
 /**
  * Whether /prompts/[slug] has something to show this visitor: a catalogue listing, a public posted
@@ -55,7 +58,7 @@ async function privatePageExists(
  *    redirects to the right locale and remembers the choice in a cookie.
  * 3. The Supabase session is refreshed on that response, so signed-in users stay signed in
  *    (Server Components can't write the renewed cookies themselves).
- * 4. Signed-out visitors of the account pages (/profile, /my-prompts) are redirected to /login,
+ * 4. Signed-out visitors of the account pages (/profile, /my-prompts, /upload/preview) are redirected to /login,
  *    which returns them to the page after signing in. A locale redirect from step 2 goes first, so
  *    the login page opens in the visitor's language.
  */
@@ -76,11 +79,12 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return NextResponse.rewrite(new URL(`/${locale}/_unknown-prompt`, request.url));
   }
   const { response, is_signed_in } = await refreshSupabaseSession(request, handleLocale(request));
-  if (section !== undefined && ACCOUNT_PAGES.has(section) && slug === undefined && !is_signed_in) {
+  const page_path = [section, slug, ...more].filter((segment) => segment !== undefined).join("/");
+  if (ACCOUNT_PAGES.has(page_path) && !is_signed_in) {
     if (response.headers.has("location")) return response;
     // Built by hand: the locale-aware getPathname() can't run in the proxy. English has no prefix.
     const login_url = new URL(`${locale === routing.defaultLocale ? "" : `/${locale}`}/login`, request.url);
-    login_url.searchParams.set("next", `/${section}`);
+    login_url.searchParams.set("next", `/${page_path}`);
     return NextResponse.redirect(login_url);
   }
   return response;

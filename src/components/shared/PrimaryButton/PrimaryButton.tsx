@@ -11,6 +11,8 @@ interface PrimaryButtonProps {
   size?: "small" | "default" | "large";
   /** Downloads the target file instead of navigating to a page. */
   download?: boolean;
+  /** Looks like the button but goes nowhere, e.g. in the upload preview of a listing that isn't posted yet. */
+  is_inert?: boolean;
   "aria-label"?: string;
 }
 
@@ -20,9 +22,18 @@ export function PrimaryButton({
   children,
   size = "default",
   download = false,
+  is_inert = false,
   "aria-label": ariaLabel,
 }: PrimaryButtonProps): ReactElement {
   const locale = useLocale();
+
+  if (is_inert) {
+    return (
+      <span className={styles.button} data-size={size} aria-disabled="true">
+        {children}
+      </span>
+    );
+  }
 
   // A download is a plain anchor: client-side routing would try to render the file as a page.
   if (download) {

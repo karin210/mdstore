@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactElement } from "react";
-import type { RouteIndexSection } from "@/components/shared/RouteIndex/RouteIndex";
 import { RouteIndexLayout } from "@/components/shared/RouteIndexLayout/RouteIndexLayout";
+import { get_listing_sections } from "@/components/prompt-detail/listingSections/listingSections";
 import { PromptDetail } from "@/components/prompt-detail/PromptDetail/PromptDetail";
 import { PromptDetailSkeleton } from "@/components/prompt-detail/PromptDetailSkeleton/PromptDetailSkeleton";
 import { getPromptView } from "@/server/prompts/getPromptView";
@@ -36,18 +36,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/prompts/
  */
 export default function PromptDetailPage({ params }: PageProps<"/[locale]/prompts/[slug]">): ReactElement {
   const t = useTranslations("promptDetail.outline");
-  // The ids are the ones on the blocks in PromptDetail, OutputExamples and TestedModels, in reading order.
-  const sections: RouteIndexSection[] = [
-    { id: "overview", level: 1, label: t("sections.overview") },
-    { id: "summary", level: 2, label: t("sections.summary") },
-    { id: "meant-for", level: 2, label: t("sections.meantFor") },
-    { id: "highlights", level: 2, label: t("sections.highlights") },
-    { id: "output-examples", level: 2, label: t("sections.outputExamples") },
-    { id: "tested-models", level: 2, label: t("sections.testedModels") },
-    { id: "preview", level: 2, label: t("sections.preview") },
-    { id: "usage", level: 2, label: t("sections.usage") },
-    { id: "ratings", level: 2, label: t("sections.ratings") },
-  ];
+  const sections = get_listing_sections(t);
 
   return (
     <RouteIndexLayout sections={sections} file_name={t("file")} content_class_name={styles.content}>

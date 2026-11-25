@@ -1,5 +1,5 @@
 import "server-only";
-import { slugify } from "@/lib/slugify";
+import { get_post_file_name } from "@/lib/postFileName";
 import type { PromptPostField, ValidationIssue } from "@/lib/validation/promptPost";
 
 export type FieldErrors = Partial<Record<PromptPostField, ValidationIssue>>;
@@ -74,5 +74,5 @@ export async function readMarkdown(file: File): Promise<string | null> {
 }
 
 export function getFileName(file: File, slug: string): string {
-  return `${slugify(file.name.replace(/\.md$/i, "")) || slug}.md`;
+  return get_post_file_name(file.name, slug);
 }

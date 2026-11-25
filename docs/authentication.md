@@ -69,6 +69,8 @@ In the Supabase dashboard, the **Site URL** and the **redirect allow-list** must
 1. **Proxy:** a signed-out visitor is redirected (a real redirect) to `/login?next=/profile` (or `/my-prompts`), in their language. A locale redirect from next-intl goes first, so the login page opens in the right language.
 2. **Page:** `require_account_profile()` redirects to `/login` if the session ended between the proxy and the render.
 
+The upload preview (`/upload/preview`) gets the proxy redirect only. It reads no data from the server: the listing it shows comes from the user's own form tab, in the browser (see `src/lib/postPreview.ts`), so it has nothing a second check would protect.
+
 Posting (`/upload`) is open to look at; the form is replaced by "Sign in to post" for visitors, and the post action re-checks the session (`get_signed_in_user`). Row-level security only accepts rows whose `author_id` is the caller.
 
 ## Account changes (`/profile`)
@@ -94,7 +96,7 @@ Database errors from `change_username()` are mapped by code: `MD409` or `23505` 
 ## Adding or changing something
 
 - **A new auth action:** put it in `src/server/auth/` or `src/server/profiles/`, validate with a Zod schema from `src/lib/validation/` (the same rules the form uses), re-check the session on the server, return a result object, and add the messages to both `auth.json` files.
-- **A new protected page:** add its first path segment to `ACCOUNT_PAGES` in `src/proxy.ts` and call `require_account_profile()` in the page. Update the table in [`roles-and-access.md`](roles-and-access.md).
+- **A new protected page:** add its path without the locale (`my-prompts`, `upload/preview`) to `ACCOUNT_PAGES` in `src/proxy.ts` and, when it reads account data, call `require_account_profile()` in the page. Update the table in [`roles-and-access.md`](roles-and-access.md).
 - **A new email link type:** point its `emailRedirectTo` at `/auth/confirm`; add the `type` to `EMAIL_OTP_TYPES` if it isn't there.
 - **A change to password rules:** change `credentials.ts` only (client and server share it) and check that Supabase's own minimum in the dashboard isn't stricter, or `weak_password` appears.
 

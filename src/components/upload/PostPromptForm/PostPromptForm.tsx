@@ -7,11 +7,13 @@ import { useReducer, useState, useTransition, type FormEvent, type ReactElement,
 import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField/PostFormField";
+import { usePostPreviewSender } from "@/components/upload/usePostPreviewSender/usePostPreviewSender";
 import { ai_models, model_families, model_family_names, type ModelId } from "@/data/aiModels";
 import { promptCategories } from "@/data/prompts";
 import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";
 import { PromptPostForm, type OutputExampleItem, type PromptPostValues } from "@/lib/forms/PromptPostForm";
 import { new_output_example_path, OUTPUT_EXAMPLES_BUCKET, output_example_url } from "@/lib/outputExamples";
+import type { PostPreviewSnapshot } from "@/lib/postPreview";
 import { createBrowserSupabase } from "@/lib/supabase/browserClient";
 import {
   MAX_OUTPUT_IMAGES,
@@ -28,6 +30,7 @@ import {
 import { postPrompt, type PostPromptResult } from "@/server/prompts/actions";
 import { push_revision, type PushRevisionResult } from "@/server/reviews/actions";
 import form_styles from "@/styles/form.module.css";
+import utility_styles from "@/styles/utilities.module.css";
 import styles from "./PostPromptForm.module.css";
 
 type TextField = Exclude<
@@ -52,6 +55,10 @@ type PostPromptFormProps =
       initial_values: Omit<PromptPostValues, "file">;
       /** The latest revision's file, kept when no new file is chosen. */
       current_file_name: string;
+      /** Its content, for the live preview while no new file is chosen. */
+      current_file_text: string;
+      /** The post's authors as the listing credits them ("@ana, @luis"), for the live preview. */
+      byline: string;
     };
 
 /** The id of a field's control, in kebab-case (`post-author-handle`); a checkbox group's first box is `${id}-0`. */
@@ -90,6 +97,19 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   const [note, set_note] = useState("");
   const [is_note_too_long, set_is_note_too_long] = useState(false);
   const [isSubmitting, startSubmit] = useTransition();
+  // Counts the author's edits, so the live preview follows this form as soon as it changes.
+  const [edit_count, set_edit_count] = useState(0);
+
+  const preview_snapshot: PostPreviewSnapshot =
+    props.mode === "revision"
+      ? {
+          values: form.getValues(),
+          byline: props.byline,
+          post_slug: props.slug,
+          current_file: { name: props.current_file_name, text: props.current_file_text },
+        }
+      : { values: form.getValues(), byline: `@${props.username}`, post_slug: null, current_file: null };
+  usePostPreviewSender(preview_snapshot, edit_count);
 
   function getIssue(field: PromptPostField): ValidationIssue | null {
     return form.getGuidance(field) ?? serverIssues[field] ?? null;
@@ -112,6 +132,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
 
   function updateField<Field extends PromptPostField>(field: Field, value: PromptPostValues[Field]): void {
     form.setValue(field, value);
+    set_edit_count((count) => count + 1);
     if (serverIssues[field]) {
       setServerIssues((issues) => {
         const remainingIssues = { ...issues };
@@ -338,6 +359,13 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   }
 
   const examples = form.getValue("outputExamples");
+  // Tertiary kind: an informational link with no purchase intent. A real link, so it also opens with a middle click.
+  const preview_link = (
+    <Link href="/upload/preview" target="_blank" className={styles.previewLink}>
+      {t("preview.open")}
+      <span className={utility_styles.visuallyHidden}> {t("preview.newTab")}</span>
+    </Link>
+  );
   const toolsGuidance = getGuidanceText("worksWith");
   const models_guidance = getGuidanceText("testedModels");
   // Every model, numbered in reading order so the first box gets the field's focus id (`-0`).
@@ -352,6 +380,10 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             : t("postingAs", { username: props.username })}
         </p>
       )}
+      <p className={styles.previewBar}>
+        {preview_link}
+        <span className={styles.previewHint}>{t("preview.hint")}</span>
+      </p>
 
       <fieldset className={styles.group}>
         <legend className={styles.legend}>{t("sections.basics")}</legend>
@@ -638,6 +670,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
       )}
       {errorMessage && <FormAlert tone="error">{errorMessage}</FormAlert>}
       <div className={styles.actions}>
+        {preview_link}
         {is_revision ? (
           <SubmitButton
             label={tReview("revise.submit")}

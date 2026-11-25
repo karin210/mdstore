@@ -160,6 +160,11 @@
           "remove": "Remove example {number}"
         }
       },
+      "preview": {
+        "open": "Preview listing",
+        "newTab": "(opens in a new tab)",
+        "hint": "See your listing as it will look once posted, in a new tab. It updates as you type."
+      },
       "submit": "Post prompt",
       "submitting": "Posting…",
       "submitted": "Sent for review. It goes live once an admin approves it.",
@@ -172,6 +177,20 @@
         "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}.",
         "notConfigured": "Posting isn’t available yet. Please try again later.",
         "imageUpload": "Couldn’t upload the images. Check your connection and try again."
+      }
+    },
+    "preview": {
+      "meta": {
+        "title": "Listing preview"
+      },
+      "banner": {
+        "live": "Preview: this listing isn’t posted yet. It follows your form as you type; blank spaces are the parts you haven’t filled in.",
+        "closed": "The form’s tab was closed, so this preview stopped updating. Open the form again to keep editing."
+      },
+      "noForm": {
+        "title": "No form to preview",
+        "text": "Open the posting form in another tab of this browser and use “Preview listing”. This page then shows your listing as you fill it in.",
+        "action": "Open the posting form"
       }
     },
     "validation": {

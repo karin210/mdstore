@@ -273,6 +273,12 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                   post_id={post.id}
                   slug={post.slug}
                   current_file_name={latest_revision_of_post.file_name}
+                  current_file_text={latest_revision_of_post.content}
+                  // Credited like the listing's byline: the owner first, then the co-authors.
+                  byline={data.authors
+                    .toSorted((first, second) => Number(second.role === "owner") - Number(first.role === "owner"))
+                    .map((author) => `@${author.username}`)
+                    .join(", ")}
                   initial_values={{
                     kind: latest_revision_of_post.kind,
                     title: latest_revision_of_post.title,
