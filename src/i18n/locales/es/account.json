@@ -8,7 +8,7 @@
         "file": "profile.md",
         "sections": {
           "account": "Cuenta",
-          "recent": "Últimas subidas",
+          "uploads": "Tus subidas",
           "username": "Nombre de usuario",
           "email": "Correo",
           "password": "Contraseña"
@@ -16,17 +16,16 @@
       },
       "eyebrow": "Cuenta",
       "title": "Tu perfil",
-      "lead": "Los datos de tu cuenta, tus últimas subidas y los formularios para cambiar tu nombre de usuario, tu correo o tu contraseña.",
+      "lead": "Los datos de tu cuenta, tus subidas y los formularios para cambiar tu nombre de usuario, tu correo o tu contraseña.",
       "details": {
         "username": "Nombre de usuario",
         "email": "Correo electrónico",
         "memberSince": "Miembro desde",
         "noUsername": "Aún sin elegir"
       },
-      "recent": {
-        "title": "Últimas subidas",
-        "lead": "Tus cinco publicaciones más recientes, de la más nueva a la más antigua.",
-        "showAll": "Ver todos mis prompts"
+      "uploads": {
+        "title": "Tus subidas",
+        "lead": "Todos los prompts que publicaste o de los que eres coautor, del más reciente al más antiguo."
       },
       "username": {
         "title": "Cambia tu nombre de usuario",
@@ -104,6 +103,22 @@
         "prompt": "Prompt",
         "skill": "Skill",
         "agent": "Agente"
+      },
+      "delete": {
+        "label": "Eliminar",
+        "button": "Eliminar «{title}»",
+        "question": "¿Eliminar «{title}» para siempre?",
+        "consequence": "También se eliminan su página, revisiones, comentarios, coautores, valoraciones e imágenes de ejemplo. No se puede deshacer.",
+        "confirm": "Eliminar definitivamente",
+        "busy": "Eliminando…",
+        "cancel": "Cancelar",
+        "errors": {
+          "unauthenticated": "Tu sesión terminó. Vuelve a iniciar sesión para continuar.",
+          "forbidden": "Solo el propietario de la publicación puede eliminarla.",
+          "notFound": "No encontramos esa publicación. Recarga la página e inténtalo de nuevo.",
+          "notConfigured": "Eliminar aún no está disponible. Inténtalo más tarde.",
+          "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}."
+        }
       }
     }
   }

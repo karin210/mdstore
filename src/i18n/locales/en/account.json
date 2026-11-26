@@ -8,7 +8,7 @@
         "file": "profile.md",
         "sections": {
           "account": "Account",
-          "recent": "Latest uploads",
+          "uploads": "Your uploads",
           "username": "Username",
           "email": "Email",
           "password": "Password"
@@ -16,17 +16,16 @@
       },
       "eyebrow": "Account",
       "title": "Your profile",
-      "lead": "Your account details, your latest uploads, and the forms to change your username, email or password.",
+      "lead": "Your account details, your uploads, and the forms to change your username, email or password.",
       "details": {
         "username": "Username",
         "email": "Email",
         "memberSince": "Member since",
         "noUsername": "Not picked yet"
       },
-      "recent": {
-        "title": "Latest uploads",
-        "lead": "Your five most recent posts, newest first.",
-        "showAll": "Show all my prompts"
+      "uploads": {
+        "title": "Your uploads",
+        "lead": "Every prompt you posted or co-author, newest first."
       },
       "username": {
         "title": "Change your username",
@@ -104,6 +103,22 @@
         "prompt": "Prompt",
         "skill": "Skill",
         "agent": "Agent"
+      },
+      "delete": {
+        "label": "Delete",
+        "button": "Delete “{title}”",
+        "question": "Delete “{title}” for good?",
+        "consequence": "Its page, reviews, comments, co-authors, ratings and example images are removed too. This can’t be undone.",
+        "confirm": "Delete permanently",
+        "busy": "Deleting…",
+        "cancel": "Cancel",
+        "errors": {
+          "unauthenticated": "Your session ended. Sign in again to continue.",
+          "forbidden": "Only the post’s owner can delete it.",
+          "notFound": "We couldn’t find that post. Reload the page and try again.",
+          "notConfigured": "Deleting isn’t available yet. Please try again later.",
+          "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}."
+        }
       }
     }
   }

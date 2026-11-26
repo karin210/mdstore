@@ -8,6 +8,7 @@ export type SubmissionStatus = PostStatus;
 
 /** One post the signed-in user owns or co-authors, as /my-prompts and /profile list it. */
 export interface MySubmission {
+  id: string;
   slug: string;
   title: string;
   kind: PromptKind;
@@ -21,6 +22,7 @@ export interface MySubmission {
 interface MembershipRow {
   role: AuthorRole;
   post: {
+    id: string;
     slug: string;
     title: string;
     kind: PromptKind;
@@ -45,7 +47,7 @@ export async function getMySubmissions(userId: string): Promise<MySubmission[]> 
     // Named foreign key: prompt_revisions and review_comments also link posts to reviews, which
     // PostgREST would otherwise report as an ambiguous embed.
     .select(
-      "role, post:posted_prompts(slug, title, kind, status, created_at, prompt_reviews!prompt_reviews_post_id_fkey(number, status))",
+      "role, post:posted_prompts(id, slug, title, kind, status, created_at, prompt_reviews!prompt_reviews_post_id_fkey(number, status))",
     )
     .eq("user_id", userId)
     .returns<MembershipRow[]>();
@@ -54,9 +56,11 @@ export async function getMySubmissions(userId: string): Promise<MySubmission[]> 
   return (data ?? [])
     .flatMap((row): MySubmission[] => {
       if (!row.post || !SLUG_PATTERN.test(row.post.slug)) return [];
-      const { slug, title, kind, status, created_at, prompt_reviews } = row.post;
+      const { id, slug, title, kind, status, created_at, prompt_reviews } = row.post;
       const latest = [...prompt_reviews].sort((first, second) => second.number - first.number)[0];
-      return [{ slug, title, kind, status, created_at, role: row.role, latest_review_status: latest?.status ?? null }];
+      return [
+        { id, slug, title, kind, status, created_at, role: row.role, latest_review_status: latest?.status ?? null },
+      ];
     })
     .sort((first, second) => second.created_at.localeCompare(first.created_at));
 }

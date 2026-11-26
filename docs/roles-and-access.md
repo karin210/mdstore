@@ -42,6 +42,7 @@ The app has two levels of roles: one for the whole site, and one per post.
 | Accept or reject suggested changes                        |         |                |    yes    |  yes  |       |
 | Approve, request changes or reject                        |         |                |           |       |  yes  |
 | Withdraw the review in progress                           |         |                |           |  yes  |       |
+| Delete the post for good (from `/profile`, `/my-prompts`) |         |                |           |  yes  |       |
 | Add a co-author, create an invite link                    |         |                |           |  yes  |       |
 | Remove a co-author                                        |         |                |           |  yes  |       |
 | Leave the post                                            |         |                |    yes    |       |       |
@@ -68,7 +69,7 @@ Each rule is checked in up to three layers. The database is the one that matters
    - `/profile` and `/my-prompts`: `require_account_profile()` redirects to `/login` if the session ended after the proxy ran.
 3. **Database** (the source of truth):
    - **Row-level security** hides pending posts, reviews, revisions and comments from everyone but the post's authors and the admins, so the data stays private even if a check above were skipped.
-   - **Every write** in the review workflow is a `security definer` function that checks the caller and the review's state: `push_revision` (authors), `add_review_comment` (authors and admins, also for suggestions), `apply_suggestions` and `reject_suggestion` (authors), `decide_review` (admins), `withdraw_review`, `add_post_coauthor`, `create_post_invite` (owner), `remove_post_author` (owner, or the co-author themselves), `change_username` (the caller's own profile), `rate_prompt` (signed-in readers who aren't the post's authors, approved posts only). They raise `MD401` (not signed in), `MD403` (not allowed) and `MD404` (not found, also used when the caller may not see it).
+   - **Every write** in the review workflow is a `security definer` function that checks the caller and the review's state: `push_revision` (authors), `add_review_comment` (authors and admins, also for suggestions), `apply_suggestions` and `reject_suggestion` (authors), `decide_review` (admins), `withdraw_review`, `delete_post`, `add_post_coauthor`, `create_post_invite` (owner), `remove_post_author` (owner, or the co-author themselves), `change_username` (the caller's own profile), `rate_prompt` (signed-in readers who aren't the post's authors, approved posts only). They raise `MD401` (not signed in), `MD403` (not allowed) and `MD404` (not found, also used when the caller may not see it).
    - Server actions re-check the session before calling them (for example `get_signed_in_profile()` in `src/server/prompts/actions.ts`).
 
 ## Changing roles

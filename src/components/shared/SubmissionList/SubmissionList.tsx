@@ -1,18 +1,20 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
+import { DeletePostButton } from "@/components/shared/DeletePostButton/DeletePostButton";
 import { Link } from "@/i18n/navigation";
 import type { MySubmission } from "@/server/prompts/mySubmissions";
 import styles from "./SubmissionList.module.css";
 
 interface SubmissionListProps {
-  /** Already in display order (newest first) and already cut to length by the caller. */
+  /** Already in display order (newest first). */
   submissions: MySubmission[];
 }
 
 /**
  * The posts a user owns or co-authors, with the date each one was posted and where it is in its
- * review. Used by /my-prompts (all of them) and /profile (the latest five). Every post links to its
- * review (feedback, revisions, co-authors); live ones also link to their public page.
+ * review. Used by /my-prompts and /profile (all of them in both). Every post links to its
+ * review (feedback, revisions, co-authors); live ones also link to their public page. The owner of a post
+ * can delete it from here (co-authors can't).
  */
 export async function SubmissionList({ submissions }: SubmissionListProps): Promise<ReactElement> {
   const t = await getTranslations("account.submissions");
@@ -39,7 +41,7 @@ export async function SubmissionList({ submissions }: SubmissionListProps): Prom
           {submission.status === "approved" && submission.latest_review_status && (
             <p className={styles.note}>{t(`liveReview.${submission.latest_review_status}`)}</p>
           )}
-          <p className={styles.links}>
+          <div className={styles.links}>
             <Link className={styles.link} href={`/prompts/${submission.slug}/review`}>
               {t("openReview")}
             </Link>
@@ -48,7 +50,12 @@ export async function SubmissionList({ submissions }: SubmissionListProps): Prom
                 {t("view")}
               </Link>
             )}
-          </p>
+            {submission.role === "owner" && (
+              <span className={styles.delete}>
+                <DeletePostButton post_id={submission.id} title={submission.title} />
+              </span>
+            )}
+          </div>
         </li>
       ))}
     </ul>

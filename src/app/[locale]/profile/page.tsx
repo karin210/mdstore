@@ -6,7 +6,7 @@ import { AccountDetails } from "@/components/profile/AccountDetails/AccountDetai
 import { ChangePasswordForm } from "@/components/profile/ChangePasswordForm/ChangePasswordForm";
 import { EmailSlot } from "@/components/profile/EmailSlot/EmailSlot";
 import { ProfileSection } from "@/components/profile/ProfileSection/ProfileSection";
-import { RecentUploads } from "@/components/profile/RecentUploads/RecentUploads";
+import { ProfileUploads } from "@/components/profile/ProfileUploads/ProfileUploads";
 import { UsernameSlot } from "@/components/profile/UsernameSlot/UsernameSlot";
 import type { RouteIndexSection } from "@/components/shared/RouteIndex/RouteIndex";
 import { RouteIndexLayout } from "@/components/shared/RouteIndexLayout/RouteIndexLayout";
@@ -29,8 +29,7 @@ function SlotSkeleton({ height }: { height: string }): ReactElement {
 }
 
 /**
- * The signed-in user's account: their details, their five latest uploads (all of them on
- * /my-prompts) and the forms to change their username, email and password. The headings render at
+ * The signed-in user's account: their details, all their uploads (newest first) and the forms to change their username, email and password. The headings render at
  * once; every part that reads the session renders inside <Suspense>. src/proxy.ts sends signed-out
  * visitors to /login first.
  */
@@ -38,7 +37,7 @@ export default function ProfilePage(): ReactElement {
   const t = useTranslations("account.profile");
   const sections: RouteIndexSection[] = [
     { id: "account", level: 1, label: t("outline.sections.account") },
-    { id: "recent", level: 2, label: t("outline.sections.recent") },
+    { id: "uploads", level: 2, label: t("outline.sections.uploads") },
     { id: "username", level: 2, label: t("outline.sections.username") },
     { id: "email", level: 2, label: t("outline.sections.email") },
     { id: "password", level: 2, label: t("outline.sections.password") },
@@ -60,9 +59,9 @@ export default function ProfilePage(): ReactElement {
           </Suspense>
         </div>
       </section>
-      <ProfileSection id="recent" title={t("recent.title")} lead={t("recent.lead")}>
+      <ProfileSection id="uploads" title={t("uploads.title")} lead={t("uploads.lead")}>
         <Suspense fallback={<SlotSkeleton height="12rem" />}>
-          <RecentUploads />
+          <ProfileUploads />
         </Suspense>
       </ProfileSection>
       <ProfileSection id="username" title={t("username.title")} lead={t("username.lead")}>

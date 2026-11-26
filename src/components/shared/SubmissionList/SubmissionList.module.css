@@ -64,8 +64,18 @@
 .links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-sm);
   margin: 0;
+}
+
+/* The delete button sits at the end of the row; its confirmation takes a row of its own. */
+.delete {
+  display: contents;
+}
+
+.delete > button {
+  margin-inline-start: auto;
 }
 
 .link {
