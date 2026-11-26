@@ -17,6 +17,8 @@ interface RevisionChangesProps {
   comments: LineComment[];
   /** Authors and admins of a review in progress who have a username. */
   can_comment: boolean;
+  /** The post's authors, while the review is in progress: they answer suggestions. */
+  can_answer: boolean;
 }
 
 /**
@@ -31,11 +33,13 @@ export async function RevisionChanges({
   revisions,
   comments,
   can_comment,
+  can_answer,
 }: RevisionChangesProps): Promise<ReactElement> {
   const t = await getTranslations("review");
   const base = get_base_revision(revision, review, revisions);
   const base_is_live = base !== null && base.review_id !== review.id;
-  const lines = diff_lines(base ? splitFileLines(base.content) : [], splitFileLines(revision.content));
+  const file_lines = splitFileLines(revision.content);
+  const lines = diff_lines(base ? splitFileLines(base.content) : [], file_lines);
   // Unchanged lines with comments stay visible, so no thread hides in a collapsed stretch.
   const commented_new_lines = new Set(
     comments.filter((comment) => comment.side === "new").map((comment) => comment.line_number),
@@ -103,6 +107,8 @@ export async function RevisionChanges({
               hidden_after={hidden_after}
               comments={comments}
               can_comment={can_comment}
+              can_answer={can_answer}
+              file_lines={file_lines}
               label={t("changes.fileTitle")}
             />
           </>

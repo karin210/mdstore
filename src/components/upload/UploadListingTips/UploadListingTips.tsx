@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import type { ReactElement } from "react";
 import { FeatureGrid } from "@/components/upload/FeatureGrid/FeatureGrid";
 
-const tipIds = ["oneJob", "testedTools", "technologies", "results"] as const;
+const tipIds = ["oneJob", "technologies", "results"] as const;
 
 export function UploadListingTips(): ReactElement {
   const t = useTranslations("upload.listing");

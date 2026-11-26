@@ -20,10 +20,10 @@ The app has two levels of roles: one for the whole site, and one per post.
 
 ### Per post (`post_authors.role`)
 
-| Role      | Who                                                        |
-| --------- | ---------------------------------------------------------- |
-| Owner     | whoever posted it (set by the `start_post_review` trigger) |
-| Co-author | added by the owner by @username, or through an invite link |
+| Role      | Who                                                                                                                    |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Owner     | whoever posted it (set by the `start_post_review` trigger)                                                             |
+| Co-author | named by the owner on the upload form (username search), added by @username from the review, or through an invite link |
 
 "Author" below means either of them. Admins are not authors of a post unless they are added as one.
 
@@ -34,9 +34,12 @@ The app has two levels of roles: one for the whole site, and one per post.
 | Browse approved prompts, download free ones, use the API  |   yes   |      yes       |    yes    |  yes  |  yes  |
 | Post a prompt (`/upload`), preview it (`/upload/preview`) |         |      yes       |    yes    |  yes  |  yes  |
 | Profile and my prompts (`/profile`, `/my-prompts`)        |         |      yes       |    yes    |  yes  |  yes  |
+| Search usernames (co-authors on the upload form)          |         |      yes       |    yes    |  yes  |  yes  |
 | See a post that isn't approved yet, and its review        |         |                |    yes    |  yes  |  yes  |
 | Push a new revision                                       |         |                |    yes    |  yes  |       |
 | Comment on a review or a line                             |         |                |    yes    |  yes  |  yes  |
+| Suggest a change to lines of the file                     |         |                |    yes    |  yes  |  yes  |
+| Accept or reject suggested changes                        |         |                |    yes    |  yes  |       |
 | Approve, request changes or reject                        |         |                |           |       |  yes  |
 | Withdraw the review in progress                           |         |                |           |  yes  |       |
 | Add a co-author, create an invite link                    |         |                |           |  yes  |       |
@@ -65,7 +68,7 @@ Each rule is checked in up to three layers. The database is the one that matters
    - `/profile` and `/my-prompts`: `require_account_profile()` redirects to `/login` if the session ended after the proxy ran.
 3. **Database** (the source of truth):
    - **Row-level security** hides pending posts, reviews, revisions and comments from everyone but the post's authors and the admins, so the data stays private even if a check above were skipped.
-   - **Every write** in the review workflow is a `security definer` function that checks the caller and the review's state: `push_revision` (authors), `add_review_comment` (authors and admins), `decide_review` (admins), `withdraw_review`, `add_post_coauthor`, `create_post_invite` (owner), `remove_post_author` (owner, or the co-author themselves), `change_username` (the caller's own profile), `rate_prompt` (signed-in readers who aren't the post's authors, approved posts only). They raise `MD401` (not signed in), `MD403` (not allowed) and `MD404` (not found, also used when the caller may not see it).
+   - **Every write** in the review workflow is a `security definer` function that checks the caller and the review's state: `push_revision` (authors), `add_review_comment` (authors and admins, also for suggestions), `apply_suggestions` and `reject_suggestion` (authors), `decide_review` (admins), `withdraw_review`, `add_post_coauthor`, `create_post_invite` (owner), `remove_post_author` (owner, or the co-author themselves), `change_username` (the caller's own profile), `rate_prompt` (signed-in readers who aren't the post's authors, approved posts only). They raise `MD401` (not signed in), `MD403` (not allowed) and `MD404` (not found, also used when the caller may not see it).
    - Server actions re-check the session before calling them (for example `get_signed_in_profile()` in `src/server/prompts/actions.ts`).
 
 ## Changing roles

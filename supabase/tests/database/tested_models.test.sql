@@ -23,7 +23,7 @@ language sql as $$
     usage_steps, works_with, tested_models, recommended_models, content, preview_line_count
   ) values (
     p_slug, '00000000-0000-0000-0000-0000000000d1', '@modelsowner', 'test.md', 'Test prompt', 'A tagline long enough',
-    'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}',
+    'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}',
     p_tested, p_recommended, E'line 1\nline 2\nline 3\n', 5
   );
 $$;
@@ -62,7 +62,7 @@ select is(
 select pg_temp.act_as('00000000-0000-0000-0000-0000000000d1');
 select public.push_revision(
   (select id from public.posted_prompts where slug = 'models-post'), 'prompt', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\n', 5, null, '{gemini-3-pro}', '{gemini-3-pro}'
 );
 reset role;
@@ -81,7 +81,7 @@ select is(pg_temp.models_of('models-post'), 'gemini-3-pro / gemini-3-pro', 'appr
 select pg_temp.act_as('00000000-0000-0000-0000-0000000000d1');
 select public.push_revision(
   (select id from public.posted_prompts where slug = 'models-post'), 'prompt', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5, null, '{claude-haiku-5-5}', '{}'
 );
 reset role;

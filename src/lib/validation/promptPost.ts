@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { is_model_id } from "@/data/aiModels";
 import { prompt_kinds, promptCategories, type PromptCategory, type PromptKind } from "@/data/prompts";
+import { normalize_username, USERNAME_PATTERN } from "@/lib/validation/username";
 
 /**
  * Rules for posting a prompt, shared by the upload form (client) and the create action (server).
+ * What a prompt was tested with (tools and models) is not here: the staff provide it, not the authors.
  * Each check returns an issue whose `key` lives under `upload.validation` in the catalogue, with
  * the values its message needs; the client translates it, the server returns it as a field error.
  */
@@ -18,8 +19,7 @@ export interface ValidationIssue {
     | "itemTooLong"
     | "chooseKind"
     | "chooseCategory"
-    | "chooseTool"
-    | "unknownModel"
+    | "coauthorInvalid"
     | "fileRequired"
     | "fileType"
     | "fileTooLarge"
@@ -30,18 +30,6 @@ export interface ValidationIssue {
     | "previewRange";
   values?: Record<string, number>;
 }
-
-/** The AI tools a post can be marked as tested with. */
-export const WORKS_WITH_TOOLS = [
-  "Claude Code",
-  "Cursor",
-  "GitHub Copilot",
-  "Codex",
-  "Gemini CLI",
-  "Aider",
-  "Windsurf",
-  "Zed",
-] as const;
 
 /** What a post is: a prompt, a skill or an agent. Matches the `kind` check on posted_prompts. */
 export const PROMPT_KINDS = prompt_kinds;
@@ -55,6 +43,8 @@ export const MAX_OUTPUT_IMAGES = 6;
 export const MAX_OUTPUT_IMAGE_BYTES = 2 * 1024 * 1024;
 export const OUTPUT_CAPTION_MAX_LENGTH = 120;
 export const PREVIEW_LINES = { min: 5, max: 40, default: 12 } as const;
+/** Co-authors a new post can name; more can be added later from its review. */
+export const MAX_COAUTHORS = 10;
 
 const TEXT_LIMITS = {
   title: { min: 3, max: 80 },
@@ -62,7 +52,8 @@ const TEXT_LIMITS = {
   summary: { min: 20, max: 400 },
 } as const;
 
-const LIST_LIMITS = {
+/** Items per list field and characters per item; the forms cap their inputs with them. */
+export const LIST_LIMITS = {
   meantFor: { min: 1, max: 6, itemMax: 60 },
   highlights: { min: 1, max: 10, itemMax: 160 },
   usageSteps: { min: 1, max: 8, itemMax: 300 },
@@ -70,11 +61,6 @@ const LIST_LIMITS = {
 
 export type TextField = keyof typeof TEXT_LIMITS;
 export type ListField = keyof typeof LIST_LIMITS;
-/** One model the author tested with (an id of src/data/aiModels.ts), and whether they recommend it. */
-export interface TestedModelChoice {
-  model_id: string;
-  recommended: boolean;
-}
 
 /** One output example as the server stores it: a path in the `output-examples` bucket and its caption. */
 export interface OutputExample {
@@ -93,31 +79,22 @@ export interface OutputExampleDraft {
 }
 
 export type PromptPostField =
-  | TextField
-  | ListField
-  | "kind"
-  | "category"
-  | "worksWith"
-  | "testedModels"
-  | "file"
-  | "previewLineCount"
-  | "outputExamples";
+  TextField | ListField | "kind" | "category" | "file" | "previewLineCount" | "outputExamples" | "coauthors";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "kind",
+  "category",
   "title",
   "tagline",
   "summary",
-  "category",
   "meantFor",
   "highlights",
+  "outputExamples",
   "usageSteps",
-  "worksWith",
-  "testedModels",
   "file",
   "previewLineCount",
-  "outputExamples",
+  "coauthors",
 ];
 
 // ---------------------------------------------------------------------------
@@ -164,19 +141,6 @@ export function checkCategory(value: string): ValidationIssue | null {
   return isPromptCategory(value) ? null : { key: "chooseCategory" };
 }
 
-export function checkWorksWith(values: string[]): ValidationIssue | null {
-  const knownTools: readonly string[] = WORKS_WITH_TOOLS;
-  const knownValues = values.filter((value) => knownTools.includes(value));
-  return knownValues.length > 0 && knownValues.length === values.length ? null : { key: "chooseTool" };
-}
-
-/** Optional: every model must be in the registry, once. */
-export function check_tested_models(models: TestedModelChoice[]): ValidationIssue | null {
-  const ids = models.map((model) => model.model_id);
-  const is_known = ids.every((id) => is_model_id(id));
-  return is_known && new Set(ids).size === ids.length ? null : { key: "unknownModel" };
-}
-
 /**
  * The file's metadata; its text content is checked on the server (see checkFileContent).
  * A revision may leave the file out (`is_optional`) to keep the previous version's file.
@@ -211,6 +175,17 @@ export function check_output_examples(examples: OutputExampleDraft[]): Validatio
     return { key: "tooLong", values: { max: OUTPUT_CAPTION_MAX_LENGTH } };
   }
   return null;
+}
+
+/**
+ * Optional: up to MAX_COAUTHORS usernames, each well formed and named once. Whether they exist is checked on the
+ * server when they are added (the form only offers users its search found).
+ */
+export function check_coauthors(usernames: string[]): ValidationIssue | null {
+  if (usernames.length > MAX_COAUTHORS) return { key: "tooManyItems", values: { max: MAX_COAUTHORS } };
+  const normalized = usernames.map((username) => normalize_username(username).toLowerCase());
+  const is_well_formed = normalized.every((username) => USERNAME_PATTERN.test(username));
+  return is_well_formed && new Set(normalized).size === normalized.length ? null : { key: "coauthorInvalid" };
 }
 
 export function checkPreviewLineCount(valueRaw: string): ValidationIssue | null {
@@ -271,10 +246,6 @@ const prompt_post_object = z.strictObject({
   meantFor: listSchema("meantFor"),
   highlights: listSchema("highlights"),
   usageSteps: listSchema("usageSteps"),
-  worksWith: z.array(z.string()).superRefine(asRefinement(checkWorksWith)),
-  testedModels: z
-    .array(z.strictObject({ model_id: z.string(), recommended: z.boolean() }))
-    .superRefine(asRefinement(check_tested_models)),
   file: z
     .custom<File>((value) => value instanceof File, { message: "fileRequired" })
     .superRefine(asRefinement(checkFile)),
@@ -286,7 +257,13 @@ const prompt_post_object = z.strictObject({
   outputExamples: output_examples_schema,
 });
 
-export const promptPostSchema = prompt_post_object;
+/** A new post: the listing's fields plus the co-authors to add once it exists. */
+export const promptPostSchema = prompt_post_object.extend({
+  coauthors: z
+    .array(z.string())
+    .superRefine(asRefinement(check_coauthors))
+    .transform((usernames) => usernames.map(normalize_username)),
+});
 
 export type PromptPostInput = z.output<typeof promptPostSchema>;
 

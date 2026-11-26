@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import type { ReactElement } from "react";
 import { review_href } from "@/components/review/reviewHref/reviewHref";
+import { SuggestionCard } from "@/components/review/SuggestionCard/SuggestionCard";
 import { Link } from "@/i18n/navigation";
 import { build_timeline, get_base_revision } from "@/lib/review/reviewView";
+import { get_suggestion_view } from "@/lib/review/suggestions";
 import type { Review, ReviewComment, Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
 import review_styles from "@/styles/review.module.css";
@@ -16,6 +18,8 @@ interface ReviewTimelineProps {
   comments: ReviewComment[];
   name_of: (user_id: string | null) => string;
   format_date: (iso: string) => string;
+  /** The post's authors, while the review is in progress: they answer suggestions. */
+  can_answer: boolean;
 }
 
 /** The conversation of one review: revisions pushed, comments (on the review or on a line) and decisions. */
@@ -27,6 +31,7 @@ export async function ReviewTimeline({
   comments,
   name_of,
   format_date,
+  can_answer,
 }: ReviewTimelineProps): Promise<ReactElement> {
   const t = await getTranslations("review.timeline");
   const items = build_timeline(review, revisions, comments);
@@ -38,12 +43,16 @@ export async function ReviewTimeline({
       {items.map((item) => {
         if (item.kind === "revision") {
           const { revision } = item;
+          const applied_count = comments.filter((comment) => comment.applied_revision_id === revision.id).length;
           return (
             <li key={`revision-${revision.id}`} className={review_styles.event} data-kind="revision">
               <p className={review_styles.eventHeader}>
                 <strong>{t("revision", { username: name_of(revision.created_by), number: revision.number })}</strong>
                 <time dateTime={revision.created_at}>{format_date(revision.created_at)}</time>
               </p>
+              {applied_count > 0 && (
+                <p className={review_styles.muted}>{t("appliedSuggestions", { count: applied_count })}</p>
+              )}
               <p className={styles.eventLinks}>
                 <Link href={review_href(slug, { review: review_number, tab: "file", revision: revision.number })}>
                   {t("viewRevision")}
@@ -58,6 +67,7 @@ export async function ReviewTimeline({
 
         const { comment } = item;
         const username = name_of(comment.author_id);
+        const suggestion = get_suggestion_view(comment, review, revisions);
         const line_revision = comment.revision_id ? revisions_by_id.get(comment.revision_id) : undefined;
         const is_old_side = comment.line_side === "old";
         // A removed line is quoted from the file the revision replaced (see get_base_revision).
@@ -70,13 +80,21 @@ export async function ReviewTimeline({
           quoted_file && comment.line_number ? splitFileLines(quoted_file.content)[comment.line_number - 1] : null;
         const heading = comment.decision
           ? t(`decision.${comment.decision}`, { username })
-          : line_revision && comment.line_number
-            ? t(is_old_side ? "lineCommentOld" : "lineComment", {
+          : suggestion && line_revision
+            ? t("suggestion", {
                 username,
-                line: comment.line_number,
+                count: suggestion.last_line - suggestion.first_line + 1,
+                first: suggestion.first_line,
+                last: suggestion.last_line,
                 number: line_revision.number,
               })
-            : t("comment", { username });
+            : line_revision && comment.line_number
+              ? t(is_old_side ? "lineCommentOld" : "lineComment", {
+                  username,
+                  line: comment.line_number,
+                  number: line_revision.number,
+                })
+              : t("comment", { username });
 
         return (
           <li
@@ -89,7 +107,7 @@ export async function ReviewTimeline({
               <strong>{heading}</strong>
               <time dateTime={comment.created_at}>{format_date(comment.created_at)}</time>
             </p>
-            {line_text !== null && line_text !== undefined && line_revision && (
+            {!suggestion && line_text !== null && line_text !== undefined && line_revision && (
               <Link
                 className={styles.quotedLine}
                 data-side={comment.line_side}
@@ -104,6 +122,24 @@ export async function ReviewTimeline({
               </Link>
             )}
             {comment.body && <p className={review_styles.body}>{comment.body}</p>}
+            {suggestion && line_revision && (
+              <>
+                <SuggestionCard
+                  review_id={review.id}
+                  comment_id={comment.id}
+                  view={suggestion}
+                  resolved_by={comment.resolved_by ? name_of(comment.resolved_by) : null}
+                  can_answer={can_answer}
+                />
+                <p className={styles.eventLinks}>
+                  <Link
+                    href={review_href(slug, { review: review_number, tab: "file", revision: line_revision.number })}
+                  >
+                    {t("viewRevision")}
+                  </Link>
+                </p>
+              </>
+            )}
           </li>
         );
       })}

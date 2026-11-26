@@ -19,7 +19,7 @@
       "items": {
         "ownPage": {
           "title": "Una página propia",
-          "text": "Tu prompt tiene su propia dirección con su resumen, puntos destacados, uso sugerido y las herramientas con las que lo probaste."
+          "text": "Tu prompt tiene su propia dirección con su resumen, puntos destacados y uso sugerido. Cuando nuestro equipo lo prueba, la página también muestra las herramientas y modelos con los que funciona."
         },
         "freePreview": {
           "title": "Tú eliges la vista previa",
@@ -47,10 +47,6 @@
         "oneJob": {
           "title": "Elige una tarea concreta",
           "text": "“Mejorar la experiencia de un formulario” inspira más confianza, y se usa mejor, que “mejorar toda mi app”."
-        },
-        "testedTools": {
-          "title": "Di con qué lo probaste",
-          "text": "Marca las herramientas de IA con las que lo usaste, como Claude Code, Cursor o Copilot, para que los desarrolladores sepan que funciona."
         },
         "technologies": {
           "title": "Nombra las tecnologías",
@@ -92,9 +88,8 @@
       "postingAs": "Tu publicación aparece a nombre de @{username}; puedes sumar coautores desde su revisión.",
       "sections": {
         "basics": "Lo básico",
-        "details": "Qué hace",
         "file": "El archivo",
-        "examples": "Ejemplos de resultado"
+        "coauthors": "Coautores"
       },
       "fields": {
         "kind": {
@@ -119,8 +114,7 @@
           "hint": "Qué cubre el prompt, en dos o tres oraciones."
         },
         "category": {
-          "label": "Categoría",
-          "placeholder": "Elige una categoría"
+          "label": "Categoría"
         },
         "meantFor": {
           "label": "Pensado para",
@@ -128,21 +122,14 @@
         },
         "highlights": {
           "label": "Puntos destacados",
-          "hint": "Lo que el prompt hace que haga el agente, uno por línea."
+          "hint": "Lo que el prompt hace que haga el agente, uno por elemento, hasta {max}. Pulsa Enter para agregar el siguiente.",
+          "itemLabel": "Punto destacado {number}",
+          "add": "Agregar un punto destacado",
+          "remove": "Quitar el punto destacado {number}"
         },
         "usageSteps": {
           "label": "Uso sugerido",
           "hint": "Los pasos para empezar a usarlo, uno por línea. Escribe los nombres de archivo entre `comillas invertidas`."
-        },
-        "worksWith": {
-          "label": "Herramientas con las que se probó",
-          "hint": "Las herramientas de IA con las que lo usaste."
-        },
-        "testedModels": {
-          "label": "Modelos con los que se probó (opcional)",
-          "hint": "Los modelos concretos con los que lo usaste. Marca como recomendados los que dieron mejores resultados.",
-          "recommended": "Recomendado",
-          "recommendedLabel": "Recomendar {model}"
         },
         "file": {
           "label": "Archivo Markdown",
@@ -158,6 +145,28 @@
           "captionLabel": "Descripción del ejemplo {number} (opcional)",
           "stored": "Ejemplo {number}, ya guardado",
           "remove": "Quitar el ejemplo {number}"
+        },
+        "coauthors": {
+          "label": "Coautores (opcional)",
+          "hint": "Las personas que lo hicieron contigo. Pueden subir nuevas versiones y participar en la revisión. Hasta {max}; puedes añadir más después desde la revisión.",
+          "searchLabel": "Buscar usuarios por nombre de usuario",
+          "placeholder": "Nombre de usuario",
+          "search": "Buscar",
+          "searching": "Buscando…",
+          "tooShort": "Escribe al menos dos caracteres de un nombre de usuario.",
+          "noMatch": "Ningún usuario coincide con «{query}».",
+          "found": "{count, plural, one {# usuario encontrado} other {# usuarios encontrados}}.",
+          "error": "La búsqueda no funcionó. Vuelve a intentarlo en un momento.",
+          "resultsLabel": "Usuarios que coinciden",
+          "add": "Añadir",
+          "added": "Añadido",
+          "addLabel": "Añadir a @{username} como coautor",
+          "addedLabel": "@{username} está añadido",
+          "addedStatus": "@{username} añadido como coautor.",
+          "removedStatus": "@{username} quitado.",
+          "removeLabel": "Quitar a @{username}",
+          "chosenTitle": "{count, plural, one {# coautor} other {# coautores}}",
+          "full": "Son {max} coautores, el máximo que puedes añadir aquí."
         }
       },
       "preview": {
@@ -177,7 +186,8 @@
         "server": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento. Si sigue pasando, menciona este código: {requestId}.",
         "notConfigured": "Publicar aún no está disponible. Inténtalo más tarde.",
         "imageUpload": "No se pudieron subir las imágenes. Revisa tu conexión e inténtalo de nuevo."
-      }
+      },
+      "coauthorsNotAdded": "No se pudo añadir a estos coautores: {usernames}. Puedes añadirlos desde la revisión."
     },
     "preview": {
       "meta": {
@@ -201,17 +211,16 @@
       "tooManyItems": "Usa como máximo {max} líneas.",
       "itemTooLong": "Mantén cada línea por debajo de {max} caracteres.",
       "chooseCategory": "Elige una categoría.",
-      "chooseTool": "Marca al menos una herramienta.",
       "fileRequired": "Elige tu archivo .md.",
       "fileType": "Elige un archivo Markdown que termine en .md.",
       "fileTooLarge": "Elige un archivo de hasta 200 KB.",
       "fileEmpty": "El archivo está vacío. Elige el archivo con tu prompt.",
       "previewRange": "Usa un número del {min} al {max}.",
       "chooseKind": "Elige prompt, skill o agente.",
-      "unknownModel": "Elige modelos solo de la lista, una vez cada uno.",
       "imageType": "Usa imágenes PNG, JPEG o WebP de hasta 2 MB, de tu propia cuenta.",
       "imageTooLarge": "Cada imagen puede pesar hasta 2 MB.",
-      "tooManyImages": "Usa como máximo {max} imágenes."
+      "tooManyImages": "Usa como máximo {max} imágenes.",
+      "coauthorInvalid": "Elige coautores de los resultados de la búsqueda, una vez cada uno."
     },
     "outline": {
       "file": "upload.md",

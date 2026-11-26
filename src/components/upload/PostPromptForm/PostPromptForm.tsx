@@ -7,8 +7,11 @@ import { useReducer, useState, useTransition, type FormEvent, type ReactElement,
 import { FormAlert } from "@/components/shared/FormAlert/FormAlert";
 import { SubmitButton } from "@/components/shared/SubmitButton/SubmitButton";
 import { getDescribedBy, PostFormField } from "@/components/upload/PostFormField/PostFormField";
+import { CoauthorPicker } from "@/components/upload/CoauthorPicker/CoauthorPicker";
+import { PostChipField } from "@/components/upload/PostChipField/PostChipField";
+import { PostListField } from "@/components/upload/PostListField/PostListField";
 import { usePostPreviewSender } from "@/components/upload/usePostPreviewSender/usePostPreviewSender";
-import { ai_models, model_families, model_family_names, type ModelId } from "@/data/aiModels";
+import type { TestedModel } from "@/data/aiModels";
 import { promptCategories } from "@/data/prompts";
 import { Link, useRouter as useLocaleRouter } from "@/i18n/navigation";
 import { PromptPostForm, type OutputExampleItem, type PromptPostValues } from "@/lib/forms/PromptPostForm";
@@ -16,6 +19,8 @@ import { new_output_example_path, OUTPUT_EXAMPLES_BUCKET, output_example_url } f
 import type { PostPreviewSnapshot } from "@/lib/postPreview";
 import { createBrowserSupabase } from "@/lib/supabase/browserClient";
 import {
+  LIST_LIMITS,
+  MAX_COAUTHORS,
   MAX_OUTPUT_IMAGES,
   OUTPUT_CAPTION_MAX_LENGTH,
   OUTPUT_IMAGE_TYPES,
@@ -23,7 +28,6 @@ import {
   PROMPT_KINDS,
   PROMPT_POST_FIELDS,
   REVISION_NOTE_MAX_LENGTH,
-  WORKS_WITH_TOOLS,
   type PromptPostField,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
@@ -33,10 +37,7 @@ import form_styles from "@/styles/form.module.css";
 import utility_styles from "@/styles/utilities.module.css";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<
-  PromptPostField,
-  "kind" | "category" | "worksWith" | "testedModels" | "file" | "outputExamples"
->;
+type TextField = Exclude<PromptPostField, "kind" | "category" | "highlights" | "file" | "outputExamples" | "coauthors">;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 type PostPromptFormProps =
@@ -52,23 +53,25 @@ type PostPromptFormProps =
       mode: "revision";
       post_id: string;
       slug: string;
-      initial_values: Omit<PromptPostValues, "file">;
+      initial_values: Omit<PromptPostValues, "file" | "coauthors">;
       /** The latest revision's file, kept when no new file is chosen. */
       current_file_name: string;
       /** Its content, for the live preview while no new file is chosen. */
       current_file_text: string;
       /** The post's authors as the listing credits them ("@ana, @luis"), for the live preview. */
       byline: string;
+      /** What the staff recorded the post as tested with; authors can't change it, the preview shows it. */
+      tested_with: { works_with: string[]; tested_models: TestedModel[] };
     };
 
-/** The id of a field's control, in kebab-case (`post-author-handle`); a checkbox group's first box is `${id}-0`. */
+/** The id of a field's control, in kebab-case (`post-author-handle`); a group's first control is `${id}-0`. */
 function getFieldId(field: PromptPostField): string {
   return `post-${field.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
 }
 
-/** Moves focus to a field (the first box of a checkbox group) to lead the user to what needs a change. */
+/** Moves focus to a field (the first control of a group) to lead the user to what needs a change. */
 function focusField(field: PromptPostField): void {
-  const is_group = field === "worksWith" || field === "testedModels";
+  const is_group = field === "highlights" || field === "category";
   const id = is_group ? `${getFieldId(field)}-0` : getFieldId(field);
   document.getElementById(id)?.focus();
 }
@@ -94,6 +97,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   const [serverIssues, setServerIssues] = useState<IssueMap>({});
   const [errorMessage, setErrorMessage] = useState<ReactNode>(null);
   const [submitted_slug, set_submitted_slug] = useState<string | null>(null);
+  const [coauthors_not_added, set_coauthors_not_added] = useState<string[]>([]);
   const [note, set_note] = useState("");
   const [is_note_too_long, set_is_note_too_long] = useState(false);
   const [isSubmitting, startSubmit] = useTransition();
@@ -107,8 +111,17 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
           byline: props.byline,
           post_slug: props.slug,
           current_file: { name: props.current_file_name, text: props.current_file_text },
+          tested_with: props.tested_with,
         }
-      : { values: form.getValues(), byline: `@${props.username}`, post_slug: null, current_file: null };
+      : {
+          values: form.getValues(),
+          // The poster first, then the co-authors they named, as the listing will credit them.
+          byline: [props.username, ...form.getValue("coauthors")].map((username) => `@${username}`).join(", "),
+          post_slug: null,
+          current_file: null,
+          // The staff add it once the post is in; a new post has none.
+          tested_with: { works_with: [], tested_models: [] },
+        };
   usePostPreviewSender(preview_snapshot, edit_count);
 
   function getIssue(field: PromptPostField): ValidationIssue | null {
@@ -146,29 +159,6 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   function leaveField(field: PromptPostField): void {
     form.markLeft(field);
     rerender();
-  }
-
-  function toggleTool(tool: string, isChecked: boolean): void {
-    const tools = form.getValue("worksWith");
-    updateField("worksWith", isChecked ? [...tools, tool] : tools.filter((value) => value !== tool));
-  }
-
-  /** Ticking a model marks it tested; unticking it also drops its recommendation. */
-  function toggle_model(model_id: ModelId, is_tested: boolean): void {
-    const models = form.getValue("testedModels");
-    updateField(
-      "testedModels",
-      is_tested ? [...models, { model_id, recommended: false }] : models.filter((model) => model.model_id !== model_id),
-    );
-  }
-
-  function toggle_recommended(model_id: ModelId, is_recommended: boolean): void {
-    updateField(
-      "testedModels",
-      form
-        .getValue("testedModels")
-        .map((model) => (model.model_id === model_id ? { ...model, recommended: is_recommended } : model)),
-    );
   }
 
   /** A picked image's size for the list, e.g. "340 KB". */
@@ -269,6 +259,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
       setServerIssues({});
       setFormKey((key) => key + 1);
       set_submitted_slug(result.slug);
+      set_coauthors_not_added(result.coauthors_not_added);
       rerender();
       return;
     }
@@ -366,10 +357,6 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
       <span className={utility_styles.visuallyHidden}> {t("preview.newTab")}</span>
     </Link>
   );
-  const toolsGuidance = getGuidanceText("worksWith");
-  const models_guidance = getGuidanceText("testedModels");
-  // Every model, numbered in reading order so the first box gets the field's focus id (`-0`).
-  const model_ids = Object.keys(ai_models) as ModelId[];
 
   return (
     <form key={formKey} className={styles.form} noValidate onSubmit={submitPost} aria-busy={isSubmitting}>
@@ -410,168 +397,40 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             ))}
           </select>
         </PostFormField>
+        <PostChipField
+          id={getFieldId("category")}
+          name="category"
+          label={t("fields.category.label")}
+          options={promptCategories.map((category) => ({ value: category, label: tCategories(category) }))}
+          value={form.getValue("category")}
+          guidance_text={getGuidanceText("category")}
+          is_invalid={getIssue("category") !== null}
+          on_change={(category) => updateField("category", category)}
+          on_leave={() => leaveField("category")}
+        />
         {renderTextField("title")}
         {renderTextField("tagline")}
         {renderTextField("summary", { multiline: true })}
-        <PostFormField id="post-category" label={t("fields.category.label")} guidanceText={getGuidanceText("category")}>
-          <select
-            id="post-category"
-            name="category"
-            className={form_styles.input}
-            value={form.getValue("category")}
-            aria-describedby={getDescribedBy("post-category", false)}
-            {...getControlState("category")}
-            onChange={(event) => updateField("category", event.target.value)}
-            onBlur={() => leaveField("category")}
-          >
-            <option value="">{t("fields.category.placeholder")}</option>
-            {promptCategories.map((category) => (
-              <option key={category} value={category}>
-                {tCategories(category)}
-              </option>
-            ))}
-          </select>
-        </PostFormField>
       </fieldset>
 
       <fieldset className={styles.group}>
-        <legend className={styles.legend}>{t("sections.details")}</legend>
         {renderTextField("meantFor", { multiline: true })}
-        {renderTextField("highlights", { multiline: true })}
-        {renderTextField("usageSteps", { multiline: true })}
-        <fieldset
-          className={styles.tools}
-          aria-describedby="post-works-with-hint post-works-with-guidance"
-          aria-invalid={getIssue("worksWith") !== null}
-        >
-          <legend className={form_styles.label}>{t("fields.worksWith.label")}</legend>
-          <ul className={styles.toolList}>
-            {WORKS_WITH_TOOLS.map((tool, index) => (
-              <li key={tool}>
-                <label className={styles.tool}>
-                  <input
-                    id={`${getFieldId("worksWith")}-${index}`}
-                    type="checkbox"
-                    name="worksWith"
-                    value={tool}
-                    checked={form.getValue("worksWith").includes(tool)}
-                    onChange={(event) => toggleTool(tool, event.target.checked)}
-                    onBlur={() => leaveField("worksWith")}
-                  />
-                  {tool}
-                </label>
-              </li>
-            ))}
-          </ul>
-          <p id="post-works-with-hint" className={form_styles.hint}>
-            {t("fields.worksWith.hint")}
-          </p>
-          <p
-            id="post-works-with-guidance"
-            className={form_styles.guidance}
-            aria-live="polite"
-            hidden={toolsGuidance === ""}
-          >
-            {toolsGuidance}
-          </p>
-        </fieldset>
-        <fieldset
-          className={styles.tools}
-          aria-describedby="post-tested-models-hint post-tested-models-guidance"
-          aria-invalid={getIssue("testedModels") !== null}
-        >
-          <legend className={form_styles.label}>{t("fields.testedModels.label")}</legend>
-          <p id="post-tested-models-hint" className={form_styles.hint}>
-            {t("fields.testedModels.hint")}
-          </p>
-          <div className={styles.modelFamilies}>
-            {model_families.map((family) => (
-              <div key={family} className={styles.modelFamily}>
-                <p className={styles.modelFamilyName} aria-hidden="true">
-                  {model_family_names[family]}
-                </p>
-                <ul className={styles.modelList} aria-label={model_family_names[family]}>
-                  {model_ids
-                    .filter((model_id) => ai_models[model_id].family === family)
-                    .map((model_id) => {
-                      const choice = form.getValue("testedModels").find((model) => model.model_id === model_id);
-                      const name = ai_models[model_id].name;
-                      return (
-                        <li key={model_id} className={styles.modelRow}>
-                          <label className={styles.tool}>
-                            <input
-                              id={`${getFieldId("testedModels")}-${model_ids.indexOf(model_id)}`}
-                              type="checkbox"
-                              name="testedModels"
-                              value={model_id}
-                              checked={choice !== undefined}
-                              onChange={(event) => toggle_model(model_id, event.target.checked)}
-                              onBlur={() => leaveField("testedModels")}
-                            />
-                            {name}
-                          </label>
-                          {choice && (
-                            <label className={styles.recommend}>
-                              <input
-                                type="checkbox"
-                                name="recommendedModels"
-                                value={model_id}
-                                checked={choice.recommended}
-                                aria-label={t("fields.testedModels.recommendedLabel", { model: name })}
-                                onChange={(event) => toggle_recommended(model_id, event.target.checked)}
-                              />
-                              <span aria-hidden="true">{t("fields.testedModels.recommended")}</span>
-                            </label>
-                          )}
-                        </li>
-                      );
-                    })}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <p
-            id="post-tested-models-guidance"
-            className={form_styles.guidance}
-            aria-live="polite"
-            hidden={models_guidance === ""}
-          >
-            {models_guidance}
-          </p>
-        </fieldset>
-      </fieldset>
-
-      <fieldset className={styles.group}>
-        <legend className={styles.legend}>{t("sections.file")}</legend>
-        <PostFormField
-          id="post-file"
-          label={is_revision ? tReview("revise.fileLabel") : t("fields.file.label")}
-          hint={
-            props.mode === "revision"
-              ? tReview("revise.fileHint", { fileName: props.current_file_name })
-              : t("fields.file.hint")
-          }
-          guidanceText={getGuidanceText("file")}
-        >
-          <input
-            id="post-file"
-            name="file"
-            type="file"
-            accept=".md,text/markdown"
-            className={form_styles.input}
-            aria-describedby={getDescribedBy("post-file", true)}
-            {...getControlState("file")}
-            onChange={(event) => {
-              updateField("file", event.target.files?.[0] ?? null);
-              leaveField("file");
-            }}
-          />
-        </PostFormField>
-        {renderTextField("previewLineCount")}
-      </fieldset>
-
-      <fieldset className={styles.group}>
-        <legend className={styles.legend}>{t("sections.examples")}</legend>
+        <PostListField
+          id={getFieldId("highlights")}
+          label={t("fields.highlights.label")}
+          hint={t("fields.highlights.hint", { max: LIST_LIMITS.highlights.max })}
+          guidance_text={getGuidanceText("highlights")}
+          // The form keeps one item per line, the format the validation and the server read.
+          items={form.getValue("highlights").split("\n")}
+          max_items={LIST_LIMITS.highlights.max}
+          item_max_length={LIST_LIMITS.highlights.itemMax}
+          get_item_label={(number) => t("fields.highlights.itemLabel", { number })}
+          get_remove_label={(number) => t("fields.highlights.remove", { number })}
+          add_label={t("fields.highlights.add")}
+          control_state={getControlState("highlights")}
+          on_change={(items) => updateField("highlights", items.join("\n"))}
+          on_leave={() => leaveField("highlights")}
+        />
         <PostFormField
           id="post-output-examples"
           label={t("fields.outputExamples.label")}
@@ -633,7 +492,50 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             })}
           </ul>
         )}
+        {renderTextField("usageSteps", { multiline: true })}
       </fieldset>
+
+      <fieldset className={styles.group}>
+        <legend className={styles.legend}>{t("sections.file")}</legend>
+        <PostFormField
+          id="post-file"
+          label={is_revision ? tReview("revise.fileLabel") : t("fields.file.label")}
+          hint={
+            props.mode === "revision"
+              ? tReview("revise.fileHint", { fileName: props.current_file_name })
+              : t("fields.file.hint")
+          }
+          guidanceText={getGuidanceText("file")}
+        >
+          <input
+            id="post-file"
+            name="file"
+            type="file"
+            accept=".md,text/markdown"
+            className={form_styles.input}
+            aria-describedby={getDescribedBy("post-file", true)}
+            {...getControlState("file")}
+            onChange={(event) => {
+              updateField("file", event.target.files?.[0] ?? null);
+              leaveField("file");
+            }}
+          />
+        </PostFormField>
+        {renderTextField("previewLineCount")}
+      </fieldset>
+
+      {!is_revision && (
+        <fieldset className={styles.group}>
+          <legend className={styles.legend}>{t("sections.coauthors")}</legend>
+          <CoauthorPicker
+            id={getFieldId("coauthors")}
+            coauthors={form.getValue("coauthors")}
+            max_coauthors={MAX_COAUTHORS}
+            guidance_text={getGuidanceText("coauthors")}
+            on_change={(coauthors) => updateField("coauthors", coauthors)}
+          />
+        </fieldset>
+      )}
 
       {is_revision && (
         <fieldset className={styles.group}>
@@ -666,6 +568,14 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
         <FormAlert tone="success">
           {t("submitted")} <Link href={`/prompts/${submitted_slug}/review`}>{t("openReview")}</Link>{" "}
           <Link href="/my-prompts">{t("myPrompts")}</Link>
+          {coauthors_not_added.length > 0 && (
+            <>
+              {" "}
+              {t("coauthorsNotAdded", {
+                usernames: coauthors_not_added.map((username) => `@${username}`).join(", "),
+              })}
+            </>
+          )}
         </FormAlert>
       )}
       {errorMessage && <FormAlert tone="error">{errorMessage}</FormAlert>}

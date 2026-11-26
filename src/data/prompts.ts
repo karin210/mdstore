@@ -2,7 +2,11 @@ import { type TestedModel } from "@/data/aiModels";
 import type { Messages } from "@/i18n/messages";
 
 /** Stable category ids; their labels live in the catalogue under `prompts.categories.<id>`. */
-export const promptCategories = ["conventions", "agents", "frontend", "testing", "refactoring", "devops"] as const;
+/**
+ * The categories a listing is filed under (one each). The posted_prompts and prompt_revisions category checks
+ * keep the same list (latest: 20261125010000_ux_ui_and_code_conventions_categories.sql).
+ */
+export const promptCategories = ["ux-ui", "frontend", "code-conventions"] as const;
 
 export type PromptCategory = (typeof promptCategories)[number];
 

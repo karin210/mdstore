@@ -18,6 +18,10 @@ interface DiffTableProps {
   comments: LineComment[];
   /** Authors and admins of a review in progress who have a username. */
   can_comment: boolean;
+  /** The post's authors, while the review is in progress: they answer suggestions. */
+  can_answer: boolean;
+  /** The revision's own file, for suggesting changes to its lines. */
+  file_lines: string[];
   label: string;
 }
 
@@ -40,6 +44,8 @@ export function DiffTable({
   hidden_after,
   comments,
   can_comment,
+  can_answer,
+  file_lines,
   label,
 }: DiffTableProps): ReactElement {
   const t = useTranslations("review");
@@ -126,6 +132,8 @@ export function DiffTable({
                             comments={line_comments}
                             is_form_open={is_open}
                             on_close={() => set_open_key(null)}
+                            file_lines={file_lines}
+                            can_answer={can_answer}
                           />
                         </td>
                       </tr>

@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { prompt_kinds } from "@/data/prompts";
-import { check_output_examples, check_tested_models, checkKind, promptPostSchema } from "@/lib/validation/promptPost";
+import {
+  check_coauthors,
+  check_output_examples,
+  checkKind,
+  MAX_COAUTHORS,
+  promptPostSchema,
+} from "@/lib/validation/promptPost";
 
 describe("checkKind", () => {
   it.each(prompt_kinds)("accepts %s", (kind) => {
@@ -18,15 +24,14 @@ describe("promptPostSchema kind", () => {
     title: "Form UX",
     tagline: "Makes every form easier to fill in.",
     summary: "Rules for labels, inline guidance and focus on submit.",
-    category: "frontend",
+    category: "ux-ui",
     meantFor: "React apps",
     highlights: "Inline guidance",
     usageSteps: "Drop it into your repo",
-    worksWith: ["Claude Code"],
-    testedModels: [],
     file: new File(["# Form UX\n"], "form-ux.md"),
     previewLineCount: "12",
     outputExamples: [],
+    coauthors: [],
   };
 
   it.each(prompt_kinds)("accepts the %s kind", (kind) => {
@@ -40,27 +45,10 @@ describe("promptPostSchema kind", () => {
       expect(result.error?.issues.map((issue) => [issue.path[0], issue.message])).toEqual([["kind", "chooseKind"]]);
     }
   });
-});
 
-describe("check_tested_models", () => {
-  it("accepts no models, or registry models with or without a recommendation", () => {
-    expect(check_tested_models([])).toBeNull();
-    expect(
-      check_tested_models([
-        { model_id: "claude-opus-5-5", recommended: true },
-        { model_id: "gpt-5-1", recommended: false },
-      ]),
-    ).toBeNull();
-  });
-
-  it("refuses an unknown or repeated model", () => {
-    expect(check_tested_models([{ model_id: "gpt-9", recommended: false }])).toEqual({ key: "unknownModel" });
-    expect(
-      check_tested_models([
-        { model_id: "gpt-5-1", recommended: false },
-        { model_id: "gpt-5-1", recommended: true },
-      ]),
-    ).toEqual({ key: "unknownModel" });
+  it("refuses tools or models from the author: the staff provide them", () => {
+    expect(promptPostSchema.safeParse({ ...valid_submission, worksWith: ["Claude Code"] }).success).toBe(false);
+    expect(promptPostSchema.safeParse({ ...valid_submission, testedModels: [] }).success).toBe(false);
   });
 });
 
@@ -95,5 +83,26 @@ describe("check_output_examples", () => {
       key: "tooLong",
       values: { max: 120 },
     });
+  });
+});
+
+describe("check_coauthors", () => {
+  it("accepts none, or distinct well-formed usernames", () => {
+    expect(check_coauthors([])).toBeNull();
+    expect(check_coauthors(["ana", "@luis.dev"])).toBeNull();
+  });
+
+  it("refuses the same user twice, ignoring case and the @", () => {
+    expect(check_coauthors(["ana", "@Ana"])).toEqual({ key: "coauthorInvalid" });
+  });
+
+  it("refuses malformed usernames", () => {
+    expect(check_coauthors(["a"])).toEqual({ key: "coauthorInvalid" });
+    expect(check_coauthors(["ana%"])).toEqual({ key: "coauthorInvalid" });
+  });
+
+  it("refuses more than the maximum", () => {
+    const usernames = Array.from({ length: MAX_COAUTHORS + 1 }, (_, index) => `user${index}`);
+    expect(check_coauthors(usernames)).toEqual({ key: "tooManyItems", values: { max: MAX_COAUTHORS } });
   });
 });

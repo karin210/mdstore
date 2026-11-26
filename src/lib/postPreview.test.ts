@@ -11,11 +11,10 @@ const EMPTY_VALUES: PromptPostValues = {
   meantFor: "",
   highlights: "",
   usageSteps: "",
-  worksWith: [],
-  testedModels: [],
   file: null,
   previewLineCount: "12",
   outputExamples: [],
+  coauthors: [],
 };
 
 function snapshot_of(values: Partial<PromptPostValues>, extra: Partial<PostPreviewSnapshot> = {}): PostPreviewSnapshot {
@@ -24,6 +23,7 @@ function snapshot_of(values: Partial<PromptPostValues>, extra: Partial<PostPrevi
     byline: "@ana",
     post_slug: null,
     current_file: null,
+    tested_with: { works_with: [], tested_models: [] },
     ...extra,
   };
 }
@@ -53,7 +53,7 @@ describe("build_preview_listing", () => {
     const { prompt, category, empty_fields } = build_preview_listing({
       snapshot: snapshot_of({
         title: "  Form UX review ",
-        category: "frontend",
+        category: "ux-ui",
         highlights: "First\n\n  Second  \n",
         previewLineCount: "5",
       }),
@@ -70,7 +70,7 @@ describe("build_preview_listing", () => {
     expect(prompt.fullMarkdown).toBe(text);
     expect(prompt.priceUsd).toBe(0);
     expect(prompt.author).toBe("@ana");
-    expect(category).toBe("frontend");
+    expect(category).toBe("ux-ui");
     expect(empty_fields.has("title")).toBe(false);
     expect(empty_fields.has("file")).toBe(false);
   });
@@ -87,7 +87,7 @@ describe("build_preview_listing", () => {
     expect(prompt.excerpt.split("\n")).toHaveLength(12);
   });
 
-  it("lists only the examples that have a browser URL, and only known models", () => {
+  it("lists only the examples that have a browser URL", () => {
     const { prompt } = build_preview_listing({
       snapshot: snapshot_of({
         title: "Title",
@@ -95,13 +95,26 @@ describe("build_preview_listing", () => {
           { id: "a", caption: "", path: null, file: null },
           { id: "b", caption: "The form", path: null, file: null },
         ],
-        testedModels: [{ model_id: "not-a-model", recommended: true }],
       }),
       file: null,
       image_urls: new Map([["b", "blob:http://localhost/b"]]),
     });
 
     expect(prompt.outputExamples).toEqual([{ src: "blob:http://localhost/b", alt: "The form", caption: "The form" }]);
-    expect(prompt.tested_models).toEqual([]);
+  });
+
+  it("shows what the staff recorded the post as tested with, not anything from the form", () => {
+    const tested_with = {
+      works_with: ["Cursor"],
+      tested_models: [{ model_id: "claude-haiku-5-5" as const, recommended: true }],
+    };
+    const { prompt } = build_preview_listing({
+      snapshot: snapshot_of({ title: "Title" }, { tested_with }),
+      file: null,
+      image_urls: new Map(),
+    });
+
+    expect(prompt.worksWith).toEqual(["Cursor"]);
+    expect(prompt.tested_models).toEqual(tested_with.tested_models);
   });
 });

@@ -7,7 +7,7 @@
 **mdstore** is a hub for developing coding prompts. Developers share the prompts they author, and the community gets access to high-quality, tested ones. The prompts are packaged as plain Markdown (`.md`) files: `CLAUDE.md` / `AGENTS.md` instructions, Cursor rules, custom commands and agent playbooks for AI coding tools (Claude Code, Cursor, GitHub Copilot, Aider…). Selling prompts is one of the core features, not the main pitch: the home page H1 and lead lead with developing and sharing, not buying.
 
 - **Buyers** browse listings by category, read a free preview of each file (its first lines), buy it once, and drop the `.md` into their repo. Purchases include future versions of the file.
-- **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use, tools tested with, and optionally the specific models tested with, each one markable as recommended), the `.md` file and the free-preview length. The post is published at once on its own `/prompts/[slug]` page. Posting is free for now; paid posts come with checkout. While filling in the form, "Preview listing" opens `/upload/preview` in a new tab: the listing exactly as it will look, updated live as they type (also from the "push a new version" form on a review page).
+- **Authors** post the prompts they have refined from `/upload` ("Upload your prompts"): signed-in users fill in a form with what the detail page shows (title, tagline, summary, category, author handle, meant for, highlights, suggested use), the `.md` file, the free-preview length and, optionally, co-authors (found with a username search, `search_usernames` in `src/server/profiles/searchUsernames.ts`, signed-in only; the create action adds them with `add_post_coauthor` right after inserting the post, and reports any it couldn't add). What a prompt was tested with (tools and models, some marked recommended) is not on the form: the staff who test it provide it (how is not built yet), so a new post starts with none and a new version keeps the post's. The post opens a review (`docs/review-workflow.md`) and goes public on its own `/prompts/[slug]` page once an admin approves it; reviewers can suggest changes to lines of the file, which the authors accept or reject. Posting is free for now; paid posts come with checkout. While filling in the form, "Preview listing" opens `/upload/preview` in a new tab: the listing exactly as it will look, updated live as they type (also from the "push a new version" form on a review page).
 
 Current state: the **landing page** (`/`), a **detail page per prompt** (`/prompts/[slug]`), the **upload page** (`/upload`, posting form at the bottom), its **live preview** (`/upload/preview`, signed-in only), the **login page** (`/login`, sign-up / sign-in tabs), the signed-in **profile** (`/profile`: account details, the five latest uploads with a link to all of them, and forms to change the username, email and password) and **my prompts** (`/my-prompts`: every post the user owns or co-authors, newest first), and the branded 404. Signed-out visitors of `/profile`, `/my-prompts` and `/upload/preview` are redirected to `/login` by `src/proxy.ts`. Prompts come from two sources: the curated catalogue (`src/data/prompts.ts` + copy in the message catalogue; currently empty, so the full `.md` products would live in `content/prompts/`, which no longer exists) and the `posted_prompts` table in Supabase (user posts, always free). Product files must stay agnostic of the AI agent, the tooling and the developer's stack unless the listing is explicitly about one. Free prompts can be downloaded from `/prompts/[slug]/download`; paid ones get a `403` there. The landing page's "most popular prompts" grid shows up to six approved posts: highest average stars first, newest first among equal averages, then unrated posts newest first (so with no ratings, the six newest); the rule is the database function `popular_prompts()`, read by `src/server/prompts/popularPrompts.ts`. Catalogue listings aren't in it (they have no ratings or dates). Signed-in readers rate approved posts from 1 to 5 stars on the listing page ("Ratings" section; authors can't rate their own); the average and count show under the tagline and in the API. There is no checkout yet.
 
@@ -27,7 +27,7 @@ What sets mdstore apart from other prompt and skill marketplaces. Only output pr
 
 - **Output previews.** Besides the free excerpt of the file, each listing shows what the prompt actually produces: a preview of its output, ideally several examples. Buyers judge a prompt by its results, not only by reading its instructions.
 - **Very specific files.** Listings target one narrow job (e.g. only improving the UI/UX of a form) rather than broad, catch-all instructions, so buyers know exactly what they get.
-- **Supported technologies.** Each listing states which technologies its instructions support (frameworks, languages, styling approaches), alongside the AI tools it was tested with (`worksWith`).
+- **Supported technologies.** Each listing states which technologies its instructions support (frameworks, languages, styling approaches), alongside the AI tools the staff tested it with (`worksWith`).
 
 ## Stack
 
@@ -80,7 +80,7 @@ src/
 │  │                         PromptDetail) so the shared App Shell stays instant;
 │  │                         listing detail: header (h1 title + h2 tagline), summary,
 │  │                         meant for, highlights, purchase card, output examples,
-│  │                         tested with (the tools from the upload form, then models by family, recommended ones highlighted, plus a
+│  │                         tested with (the tools the staff recorded, then models by family, recommended ones highlighted, plus a
 │  │                         cost table), free preview (+ "Show the full file" for free listings only;
 │  │                         paid files must never be read into a page), suggested use
 │  │                         (catalogue slugs prerendered via generateStaticParams; posted
@@ -115,7 +115,10 @@ src/
 │  │                         Markdown file: homeSections (the route index's order), MarkdownField
 │  │                         (hero's WebGL backdrop, lazy, see src/lib/markdownFieldRenderer.ts)
 │  ├─ upload/                used only by /upload: its sections, PostPromptSection (session
-│  │                         check in <Suspense>), PostPromptForm, PostFormField,
+│  │                         check in <Suspense>), PostPromptForm, PostFormField, PostListField
+│  │                         (a list built one input per item, with add / remove: highlights), PostChipField (one choice
+│  │                         as radio chips: category), CoauthorPicker (username search, results
+│  │                         list, chosen co-authors; new posts only),
 │  │                         usePostPreviewSender (the form's side of the live preview) and
 │  │                         PostPreview (the /upload/preview body, reads PostPreviewReceiver)
 │  ├─ profile/               used only by /profile: ProfileSection, AccountDetails, RecentUploads,
@@ -137,7 +140,9 @@ src/
 │  │                         count), PromptRatings (session read in <Suspense>) + RatingForm
 │  └─ review/                review page, queue and invite: ReviewBody, ReviewTimeline,
 │                            RevisionFile, RevisionChanges, DiffTable, LineThread (a line's
-│                            comments, shared by both), CommentForm, DecisionForm,
+│                            comments, shared by both), CommentForm (also suggests changes),
+│                            SuggestionCard (a suggested change + accept / edit / reject),
+│                            SuggestionBatch (apply several as one revision), DecisionForm,
 │                            AuthorsPanel, WithdrawButton, ReviewQueue, InviteBody/InviteAccept
 │                            (own modules + src/styles/review.module.css and reviewPage.module.css)
 ├─ data/                     static catalogues: prompts.ts (listings), aiModels.ts (model

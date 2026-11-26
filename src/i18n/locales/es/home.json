@@ -105,7 +105,7 @@
         },
         "supportedTools": {
           "question": "¿Con qué herramientas de IA para programar funcionan los prompts?",
-          "answer": "Con cualquier herramienta que lea instrucciones en Markdown: Claude Code, Cursor, GitHub Copilot, Aider y otras. Cada publicación muestra las herramientas con las que su autor lo probó."
+          "answer": "Con cualquier herramienta que lea instrucciones en Markdown: Claude Code, Cursor, GitHub Copilot, Aider y otras. Cada publicación muestra las herramientas con las que el equipo de mdstore la probó."
         },
         "updates": {
           "question": "¿Recibo actualizaciones cuando el autor mejora el archivo?",

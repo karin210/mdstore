@@ -88,11 +88,14 @@ export async function push_revision(post_id: string, formData: FormData): Promis
   const supabase = await createServerSupabase();
   if (!supabase) return { status: "error", error_key: "notConfigured" };
 
-  // Without a new file, the latest revision's file carries over (readable by the authors only).
+  // Without a new file, the latest revision's file carries over (readable by the authors only). What the
+  // prompt was tested with always carries over: the staff provide it, not the authors.
   const { data: latest, error: latest_error } = await supabase
     .from("prompt_revisions")
     // Named foreign key: posted_prompts.live_revision_id links the two tables the other way too.
-    .select("file_name, content, output_examples, posted_prompts!prompt_revisions_post_id_fkey(slug)")
+    .select(
+      "file_name, content, output_examples, works_with, tested_models, recommended_models, posted_prompts!prompt_revisions_post_id_fkey(slug)",
+    )
     .eq("post_id", post_id)
     .order("number", { ascending: false })
     .limit(1)
@@ -100,6 +103,9 @@ export async function push_revision(post_id: string, formData: FormData): Promis
       file_name: string;
       content: string;
       output_examples: unknown;
+      works_with: string[];
+      tested_models: string[];
+      recommended_models: string[];
       posted_prompts: { slug: string } | null;
     }>();
   if (latest_error) return to_error("reviews.pushRevision", latest_error);
@@ -138,12 +144,12 @@ export async function push_revision(post_id: string, formData: FormData): Promis
     p_meant_for: input.meantFor,
     p_highlights: input.highlights,
     p_usage_steps: input.usageSteps,
-    p_works_with: input.worksWith,
+    p_works_with: latest.works_with,
     p_content: content,
     p_preview_line_count: input.previewLineCount,
     p_note: input.note || null,
-    p_tested_models: input.testedModels.map((model) => model.model_id),
-    p_recommended_models: input.testedModels.filter((model) => model.recommended).map((model) => model.model_id),
+    p_tested_models: latest.tested_models,
+    p_recommended_models: latest.recommended_models,
     p_output_examples: input.outputExamples,
   });
   return result.status === "ok" ? { status: "ok", number: result.value } : result;
@@ -157,6 +163,10 @@ export interface CommentInput {
   line_number?: number;
   /** Which file the line counts in; "new" (the revision's own file) when left out. */
   line_side?: LineSide;
+  /** A suggested change: the lines that replace line_number to line_end; empty deletes them. */
+  suggestion?: string[];
+  /** The last line a suggestion replaces, when it spans several. */
+  line_end?: number;
 }
 
 export async function add_review_comment(input: CommentInput): Promise<ReviewActionResult> {
@@ -166,6 +176,42 @@ export async function add_review_comment(input: CommentInput): Promise<ReviewAct
     p_revision_id: input.revision_id ?? null,
     p_line_number: input.line_number ?? null,
     p_line_side: input.line_side ?? "new",
+    p_suggestion: input.suggestion ?? null,
+    p_line_end: input.line_end ?? null,
+  });
+  return result.status === "ok" ? { status: "ok" } : result;
+}
+
+/** One suggestion to accept; `lines` when the author edited the replacement first. */
+export interface AcceptedSuggestion {
+  id: string;
+  lines?: string[];
+}
+
+/**
+ * An author accepts suggested changes: they are applied to the review's latest revision and pushed as one
+ * new revision, with the note as its message.
+ */
+export async function apply_suggestions(
+  review_id: string,
+  suggestions: AcceptedSuggestion[],
+  note: string,
+): Promise<ReviewActionResult<{ number: number }>> {
+  const result = await call_function<number>("reviews.applySuggestions", "apply_suggestions", {
+    p_review_id: review_id,
+    p_suggestions: suggestions.map((suggestion) =>
+      suggestion.lines ? { id: suggestion.id, lines: suggestion.lines } : { id: suggestion.id },
+    ),
+    p_note: note.trim() || null,
+  });
+  return result.status === "ok" ? { status: "ok", number: result.value } : result;
+}
+
+/** An author turns a suggestion down, with an optional reply on its line. */
+export async function reject_suggestion(comment_id: string, reply: string): Promise<ReviewActionResult> {
+  const result = await call_function<null>("reviews.rejectSuggestion", "reject_suggestion", {
+    p_comment_id: comment_id,
+    p_reply: reply.trim() || null,
   });
   return result.status === "ok" ? { status: "ok" } : result;
 }

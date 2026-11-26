@@ -13,11 +13,11 @@ insert into public.posted_prompts (
   meant_for, highlights, usage_steps, works_with, content, preview_line_count
 ) values (
   'rated-post', '00000000-0000-0000-0000-0000000000b1', '@ratingowner', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5
 ), (
   'pending-post', '00000000-0000-0000-0000-0000000000b1', '@ratingowner', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5
 );
 update public.posted_prompts set status = 'approved' where slug = 'rated-post';

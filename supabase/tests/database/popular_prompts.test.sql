@@ -13,7 +13,7 @@ insert into public.posted_prompts (
 )
 select
   'popular-p' || n, '00000000-0000-0000-0000-0000000000c1', '@popularowner', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5, now() - make_interval(days => 10 - n)
 from generate_series(1, 5) as n;
 update public.posted_prompts set status = 'approved' where slug in ('popular-p1', 'popular-p2', 'popular-p3', 'popular-p4');

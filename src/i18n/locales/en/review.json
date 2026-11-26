@@ -58,7 +58,9 @@
       },
       "someone": "someone",
       "viewRevision": "View the file",
-      "viewChanges": "View the changes"
+      "viewChanges": "View the changes",
+      "suggestion": "@{username} suggested a change to {count, plural, one {line {first}} other {lines {first}–{last}}} of revision {number}",
+      "appliedSuggestions": "{count, plural, one {Applies # suggestion} other {Applies # suggestions}}"
     },
     "comment": {
       "label": "Add a comment",
@@ -119,7 +121,8 @@
         "preview_line_count": "Free preview length",
         "file_name": "File name"
       },
-      "examples": "Output examples"
+      "examples": "Output examples",
+      "lineHelpSuggest": "Select a line number to comment on that line or suggest a change to it."
     },
     "changes": {
       "against": {
@@ -137,7 +140,7 @@
       "removed": "Removed line",
       "added": "Added line",
       "summary": "{added, plural, one {# line added} other {# lines added}}, {removed, plural, one {# removed} other {# removed}}",
-      "lineHelp": "Select a line number to comment on that line: the old number on a removed line, the new number on any other."
+      "lineHelp": "Select a line number to comment on that line: the old number on a removed line, the new number on any other. On a new number you can also suggest a change."
     },
     "revise": {
       "intoActive": "Your new version joins review #{number} and goes back to the reviewers.",
@@ -224,6 +227,50 @@
       },
       "signedOut": "Sign in or create an account to accept the invite.",
       "signIn": "Sign in to continue"
+    },
+    "suggestion": {
+      "toggle": "Suggest a change",
+      "lineEndLabel": "Through line",
+      "textLabel": "Replace {count, plural, one {line {first}} other {lines {first}–{last}}} with",
+      "textHint": "Write the lines as they should read. Leave it empty to delete them.",
+      "bodyLabel": "Why (optional)",
+      "unchanged": "Change the text first: it still matches the file.",
+      "submit": "Suggest change",
+      "lineHeading": "@{username} suggested a change to {count, plural, one {line {first}} other {lines {first}–{last}}}",
+      "state": {
+        "pending": "Pending",
+        "outdated": "Outdated",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      },
+      "outdated": "These lines changed in a later revision, so the suggestion can’t be applied any more.",
+      "acceptedInto": "Accepted by @{username} into revision {number}.",
+      "acceptedEdited": "Accepted with edits by @{username} into revision {number}.",
+      "rejectedBy": "Rejected by @{username}.",
+      "appliedAs": "Applied as",
+      "diffLabel": "Suggested change",
+      "deletes": "Deletes these lines.",
+      "accept": "Accept",
+      "accepting": "Applying…",
+      "edit": "Edit and accept",
+      "editLabel": "Your version of the lines",
+      "applyEdited": "Apply my version",
+      "reject": "Reject",
+      "outdatedReject": "Dismiss",
+      "rejecting": "Rejecting…",
+      "replyLabel": "Reply (optional)",
+      "confirmReject": "Confirm: reject",
+      "cancel": "Cancel",
+      "batch": {
+        "title": "{count, plural, one {# suggestion to answer} other {# suggestions to answer}}",
+        "lead": "Pick the ones to accept. They are applied together as one new revision.",
+        "item": "{count, plural, one {Line {first}} other {Lines {first}–{last}}} of revision {number} · @{username}",
+        "noteLabel": "Note for the new revision (optional)",
+        "submit": "{count, plural, =0 {Apply suggestions} one {Apply # suggestion} other {Apply # suggestions}}",
+        "busy": "Applying…",
+        "none": "Pick at least one suggestion.",
+        "overlap": "Two of the chosen suggestions change the same lines. Apply one, then answer the other."
+      }
     }
   }
 }

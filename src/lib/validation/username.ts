@@ -7,6 +7,9 @@ import { z } from "zod";
  */
 export const USERNAME_PATTERN = /^[A-Za-z0-9._-]{2,39}$/;
 export const USERNAME_MAX_LENGTH = 39;
+/** A username search (co-authors on the upload form): a piece of a username, at least two characters. */
+export const USERNAME_SEARCH_MIN_LENGTH = 2;
+export const USERNAME_SEARCH_PATTERN = /^[A-Za-z0-9._-]{2,39}$/;
 
 export type UsernameGuidanceKey = "usernameRequired" | "usernameFormat";
 

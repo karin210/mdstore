@@ -1,0 +1,59 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field > legend {
+  padding: 0;
+}
+
+/* The legend is not a flex item, so the field's gap doesn't reach it. */
+.field > legend + * {
+  margin-top: var(--space-2xs);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* The same pill as the landing page's category filters; the radio inside is visually hidden. */
+.chip {
+  padding: 0.45em 1.1em;
+  border: 0.0625rem solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.chip:hover {
+  border-color: var(--color-primary);
+}
+
+.chip:has(:checked) {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+/* The radio is hidden, so its chip carries the keyboard focus ring. */
+.chip:has(:focus-visible) {
+  outline: 0.1875rem solid var(--color-focus);
+  outline-offset: 0.125rem;
+}
+
+.field[data-invalid="true"] .chip:not(:has(:checked)) {
+  border-color: var(--color-error);
+}

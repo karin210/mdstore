@@ -32,7 +32,7 @@
     "models": {
       "title": "Tested with",
       "note": "The specific models {fileName} was tested against, by family. The recommended ones gave the best results.",
-      "empty": "The author hasn't listed the tools or models this prompt was tested with yet.",
+      "empty": "The mdstore team hasn't tested this prompt yet.",
       "recommended": "Recommended",
       "table": {
         "caption": "Cost by model, in US dollars per one million tokens",
@@ -41,7 +41,7 @@
         "output": "Output"
       },
       "tools": "Tools",
-      "toolsOnly": "The AI coding tools {fileName} was tested with. The author hasn't listed specific models yet."
+      "toolsOnly": "The AI coding tools the mdstore team tested {fileName} with. Specific models are on their way."
     },
     "preview": {
       "title": "Free preview",

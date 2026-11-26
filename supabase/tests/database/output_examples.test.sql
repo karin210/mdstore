@@ -23,7 +23,7 @@ language sql as $$
     usage_steps, works_with, output_examples, content, preview_line_count
   ) values (
     p_slug, '00000000-0000-0000-0000-0000000000e1', '@examplesowner', 'test.md', 'Test prompt', 'A tagline long enough',
-    'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}',
+    'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}',
     p_examples, E'line 1\nline 2\nline 3\n', 5
   );
 $$;
@@ -73,7 +73,7 @@ select public.decide_review(
 select pg_temp.act_as('00000000-0000-0000-0000-0000000000e1');
 select public.push_revision(
   (select id from public.posted_prompts where slug = 'examples-post'), 'prompt', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\n', 5, null, '{}', '{}',
   '[{"path": "00000000-0000-0000-0000-0000000000e1/33333333-3333-3333-3333-333333333333.webp", "caption": "A table"}]'
 );

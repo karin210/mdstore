@@ -6,14 +6,12 @@ import {
   checkList,
   checkPreviewLineCount,
   checkText,
-  checkWorksWith,
+  check_coauthors,
   check_output_examples,
-  check_tested_models,
   PREVIEW_LINES,
   PROMPT_POST_FIELDS,
   type PromptKind,
   type PromptPostField,
-  type TestedModelChoice,
   type ValidationIssue,
 } from "@/lib/validation/promptPost";
 
@@ -37,11 +35,11 @@ export interface PromptPostValues {
   meantFor: string;
   highlights: string;
   usageSteps: string;
-  worksWith: string[];
-  testedModels: TestedModelChoice[];
   file: File | null;
   previewLineCount: string;
   outputExamples: OutputExampleItem[];
+  /** Usernames (without @) to add as co-authors of a new post; a revision leaves it empty. */
+  coauthors: string[];
 }
 
 const EMPTY_POST: PromptPostValues = {
@@ -53,11 +51,10 @@ const EMPTY_POST: PromptPostValues = {
   meantFor: "",
   highlights: "",
   usageSteps: "",
-  worksWith: [],
-  testedModels: [],
   file: null,
   previewLineCount: String(PREVIEW_LINES.default),
   outputExamples: [],
+  coauthors: [],
 };
 
 /**
@@ -69,8 +66,9 @@ const EMPTY_POST: PromptPostValues = {
 export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, ValidationIssue> {
   private readonly is_revision: boolean;
 
-  constructor(initial_values?: Omit<PromptPostValues, "file">) {
-    super(initial_values ? { ...initial_values, file: null } : EMPTY_POST, PROMPT_POST_FIELDS);
+  constructor(initial_values?: Omit<PromptPostValues, "file" | "coauthors">) {
+    // A revision's co-authors are managed from its review, not here.
+    super(initial_values ? { ...initial_values, file: null, coauthors: [] } : EMPTY_POST, PROMPT_POST_FIELDS);
     this.is_revision = initial_values !== undefined;
   }
 
@@ -89,16 +87,14 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkList(field, values[field]);
       case "category":
         return checkCategory(values.category);
-      case "worksWith":
-        return checkWorksWith(values.worksWith);
-      case "testedModels":
-        return check_tested_models(values.testedModels);
       case "file":
         return checkFile(values.file, this.is_revision);
       case "previewLineCount":
         return checkPreviewLineCount(values.previewLineCount);
       case "outputExamples":
         return check_output_examples(values.outputExamples);
+      case "coauthors":
+        return check_coauthors(values.coauthors);
     }
   }
 
@@ -117,12 +113,6 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     formData.set("meantFor", values.meantFor);
     formData.set("highlights", values.highlights);
     formData.set("usageSteps", values.usageSteps);
-    values.worksWith.forEach((tool) => formData.append("worksWith", tool));
-    // Two lists, the way the database stores them: every tested model, then the recommended ones.
-    values.testedModels.forEach((model) => {
-      formData.append("testedModels", model.model_id);
-      if (model.recommended) formData.append("recommendedModels", model.model_id);
-    });
     values.outputExamples.forEach((example) => {
       if (!example.path) return;
       formData.append("outputExample", example.path);
@@ -130,6 +120,7 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
     });
     if (values.file) formData.set("file", values.file);
     formData.set("previewLineCount", values.previewLineCount);
+    if (!this.is_revision) values.coauthors.forEach((username) => formData.append("coauthor", username));
     return formData;
   }
 }

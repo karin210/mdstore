@@ -1,7 +1,10 @@
 "use client";
 
 import type { ReactElement } from "react";
+import { useTranslations } from "next-intl";
 import { CommentForm } from "@/components/review/CommentForm/CommentForm";
+import { SuggestionCard } from "@/components/review/SuggestionCard/SuggestionCard";
+import type { SuggestionView } from "@/lib/review/suggestions";
 import type { LineSide } from "@/lib/review/types";
 import review_styles from "@/styles/review.module.css";
 import styles from "./LineThread.module.css";
@@ -14,6 +17,10 @@ export interface LineComment {
   username: string;
   body: string;
   date: string;
+  /** Set on a suggested change. */
+  suggestion?: SuggestionView;
+  /** @username of whoever answered the suggestion. */
+  resolved_by?: string | null;
 }
 
 interface LineThreadProps {
@@ -24,6 +31,10 @@ interface LineThreadProps {
   comments: LineComment[];
   is_form_open: boolean;
   on_close: () => void;
+  /** The file the line belongs to, for suggesting a change (the "new" side only). */
+  file_lines?: string[];
+  /** The post's authors, while the review is in progress: they answer suggestions. */
+  can_answer: boolean;
 }
 
 /**
@@ -38,20 +49,45 @@ export function LineThread({
   comments,
   is_form_open,
   on_close,
+  file_lines,
+  can_answer,
 }: LineThreadProps): ReactElement {
+  const t = useTranslations("review");
   return (
     <div className={styles.thread}>
       {comments.map((comment) => (
         <article key={comment.id} className={styles.comment}>
           <p className={review_styles.eventHeader}>
-            <strong>@{comment.username}</strong>
+            <strong>
+              {comment.suggestion
+                ? t("suggestion.lineHeading", {
+                    username: comment.username,
+                    count: comment.suggestion.last_line - comment.suggestion.first_line + 1,
+                    first: comment.suggestion.first_line,
+                    last: comment.suggestion.last_line,
+                  })
+                : `@${comment.username}`}
+            </strong>
             <span>{comment.date}</span>
           </p>
-          <p className={review_styles.body}>{comment.body}</p>
+          {comment.body && <p className={review_styles.body}>{comment.body}</p>}
+          {comment.suggestion && (
+            <SuggestionCard
+              review_id={review_id}
+              comment_id={comment.id}
+              view={comment.suggestion}
+              resolved_by={comment.resolved_by ?? null}
+              can_answer={can_answer}
+            />
+          )}
         </article>
       ))}
       {is_form_open && (
-        <CommentForm review_id={review_id} line={{ revision_id, line_number, side }} onDone={on_close} />
+        <CommentForm
+          review_id={review_id}
+          line={{ revision_id, line_number, side, file_lines: side === "new" ? file_lines : undefined }}
+          onDone={on_close}
+        />
       )}
     </div>
   );

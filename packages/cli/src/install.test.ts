@@ -13,7 +13,7 @@ const details: PromptDetails = {
   slug: "global",
   title: "Global",
   tagline: "Rules",
-  category: "conventions",
+  category: "code-conventions",
   kind: "skill",
   version: 1,
   priceUsd: 0,

@@ -14,7 +14,7 @@ function make_revision(overrides: Partial<Revision>): Revision {
     title: "Title",
     tagline: "A tagline long enough",
     summary: "A summary that is long enough.",
-    category: "conventions",
+    category: "code-conventions",
     meant_for: ["Web apps"],
     highlights: ["One"],
     usage_steps: ["Drop it in"],
@@ -73,6 +73,16 @@ describe("get_base_revision", () => {
   });
 });
 
+const NO_SUGGESTION = {
+  suggestion: null,
+  line_end: null,
+  suggestion_state: null,
+  applied_suggestion: null,
+  applied_revision_id: null,
+  resolved_by: null,
+  resolved_at: null,
+} as const;
+
 describe("build_timeline", () => {
   it("orders revisions and comments by time, a revision before its note", () => {
     const comments: ReviewComment[] = [
@@ -86,6 +96,7 @@ describe("build_timeline", () => {
         line_side: "new",
         decision: null,
         created_at: "2026-11-16T12:00:00Z",
+        ...NO_SUGGESTION,
       },
       {
         id: "other-review",
@@ -97,6 +108,7 @@ describe("build_timeline", () => {
         line_side: "new",
         decision: null,
         created_at: "2026-11-16T11:00:00Z",
+        ...NO_SUGGESTION,
       },
     ];
     const timed_revisions = [

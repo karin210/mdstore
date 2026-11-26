@@ -32,7 +32,7 @@
     "models": {
       "title": "Probado con",
       "note": "Los modelos concretos con los que se probó {fileName}, por familia. Los recomendados dieron los mejores resultados.",
-      "empty": "El autor aún no ha indicado las herramientas ni los modelos con los que probó este prompt.",
+      "empty": "El equipo de mdstore aún no ha probado este prompt.",
       "recommended": "Recomendado",
       "table": {
         "caption": "Coste por modelo, en dólares estadounidenses por millón de tokens",
@@ -41,7 +41,7 @@
         "output": "Salida"
       },
       "tools": "Herramientas",
-      "toolsOnly": "Las herramientas de IA para programar con las que se probó {fileName}. El autor aún no ha indicado modelos concretos."
+      "toolsOnly": "Las herramientas de IA para programar con las que el equipo de mdstore probó {fileName}. Los modelos concretos llegarán pronto."
     },
     "preview": {
       "title": "Vista previa gratis",

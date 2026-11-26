@@ -8,18 +8,19 @@ Posted prompts go through a review that works like a pull request: authors push 
 
 These were decided with the project owner before building:
 
-| Topic                     | Decision                                                                                                                                     |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Feedback                  | A conversation thread plus comments on single lines of a revision's file.                                                                    |
-| Outcomes                  | **Approve**, **Request changes** or **Reject**. A message is required unless approving.                                                      |
-| Updates to approved posts | Authors propose a new revision in a new review; the live version stays public until that review is approved.                                 |
-| Visibility                | A review is visible to the post's authors and the admins only. Everyone else gets a 404.                                                     |
-| Several authors           | One **owner** (who posted it) and any number of **co-authors**.                                                                              |
-| Adding co-authors         | By `@username`, or with a one-time invite link.                                                                                              |
-| Roles                     | Co-authors push revisions and comment. Only the owner adds or removes co-authors and withdraws a review. A co-author can leave.              |
-| Byline                    | The owner's `@username` first, then the co-authors (`@owner, @coauthor`).                                                                    |
-| Usernames                 | Chosen at sign-up; accounts without one are asked for it before posting, commenting or joining. Renamed from `/profile`, once every 30 days. |
-| Self-review               | Allowed: there is a single admin for now.                                                                                                    |
+| Topic                     | Decision                                                                                                                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Feedback                  | A conversation thread plus comments on single lines of a revision's file.                                                                                                     |
+| Suggested changes         | Reviewers (admins and co-authors) suggest replacement text for a line or a range; only the post's authors accept (as written or edited) or reject. Staff don't push versions. |
+| Outcomes                  | **Approve**, **Request changes** or **Reject**. A message is required unless approving.                                                                                       |
+| Updates to approved posts | Authors propose a new revision in a new review; the live version stays public until that review is approved.                                                                  |
+| Visibility                | A review is visible to the post's authors and the admins only. Everyone else gets a 404.                                                                                      |
+| Several authors           | One **owner** (who posted it) and any number of **co-authors**.                                                                                                               |
+| Adding co-authors         | On the upload form, by searching usernames (up to 10; added right after the post is created); later from the review by `@username`, or with a one-time invite link.           |
+| Roles                     | Co-authors push revisions and comment. Only the owner adds or removes co-authors and withdraws a review. A co-author can leave.                                               |
+| Byline                    | The owner's `@username` first, then the co-authors (`@owner, @coauthor`).                                                                                                     |
+| Usernames                 | Chosen at sign-up; accounts without one are asked for it before posting, commenting or joining. Renamed from `/profile`, once every 30 days.                                  |
+| Self-review               | Allowed: there is a single admin for now.                                                                                                                                     |
 
 ## Lifecycle
 
@@ -51,6 +52,16 @@ approved post + author pushes ──► review #2 opens, compared against the li
 | `/reviews`               | admins               | Queue of reviews in progress: open ones first, then those waiting on their authors. Labels first posts and updates to live posts.                                      |
 | `/invite/[token]`        | anyone with the link | Signed out: link to sign in (returns here). No username: pick one. Valid link: "Join as co-author" button. Used, expired or unknown links say so.                      |
 | `/prompts/[slug]`        | everyone             | For authors and admins of a live post, an `AuthorBar` links to its review; a post in review shows a notice with "Open the review".                                     |
+
+### Suggested changes
+
+Like a pull request's suggestions, so the authors keep the final say over their file (decided 2026-11-26; staff suggest instead of pushing versions themselves).
+
+- **Suggesting:** on the File tab, or on an added or unchanged line of the Changes tab, select a line number, tick **Suggest a change**, pick the last line of the range (up to 50 lines) and edit the text, which starts as the lines as they are. Empty text deletes the lines. The comment is optional. Removed lines take comments only.
+- **Answering (authors only):** **Accept** applies it as written, **Edit and accept** lets the author change the replacement first, **Reject** closes it with an optional reply on the same line. When two or more can be accepted, a **Suggestions to answer** panel at the top of the Conversation tab applies the chosen ones together.
+- **What accepting does:** the changes are applied to the review's latest revision and pushed as **one new revision** by the author (the listing carries over), with the batch's note as its message. The timeline shows "Applies N suggestions" on it, and each suggestion shows where it went ("Accepted … into revision 4", or "with edits", showing what was applied).
+- **Outdated:** a suggestion made on an earlier revision still applies while its lines are unchanged: at the same line numbers, or found exactly once elsewhere (lines moved). Otherwise it is **outdated** and can only be dismissed. The database (`locate_suggestion`) decides; `src/lib/review/suggestions.ts` mirrors it for the page.
+- Two suggestions that change the same lines can't be applied together; overlapping or emptying the whole file is refused.
 
 ### The review page
 
@@ -98,6 +109,9 @@ The database functions raise their own SQLSTATE codes; `ERROR_KEYS_BY_CODE` in `
 | `src/components/prompt-detail/AuthorBar.tsx`                             | Link to the review on a live post's page.                                             |
 | `src/components/shared/UsernameField.tsx`, `PickUsernameForm.tsx`        | Username input (sign-up, pick-a-username prompt).                                     |
 | `src/lib/review/diffLines.ts`                                            | Line diff (Myers, no dependency) and hunks with context.                              |
+| `supabase/migrations/20261126000000_add_line_suggestions.sql`            | Suggestion columns, `apply_suggestions`, `reject_suggestion`, `locate_suggestion`.    |
+| `src/lib/review/suggestions.ts`                                          | A suggestion's lines and status (pending, outdated, accepted, rejected); overlaps.    |
+| `src/components/review/SuggestionCard/`, `SuggestionBatch/`              | A suggestion with its answers; the panel that applies several at once.                |
 | `src/lib/review/reviewView.ts`, `types.ts`                               | Revisions of a review, the base to compare with, the timeline, listing field changes. |
 | `src/lib/validation/username.ts`, `promptPost.ts`                        | Username rules; the revision schema (optional file, note).                            |
 | `src/server/reviews/`                                                    | `reviewData.ts` (page data and access), `reviewQueue.ts`, `invites.ts`, `actions.ts`. |
@@ -122,7 +136,7 @@ The database functions raise their own SQLSTATE codes; `ERROR_KEYS_BY_CODE` in `
 ## Not built yet
 
 - Notifications (email or in-app): authors learn about feedback by opening the review.
-- Editing or deleting comments, threaded replies to a line comment, resolving comments.
+- Editing or deleting comments, threaded replies to a line comment, resolving comments, withdrawing a suggestion.
 - Renaming usernames.
 - Pagination: the review page loads every revision of the post (each file up to 200 KB).
 - A native review of the Spanish copy.

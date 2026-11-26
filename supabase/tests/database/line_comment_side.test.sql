@@ -21,12 +21,12 @@ insert into public.posted_prompts (
   meant_for, highlights, usage_steps, works_with, content, preview_line_count
 ) values (
   'side-post', '00000000-0000-0000-0000-0000000000b1', '@side-owner', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5
 );
 select public.push_revision(
   (select id from public.posted_prompts where slug = 'side-post'), 'prompt', 'test.md', 'Test prompt',
-  'A tagline long enough', 'A summary that is long enough.', 'conventions', '{Web apps}', '{One highlight}',
+  'A tagline long enough', 'A summary that is long enough.', 'code-conventions', '{Web apps}', '{One highlight}',
   '{Drop it in}', '{Cursor}', E'line 1\nline 2 changed\nline 3\nline 4\n', 5
 );
 

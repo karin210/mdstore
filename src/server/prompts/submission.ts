@@ -8,13 +8,9 @@ function read_list(formData: FormData, field: string): string[] {
   return formData.getAll(field).filter((value) => typeof value === "string");
 }
 
-/** The two model lists the form sends, as one choice per tested model. */
-function read_tested_models(formData: FormData): { model_id: string; recommended: boolean }[] {
-  const recommended = read_list(formData, "recommendedModels");
-  return read_list(formData, "testedModels").map((model_id) => ({
-    model_id,
-    recommended: recommended.includes(model_id),
-  }));
+/** The usernames a new post names as co-authors (one `coauthor` entry each). */
+export function read_coauthors(formData: FormData): string[] {
+  return read_list(formData, "coauthor");
 }
 
 /** The output examples the form sends as two parallel lists: the storage paths, and a caption for each. */
@@ -29,7 +25,8 @@ function readText(formData: FormData, field: string): string {
 }
 
 /**
- * Only the known fields are read from the request; anything else in it is ignored.
+ * Only the known fields are read from the request; anything else in it is ignored, including the tools and
+ * models a prompt was tested with: the staff provide those, not the authors.
  * `with_note` adds the optional "what changed" note of a revision.
  */
 export function readSubmission(formData: FormData, with_note = false): Record<string, unknown> {
@@ -42,8 +39,6 @@ export function readSubmission(formData: FormData, with_note = false): Record<st
     meantFor: readText(formData, "meantFor"),
     highlights: readText(formData, "highlights"),
     usageSteps: readText(formData, "usageSteps"),
-    worksWith: read_list(formData, "worksWith"),
-    testedModels: read_tested_models(formData),
     file: formData.get("file"),
     previewLineCount: readText(formData, "previewLineCount"),
     outputExamples: read_output_examples(formData),

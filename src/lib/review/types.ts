@@ -11,6 +11,8 @@ export type PostStatus = "pending" | "approved" | "rejected" | "withdrawn";
 export type AuthorRole = "owner" | "coauthor";
 export type ReviewDecision = "approved" | "changes_requested" | "rejected" | "withdrawn";
 
+export type SuggestionState = "pending" | "accepted" | "rejected";
+
 export const ACTIVE_REVIEW_STATUSES: readonly ReviewStatus[] = ["open", "changes_requested"];
 
 /** A review in progress: authors can push to it and comment, admins can decide. */
@@ -78,4 +80,18 @@ export interface ReviewComment {
   line_side: LineSide;
   decision: ReviewDecision | null;
   created_at: string;
+  /**
+   * Set on a suggested change: the lines that replace line_number to line_end (or line_number alone) of
+   * the revision's own file; empty deletes them. See src/lib/review/suggestions.ts.
+   */
+  suggestion: string[] | null;
+  /** The last line a suggestion replaces, when it spans several; null for one line. */
+  line_end: number | null;
+  suggestion_state: SuggestionState | null;
+  /** What was applied when an author edited the suggestion before accepting it. */
+  applied_suggestion: string[] | null;
+  /** The revision an accepted suggestion went into. */
+  applied_revision_id: string | null;
+  resolved_by: string | null;
+  resolved_at: string | null;
 }

@@ -32,56 +32,6 @@
   margin-top: var(--space-xs);
 }
 
-.tools {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2xs);
-  margin: 0;
-  padding: 0;
-  border: 0;
-  min-width: 0;
-}
-
-.tools > legend {
-  padding: 0;
-}
-
-.toolList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tool {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  padding: var(--space-2xs) var(--space-sm);
-  border: 0.0625rem solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-input-bg);
-  font-size: var(--text-sm);
-  cursor: pointer;
-}
-
-.tool:has(input:checked) {
-  border-color: var(--color-primary);
-  background: var(--color-secondary);
-  color: var(--color-on-secondary);
-}
-
-.tool:has(input:focus-visible) {
-  outline: 0.1875rem solid var(--color-focus);
-  outline-offset: 0.1875rem;
-}
-
-.tool input {
-  accent-color: var(--color-primary);
-}
-
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -124,63 +74,6 @@
 .previewLink::after {
   content: "↗" / "";
   text-decoration: none;
-}
-
-/* Models tested with: one column per family; a tested model gets a "Recommended" toggle beside it */
-
-.modelFamilies {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-  gap: var(--space-md);
-}
-
-.modelFamily {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.modelFamilyName {
-  margin: 0;
-  color: var(--color-ink-muted);
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
-
-.modelList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.modelRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-xs);
-}
-
-.recommend {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2xs);
-  color: var(--color-ink-muted);
-  font-size: var(--text-xs);
-  cursor: pointer;
-}
-
-.recommend:has(input:checked) {
-  color: var(--color-primary-text);
-  font-weight: 600;
-}
-
-.recommend:has(input:focus-visible) {
-  outline: 0.1875rem solid var(--color-focus);
-  outline-offset: 0.1875rem;
-  border-radius: var(--radius-sm);
 }
 
 /* Output examples: the picked or stored images, each with a caption and a remove button */

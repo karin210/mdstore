@@ -10,12 +10,15 @@ import type { LineComment } from "@/components/review/LineThread/LineThread";
 import { review_href, REVIEW_TABS, type ReviewTab } from "@/components/review/reviewHref/reviewHref";
 import { RevisionChanges } from "@/components/review/RevisionChanges/RevisionChanges";
 import { RevisionFile } from "@/components/review/RevisionFile/RevisionFile";
+import { SuggestionBatch, type BatchSuggestion } from "@/components/review/SuggestionBatch/SuggestionBatch";
 import { ReviewTimeline } from "@/components/review/ReviewTimeline/ReviewTimeline";
 import { WithdrawButton } from "@/components/review/WithdrawButton/WithdrawButton";
 import { PostPromptForm } from "@/components/upload/PostPromptForm/PostPromptForm";
+import { to_tested_models } from "@/data/aiModels";
 import { Link } from "@/i18n/navigation";
 import { output_example_url } from "@/lib/outputExamples";
 import { get_review_revisions } from "@/lib/review/reviewView";
+import { get_suggestion_view } from "@/lib/review/suggestions";
 import { is_review_active, type Review, type Revision } from "@/lib/review/types";
 import { splitFileLines } from "@/lib/splitFileLines";
 import { get_review_page } from "@/server/reviews/reviewData";
@@ -73,6 +76,28 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
   const is_first_review = review.base_revision_id === null && review.number === 1;
   const tabs: ReviewTab[] = can_revise ? [...REVIEW_TABS] : ["conversation", "file", "changes"];
   const can_comment_on_lines = can_take_part && is_active && viewer.username !== null;
+  // Suggestions are answered by the post's authors only, admins included only when they are one.
+  const can_answer = is_author && is_active && viewer.username !== null;
+  const revision_numbers = new Map(data.revisions.map((revision) => [revision.id, revision.number]));
+  // Every suggestion the authors can still accept, for applying several at once.
+  const batch_suggestions: BatchSuggestion[] = data.comments
+    .filter((comment) => comment.review_id === review.id)
+    .flatMap((comment) => {
+      const view = get_suggestion_view(comment, review, data.revisions);
+      if (!view || view.status !== "pending" || !view.target || !comment.revision_id) return [];
+      return [
+        {
+          id: comment.id,
+          username: name_of(comment.author_id),
+          revision_number: revision_numbers.get(comment.revision_id) ?? 0,
+          first_line: view.first_line,
+          last_line: view.last_line,
+          original: view.original,
+          proposed: view.proposed,
+          target: view.target,
+        },
+      ];
+    });
   // The selected revision's line comments, ready to show; the File tab takes the "new" side only.
   const line_comments: LineComment[] = data.comments
     .filter((comment) => comment.revision_id === selected_revision.id && comment.line_number !== null)
@@ -83,6 +108,8 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
       username: name_of(comment.author_id),
       body: comment.body ?? "",
       date: format_date(comment.created_at),
+      suggestion: get_suggestion_view(comment, review, data.revisions) ?? undefined,
+      resolved_by: comment.resolved_by ? name_of(comment.resolved_by) : null,
     }));
 
   return (
@@ -174,6 +201,9 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
 
           {tab === "conversation" && (
             <section className={styles.panel} aria-label={t("timeline.label")}>
+              {can_answer && batch_suggestions.length > 1 && (
+                <SuggestionBatch review_id={review.id} suggestions={batch_suggestions} />
+              )}
               <ReviewTimeline
                 slug={post.slug}
                 review={review}
@@ -182,6 +212,7 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 comments={data.comments}
                 name_of={name_of}
                 format_date={format_date}
+                can_answer={can_answer}
               />
               {can_take_part && is_active && !viewer.username && (
                 <div className={review_styles.card}>
@@ -217,6 +248,7 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 lines={splitFileLines(selected_revision.content)}
                 comments={line_comments.filter((comment) => comment.side === "new")}
                 can_comment={can_comment_on_lines}
+                can_answer={can_answer}
               />
               {selected_revision.output_examples.length > 0 && (
                 <div className={review_styles.card}>
@@ -256,6 +288,7 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                 revisions={data.revisions}
                 comments={line_comments}
                 can_comment={can_comment_on_lines}
+                can_answer={can_answer}
               />
             </section>
           )}
@@ -279,6 +312,13 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                     .toSorted((first, second) => Number(second.role === "owner") - Number(first.role === "owner"))
                     .map((author) => `@${author.username}`)
                     .join(", ")}
+                  tested_with={{
+                    works_with: latest_revision_of_post.works_with,
+                    tested_models: to_tested_models(
+                      latest_revision_of_post.tested_models,
+                      latest_revision_of_post.recommended_models,
+                    ),
+                  }}
                   initial_values={{
                     kind: latest_revision_of_post.kind,
                     title: latest_revision_of_post.title,
@@ -288,11 +328,6 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                     meantFor: latest_revision_of_post.meant_for.join("\n"),
                     highlights: latest_revision_of_post.highlights.join("\n"),
                     usageSteps: latest_revision_of_post.usage_steps.join("\n"),
-                    worksWith: latest_revision_of_post.works_with,
-                    testedModels: latest_revision_of_post.tested_models.map((model_id) => ({
-                      model_id,
-                      recommended: latest_revision_of_post.recommended_models.includes(model_id),
-                    })),
                     previewLineCount: String(latest_revision_of_post.preview_line_count),
                     outputExamples: latest_revision_of_post.output_examples.map((example) => ({
                       id: example.path,

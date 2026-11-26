@@ -44,13 +44,13 @@ create function pg_temp.insert_post(p_slug text, p_author uuid) returns uuid lan
     meant_for, highlights, usage_steps, works_with, content, preview_line_count
   ) values (
     p_slug, p_author, '@owner', 'test.md', 'Test prompt', 'A tagline long enough', 'A summary that is long enough.',
-    'conventions', '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5
+    'code-conventions', '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}', E'line 1\nline 2\nline 3\n', 5
   ) returning id;
 $$;
 
 create function pg_temp.push(p_post uuid, p_title text) returns integer language sql as $$
   select public.push_revision(
-    p_post, 'prompt', 'test.md', p_title, 'A tagline long enough', 'A summary that is long enough.', 'conventions',
+    p_post, 'prompt', 'test.md', p_title, 'A tagline long enough', 'A summary that is long enough.', 'code-conventions',
     '{Web apps}', '{One highlight}', '{Drop it in}', '{Cursor}', E'line 1\nline 2 changed\nline 3\nline 4\n', 5
   );
 $$;

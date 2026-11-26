@@ -1,12 +1,9 @@
 {
   "prompts": {
     "categories": {
-      "conventions": "Convenciones",
-      "agents": "Agentes",
+      "ux-ui": "UX/UI",
       "frontend": "Frontend",
-      "testing": "Pruebas",
-      "refactoring": "Refactorización",
-      "devops": "DevOps"
+      "code-conventions": "Convenciones de código"
     },
     "card": {
       "testedWith": "Probado con",

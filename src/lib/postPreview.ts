@@ -1,4 +1,4 @@
-import { ai_models, type ModelId, type TestedModel } from "@/data/aiModels";
+import type { TestedModel } from "@/data/aiModels";
 import type { OutputExample, PromptCategory } from "@/data/prompts";
 import { estimate_context_tokens } from "@/lib/estimateContextTokens";
 import type { PromptPostValues } from "@/lib/forms/PromptPostForm";
@@ -28,6 +28,8 @@ export interface PostPreviewSnapshot {
   post_slug: string | null;
   /** A new version's current file, shown while no new file is picked; null for a new post. */
   current_file: PreviewFile | null;
+  /** What the staff recorded the post as tested with (empty for a new post); the form doesn't ask for it. */
+  tested_with: { works_with: string[]; tested_models: TestedModel[] };
 }
 
 /** A Markdown file as the preview reads it. */
@@ -58,10 +60,6 @@ interface PreviewListingInput {
   file: PreviewFile | null;
   /** Browser URLs of the output examples, by item id (blob: URLs for picked images, Storage URLs for saved ones). */
   image_urls: ReadonlyMap<string, string>;
-}
-
-function is_model_id(value: string): value is ModelId {
-  return Object.hasOwn(ai_models, value);
 }
 
 /**
@@ -95,9 +93,6 @@ export function build_preview_listing({ snapshot, file, image_urls }: PreviewLis
   const category = isPromptCategory(values.category) ? values.category : null;
   if (!category) empty_fields.add("category");
 
-  const tested_models: TestedModel[] = values.testedModels.flatMap((model) =>
-    is_model_id(model.model_id) ? [{ model_id: model.model_id, recommended: model.recommended }] : [],
-  );
   const output_examples: OutputExample[] = values.outputExamples.flatMap((example) => {
     const src = image_urls.get(example.id);
     return src ? [{ src, alt: example.caption || title, caption: example.caption }] : [];
@@ -115,8 +110,8 @@ export function build_preview_listing({ snapshot, file, image_urls }: PreviewLis
       priceUsd: 0,
       lineCount: file_lines.length,
       context_tokens: file ? estimate_context_tokens(file.text) : 0,
-      worksWith: values.worksWith,
-      tested_models,
+      worksWith: snapshot.tested_with.works_with,
+      tested_models: snapshot.tested_with.tested_models,
       excerpt: file_lines.slice(0, preview_line_count).join("\n"),
       outputExamples: output_examples,
       title,

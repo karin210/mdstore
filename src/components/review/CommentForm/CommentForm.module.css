@@ -13,3 +13,31 @@
   flex-direction: column;
   gap: var(--space-xs);
 }
+
+/* "Suggest a change": a checkbox with its label beside it. */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--color-primary);
+}
+
+.lineEnd {
+  max-width: 8rem;
+}
+
+/* The suggested lines: code, kept as typed. */
+.codeInput {
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  white-space: pre;
+  overflow-x: auto;
+}

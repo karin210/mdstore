@@ -14,6 +14,8 @@ interface RevisionFileProps {
   comments: LineComment[];
   /** Authors and admins of a review in progress who have a username. */
   can_comment: boolean;
+  /** The post's authors, while the review is in progress: they answer suggestions. */
+  can_answer: boolean;
 }
 
 /**
@@ -28,6 +30,7 @@ export function RevisionFile({
   lines,
   comments,
   can_comment,
+  can_answer,
 }: RevisionFileProps): ReactElement {
   const t = useTranslations("review");
   const [open_line, set_open_line] = useState<number | null>(null);
@@ -40,7 +43,7 @@ export function RevisionFile({
           {t("file.fileLabel", { fileName: file_name, count: lines.length })}
         </code>
       </p>
-      {can_comment && <p className={review_styles.muted}>{t("file.lineHelp")}</p>}
+      {can_comment && <p className={review_styles.muted}>{t("file.lineHelpSuggest")}</p>}
       {/* Focusable so keyboard users can scroll wide lines */}
       <div className={review_styles.codeScroller} tabIndex={0} aria-label={file_name}>
         <table className={review_styles.codeTable}>
@@ -82,6 +85,8 @@ export function RevisionFile({
                           comments={line_comments}
                           is_form_open={is_open}
                           on_close={() => set_open_line(null)}
+                          file_lines={lines}
+                          can_answer={can_answer}
                         />
                       </td>
                     </tr>

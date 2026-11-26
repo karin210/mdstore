@@ -1,0 +1,156 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.field > legend {
+  padding: 0;
+}
+
+/* The legend is not a flex item, so the field's gap doesn't reach it. */
+.field > legend + * {
+  margin-top: var(--space-2xs);
+}
+
+/* The search box and its button side by side; the button drops below on very narrow screens. */
+.searchRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.searchRow > input {
+  flex: 1 1 14rem;
+  width: auto;
+  min-width: 0;
+}
+
+/* Tertiary buttons: outlined in the primary colour, never filled (filling is for the purchase CTAs). */
+.searchButton,
+.addButton {
+  flex: none;
+  padding: var(--space-xs) var(--space-sm);
+  border: 0.125rem solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-primary-text);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.searchButton:hover,
+.addButton:hover:enabled {
+  background: var(--color-secondary);
+}
+
+.searchButton[aria-disabled="true"] {
+  cursor: progress;
+}
+
+.addButton {
+  padding: var(--space-2xs) var(--space-sm);
+}
+
+.addButton:disabled {
+  border-color: var(--color-border);
+  color: var(--color-ink-muted);
+  cursor: default;
+}
+
+.status {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-ink-muted);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  list-style: none;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.result + .result {
+  border-top: 0.0625rem solid var(--color-border);
+}
+
+.username {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 500;
+}
+
+.chosen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.chosenTitle {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: 0.25em 0.35em 0.25em 0.9em;
+  border: 0.0625rem solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: var(--color-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+/* Remove: a round × inside the chip, big enough to tap; its name is visually hidden text. */
+.removeButton {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--color-ink-muted);
+  font: inherit;
+  font-size: var(--text-base);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background: var(--color-surface);
+  color: var(--color-error);
+}

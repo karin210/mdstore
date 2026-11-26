@@ -12,15 +12,20 @@ const VALUES: PromptPostValues = {
   meantFor: "",
   highlights: "",
   usageSteps: "",
-  worksWith: [],
-  testedModels: [],
   file: null,
   previewLineCount: "12",
   outputExamples: [],
+  coauthors: [],
 };
 
 function snapshot_of(values: Partial<PromptPostValues>): PostPreviewSnapshot {
-  return { values: { ...VALUES, ...values }, byline: "@ana", post_slug: null, current_file: null };
+  return {
+    values: { ...VALUES, ...values },
+    byline: "@ana",
+    post_slug: null,
+    current_file: null,
+    tested_with: { works_with: [], tested_models: [] },
+  };
 }
 
 /** A receiver wired to a fake channel and timer, plus handles to drive them. */

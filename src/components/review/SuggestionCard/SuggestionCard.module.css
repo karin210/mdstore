@@ -1,0 +1,100 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.statusLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs) var(--space-sm);
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+}
+
+/* Status pill: the colour carries the state, the text names it. */
+.status {
+  padding: 0.1em 0.7em;
+  border: 0.0625rem solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  color: var(--color-primary-text);
+  font-weight: 600;
+}
+
+.status[data-status="outdated"] {
+  border-color: var(--color-tertiary);
+  color: var(--color-ink);
+}
+
+.status[data-status="accepted"] {
+  border-color: var(--color-brand-green-strong);
+  color: var(--color-brand-green-strong);
+}
+
+.status[data-status="rejected"] {
+  border-color: var(--color-ink-muted);
+  color: var(--color-ink-muted);
+}
+
+.marker {
+  display: inline-block;
+  width: 1.5ch;
+  color: var(--color-code-muted);
+}
+
+.diff tr[data-kind="added"] {
+  background: color-mix(in srgb, var(--color-brand-green-strong) 28%, var(--color-code-bg));
+}
+
+.diff tr[data-kind="removed"] {
+  background: color-mix(in srgb, var(--color-error) 28%, var(--color-code-bg));
+}
+
+.diff tr[data-kind="note"] td {
+  color: var(--color-code-muted);
+  font-family: var(--font-body);
+}
+
+/* An answered suggestion steps back so the pending ones stand out. */
+.card[data-status="accepted"] .diff,
+.card[data-status="rejected"] .diff,
+.card[data-status="outdated"] .diff {
+  opacity: 0.8;
+}
+
+.acceptButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55em 1.2em;
+  border: 0.125rem solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.acceptButton:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.answerForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.codeInput {
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  white-space: pre;
+  overflow-x: auto;
+}

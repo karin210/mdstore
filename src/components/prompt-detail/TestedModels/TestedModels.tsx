@@ -7,7 +7,7 @@ import styles from "./TestedModels.module.css";
 
 interface TestedModelsProps {
   models: TestedModel[];
-  /** The AI coding tools the author tested with (`worksWith`, "Tools tested with" on the upload form). */
+  /** The AI coding tools the prompt was tested with (`worksWith`), recorded by the staff, not the author. */
   tools: string[];
   fileName: string;
 }
@@ -30,8 +30,8 @@ function RecommendedTag({ label }: { label: string }): ReactElement {
 
 /**
  * What a prompt was tested with: the AI coding tools, then the specific models by family (the
- * recommended ones highlighted) and a cost table. Posts list tools only, until the upload form
- * asks for models.
+ * recommended ones highlighted) and a cost table. The staff record it, not the authors; a post
+ * the staff haven't tested yet shows a note instead.
  */
 export function TestedModels({ models, tools, fileName }: TestedModelsProps): ReactElement {
   const t = useTranslations("promptDetail.models");

@@ -19,7 +19,7 @@
       "items": {
         "ownPage": {
           "title": "A page of its own",
-          "text": "Your prompt gets its own address with its summary, highlights, suggested use and the tools you tested it with."
+          "text": "Your prompt gets its own address with its summary, highlights and suggested use. Once our team has tested it, the page also shows the tools and models it works with."
         },
         "freePreview": {
           "title": "You choose the preview",
@@ -47,10 +47,6 @@
         "oneJob": {
           "title": "Pick one narrow job",
           "text": "“Improve the UX of a form” is easier to trust, and to use, than “make my whole app better”."
-        },
-        "testedTools": {
-          "title": "Say what you tested it with",
-          "text": "Mark the AI tools you used it with, such as Claude Code, Cursor or Copilot, so developers know it works."
         },
         "technologies": {
           "title": "Name the technologies",
@@ -92,9 +88,8 @@
       "postingAs": "Your post is credited to @{username}; you can add co-authors from its review.",
       "sections": {
         "basics": "The basics",
-        "details": "What it does",
         "file": "The file",
-        "examples": "Output examples"
+        "coauthors": "Co-authors"
       },
       "fields": {
         "kind": {
@@ -119,8 +114,7 @@
           "hint": "What the prompt covers, in two or three sentences."
         },
         "category": {
-          "label": "Category",
-          "placeholder": "Choose a category"
+          "label": "Category"
         },
         "meantFor": {
           "label": "Meant for",
@@ -128,21 +122,14 @@
         },
         "highlights": {
           "label": "Highlights",
-          "hint": "What the prompt makes the agent do, one per line."
+          "hint": "What the prompt makes the agent do, one per item, up to {max}. Press Enter to add the next one.",
+          "itemLabel": "Highlight {number}",
+          "add": "Add a highlight",
+          "remove": "Remove highlight {number}"
         },
         "usageSteps": {
           "label": "Suggested use",
           "hint": "The steps to start using it, one per line. Wrap file names in `backticks`."
-        },
-        "worksWith": {
-          "label": "Tools tested with",
-          "hint": "The AI tools you used it with."
-        },
-        "testedModels": {
-          "label": "Models tested with (optional)",
-          "hint": "The specific models you ran it with. Mark the ones that gave the best results as recommended.",
-          "recommended": "Recommended",
-          "recommendedLabel": "Recommend {model}"
         },
         "file": {
           "label": "Markdown file",
@@ -158,6 +145,28 @@
           "captionLabel": "Caption for example {number} (optional)",
           "stored": "Example {number}, already saved",
           "remove": "Remove example {number}"
+        },
+        "coauthors": {
+          "label": "Co-authors (optional)",
+          "hint": "People who worked on it with you. They can push new versions and join the review. Up to {max}; you can add more later from the review.",
+          "searchLabel": "Search users by username",
+          "placeholder": "Username",
+          "search": "Search",
+          "searching": "Searching…",
+          "tooShort": "Type at least two characters of a username.",
+          "noMatch": "No users match “{query}”.",
+          "found": "{count, plural, one {# user found} other {# users found}}.",
+          "error": "The search didn't work. Try again in a moment.",
+          "resultsLabel": "Matching users",
+          "add": "Add",
+          "added": "Added",
+          "addLabel": "Add @{username} as a co-author",
+          "addedLabel": "@{username} is added",
+          "addedStatus": "@{username} added as a co-author.",
+          "removedStatus": "@{username} removed.",
+          "removeLabel": "Remove @{username}",
+          "chosenTitle": "{count, plural, one {# co-author} other {# co-authors}}",
+          "full": "That's {max} co-authors, the most you can add here."
         }
       },
       "preview": {
@@ -177,7 +186,8 @@
         "server": "Something went wrong on our side. Please try again in a moment. If it keeps happening, quote this code: {requestId}.",
         "notConfigured": "Posting isn’t available yet. Please try again later.",
         "imageUpload": "Couldn’t upload the images. Check your connection and try again."
-      }
+      },
+      "coauthorsNotAdded": "These co-authors couldn't be added: {usernames}. You can add them from the review."
     },
     "preview": {
       "meta": {
@@ -201,17 +211,16 @@
       "tooManyItems": "Use at most {max} lines.",
       "itemTooLong": "Keep each line under {max} characters.",
       "chooseCategory": "Choose a category.",
-      "chooseTool": "Mark at least one tool.",
       "fileRequired": "Choose your .md file.",
       "fileType": "Choose a Markdown file ending in .md.",
       "fileTooLarge": "Choose a file up to 200 KB.",
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
       "previewRange": "Use a number from {min} to {max}.",
       "chooseKind": "Choose prompt, skill or agent.",
-      "unknownModel": "Pick models from the list only, once each.",
       "imageType": "Use PNG, JPEG or WebP images of up to 2 MB, in your own account.",
       "imageTooLarge": "Each image can be up to 2 MB.",
-      "tooManyImages": "Use at most {max} images."
+      "tooManyImages": "Use at most {max} images.",
+      "coauthorInvalid": "Pick co-authors from the search results, each once."
     },
     "outline": {
       "file": "upload.md",

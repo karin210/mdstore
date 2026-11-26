@@ -105,7 +105,7 @@
         },
         "supportedTools": {
           "question": "Which AI coding tools do the prompts work with?",
-          "answer": "Any tool that reads Markdown instructions: Claude Code, Cursor, GitHub Copilot, Aider and others. Each listing shows the tools its author tested it with."
+          "answer": "Any tool that reads Markdown instructions: Claude Code, Cursor, GitHub Copilot, Aider and others. Each listing shows the tools the mdstore team tested it with."
         },
         "updates": {
           "question": "Do I get updates when the author improves the file?",

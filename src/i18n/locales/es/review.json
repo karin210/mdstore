@@ -58,7 +58,9 @@
       },
       "someone": "alguien",
       "viewRevision": "Ver el archivo",
-      "viewChanges": "Ver los cambios"
+      "viewChanges": "Ver los cambios",
+      "suggestion": "@{username} sugirió un cambio en {count, plural, one {la línea {first}} other {las líneas {first}–{last}}} de la revisión {number}",
+      "appliedSuggestions": "{count, plural, one {Aplica # sugerencia} other {Aplica # sugerencias}}"
     },
     "comment": {
       "label": "Agrega un comentario",
@@ -119,7 +121,8 @@
         "preview_line_count": "Largo de la vista previa gratis",
         "file_name": "Nombre del archivo"
       },
-      "examples": "Ejemplos de resultado"
+      "examples": "Ejemplos de resultado",
+      "lineHelpSuggest": "Selecciona un número de línea para comentarla o sugerir un cambio."
     },
     "changes": {
       "against": {
@@ -137,7 +140,7 @@
       "removed": "Línea eliminada",
       "added": "Línea agregada",
       "summary": "{added, plural, one {# línea agregada} other {# líneas agregadas}}, {removed, plural, one {# eliminada} other {# eliminadas}}",
-      "lineHelp": "Selecciona un número de línea para comentarla: el número anterior en una línea eliminada, el nuevo en cualquier otra."
+      "lineHelp": "Selecciona un número de línea para comentarla: el número antiguo en una línea eliminada, el nuevo en cualquier otra. En un número nuevo también puedes sugerir un cambio."
     },
     "revise": {
       "intoActive": "Tu nueva versión se suma a la revisión #{number} y vuelve a los revisores.",
@@ -224,6 +227,50 @@
       },
       "signedOut": "Inicia sesión o crea una cuenta para aceptar la invitación.",
       "signIn": "Iniciar sesión para continuar"
+    },
+    "suggestion": {
+      "toggle": "Sugerir un cambio",
+      "lineEndLabel": "Hasta la línea",
+      "textLabel": "Reemplazar {count, plural, one {la línea {first}} other {las líneas {first}–{last}}} por",
+      "textHint": "Escribe las líneas tal como deberían quedar. Déjalo vacío para eliminarlas.",
+      "bodyLabel": "Por qué (opcional)",
+      "unchanged": "Cambia el texto primero: todavía coincide con el archivo.",
+      "submit": "Sugerir cambio",
+      "lineHeading": "@{username} sugirió un cambio en {count, plural, one {la línea {first}} other {las líneas {first}–{last}}}",
+      "state": {
+        "pending": "Pendiente",
+        "outdated": "Desactualizada",
+        "accepted": "Aceptada",
+        "rejected": "Rechazada"
+      },
+      "outdated": "Estas líneas cambiaron en una revisión posterior, así que la sugerencia ya no se puede aplicar.",
+      "acceptedInto": "Aceptada por @{username} en la revisión {number}.",
+      "acceptedEdited": "Aceptada con cambios por @{username} en la revisión {number}.",
+      "rejectedBy": "Rechazada por @{username}.",
+      "appliedAs": "Se aplicó así",
+      "diffLabel": "Cambio sugerido",
+      "deletes": "Elimina estas líneas.",
+      "accept": "Aceptar",
+      "accepting": "Aplicando…",
+      "edit": "Editar y aceptar",
+      "editLabel": "Tu versión de las líneas",
+      "applyEdited": "Aplicar mi versión",
+      "reject": "Rechazar",
+      "outdatedReject": "Descartar",
+      "rejecting": "Rechazando…",
+      "replyLabel": "Respuesta (opcional)",
+      "confirmReject": "Confirmar: rechazar",
+      "cancel": "Cancelar",
+      "batch": {
+        "title": "{count, plural, one {# sugerencia por responder} other {# sugerencias por responder}}",
+        "lead": "Elige las que quieres aceptar. Se aplican juntas en una sola revisión nueva.",
+        "item": "{count, plural, one {Línea {first}} other {Líneas {first}–{last}}} de la revisión {number} · @{username}",
+        "noteLabel": "Nota para la nueva revisión (opcional)",
+        "submit": "{count, plural, =0 {Aplicar sugerencias} one {Aplicar # sugerencia} other {Aplicar # sugerencias}}",
+        "busy": "Aplicando…",
+        "none": "Elige al menos una sugerencia.",
+        "overlap": "Dos de las sugerencias elegidas cambian las mismas líneas. Aplica una y luego responde la otra."
+      }
     }
   }
 }

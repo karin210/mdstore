@@ -39,6 +39,9 @@ export interface ReviewPageData {
 const REVISION_COLUMNS =
   "id, review_id, number, created_by, created_at, kind, file_name, title, tagline, summary, category, meant_for, highlights, usage_steps, works_with, tested_models, recommended_models, output_examples, content, preview_line_count";
 
+const COMMENT_COLUMNS =
+  "id, review_id, author_id, body, revision_id, line_number, line_side, decision, created_at, suggestion, line_end, suggestion_state, applied_suggestion, applied_revision_id, resolved_by, resolved_at";
+
 function fail(what: string, error: { message: string }): never {
   throw new Error(`Couldn't load the review's ${what}: ${error.message}`);
 }
@@ -111,7 +114,7 @@ export async function get_review_page(slug: string): Promise<ReviewPageData | nu
       .returns<Revision[]>(),
     supabase
       .from("review_comments")
-      .select("id, review_id, author_id, body, revision_id, line_number, line_side, decision, created_at")
+      .select(COMMENT_COLUMNS)
       .eq("post_id", post.id)
       .order("created_at")
       .returns<ReviewComment[]>(),
@@ -133,7 +136,10 @@ export async function get_review_page(slug: string): Promise<ReviewPageData | nu
   const user_ids = new Set<string>([user_id]);
   author_rows.forEach((author) => user_ids.add(author.user_id));
   revisions.forEach((revision) => revision.created_by && user_ids.add(revision.created_by));
-  comments.forEach((comment) => comment.author_id && user_ids.add(comment.author_id));
+  comments.forEach((comment) => {
+    if (comment.author_id) user_ids.add(comment.author_id);
+    if (comment.resolved_by) user_ids.add(comment.resolved_by);
+  });
   reviews.forEach((review) => review.opened_by && user_ids.add(review.opened_by));
 
   const { data: profiles, error: profiles_error } = await supabase
