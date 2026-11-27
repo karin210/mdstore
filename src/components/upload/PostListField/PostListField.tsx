@@ -16,6 +16,8 @@ interface PostListFieldProps {
   items: string[];
   max_items: number;
   item_max_length: number;
+  /** A bullet before each input; without it the items stand bare. */
+  marker?: "bullet";
   /** Accessible names, by item number (1-based). */
   get_item_label: (number: number) => string;
   get_remove_label: (number: number) => string;
@@ -28,7 +30,7 @@ interface PostListFieldProps {
 
 /**
  * A list the author builds one item at a time, as the listing shows it: one input per item, a button to
- * add one and one to remove each. Enter in an item adds a new one below it instead of submitting the form.
+ * add one at the end and one to remove each.
  * Focus follows the change: to the new item, or to the item before a removed one.
  */
 export function PostListField({
@@ -39,6 +41,7 @@ export function PostListField({
   items,
   max_items,
   item_max_length,
+  marker,
   get_item_label,
   get_remove_label,
   add_label,
@@ -72,16 +75,15 @@ export function PostListField({
     on_change(items.filter((_, item_index) => item_index !== index));
   }
 
-  function handle_item_key_down(event: KeyboardEvent<HTMLInputElement>, index: number): void {
-    if (event.key !== "Enter") return;
-    event.preventDefault();
-    add_item_after(index);
+  // Enter in an item does nothing: it would otherwise submit the whole form half-filled.
+  function handle_item_key_down(event: KeyboardEvent<HTMLInputElement>): void {
+    if (event.key === "Enter") event.preventDefault();
   }
 
   return (
     <fieldset className={styles.field} aria-describedby={described_by}>
       <legend className={form_styles.label}>{label}</legend>
-      <ol className={styles.items}>
+      <ol className={styles.items} data-marker={marker}>
         {items.map((item, index) => (
           // Controlled inputs, so index keys keep each value in its place.
           <li key={index} className={styles.item}>
@@ -96,7 +98,7 @@ export function PostListField({
               aria-describedby={described_by}
               {...control_state}
               onChange={(event) => change_item(index, event.target.value)}
-              onKeyDown={(event) => handle_item_key_down(event, index)}
+              onKeyDown={handle_item_key_down}
               onBlur={on_leave}
             />
             {/* The last item can't go: the list always keeps one input to type in. */}

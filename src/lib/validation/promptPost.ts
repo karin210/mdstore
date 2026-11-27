@@ -27,6 +27,7 @@ export interface ValidationIssue {
     | "imageType"
     | "imageTooLarge"
     | "tooManyImages"
+    | "imagesRequired"
     | "previewRange";
   values?: Record<string, number>;
 }
@@ -55,7 +56,7 @@ const TEXT_LIMITS = {
 /** Items per list field and characters per item; the forms cap their inputs with them. */
 export const LIST_LIMITS = {
   meantFor: { min: 1, max: 6, itemMax: 60 },
-  highlights: { min: 1, max: 10, itemMax: 160 },
+  highlights: { min: 1, max: 7, itemMax: 160 },
   usageSteps: { min: 1, max: 8, itemMax: 300 },
 } as const;
 
@@ -162,10 +163,11 @@ export const OUTPUT_EXAMPLE_PATH_PATTERN =
   /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(png|jpg|webp)$/;
 
 /**
- * Optional: up to MAX_OUTPUT_IMAGES examples, each a PNG, JPEG or WebP of up to MAX_OUTPUT_IMAGE_BYTES (checked
+ * Required: 1 to MAX_OUTPUT_IMAGES examples (a listing shows what the prompt produces), each a PNG, JPEG or WebP of up to MAX_OUTPUT_IMAGE_BYTES (checked
  * while it is still a picked file), each caption short. Whose files they are is checked on the server.
  */
 export function check_output_examples(examples: OutputExampleDraft[]): ValidationIssue | null {
+  if (examples.length === 0) return { key: "imagesRequired" };
   if (examples.length > MAX_OUTPUT_IMAGES) return { key: "tooManyImages", values: { max: MAX_OUTPUT_IMAGES } };
   const accepted_types: readonly string[] = OUTPUT_IMAGE_TYPES;
   const files = examples.flatMap((example) => (example.file ? [example.file] : []));

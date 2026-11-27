@@ -4,12 +4,6 @@
   gap: var(--space-lg);
 }
 
-.account {
-  margin: 0;
-  color: var(--color-ink-muted);
-  font-size: var(--text-sm);
-}
-
 .group {
   display: flex;
   flex-direction: column;
@@ -40,20 +34,18 @@
   gap: var(--space-sm) var(--space-md);
 }
 
-/* Live preview: a link that opens /upload/preview in a new tab, at the top and beside the submit button */
+/* Live preview: an outlined button (a link) that opens /upload/preview in a new tab, at the top right and beside the submit button */
 
 .previewBar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2xs) var(--space-sm);
-  margin: 0;
-  padding: var(--space-sm) var(--space-md);
-  border: 0.0625rem dashed var(--color-border-strong);
-  border-radius: var(--radius-md);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2xs);
+  text-align: end;
 }
 
-.previewHint {
+.previewCaption {
+  margin: 0;
   color: var(--color-ink-muted);
   font-size: var(--text-sm);
 }
@@ -62,18 +54,24 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
-  border-radius: var(--radius-sm);
+  padding: 0.6em 1.2em;
+  border: 0.125rem solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: transparent;
   color: var(--color-primary-text);
   font-size: var(--text-sm);
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.previewLink:hover {
+  background: var(--color-secondary);
 }
 
 /* "Opens in a new tab" mark; the visually hidden text says it to screen readers. */
 .previewLink::after {
   content: "↗" / "";
-  text-decoration: none;
 }
 
 /* Output examples: the picked or stored images, each with a caption and a remove button */

@@ -7,72 +7,37 @@
     "hero": {
       "eyebrow": "// welcome, author",
       "title": "You already wrote something other developers would love.",
-      "lead": "That CLAUDE.md you tuned over dozens of sessions, the Cursor rule your whole team relies on, the agent playbook that finally just works: it saves hours for people who haven’t written it yet. Post it here and give it a page of its own.",
-      "action": "Post your prompt",
-      "learnMore": "See what you get",
-      "note": "No audience needed. Just the file and a free account."
-    },
-    "benefits": {
-      "eyebrow": "// what you get",
-      "title": "Everything is set up so your work gets noticed",
-      "lead": "You focus on the prompt. mdstore gives it a proper home.",
-      "items": {
-        "ownPage": {
-          "title": "A page of its own",
-          "text": "Your prompt gets its own address with its summary, highlights and suggested use. Once our team has tested it, the page also shows the tools and models it works with."
-        },
-        "freePreview": {
-          "title": "You choose the preview",
-          "text": "Pick how many opening lines visitors read first, so the quality of your writing does the convincing."
-        },
-        "credit": {
-          "title": "Your name on it",
-          "text": "Every post shows its author, so the developers who use your file know who to thank."
-        },
-        "outputExamples": {
-          "title": "Show what it produces",
-          "text": "Screenshots of the results your prompt gets are coming to every page. Keep a few handy."
-        },
-        "plainMarkdown": {
-          "title": "Plain Markdown, no lock-in",
-          "text": "You upload the same .md you already use. Developers download it and drop it into their repo."
-        }
-      }
+      "lead": "That .md file you tuned over dozens of sessions, the Cursor rule your whole team relies on, the agent playbook that finally just works: it can help a lot of people out there! Post it here and share it with the community.",
+      "action": "Post your prompt"
     },
     "listing": {
-      "eyebrow": "// a great first post",
-      "title": "Small and specific beats big and vague",
-      "lead": "You don’t need a masterpiece. A prompt that does one job well is exactly what developers are looking for.",
-      "tips": {
-        "oneJob": {
-          "title": "Pick one narrow job",
-          "text": "“Improve the UX of a form” is easier to trust, and to use, than “make my whole app better”."
-        },
-        "technologies": {
-          "title": "Name the technologies",
-          "text": "Frameworks, languages and styling approaches it supports help the right developers find it."
-        },
-        "results": {
-          "title": "Keep a few results handy",
-          "text": "A screenshot or two of what the prompt built is the strongest way to show it’s worth it."
-        }
-      }
+      "eyebrow": "// before you post",
+      "title": "Test it, then show it",
+      "lead": "Run your file in a real project and make sure it does what it promises. Then take screenshots of what it produced: the form below needs at least one, and they are what convinces other developers to use it."
     },
     "steps": {
-      "eyebrow": "// how to start",
-      "title": "Three friendly steps",
+      "eyebrow": "// how it works",
+      "title": "From your file to a live listing",
       "items": {
         "signIn": {
           "title": "Sign in",
           "text": "Create a free account, or sign in if you already have one."
         },
-        "describe": {
-          "title": "Describe your prompt",
-          "text": "Fill in the form below: what it does, who it’s for, how to use it, and the .md file itself."
+        "send": {
+          "title": "Fill in the form and send it",
+          "text": "Tell us what your prompt does and who it’s for, add your screenshots and the .md file, and send it."
         },
-        "publish": {
-          "title": "Get reviewed",
-          "text": "Your prompt is reviewed before it goes live, then it appears on its own page for developers to find."
+        "feedback": {
+          "title": "Get feedback from our team",
+          "text": "We get in touch right away and give you live feedback through our custom, streamlined review interface, so your prompt gets sharp and ready to post."
+        },
+        "testing": {
+          "title": "Wait while we test it",
+          "text": "We thoroughly test your prompt across different agents and models, so the community gets the results it expects."
+        },
+        "live": {
+          "title": "Go live",
+          "text": "You get a notification when your prompt is live. Then watch the community use it, rate it and build with it!"
         }
       }
     },
@@ -84,8 +49,6 @@
         "text": "Sign in to post a prompt. It takes a minute and it’s free.",
         "action": "Sign in to post"
       },
-      "signedInAsWithUsername": "Signed in as {email}. Your post is credited to @{username}; you can add co-authors from its review.",
-      "postingAs": "Your post is credited to @{username}; you can add co-authors from its review.",
       "sections": {
         "basics": "The basics",
         "file": "The file",
@@ -111,25 +74,28 @@
         },
         "summary": {
           "label": "Summary",
-          "hint": "What the prompt covers, in two or three sentences."
+          "hint": "What your prompt is about, in a few sentences: a slightly more technical version of the tagline."
         },
         "category": {
           "label": "Category"
         },
         "meantFor": {
           "label": "Meant for",
-          "hint": "The kinds of projects it suits, one per line (e.g. Next.js App Router)."
+          "hint": "The technologies it suits, one per line (e.g. Python, Next.js, Any frontend framework)."
         },
         "highlights": {
           "label": "Highlights",
-          "hint": "What the prompt makes the agent do, one per item, up to {max}. Press Enter to add the next one.",
+          "hint": "A list of the key things your prompt does, up to {max} items.",
           "itemLabel": "Highlight {number}",
-          "add": "Add a highlight",
+          "add": "Add item",
           "remove": "Remove highlight {number}"
         },
         "usageSteps": {
           "label": "Suggested use",
-          "hint": "The steps to start using it, one per line. Wrap file names in `backticks`."
+          "hint": "Things to keep in mind before using it, up to {max} items. Wrap file names in `backticks`.",
+          "itemLabel": "Item {number}",
+          "add": "Add item",
+          "remove": "Remove item {number}"
         },
         "file": {
           "label": "Markdown file",
@@ -140,8 +106,8 @@
           "hint": "How many opening lines visitors read before downloading."
         },
         "outputExamples": {
-          "label": "Screenshots of the output (optional)",
-          "hint": "Show what the prompt produces: up to {max} images, PNG, JPEG or WebP, 2 MB each. Buyers judge a prompt by its results.",
+          "label": "Screenshots of the output",
+          "hint": "Show what the prompt produces: at least one image, up to {max}, PNG, JPEG or WebP, 2 MB each.",
           "captionLabel": "Caption for example {number} (optional)",
           "stored": "Example {number}, already saved",
           "remove": "Remove example {number}"
@@ -172,7 +138,7 @@
       "preview": {
         "open": "Preview listing",
         "newTab": "(opens in a new tab)",
-        "hint": "See your listing as it will look once posted, in a new tab. It updates as you type."
+        "caption": "See how your prompt will look once posted, built from what you enter in the form."
       },
       "submit": "Post prompt",
       "submitting": "Posting…",
@@ -220,14 +186,14 @@
       "imageType": "Use PNG, JPEG or WebP images of up to 2 MB, in your own account.",
       "imageTooLarge": "Each image can be up to 2 MB.",
       "tooManyImages": "Use at most {max} images.",
-      "coauthorInvalid": "Pick co-authors from the search results, each once."
+      "coauthorInvalid": "Pick co-authors from the search results, each once.",
+      "imagesRequired": "Add at least one screenshot of what the prompt produced."
     },
     "outline": {
       "file": "upload.md",
       "sections": {
         "intro": "Intro",
-        "benefits": "What you get",
-        "listingTips": "Listing tips",
+        "listingTips": "Before you post",
         "steps": "How posting works",
         "postPrompt": "Post your prompt"
       }

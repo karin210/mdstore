@@ -37,15 +37,16 @@ import form_styles from "@/styles/form.module.css";
 import utility_styles from "@/styles/utilities.module.css";
 import styles from "./PostPromptForm.module.css";
 
-type TextField = Exclude<PromptPostField, "kind" | "category" | "highlights" | "file" | "outputExamples" | "coauthors">;
+type TextField = Exclude<
+  PromptPostField,
+  "kind" | "category" | "highlights" | "usageSteps" | "file" | "outputExamples" | "coauthors"
+>;
 type IssueMap = Partial<Record<PromptPostField, ValidationIssue>>;
 
 type PostPromptFormProps =
   | {
       mode: "create";
-      /** The signed-in user's email, shown so they know which account posts. */
-      email: string | null;
-      /** Shown as the byline, so they know how the post will be credited. */
+      /** The live preview's byline: how the post will be credited. */
       username: string;
     }
   | {
@@ -71,7 +72,7 @@ function getFieldId(field: PromptPostField): string {
 
 /** Moves focus to a field (the first control of a group) to lead the user to what needs a change. */
 function focusField(field: PromptPostField): void {
-  const is_group = field === "highlights" || field === "category";
+  const is_group = field === "highlights" || field === "usageSteps" || field === "category";
   const id = is_group ? `${getFieldId(field)}-0` : getFieldId(field);
   document.getElementById(id)?.focus();
 }
@@ -350,7 +351,7 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
   }
 
   const examples = form.getValue("outputExamples");
-  // Tertiary kind: an informational link with no purchase intent. A real link, so it also opens with a middle click.
+  // Styled as an outlined button, but a real link, so it also opens with a middle click.
   const preview_link = (
     <Link href="/upload/preview" target="_blank" className={styles.previewLink}>
       {t("preview.open")}
@@ -360,17 +361,10 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
 
   return (
     <form key={formKey} className={styles.form} noValidate onSubmit={submitPost} aria-busy={isSubmitting}>
-      {props.mode === "create" && (
-        <p className={styles.account}>
-          {props.email
-            ? t("signedInAsWithUsername", { email: props.email, username: props.username })
-            : t("postingAs", { username: props.username })}
-        </p>
-      )}
-      <p className={styles.previewBar}>
+      <div className={styles.previewBar}>
+        <p className={styles.previewCaption}>{t("preview.caption")}</p>
         {preview_link}
-        <span className={styles.previewHint}>{t("preview.hint")}</span>
-      </p>
+      </div>
 
       <fieldset className={styles.group}>
         <legend className={styles.legend}>{t("sections.basics")}</legend>
@@ -492,7 +486,22 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             })}
           </ul>
         )}
-        {renderTextField("usageSteps", { multiline: true })}
+        <PostListField
+          id={getFieldId("usageSteps")}
+          label={t("fields.usageSteps.label")}
+          hint={t("fields.usageSteps.hint", { max: LIST_LIMITS.usageSteps.max })}
+          guidance_text={getGuidanceText("usageSteps")}
+          items={form.getValue("usageSteps").split("\n")}
+          max_items={LIST_LIMITS.usageSteps.max}
+          item_max_length={LIST_LIMITS.usageSteps.itemMax}
+          marker="bullet"
+          get_item_label={(number) => t("fields.usageSteps.itemLabel", { number })}
+          get_remove_label={(number) => t("fields.usageSteps.remove", { number })}
+          add_label={t("fields.usageSteps.add")}
+          control_state={getControlState("usageSteps")}
+          on_change={(items) => updateField("usageSteps", items.join("\n"))}
+          on_leave={() => leaveField("usageSteps")}
+        />
       </fieldset>
 
       <fieldset className={styles.group}>

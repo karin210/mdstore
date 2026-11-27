@@ -29,7 +29,7 @@ async function PostPromptSlot(): Promise<ReactElement> {
     );
   }
   if (!user.username) return <PickUsernameForm />;
-  return <PostPromptForm mode="create" email={user.email} username={user.username} />;
+  return <PostPromptForm mode="create" username={user.username} />;
 }
 
 /** Placeholder with the form's shape while the session is checked. */

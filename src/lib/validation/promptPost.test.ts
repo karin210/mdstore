@@ -30,7 +30,9 @@ describe("promptPostSchema kind", () => {
     usageSteps: "Drop it into your repo",
     file: new File(["# Form UX\n"], "form-ux.md"),
     previewLineCount: "12",
-    outputExamples: [],
+    outputExamples: [
+      { path: "11111111-1111-1111-1111-111111111111/22222222-2222-2222-2222-222222222222.png", caption: "" },
+    ],
     coauthors: [],
   };
 
@@ -60,8 +62,11 @@ describe("check_output_examples", () => {
     file: null,
   });
 
-  it("accepts no examples, picked images and stored ones together", () => {
-    expect(check_output_examples([])).toBeNull();
+  it("asks for at least one example", () => {
+    expect(check_output_examples([])).toEqual({ key: "imagesRequired" });
+  });
+
+  it("accepts picked images and stored ones together", () => {
     expect(check_output_examples([{ caption: "A form", path: null, file: png }, stored()])).toBeNull();
   });
 

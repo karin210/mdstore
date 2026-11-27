@@ -34,6 +34,15 @@
   gap: var(--space-xs);
 }
 
+/* Bulleted lists (suggested use): a dot before each input, hidden from screen readers. */
+.items[data-marker="bullet"] > .item::before {
+  content: "•" / "";
+  flex: none;
+  color: var(--color-ink-muted);
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
 /* Remove: a square × beside its input, big enough to tap; its name is visually hidden text. */
 .remove {
   flex: none;

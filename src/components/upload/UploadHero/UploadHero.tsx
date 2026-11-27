@@ -20,12 +20,7 @@ export function UploadHero(): ReactElement {
           <SecondaryButton href="#post-prompt" size="large">
             {t("action")}
           </SecondaryButton>
-          {/* Tertiary kind: informational link with no acquisition intent */}
-          <a href="#benefits" className={styles.learnMore}>
-            {t("learnMore")}
-          </a>
         </div>
-        <p className={styles.note}>{t("note")}</p>
       </div>
     </section>
   );

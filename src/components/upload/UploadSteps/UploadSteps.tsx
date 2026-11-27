@@ -3,8 +3,9 @@ import type { ReactElement } from "react";
 import section_styles from "@/styles/section.module.css";
 import styles from "./UploadSteps.module.css";
 
-const stepIds = ["signIn", "describe", "publish"] as const;
+const stepIds = ["signIn", "send", "feedback", "testing", "live"] as const;
 
+/** How a post goes live: sign in, send the form, review feedback, staff testing, then live. */
 export function UploadSteps(): ReactElement {
   const t = useTranslations("upload.steps");
 

@@ -66,7 +66,7 @@ src/
 ├─ app/[locale]/             routes only (en unprefixed, es under /es; see src/i18n/routing.ts)
 │  ├─ layout.tsx             root layout: fonts, metadata title template, header + footer
 │  ├─ page.tsx               landing page (composes the homepage sections)
-│  ├─ upload/page.tsx        "Upload your prompts": hero, benefits, tips, steps, posting form
+│  ├─ upload/page.tsx        "Upload your prompts": hero, test-and-screenshot reminder, steps, posting form (at least one output screenshot required)
 │  ├─ upload/preview/page.tsx
 │  │                         live preview of the posting form, in its own tab: the listing's layout
 │  │                         and route index, filled from the form's tab (PostPreview, client-side)
@@ -117,7 +117,7 @@ src/
 │  │                         (hero's WebGL backdrop, lazy, see src/lib/markdownFieldRenderer.ts)
 │  ├─ upload/                used only by /upload: its sections, PostPromptSection (session
 │  │                         check in <Suspense>), PostPromptForm, PostFormField, PostListField
-│  │                         (a list built one input per item, with add / remove: highlights), PostChipField (one choice
+│  │                         (a list built one input per item, with add / remove: highlights, and suggested use with bullets), PostChipField (one choice
 │  │                         as radio chips: category), CoauthorPicker (username search, results
 │  │                         list, chosen co-authors; new posts only),
 │  │                         usePostPreviewSender (the form's side of the live preview) and
