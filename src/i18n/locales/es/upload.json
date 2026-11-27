@@ -101,10 +101,6 @@
           "label": "Archivo Markdown",
           "hint": "Tu archivo .md, de hasta 200 KB."
         },
-        "previewLineCount": {
-          "label": "Largo de la vista previa gratis (líneas)",
-          "hint": "Cuántas líneas iniciales leen los visitantes antes de descargar."
-        },
         "outputExamples": {
           "label": "Capturas del resultado",
           "hint": "Muestra lo que produce el prompt: al menos una imagen, hasta {max}, PNG, JPEG o WebP, de 2 MB cada una.",
@@ -142,9 +138,7 @@
       },
       "submit": "Publicar prompt",
       "submitting": "Publicando…",
-      "submitted": "Enviado a revisión. Se publica cuando un administrador lo apruebe.",
-      "openReview": "Abrir su revisión",
-      "myPrompts": "Ver todos mis prompts",
+      "submitted": "Enviado a revisión. Puedes ver tus subidas en tu <profile>perfil</profile>.",
       "fixFields": "Algunos campos necesitan un cambio antes de publicar. Están marcados abajo.",
       "errors": {
         "unauthenticated": "Tu sesión terminó. Inicia sesión de nuevo para publicar tu prompt.",
@@ -181,7 +175,6 @@
       "fileType": "Elige un archivo Markdown que termine en .md.",
       "fileTooLarge": "Elige un archivo de hasta 200 KB.",
       "fileEmpty": "El archivo está vacío. Elige el archivo con tu prompt.",
-      "previewRange": "Usa un número del {min} al {max}.",
       "chooseKind": "Elige prompt, skill o agente.",
       "imageType": "Usa imágenes PNG, JPEG o WebP de hasta 2 MB, de tu propia cuenta.",
       "imageTooLarge": "Cada imagen puede pesar hasta 2 MB.",

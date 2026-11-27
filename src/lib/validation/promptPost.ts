@@ -27,8 +27,7 @@ export interface ValidationIssue {
     | "imageType"
     | "imageTooLarge"
     | "tooManyImages"
-    | "imagesRequired"
-    | "previewRange";
+    | "imagesRequired";
   values?: Record<string, number>;
 }
 
@@ -43,6 +42,10 @@ export const OUTPUT_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"] as c
 export const MAX_OUTPUT_IMAGES = 6;
 export const MAX_OUTPUT_IMAGE_BYTES = 2 * 1024 * 1024;
 export const OUTPUT_CAPTION_MAX_LENGTH = 120;
+/**
+ * Lines a paid listing shows for free. Every post is free for now, so the form doesn't ask: posts store the default
+ * (the column is required), and free listings show the whole file instead.
+ */
 export const PREVIEW_LINES = { min: 5, max: 40, default: 12 } as const;
 /** Co-authors a new post can name; more can be added later from its review. */
 export const MAX_COAUTHORS = 10;
@@ -79,8 +82,7 @@ export interface OutputExampleDraft {
   file: { type: string; size: number } | null;
 }
 
-export type PromptPostField =
-  TextField | ListField | "kind" | "category" | "file" | "previewLineCount" | "outputExamples" | "coauthors";
+export type PromptPostField = TextField | ListField | "kind" | "category" | "file" | "outputExamples" | "coauthors";
 
 /** Field order on the form, used to focus the first wrong field on submit. */
 export const PROMPT_POST_FIELDS: PromptPostField[] = [
@@ -94,7 +96,6 @@ export const PROMPT_POST_FIELDS: PromptPostField[] = [
   "outputExamples",
   "usageSteps",
   "file",
-  "previewLineCount",
   "coauthors",
 ];
 
@@ -190,15 +191,6 @@ export function check_coauthors(usernames: string[]): ValidationIssue | null {
   return is_well_formed && new Set(normalized).size === normalized.length ? null : { key: "coauthorInvalid" };
 }
 
-export function checkPreviewLineCount(valueRaw: string): ValidationIssue | null {
-  const valueNumber = Number(valueRaw);
-  const isInRange =
-    Number.isInteger(valueNumber) && valueNumber >= PREVIEW_LINES.min && valueNumber <= PREVIEW_LINES.max;
-  return valueRaw.trim() !== "" && isInRange
-    ? null
-    : { key: "previewRange", values: { min: PREVIEW_LINES.min, max: PREVIEW_LINES.max } };
-}
-
 // ---------------------------------------------------------------------------
 // Server schema (the same checks, as a Zod schema the create action parses with)
 // ---------------------------------------------------------------------------
@@ -251,10 +243,6 @@ const prompt_post_object = z.strictObject({
   file: z
     .custom<File>((value) => value instanceof File, { message: "fileRequired" })
     .superRefine(asRefinement(checkFile)),
-  previewLineCount: z
-    .string()
-    .superRefine(asRefinement(checkPreviewLineCount))
-    .transform((value) => Number(value)),
   /** New uploads (in the poster's folder) and, for a revision, examples kept from the previous version. */
   outputExamples: output_examples_schema,
 });

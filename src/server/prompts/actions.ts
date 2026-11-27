@@ -4,7 +4,7 @@ import type { PostgrestError } from "@supabase/supabase-js";
 import { updateTag } from "next/cache";
 import { findPromptBySlug } from "@/data/prompts";
 import { slugify } from "@/lib/slugify";
-import { checkFileContent, promptPostSchema, type PromptPostInput } from "@/lib/validation/promptPost";
+import { checkFileContent, PREVIEW_LINES, promptPostSchema, type PromptPostInput } from "@/lib/validation/promptPost";
 import { logServerError } from "@/server/logServerError";
 import { get_signed_in_profile } from "@/server/profiles/profiles";
 import { getPostedPromptTag, POSTED_PROMPTS_TAG } from "@/server/prompts/postedPrompts";
@@ -76,7 +76,8 @@ async function insertPostedPrompt(
       recommended_models: [],
       output_examples: input.outputExamples,
       content,
-      preview_line_count: input.previewLineCount,
+      // Every post is free for now, so the form doesn't ask for a preview length.
+      preview_line_count: PREVIEW_LINES.default,
     })
     // The poster can read their own pending post, so the insert can return its id.
     .select("id")

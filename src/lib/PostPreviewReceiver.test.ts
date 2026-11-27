@@ -13,7 +13,6 @@ const VALUES: PromptPostValues = {
   highlights: "",
   usageSteps: "",
   file: null,
-  previewLineCount: "12",
   outputExamples: [],
   coauthors: [],
 };

@@ -29,7 +29,6 @@ describe("promptPostSchema kind", () => {
     highlights: "Inline guidance",
     usageSteps: "Drop it into your repo",
     file: new File(["# Form UX\n"], "form-ux.md"),
-    previewLineCount: "12",
     outputExamples: [
       { path: "11111111-1111-1111-1111-111111111111/22222222-2222-2222-2222-222222222222.png", caption: "" },
     ],

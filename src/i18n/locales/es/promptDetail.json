@@ -44,12 +44,10 @@
       "toolsOnly": "Las herramientas de IA para programar con las que el equipo de mdstore probó {fileName}. Los modelos concretos llegarán pronto."
     },
     "preview": {
-      "title": "Vista previa gratis",
-      "note": "Las primeras líneas de {fileName}, tal como las leerá tu agente.",
-      "fullFileNote": " Es gratis, así que también puedes leer aquí el archivo completo.",
+      "title": "El archivo",
+      "note": "{fileName}, renderizado para que sea fácil de leer. La descarga es el Markdown tal cual, como lo lee tu agente.",
+      "paidNote": "Las primeras líneas de {fileName}, tal como las leerá tu agente.",
       "moreLines": "{count, plural, one {# línea más} other {# líneas más}}",
-      "showFull": "Mostrar el archivo completo ({lines})",
-      "hideFull": "Ocultar el archivo completo",
       "fullLabel": "{fileName} completo"
     },
     "usage": "Uso sugerido",
@@ -80,7 +78,7 @@
         "highlights": "Puntos clave",
         "outputExamples": "Ejemplos de resultados",
         "testedModels": "Probado con",
-        "preview": "Vista previa gratis",
+        "preview": "El archivo",
         "usage": "Uso sugerido",
         "ratings": "Valoraciones"
       }

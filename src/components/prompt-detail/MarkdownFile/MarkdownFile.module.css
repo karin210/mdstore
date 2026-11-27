@@ -1,0 +1,135 @@
+/* A rendered .md file: a card that scrolls on its own, so a long file doesn't push the rest of the listing away. */
+.file {
+  max-height: min(75dvh, 50rem);
+  overflow-y: auto;
+  padding: var(--space-md) var(--space-lg);
+  border: 0.0625rem solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.file > :first-child {
+  margin-top: 0;
+}
+
+.file > :last-child {
+  margin-bottom: 0;
+}
+
+.file :is(h3, h4, h5, h6) {
+  margin: 1.4em 0 0.5em;
+  font-family: var(--font-display);
+  line-height: 1.25;
+}
+
+.file h3 {
+  font-size: var(--text-xl);
+}
+
+.file h4 {
+  font-size: var(--text-lg);
+}
+
+.file :is(h5, h6) {
+  font-size: var(--text-base);
+}
+
+.file :is(p, ul, ol, pre, blockquote, table) {
+  margin: 0 0 1em;
+}
+
+.file :is(ul, ol) {
+  padding-inline-start: 1.5em;
+}
+
+.file ul {
+  list-style: disc;
+}
+
+.file ol {
+  list-style: decimal;
+}
+
+.file li + li {
+  margin-top: 0.3em;
+}
+
+/* GitHub task lists: the checkbox replaces the bullet. */
+.file li:has(> input[type="checkbox"]) {
+  list-style: none;
+}
+
+.file a {
+  color: var(--color-primary-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.file strong {
+  font-weight: 700;
+}
+
+.file em {
+  font-style: italic;
+}
+
+.file :not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  background: var(--color-secondary);
+  color: var(--color-on-secondary);
+  font-family: var(--font-code);
+  font-size: 0.9em;
+}
+
+.file pre {
+  padding: var(--space-sm) var(--space-md);
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  background: var(--color-code-bg);
+  color: var(--color-code-ink);
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  overflow-wrap: normal;
+}
+
+.file blockquote {
+  padding-inline-start: var(--space-sm);
+  border-inline-start: 0.25rem solid var(--color-border);
+  color: var(--color-ink-muted);
+}
+
+.file hr {
+  margin: 1.5em 0;
+  border: 0;
+  border-top: 0.0625rem solid var(--color-border);
+}
+
+/* Tables scroll sideways inside the card instead of widening it. */
+.file table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.file :is(th, td) {
+  padding: 0.4em 0.75em;
+  border: 0.0625rem solid var(--color-border);
+  text-align: start;
+}
+
+.file th {
+  background: var(--color-secondary);
+  font-weight: 600;
+}
+
+.file:focus-visible {
+  outline: 0.125rem solid var(--color-focus);
+  outline-offset: 0.125rem;
+}

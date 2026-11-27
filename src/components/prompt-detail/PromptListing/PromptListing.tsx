@@ -2,6 +2,7 @@ import { useLocale, useTranslations } from "next-intl";
 import type { ReactElement, ReactNode } from "react";
 import { PrimaryButton } from "@/components/shared/PrimaryButton/PrimaryButton";
 import { InlineCode } from "@/components/prompt-detail/InlineCode/InlineCode";
+import { MarkdownFile } from "@/components/prompt-detail/MarkdownFile/MarkdownFile";
 import { OutputExamples } from "@/components/prompt-detail/OutputExamples/OutputExamples";
 import { RatingSummary } from "@/components/prompt-detail/RatingSummary/RatingSummary";
 import { TestedModels } from "@/components/prompt-detail/TestedModels/TestedModels";
@@ -45,7 +46,7 @@ export function PromptListing({
   const locale = useLocale() as Locale;
   const free = isFree(prompt);
   const remainingLines = prompt.lineCount - prompt.excerpt.split("\n").length;
-  // Null for paid prompts: their content never reaches the page's HTML.
+  // Null for paid prompts: their content never reaches the page's HTML, only the raw excerpt does.
   const fullMarkdown = free ? prompt.fullMarkdown : null;
   const lines = tPrompts("lineCount", { count: prompt.lineCount });
 
@@ -174,11 +175,16 @@ export function PromptListing({
             {t("preview.title")}
           </h2>
           <p className={styles.note}>
-            {t("preview.note", { fileName: file_name_in_text })}
-            {fullMarkdown && t("preview.fullFileNote")}
+            {fullMarkdown !== null
+              ? t("preview.note", { fileName: file_name_in_text })
+              : t("preview.paidNote", { fileName: file_name_in_text })}
           </p>
         </header>
-        <div className={styles.fileView}>
+        {fullMarkdown !== null ? (
+          <div {...empty("file")}>
+            <MarkdownFile markdown={fullMarkdown} label={t("preview.fullLabel", { fileName: file_name_in_text })} />
+          </div>
+        ) : (
           <pre className={styles.excerpt} {...empty("file")}>
             <code>
               {prompt.excerpt}
@@ -190,26 +196,7 @@ export function PromptListing({
               )}
             </code>
           </pre>
-          {fullMarkdown && (
-            // Native disclosure; while open it replaces the excerpt (see .fileView in the CSS).
-            <details className={styles.fullFile}>
-              {/* Tertiary kind: informational trigger with no purchase intent */}
-              <summary className={styles.toggle}>
-                <span data-label="show">{t("preview.showFull", { lines })}</span>
-                <span data-label="hide">{t("preview.hideFull")}</span>
-              </summary>
-              {/* Focusable so keyboard users can scroll the long file */}
-              <pre
-                className={styles.excerpt}
-                data-full="true"
-                tabIndex={0}
-                aria-label={t("preview.fullLabel", { fileName: prompt.fileName })}
-              >
-                <code>{fullMarkdown}</code>
-              </pre>
-            </details>
-          )}
-        </div>
+        )}
       </section>
 
       <section id="usage" className={styles.usageSection} aria-labelledby="usage-title">

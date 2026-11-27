@@ -101,10 +101,6 @@
           "label": "Markdown file",
           "hint": "Your .md file, up to 200 KB."
         },
-        "previewLineCount": {
-          "label": "Free preview length (lines)",
-          "hint": "How many opening lines visitors read before downloading."
-        },
         "outputExamples": {
           "label": "Screenshots of the output",
           "hint": "Show what the prompt produces: at least one image, up to {max}, PNG, JPEG or WebP, 2 MB each.",
@@ -142,9 +138,7 @@
       },
       "submit": "Post prompt",
       "submitting": "Posting…",
-      "submitted": "Sent for review. It goes live once an admin approves it.",
-      "openReview": "Open its review",
-      "myPrompts": "See all my prompts",
+      "submitted": "Sent for review. You can see your uploads in your <profile>profile</profile>.",
       "fixFields": "Some fields need a change before posting. They’re marked below.",
       "errors": {
         "unauthenticated": "Your session ended. Sign in again to post your prompt.",
@@ -181,7 +175,6 @@
       "fileType": "Choose a Markdown file ending in .md.",
       "fileTooLarge": "Choose a file up to 200 KB.",
       "fileEmpty": "The file is empty. Choose the file with your prompt.",
-      "previewRange": "Use a number from {min} to {max}.",
       "chooseKind": "Choose prompt, skill or agent.",
       "imageType": "Use PNG, JPEG or WebP images of up to 2 MB, in your own account.",
       "imageTooLarge": "Each image can be up to 2 MB.",

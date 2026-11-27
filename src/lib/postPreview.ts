@@ -6,7 +6,7 @@ import { get_post_file_name } from "@/lib/postFileName";
 import type { ListingEmptyField, PromptListingView } from "@/lib/promptView";
 import { slugify } from "@/lib/slugify";
 import { splitFileLines } from "@/lib/splitFileLines";
-import { checkPreviewLineCount, isPromptCategory, PREVIEW_LINES, splitLines } from "@/lib/validation/promptPost";
+import { isPromptCategory, PREVIEW_LINES, splitLines } from "@/lib/validation/promptPost";
 
 /*
  * The live preview of the upload form (/upload/preview). The form and the preview run in different tabs of
@@ -85,8 +85,6 @@ export function build_preview_listing({ snapshot, file, image_urls }: PreviewLis
 
   const title = get_text("title");
   const slug = snapshot.post_slug ?? (slugify(values.title) || "prompt");
-  const preview_line_count =
-    checkPreviewLineCount(values.previewLineCount) === null ? Number(values.previewLineCount) : PREVIEW_LINES.default;
   const file_lines = file ? splitFileLines(file.text) : [];
   if (!file) empty_fields.add("file");
 
@@ -112,7 +110,7 @@ export function build_preview_listing({ snapshot, file, image_urls }: PreviewLis
       context_tokens: file ? estimate_context_tokens(file.text) : 0,
       worksWith: snapshot.tested_with.works_with,
       tested_models: snapshot.tested_with.tested_models,
-      excerpt: file_lines.slice(0, preview_line_count).join("\n"),
+      excerpt: file_lines.slice(0, PREVIEW_LINES.default).join("\n"),
       outputExamples: output_examples,
       title,
       tagline: get_text("tagline"),

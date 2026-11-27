@@ -328,7 +328,6 @@ export async function ReviewBody({ params, searchParams }: ReviewBodyProps): Pro
                     meantFor: latest_revision_of_post.meant_for.join("\n"),
                     highlights: latest_revision_of_post.highlights.join("\n"),
                     usageSteps: latest_revision_of_post.usage_steps.join("\n"),
-                    previewLineCount: String(latest_revision_of_post.preview_line_count),
                     outputExamples: latest_revision_of_post.output_examples.map((example) => ({
                       id: example.path,
                       caption: example.caption,

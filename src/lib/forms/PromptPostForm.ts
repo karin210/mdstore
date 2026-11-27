@@ -4,11 +4,9 @@ import {
   checkFile,
   checkKind,
   checkList,
-  checkPreviewLineCount,
   checkText,
   check_coauthors,
   check_output_examples,
-  PREVIEW_LINES,
   PROMPT_POST_FIELDS,
   type PromptKind,
   type PromptPostField,
@@ -36,7 +34,6 @@ export interface PromptPostValues {
   highlights: string;
   usageSteps: string;
   file: File | null;
-  previewLineCount: string;
   outputExamples: OutputExampleItem[];
   /** Usernames (without @) to add as co-authors of a new post; a revision leaves it empty. */
   coauthors: string[];
@@ -52,7 +49,6 @@ const EMPTY_POST: PromptPostValues = {
   highlights: "",
   usageSteps: "",
   file: null,
-  previewLineCount: String(PREVIEW_LINES.default),
   outputExamples: [],
   coauthors: [],
 };
@@ -89,8 +85,6 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
         return checkCategory(values.category);
       case "file":
         return checkFile(values.file, this.is_revision);
-      case "previewLineCount":
-        return checkPreviewLineCount(values.previewLineCount);
       case "outputExamples":
         return check_output_examples(values.outputExamples);
       case "coauthors":
@@ -119,7 +113,6 @@ export class PromptPostForm extends BaseForm<PromptPostField, PromptPostValues, 
       formData.append("outputExampleCaption", example.caption);
     });
     if (values.file) formData.set("file", values.file);
-    formData.set("previewLineCount", values.previewLineCount);
     if (!this.is_revision) values.coauthors.forEach((username) => formData.append("coauthor", username));
     return formData;
   }

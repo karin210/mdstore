@@ -89,12 +89,12 @@ export async function push_revision(post_id: string, formData: FormData): Promis
   if (!supabase) return { status: "error", error_key: "notConfigured" };
 
   // Without a new file, the latest revision's file carries over (readable by the authors only). What the
-  // prompt was tested with always carries over: the staff provide it, not the authors.
+  // prompt was tested with always carries over: the staff provide it, not the authors. So does the preview length, which the form no longer asks for.
   const { data: latest, error: latest_error } = await supabase
     .from("prompt_revisions")
     // Named foreign key: posted_prompts.live_revision_id links the two tables the other way too.
     .select(
-      "file_name, content, output_examples, works_with, tested_models, recommended_models, posted_prompts!prompt_revisions_post_id_fkey(slug)",
+      "file_name, content, preview_line_count, output_examples, works_with, tested_models, recommended_models, posted_prompts!prompt_revisions_post_id_fkey(slug)",
     )
     .eq("post_id", post_id)
     .order("number", { ascending: false })
@@ -102,6 +102,7 @@ export async function push_revision(post_id: string, formData: FormData): Promis
     .maybeSingle<{
       file_name: string;
       content: string;
+      preview_line_count: number;
       output_examples: unknown;
       works_with: string[];
       tested_models: string[];
@@ -146,7 +147,7 @@ export async function push_revision(post_id: string, formData: FormData): Promis
     p_usage_steps: input.usageSteps,
     p_works_with: latest.works_with,
     p_content: content,
-    p_preview_line_count: input.previewLineCount,
+    p_preview_line_count: latest.preview_line_count,
     p_note: input.note || null,
     p_tested_models: latest.tested_models,
     p_recommended_models: latest.recommended_models,

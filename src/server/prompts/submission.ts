@@ -40,7 +40,6 @@ export function readSubmission(formData: FormData, with_note = false): Record<st
     highlights: readText(formData, "highlights"),
     usageSteps: readText(formData, "usageSteps"),
     file: formData.get("file"),
-    previewLineCount: readText(formData, "previewLineCount"),
     outputExamples: read_output_examples(formData),
   };
   if (with_note) submission.note = readText(formData, "note");

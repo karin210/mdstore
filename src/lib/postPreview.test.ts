@@ -12,7 +12,6 @@ const EMPTY_VALUES: PromptPostValues = {
   highlights: "",
   usageSteps: "",
   file: null,
-  previewLineCount: "12",
   outputExamples: [],
   coauthors: [],
 };
@@ -55,7 +54,6 @@ describe("build_preview_listing", () => {
         title: "  Form UX review ",
         category: "ux-ui",
         highlights: "First\n\n  Second  \n",
-        previewLineCount: "5",
       }),
       file: { name: "My Form Rules.md", text },
       image_urls: new Map(),
@@ -65,7 +63,7 @@ describe("build_preview_listing", () => {
     expect(prompt.slug).toBe("form-ux-review");
     expect(prompt.fileName).toBe("my-form-rules.md");
     expect(prompt.highlights).toEqual(["First", "Second"]);
-    expect(prompt.excerpt).toBe("line 1\nline 2\nline 3\nline 4\nline 5");
+    expect(prompt.excerpt.split("\n")).toHaveLength(12);
     expect(prompt.lineCount).toBe(20);
     expect(prompt.fullMarkdown).toBe(text);
     expect(prompt.priceUsd).toBe(0);
@@ -75,16 +73,15 @@ describe("build_preview_listing", () => {
     expect(empty_fields.has("file")).toBe(false);
   });
 
-  it("keeps a new version's slug and falls back to the default preview length when it is invalid", () => {
+  it("keeps a new version's slug", () => {
     const text = Array.from({ length: 30 }, (_, index) => `l${index}`).join("\n");
     const { prompt } = build_preview_listing({
-      snapshot: snapshot_of({ title: "Renamed", previewLineCount: "abc" }, { post_slug: "original-slug" }),
+      snapshot: snapshot_of({ title: "Renamed" }, { post_slug: "original-slug" }),
       file: { name: "original-slug.md", text },
       image_urls: new Map(),
     });
 
     expect(prompt.slug).toBe("original-slug");
-    expect(prompt.excerpt.split("\n")).toHaveLength(12);
   });
 
   it("lists only the examples that have a browser URL", () => {

@@ -44,12 +44,10 @@
       "toolsOnly": "The AI coding tools the mdstore team tested {fileName} with. Specific models are on their way."
     },
     "preview": {
-      "title": "Free preview",
-      "note": "The first lines of {fileName}, exactly as your agent will read them.",
-      "fullFileNote": " It's free, so you can read the whole file here too.",
+      "title": "The file",
+      "note": "{fileName}, rendered so it's easy to read. The download is the plain Markdown your agent reads.",
+      "paidNote": "The first lines of {fileName}, exactly as your agent will read them.",
       "moreLines": "{count, plural, one {# more line} other {# more lines}}",
-      "showFull": "Show the full file ({lines})",
-      "hideFull": "Hide the full file",
       "fullLabel": "Full {fileName}"
     },
     "usage": "Suggested use",
@@ -80,7 +78,7 @@
         "highlights": "Highlights",
         "outputExamples": "Output examples",
         "testedModels": "Tested with",
-        "preview": "Free preview",
+        "preview": "The file",
         "usage": "Suggested use",
         "ratings": "Ratings"
       }

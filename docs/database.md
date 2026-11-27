@@ -24,7 +24,7 @@ The goal of this part of the project is also to learn raw PostgreSQL, so there i
 
 ## `posted_prompts`
 
-One row per listing posted from `/upload` (a prompt or a skill). It holds the listing copy, the full `.md` in `content` (up to 200 KB) and the free-preview length.
+One row per listing posted from `/upload` (a prompt or a skill). It holds the listing copy, the full `.md` in `content` (up to 200 KB) and the free-preview length (`preview_line_count`: lines a paid listing shows; every post is free for now, so the form doesn't ask and posts store the default, 12).
 
 - **The database checks the same rules as the app's frontend.** The form validates in `src/lib/validation/promptPost.ts` (slug and file-name patterns, length limits, allowed categories, array sizes). The table repeats those rules as `CHECK` constraints, because anyone with the publishable key can call the API directly and skip the form. When you change a rule, update both the validation file and the migration.
 - `author_id` defaults to `auth.uid()` and cascades on user deletion. `slug` is unique.

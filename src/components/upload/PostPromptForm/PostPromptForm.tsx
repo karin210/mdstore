@@ -24,7 +24,6 @@ import {
   MAX_OUTPUT_IMAGES,
   OUTPUT_CAPTION_MAX_LENGTH,
   OUTPUT_IMAGE_TYPES,
-  PREVIEW_LINES,
   PROMPT_KINDS,
   PROMPT_POST_FIELDS,
   REVISION_NOTE_MAX_LENGTH,
@@ -328,16 +327,6 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
       <PostFormField id={id} label={t(`fields.${field}.label`)} hint={hint} guidanceText={getGuidanceText(field)}>
         {options.multiline ? (
           <textarea rows={4} {...sharedProps} onChange={(event) => updateField(field, event.target.value)} />
-        ) : field === "previewLineCount" ? (
-          <input
-            type="number"
-            inputMode="numeric"
-            min={PREVIEW_LINES.min}
-            max={PREVIEW_LINES.max}
-            step={1}
-            {...sharedProps}
-            onChange={(event) => updateField(field, event.target.value)}
-          />
         ) : (
           <input
             type="text"
@@ -530,7 +519,6 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
             }}
           />
         </PostFormField>
-        {renderTextField("previewLineCount")}
       </fieldset>
 
       {!is_revision && (
@@ -575,8 +563,10 @@ export function PostPromptForm(props: PostPromptFormProps): ReactElement {
 
       {submitted_slug && (
         <FormAlert tone="success">
-          {t("submitted")} <Link href={`/prompts/${submitted_slug}/review`}>{t("openReview")}</Link>{" "}
-          <Link href="/my-prompts">{t("myPrompts")}</Link>
+          {/* Locale-aware link: /es/profile#uploads in Spanish. */}
+          {t.rich("submitted", {
+            profile: (chunks) => <Link href={{ pathname: "/profile", hash: "uploads" }}>{chunks}</Link>,
+          })}
           {coauthors_not_added.length > 0 && (
             <>
               {" "}
